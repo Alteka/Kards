@@ -2,12 +2,12 @@
   <div id="wrapper">
     <el-button v-on:click="closeTestCard()" type="danger" icon="el-icon-close" circle></el-button>
     
-    <Grid v-if="config.cardType == 'grid'"></Grid>
-    <Alteka v-if="config.cardType == 'alteka'"></Alteka>
-    <SMPTE v-if="config.cardType == 'smpte'"></SMPTE>
-    <ARIB v-if="config.cardType == 'arib'"></ARIB>
-    <Bars v-if="config.cardType == 'bars'"></Bars>
-    <Placeholder v-if="config.cardType == 'placeholder'"></Placeholder>
+    <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
+    <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+    <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
+    <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
+    <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+    <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
 
   </div>
 </template>

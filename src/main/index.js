@@ -74,7 +74,7 @@ function manageTestCardWindow() {
       })
     testCardWindowScreen = config.screen
     testCardWindow.on('close', function () { 
-      // testCardWindow = null 
+      testCardWindow = null 
       controlWindow.webContents.send('closeTestCard')
     })
     testCardWindow.loadURL(testCardUrl)

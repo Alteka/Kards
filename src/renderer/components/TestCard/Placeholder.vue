@@ -11,6 +11,9 @@
         electron: process.versions.electron,
         name: this.$route.name,
       }
+    },
+    props: {
+      config: Object
     }
   }
 </script>

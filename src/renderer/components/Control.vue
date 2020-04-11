@@ -9,7 +9,7 @@
 
 <hr>
 
-<el-switch v-model="config.visible" width="50" active-text="Enabled" inactive-text="Disabled">Enable</el-switch>
+<el-switch v-model="config.visible" active-text="Enabled" inactive-text="Disabled">Enable</el-switch>
       
       <hr>
 
