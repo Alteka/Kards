@@ -1,11 +1,11 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents } from 'electron'
 
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow
+let controlWindow
 let testCardWindow
 
 
@@ -14,15 +14,13 @@ function createWindow () {
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
-  mainWindow = new BrowserWindow({
+  controlWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
     width: 1000
   })
-
-  mainWindow.loadURL(winURL)
-
-  mainWindow.on('closed', () => { mainWindow = null })
+  controlWindow.loadURL(winURL)
+  controlWindow.on('closed', () => { controlWindow = null })
 }
 
 app.on('ready', createWindow)
@@ -32,45 +30,41 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (controlWindow === null) {
     createWindow()
   }
 })
 
+let config
 
-function showTestCard() {
-  if (testCardWindow == null) {
+ipcMain.on('config', (event, arg) => {
+  config = arg
+  console.log('config change via ipc: ', config)
+  manageTestCardWindow()
+  if (testCardWindow != null) { 
+    testCardWindow.webContents.send('config', config)
+  }
+})
+
+ipcMain.on('getConfig', (event, arg) => {
+  testCardWindow.webContents.send('config', config)
+})
+
+ipcMain.on('closeTestCard', (event, arg) => {
+  controlWindow.webContents.send('closeTestCard')
+})
+
+
+function manageTestCardWindow() {
+  if (testCardWindow == null && config.visible) {
     console.log('showing test card!')
-    const testCardUrl = process.env.NODE_ENV === 'development'
-      ? 'http://localhost:9080/#/testcard'
-      : `file://${__dirname}/index.html#testcard`
-    testCardWindow = new BrowserWindow({ width: 400, height: 320, webPreferences: {webSecurity: false} })
+    const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
+    testCardWindow = new BrowserWindow({ width: 900, height: 600, webPreferences: {webSecurity: false} })
+    
     testCardWindow.on('close', function () { testCardWindow = null })
     testCardWindow.loadURL(testCardUrl)
-  } else {
-    console.log('already showing window!')
+  } else if (testCardWindow != null && !config.visible) {
+    console.log('closing test card')
+    testCardWindow.close()
   }
 }
-function closeTestCard() {
-  if (testCardWindow != null) {
-  console.log('closing test card')
-  testCardWindow.close()
-  } else {
-    console.log('test card window already closed!')
-  }
-}
-
-ipcMain.on('command', (event, arg) => {
-  switch(arg) {
-    case 'openTestCard':
-      showTestCard()
-    break;
-    case 'closeTestCard':
-      closeTestCard()
-    break;
-    default:
-      console.log('unknown command: ', arg)
-    break;
-  }
-  
-})

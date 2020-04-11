@@ -4,23 +4,23 @@
     
     <el-radio-group v-model="config.screen">
       <el-radio-button label="0">Window</el-radio-button>
-      <el-radio-button v-for="scr in screens" label="scr.id">{{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
+      <el-radio-button v-for="scr in screens" :label="scr.id">{{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
     </el-radio-group>
 
-      <el-button v-on:click="command('openTestCard')">Open Test Card</el-button>
-      <el-button v-on:click="command('closeTestCard')">Close Test Card</el-button>
-
+<el-switch v-model="config.visible">
+</el-switch>
+      
+      <hr>
 
     <el-radio-group v-model="config.cardType">
-      <el-radio-button label="Alteka"></el-radio-button>
-      <el-radio-button label="SMPTE"></el-radio-button>
-      <el-radio-button label="ARIB"></el-radio-button>
-      <el-radio-button label="75% Bars"></el-radio-button>
-      <el-radio-button label="100% Bars"></el-radio-button>
-      <el-radio-button label="Placeholder"></el-radio-button>
+      <el-radio-button label="alteka">Alteka</el-radio-button>
+      <el-radio-button label="smpte">SMPTE</el-radio-button>
+      <el-radio-button label="arib">ARIB</el-radio-button>
+      <el-radio-button label="bars">75% Bars</el-radio-button>
+      <el-radio-button label="placeholder">Placeholder</el-radio-button>
     </el-radio-group>
 <hr>
- {{ screens }}
+ {{ config }}
   </div>
 </template>
 
@@ -34,16 +34,26 @@ const { ipcRenderer, screen } = require('electron')
     data: function () {
     return {
       config: {
-        cardType: 'Alteka',
+        visible: false,
+        cardType: 'alteka',
         screen: 0
       },
       screens: screen.getAllDisplays()
     }
   },
-    methods: {
-      command: function (cmd) {
-        ipcRenderer.send('command', cmd)
-      }
+    mounted: function() {
+      let vm = this
+      ipcRenderer.on('closeTestCard', function(event, val) {
+        vm.config.visible = false
+      })
+    },
+    watch: {
+      config: {
+        handler: function (val, oldVal) { 
+          ipcRenderer.send('config', val)
+         },
+        deep: true
+      },
     }
   }
 </script>
