@@ -73,7 +73,10 @@ function manageTestCardWindow() {
         } 
       })
     testCardWindowScreen = config.screen
-    testCardWindow.on('close', function () { testCardWindow = null })
+    testCardWindow.on('close', function () { 
+      // testCardWindow = null 
+      controlWindow.webContents.send('closeTestCard')
+    })
     testCardWindow.loadURL(testCardUrl)
   } else if (testCardWindow != null && !config.visible) {
     console.log('closing test card')
