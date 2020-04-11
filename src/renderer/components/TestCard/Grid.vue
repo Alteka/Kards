@@ -1,6 +1,6 @@
 <template>
   <div>
-   SystemInformation
+   Grid.
   </div>
 </template>
 

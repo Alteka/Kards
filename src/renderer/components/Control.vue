@@ -2,13 +2,14 @@
   <div id="wrapper">
     <h1>Test Card Control</h1>
     
-    <el-radio-group v-model="config.screen">
+    <el-radio-group v-model="config.screen" :disabled="config.visible">
       <el-radio-button label="0">Window</el-radio-button>
       <el-radio-button v-for="scr in screens" :label="scr.id">{{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
     </el-radio-group>
 
-<el-switch v-model="config.visible">
-</el-switch>
+<hr>
+
+<el-switch v-model="config.visible" width="50" active-text="Enabled" inactive-text="Disabled">Enable</el-switch>
       
       <hr>
 
@@ -16,17 +17,22 @@
       <el-radio-button label="alteka">Alteka</el-radio-button>
       <el-radio-button label="smpte">SMPTE</el-radio-button>
       <el-radio-button label="arib">ARIB</el-radio-button>
+      <el-radio-button label="grid">Grid</el-radio-button>
       <el-radio-button label="bars">75% Bars</el-radio-button>
       <el-radio-button label="placeholder">Placeholder</el-radio-button>
     </el-radio-group>
 <hr>
- {{ config }}
+
+Colour Choices
+ <el-color-picker v-model="config.colourPri"></el-color-picker>
+ <el-color-picker v-model="config.colourSec"></el-color-picker>
+
   </div>
 </template>
 
 <script>
 const { ipcRenderer, screen } = require('electron')
-  // import SystemInformation from './LandingPage/SystemInformation'
+  
 
   export default {
     name: 'control',
@@ -36,7 +42,9 @@ const { ipcRenderer, screen } = require('electron')
       config: {
         visible: false,
         cardType: 'alteka',
-        screen: 0
+        screen: 0,
+        colourSec: '#aaa',
+        colourPri: '#d33'
       },
       screens: screen.getAllDisplays()
     }

@@ -7,7 +7,9 @@ if (process.env.NODE_ENV !== 'development') {
 
 let controlWindow
 let testCardWindow
+let config
 
+let testCardWindowScreen
 
 function createWindow () {
   const winURL = process.env.NODE_ENV === 'development'
@@ -35,7 +37,6 @@ app.on('activate', () => {
   }
 })
 
-let config
 
 ipcMain.on('config', (event, arg) => {
   config = arg
@@ -59,12 +60,28 @@ function manageTestCardWindow() {
   if (testCardWindow == null && config.visible) {
     console.log('showing test card!')
     const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
-    testCardWindow = new BrowserWindow({ width: 900, height: 600, webPreferences: {webSecurity: false} })
-    
+
+    let fs = config.screen == 0 ? false : true
+
+    testCardWindow = new BrowserWindow({
+       width: 900,
+       height: 600,
+       fullscreen: fs,
+       simpleFullscreen: fs,
+       webPreferences: {
+         webSecurity: false
+        } 
+      })
+    testCardWindowScreen = config.screen
     testCardWindow.on('close', function () { testCardWindow = null })
     testCardWindow.loadURL(testCardUrl)
   } else if (testCardWindow != null && !config.visible) {
     console.log('closing test card')
     testCardWindow.close()
+  }
+
+  if (testCardWindow != null && config.screen != testCardWindowScreen) {
+    // window has been changed screen. Do something about it.
+    console.log('moving test card... maybe...')
   }
 }

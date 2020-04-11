@@ -1,13 +1,25 @@
 <template>
   <div id="wrapper">
-    <h1>Test Card. Yup.</h1>
     <el-button v-on:click="closeTestCard()" type="danger" icon="el-icon-close" circle></el-button>
-    {{ config }}
+    
+    <Grid v-if="config.cardType == 'grid'"></Grid>
+    <Alteka v-if="config.cardType == 'alteka'"></Alteka>
+    <SMPTE v-if="config.cardType == 'smpte'"></SMPTE>
+    <ARIB v-if="config.cardType == 'arib'"></ARIB>
+    <Bars v-if="config.cardType == 'bars'"></Bars>
+    <Placeholder v-if="config.cardType == 'placeholder'"></Placeholder>
+
   </div>
 </template>
 
 <script>
 const { ipcRenderer } = require('electron')
+import Grid from './TestCard/Grid'
+import Alteka from './TestCard/Alteka'
+import SMPTE from './TestCard/SMPTE'
+import ARIB from './TestCard/ARIB'
+import Bars from './TestCard/Bars'
+import Placeholder from './TestCard/Placeholder'
 var Mousetrap = require('mousetrap');
 
 Mousetrap.bind('up up down down left right left right b a enter', () => {
@@ -17,7 +29,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
   export default {
     name: 'testcard',
-    // components: { SystemInformation },
+    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder },
     data: function() { 
       return {
         config: {
