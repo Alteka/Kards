@@ -22,7 +22,9 @@ function createWindow () {
     width: 1000
   })
   controlWindow.loadURL(winURL)
-  controlWindow.on('closed', () => { controlWindow = null })
+  controlWindow.on('closed', () => { 
+    app.quit()
+   })
 }
 
 app.on('ready', createWindow)
