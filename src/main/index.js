@@ -5,6 +5,10 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
+process.on('uncaughtException', function (error) {
+  console.log('Error: ', error)
+})
+
 let controlWindow
 let testCardWindow
 let config
@@ -24,7 +28,7 @@ function createWindow () {
   controlWindow.loadURL(winURL)
   controlWindow.on('closed', () => { 
     if (testCardWindow != null) { testCardWindow.close() }
-    
+
     app.quit()
    })
 }
