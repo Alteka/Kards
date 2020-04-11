@@ -23,6 +23,8 @@ function createWindow () {
   })
   controlWindow.loadURL(winURL)
   controlWindow.on('closed', () => { 
+    if (testCardWindow != null) { testCardWindow.close() }
+    
     app.quit()
    })
 }
