@@ -13,16 +13,17 @@
 
 <el-divider content-position="center">Select Output</el-divider>
 
+<el-row style="text-align: center">
     <el-radio-group v-model="config.screen" :disabled="config.visible">
       <el-radio-button label="0"><i class="el-icon-crop"></i> Window</el-radio-button>
       <el-radio-button v-for="scr in screens" :label="scr.id"><i class="el-icon-monitor"></i> {{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
     </el-radio-group>
-
+</el-row>
 
      
 <el-divider content-position="center">Select Card Type</el-divider>
 
-
+<el-row style="text-align: center">
     <el-radio-group v-model="config.cardType">
       <el-radio-button label="alteka">Alteka</el-radio-button>
       <el-radio-button label="smpte">SMPTE</el-radio-button>
@@ -31,6 +32,7 @@
       <el-radio-button label="bars">75% Bars</el-radio-button>
       <el-radio-button label="placeholder">Placeholder</el-radio-button>
     </el-radio-group>
+</el-row>
 
 
 <el-divider content-position="center">Options</el-divider>
@@ -38,18 +40,55 @@
 
 <el-form ref="form" :model="config" label-width="120px">
 
-  <el-form-item label="Colour Choices">
-    <el-color-picker v-model="config.colourPri"></el-color-picker>
-    <el-color-picker v-model="config.colourSec"></el-color-picker>
-  </el-form-item>
+<el-row>
+  <el-col :span="8">
+    <el-form-item label="Primary Colour">
+      <el-color-picker v-model="config.colourPri"></el-color-picker>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item label="Second Colour">
+      <el-color-picker v-model="config.colourSec"></el-color-picker>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item label="Gradient">
+      <el-switch v-model="config.gradient"></el-switch>
+    </el-form-item>
+  </el-col>
+</el-row>
+  
 
-  <el-form-item label="Name">
-    <el-input v-model="config.displayName"></el-input>
-  </el-form-item>
 
-<el-form-item label="Fill Output">
- <el-switch v-model="config.fullsize"></el-switch>
-</el-form-item>
+<el-row>
+  <el-col :span="24">
+    <el-form-item label="Name">
+      <el-input v-model="config.displayName"></el-input>
+    </el-form-item>
+  </el-col>
+</el-row>
+
+
+
+<el-row>
+  <el-col :span="8">
+    <el-form-item label="Fill Output">
+      <el-switch v-model="config.fullsize"></el-switch>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item label="Animation">
+      <el-switch v-model="config.animated"></el-switch>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item v-if="!config.fullsize" label="Show Bounds">
+      <el-switch v-model="config.bounds"></el-switch>
+    </el-form-item>
+  </el-col>
+</el-row>
+
+
 
   <el-form-item v-if="!config.fullsize" label="Canvas Size">
     <el-col :span="3" align="right">Width</el-col>
@@ -73,13 +112,31 @@
       </el-col>
   </el-form-item>
 
+
+<el-row>
+  <el-col :span="8">
+    <el-button type="primary" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
+  </el-col>
+  <el-col :span="8">
+    <el-image style="width: 150px; height: 50px" :src="config.logoUrl" fit="contain">
+      <div slot="error" class="image-slot">
+        Using Alteka Logo
+      </div>
+    </el-image>
+  </el-col>
+  <el-col :span="8" v-if="config.logoUrl != false">
+    <el-button type="primary" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
+  </el-col>
+</el-row>
+
+
+
+
 <el-form-item label="Options">
     <el-checkbox-group v-model="config.options">
       <el-checkbox label="CPU" name="type"></el-checkbox>
       <el-checkbox label="RAM" name="type"></el-checkbox>
       <el-checkbox label="Framerate" name="type"></el-checkbox>
-      <el-checkbox label="Animated" name="type"></el-checkbox>
-      <el-checkbox label="Bounds" name="type"></el-checkbox>
     </el-checkbox-group>
   </el-form-item>
 
@@ -109,6 +166,10 @@ const { ipcRenderer, screen } = require('electron')
         width: 1920,
         height: 1080,
         screen: 0,
+        gradient: true,
+        bounds: false,
+        animated: true,
+        logoUrl: "",
         colourSec: '#aaa',
         colourPri: '#d33',
         options: [],
@@ -118,10 +179,22 @@ const { ipcRenderer, screen } = require('electron')
       screens: screen.getAllDisplays()
     }
   },
+  methods: {
+    selectImage: function() {
+      ipcRenderer.send('selectImage')
+    },
+    clearImage: function() {
+      // ipcRenderer.send('clearImage')
+      this.config.logoUrl = ""
+    }
+  },
     mounted: function() {
       let vm = this
       ipcRenderer.on('closeTestCard', function(event, val) {
         vm.config.visible = false
+      })
+      ipcRenderer.on('logoUrl', function(event, val) {
+        vm.config.logoUrl = val
       })
     },
     watch: {

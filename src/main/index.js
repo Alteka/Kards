@@ -1,5 +1,5 @@
-import { app, BrowserWindow, ipcMain, webContents } from 'electron'
-
+import { app, BrowserWindow, ipcMain, webContents, dialog } from 'electron'
+const fs = require('fs')
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -21,14 +21,15 @@ function createWindow () {
   : `file://${__dirname}/index.html`
 
   controlWindow = new BrowserWindow({
-    height: 563,
+    height: 750,
     useContentSize: true,
-    width: 1000
+    width: 1000,
+    webPreferences: {
+      webSecurity: false
+     }
   })
   controlWindow.loadURL(winURL)
   controlWindow.on('closed', () => { 
-    if (testCardWindow != null) { testCardWindow.close() }
-
     app.quit()
    })
 }
@@ -96,3 +97,25 @@ function manageTestCardWindow() {
     console.log('moving test card... maybe...')
   }
 }
+
+
+ipcMain.on('selectImage', (event, arg) => {
+  let result = dialog.showOpenDialog({ 
+    title: "Select Image",
+    properties: ['openFile'],
+    filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif']}],
+   })
+
+   if (result.length > 0) {
+    let dest = app.getPath('userData') + '/logo.png'
+
+    fs.copyFile(result[0], dest, (err) => {
+      if (err) throw err;
+      console.log(result[0] + ' was copied to ' + dest);
+      let logoUrl = 'file://' + dest + '?bust=' + Math.round((Math.random()*100000))
+      controlWindow.webContents.send('logoUrl', logoUrl)
+    });
+   } else {
+     console.log('No file selected')
+   }
+})
