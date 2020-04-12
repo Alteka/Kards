@@ -35,6 +35,6 @@
     width: 100%;
     height: 20%;
     text-align: center;
-    font-size: 500%;
+    font-size: 300%;
   }
 </style>
