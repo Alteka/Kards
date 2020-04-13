@@ -1,16 +1,15 @@
 <template>
   <div id="placeholder" :style="{background : config.colourPri}" :class="{gradient : config.gradient}">
-   <h1 class="name" :style="{color:config.colourSec}">{{ config.displayName }}</h1>
+   
+   <div v-resize-text="{ratio:0.7, minFontSize: '10px', maxFontSize: '500px', delay: 200}" class="name" :style="{color:config.colourSec}">{{ config.displayName }}</div>
   </div>
 </template>
 
 <script>
+import ResizeText from 'vue-resize-text'
   export default {
-    data () {
-      return {
-        electron: process.versions.electron,
-        name: this.$route.name,
-      }
+    directives: {
+      ResizeText
     },
     props: {
       config: Object
@@ -31,7 +30,6 @@
     width: 100%;
     height: 20%;
     text-align: center;
-    font-size: 300%;
   }
   .gradient:before {
     content: '';

@@ -7,6 +7,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
 
+import VueResizeText from 'vue-resize-text'
+Vue.use(VueResizeText)
+
 Vue.use(ElementUI, {locale})
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
