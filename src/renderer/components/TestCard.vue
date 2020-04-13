@@ -46,5 +46,58 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 </script>
 
 <style>
- 
+ .black {
+    background-color: rgba(255,255,255,0.0625);
+  }
+  .superblack {
+    background-color: rgba(0,0,0,1)
+  }
+  .grey40 {
+    background-color: rgba(255,255,255,0.404);
+  }
+  .superwhite {
+    background-color: rgba(255,255,255,1);
+  }
+  .white {
+    background-color: rgba(255,255,255,0.918);
+  }
+  .white75 {
+    background-color: rgba(255,255,255,0.704);
+  }
+  .yellow100 {
+    background-color: rgba(255,255,0,0.918);
+  }
+  .yellow75 {
+    background-color: rgba(255,255,0,0.704);
+  }
+  .cyan100 {
+    background-color: rgba(0,255,255,0.918);
+  }
+  .cyan75 {
+    background-color: rgba(0,255,255,0.704);
+  }
+  .green100 {
+    background-color: rgba(0,255,0,0.918);
+  }
+  .green75 {
+    background-color: rgba(0,255,0,0.704);
+  }
+  .magenta100 {
+    background-color: rgba(255,0,255,0.918);
+  }
+  .magenta75 {
+    background-color: rgba(255,0,255,0.704);
+  }
+  .red100 {
+    background-color: rgba(255,0,0,0.918);
+  }
+  .red75 {
+    background-color: rgba(255,0,0,0.704);
+  }
+  .blue100 {
+    background-color: rgba(0,0,255,0.918);
+  }
+  .blue75 {
+    background-color: rgba(0,0,255,0.704);
+  }
 </style>
