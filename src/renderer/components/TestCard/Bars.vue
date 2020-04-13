@@ -1,24 +1,18 @@
 <template>
   <div id="bars">
-    <div id="bar1"></div>
-    <div id="bar2"></div>
-    <div id="bar3"></div>
-    <div id="bar4"></div>
-    <div id="bar5"></div>
-    <div id="bar6"></div>
-    <div id="bar7"></div>
-    <div id="bar8"></div>
+    <div class="white75"></div>
+    <div class="yellow75"></div>
+    <div class="cyan75"></div>
+    <div class="green75"></div>
+    <div class="magenta75"></div>
+    <div class="red75"></div>
+    <div class="blue75"></div>
+    <div class="black"></div>
   </div>
 </template>
 
 <script>
   export default {
-    data () {
-      return {
-        electron: process.versions.electron,
-        name: this.$route.name,
-      }
-    },
     props: {
       config: Object
     }
@@ -32,36 +26,11 @@
     left: 0px;
     height: 100%;
     width: 100%;
-    z-index: -100;
+    display: flex;
     background: black;
   }
   #bars div {
-    float:left;
-    width: 12.5%;
+    width: 100%;
     height: 100%;
-  }
-  #bar1 {
-    background-color: rgba(255, 255, 255, 0.75)
-  }
-  #bar2 {
-    background-color: rgba(255, 255, 0, 0.75)
-  }
-  #bar3 {
-    background-color: rgba(0, 255, 255, 0.75)
-  }
-  #bar4 {
-    background-color: rgba(0, 255, 0, 0.75)
-  }
-  #bar5 {
-    background-color: rgba(255, 0, 255, 0.75)
-  }
-  #bar6 {
-    background-color: rgba(255, 0, 0, 0.75)
-  }
-  #bar7 {
-    background-color: rgba(0, 0, 255, 0.75)
-  }
-  #bar8 {
-    background-color: rgba(0, 0, 0, 1)
   }
 </style>
