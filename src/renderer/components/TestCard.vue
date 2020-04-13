@@ -69,6 +69,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   width: 100%;
   height: 100%;
   color: white;
+  overflow: hidden;
 }
 #bounds {
   position: absolute;
@@ -84,9 +85,8 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       linear-gradient(to bottom, red 1px, transparent 1px);
 }
 .showBounds {
-  max-width: calc(100% - 4px);
-  max-height: calc(100% - 4px);
-  border: 2px solid red;
+  outline: 1px solid red;
+  outline-offset: -1px;
 }
 
 
