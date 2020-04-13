@@ -1,12 +1,15 @@
 <template>
   <div id="wrapper">
 
-    <el-row style="text-align: center; vertical-align: middle;">
-      <el-col :span="12" style="margin-top: 20px;">
+    <el-row style="text-align: center;">
+      <el-col :span="11" style="margin-top: 20px;">
         <el-switch v-model="config.visible" active-text="Enabled" inactive-text="Disabled">Enable</el-switch>
       </el-col>
-      <el-col :span="12">
-        <h3>Alteka Test Card</h3>
+      <el-col :span="2">
+        <img src="~@/assets/bug.png" width="100%" />
+      </el-col>
+      <el-col :span="11" style="color: #7BB144;">
+        <h2 style="margin-top: 10px; margin-bottom: 0px;">ALTEKA Test Card</h2>
       </el-col>
     </el-row>
 

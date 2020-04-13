@@ -1,11 +1,13 @@
 <template>
-  <div id="wrapper">
-    <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-    <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
-    <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
-    <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
-    <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
-    <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+  <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen }">
+    <div id="cards" :style="computedStyle">
+      <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
+      <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+      <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
+      <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
+      <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+      <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+    </div>
   </div>
 </template>
 
@@ -30,6 +32,20 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         }
       }
     },
+    computed: {
+      computedStyle: function() {
+        if (this.config.fullsize) {
+          return {}
+        } else {
+          return {
+            height: this.config.height + 'px',
+            width: this.config.width + 'px',
+            top: this.config.top + 'px',
+            left: this.config.left + 'px',
+          }
+        }
+      }
+    },
     methods: {
       closeTestCard: function () {
         ipcRenderer.send('closeTestCard')
@@ -46,6 +62,34 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 </script>
 
 <style>
+#cards {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+#bounds {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: black;
+  width: 100%;
+  height: 100%;
+  overflow: overlay;
+  background-size: 50% 50%;
+    background-image:
+      linear-gradient(to right, red 1px, transparent 1px),
+      linear-gradient(to bottom, red 1px, transparent 1px);
+}
+.showBounds {
+  max-width: calc(100% - 4px);
+  max-height: calc(100% - 4px);
+  border: 2px solid red;
+}
+
+
  .black {
     background-color: rgb(16,16,16);
   }
