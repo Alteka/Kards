@@ -1,7 +1,7 @@
 <template>
   <div id="arib">
   
-    <div class="row">
+    <div class="row grey40">
       <div class="endbit grey40"></div>
       <div class="centerbit">
           <div class="white"></div>
@@ -15,7 +15,7 @@
       <div class="grey40 endbit"></div>
     </div>
 
-    <div class="row" style="height: 50%">
+    <div class="row grey40" style="height: 50%">
       <div class="endbit grey40"></div>
       <div class="centerbit">
         <div class="white75"></div>
@@ -55,7 +55,7 @@
       <div style="width: 87.5%; float: left" class="ramp"></div>
     </div>
 
-    <div class="row" style="height: 25%">
+    <div class="row black" style="height: 25%">
       <div class="centerbit" style="width: 12.5%">
         <div class="rec709yellow"></div>
         <div class="rec709cyan"></div>
@@ -117,6 +117,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     max-width: 75%;
+    width: 75%;
     float: left;
   }
   .ramp {
