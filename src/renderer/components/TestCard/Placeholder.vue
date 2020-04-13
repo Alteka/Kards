@@ -1,7 +1,7 @@
 <template>
   <div id="placeholder" :style="{background : config.colourPri}" :class="{gradient : config.gradient}">
    
-   <div v-resize-text="{ratio:0.7, minFontSize: '10px', maxFontSize: '500px', delay: 200}" class="name" :style="{color:config.colourSec}">{{ config.displayName }}</div>
+   <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px', delay: 200}" class="name" :style="{color:config.colourSec}">{{ config.displayName }}</div>
   </div>
 </template>
 

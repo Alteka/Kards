@@ -9,7 +9,7 @@
         <img src="~@/assets/bug.png" width="100%" />
       </el-col>
       <el-col :span="11" style="color: #7BB144;">
-        <h2 style="margin-top: 10px; margin-bottom: 0px;">ALTEKA Test Card</h2>
+        <h2 class="logo">ALTEKA Test Card</h2>
       </el-col>
     </el-row>
 
@@ -213,7 +213,16 @@ const { ipcRenderer, screen } = require('electron')
 
 <style>
  #app {
-  font-family: Helvetica, sans-serif;
+  font-family: Sansation, Helvetica, sans-serif;
   /* text-align: center; */
+}
+@font-face {
+  font-family: Sansation;
+  src: url("~@/assets/Sansation-Regular.ttf");
+}
+.logo {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-family: Sansation;
 }
 </style>
