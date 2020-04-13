@@ -34,17 +34,17 @@
       <div class="centerbit">
           <div class="superblack"></div>
           <div class="superblack"></div> 
-          <div style="background-color:rgba(16,16,16,1)"></div>
-          <div style="background-color:rgba(38,38,38,1)"></div>
-          <div style="background-color:rgba(60,60,60,1)"></div>
-          <div style="background-color:rgba(82,82,82,1)"></div>
-          <div style="background-color:rgba(104,104,104,1)"></div>
-          <div style="background-color:rgba(125,125,125,1)"></div>
-          <div style="background-color:rgba(148,148,148,1)"></div>
-          <div style="background-color:rgba(169,169,169,1)"></div>
-          <div style="background-color:rgba(191,191,191,1)"></div>
-          <div style="background-color:rgba(213,213,213,1)"></div>
-          <div style="background-color:rgba(235,235,235,1)"></div>
+          <div class="black"></div>
+          <div class="step10"></div>
+          <div class="step20"></div>
+          <div class="step30"></div>
+          <div class="step40"></div>
+          <div class="step50"></div>
+          <div class="step60"></div>
+          <div class="step70"></div>
+          <div class="step80"></div>
+          <div class="step90"></div>
+          <div class="white"></div>
           <div class="superwhite"></div>
       </div>
       <div class="white75 endbit"></div>
@@ -57,13 +57,12 @@
 
     <div class="row" style="height: 25%">
       <div class="centerbit" style="width: 12.5%">
-        <div style="background-color: rgb(178,180,79);"></div>
-        <div style="background-color: rgb(135,177,180);"></div>
-        <div style="background-color: rgb(128,177,74);"></div>
+        <div class="rec709yellow"></div>
+        <div class="rec709cyan"></div>
+        <div class="rec709green"></div>
       </div>
       <div class="centerbit">
         <div class="black" style="width: 9.444%;"></div>
-
         <div class="centerbit" style="width: 24.02%;">
           <div style="background-color: rgb(12,12,12);"></div>
           <div class="black"></div>
@@ -71,15 +70,14 @@
           <div class="black"></div>
           <div style="background-color: rgb(25,25,25);"></div>
         </div>
-
         <div style="width: 16.52777%;" class="black"></div>
         <div style="width: 30.41666%;" class="white75"></div>
         <div style="width: 19.58333%;" class="black"></div>
       </div>
       <div class="centerbit" style="width: 12.5%">
-        <div style="background-color: rgb(163,72,176);"></div>
-        <div style="background-color: rgb(160,67,41);"></div>
-        <div style="background-color: rgb(57,37,176);"></div>
+        <div class="rec709magenta"></div>
+        <div class="rec709red"></div>
+        <div class="rec709blue"></div>
       </div>
     </div>
 
@@ -101,17 +99,14 @@
     left: 0px;
     height: 100%;
     width: 100%;
-    background: black;
+    background: grey;
   }
-
   .row {
     height: 8.33333%;
   }
   .row div {
     height: 100%;
     width: 100%;
-    margin: 0;
-    padding: 0;
   }
   .endbit {
     float: left;
@@ -127,5 +122,4 @@
   .ramp {
     background: linear-gradient(90deg, rgba(0,0,0,1) 29%, rgba(255,255,255,1) 99%);
   }
-
 </style>
