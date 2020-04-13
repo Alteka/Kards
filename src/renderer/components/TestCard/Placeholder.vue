@@ -1,6 +1,6 @@
 <template>
-  <div id="placeholder">
-   <h1 class="name">{{ config.displayName }}</h1>
+  <div id="placeholder" :style="{background : config.colourPri}" :class="{gradient : config.gradient}">
+   <h1 class="name" :style="{color:config.colourSec}">{{ config.displayName }}</h1>
   </div>
 </template>
 
@@ -21,12 +21,8 @@
 <style scoped>
   #placeholder {
     background: #d33;
-    position: absolute;
-    top: 0px;
-    left: 0px;
     height: 100%;
     width: 100%;
-    z-index: -100;
   }
   .name {
     position: absolute;
@@ -36,5 +32,14 @@
     height: 20%;
     text-align: center;
     font-size: 300%;
+  }
+  .gradient:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
   }
 </style>
