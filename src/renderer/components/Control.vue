@@ -1,14 +1,14 @@
 <template>
   <div id="wrapper">
 
-    <el-row style="text-align: center;">
-      <el-col :span="11" style="margin-top: 20px;">
-        <el-switch v-model="config.visible" active-text="Enabled" inactive-text="Disabled">Enable</el-switch>
+    <el-row>
+      <el-col :span="11" style="margin-top: 20px; padding-left: 20px;">
+        <el-switch active-color="#7BB144" v-model="config.visible" active-text="Enabled">Enable</el-switch>
       </el-col>
       <el-col :span="2">
         <img src="~@/assets/bug.png" width="100%" />
       </el-col>
-      <el-col :span="11" style="color: #7BB144;">
+      <el-col :span="11" style="color: #7BB144; padding-left: 10px;">
         <h2 class="logo">ALTEKA Test Card</h2>
       </el-col>
     </el-row>
@@ -17,9 +17,9 @@
 <el-divider content-position="center">Select Output</el-divider>
 
 <el-row style="text-align: center">
-    <el-radio-group v-model="config.screen" :disabled="config.visible">
-      <el-radio-button label="0"><i class="el-icon-crop"></i> Window</el-radio-button>
+    <el-radio-group fill="#7BB144" v-model="config.screen" :disabled="config.visible">
       <el-radio-button v-for="scr in screens" :label="scr.id"><i class="el-icon-monitor"></i> {{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
+      <el-radio-button label="0"><i class="el-icon-crop"></i> Window</el-radio-button>
     </el-radio-group>
 </el-row>
 
@@ -27,7 +27,7 @@
 <el-divider content-position="center">Select Card Type</el-divider>
 
 <el-row style="text-align: center">
-    <el-radio-group v-model="config.cardType">
+    <el-radio-group fill="#7BB144" v-model="config.cardType">
       <el-radio-button label="alteka">Alteka</el-radio-button>
       <el-radio-button label="smpte">SMPTE</el-radio-button>
       <el-radio-button label="arib">ARIB</el-radio-button>
@@ -56,7 +56,7 @@
   </el-col>
   <el-col :span="8">
     <el-form-item label="Gradient">
-      <el-switch v-model="config.gradient"></el-switch>
+      <el-switch active-color="#7BB144" v-model="config.gradient"></el-switch>
     </el-form-item>
   </el-col>
 </el-row>
@@ -76,17 +76,17 @@
 <el-row>
   <el-col :span="8">
     <el-form-item label="Fill Output">
-      <el-switch v-model="config.fullsize"></el-switch>
+      <el-switch active-color="#7BB144" v-model="config.fullsize"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
     <el-form-item label="Animation">
-      <el-switch v-model="config.animated"></el-switch>
+      <el-switch active-color="#7BB144" v-model="config.animated"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
     <el-form-item v-if="!config.fullsize" label="Show Bounds">
-      <el-switch v-model="config.bounds"></el-switch>
+      <el-switch active-color="#7BB144" v-model="config.bounds"></el-switch>
     </el-form-item>
   </el-col>
 </el-row>
@@ -118,7 +118,7 @@
 
 <el-row>
   <el-col :span="8">
-    <el-button type="primary" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
+    <el-button type="success" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
   </el-col>
   <el-col :span="8">
     <el-image style="width: 150px; height: 50px" :src="config.logoUrl" fit="contain">
@@ -128,7 +128,7 @@
     </el-image>
   </el-col>
   <el-col :span="8" v-if="config.logoUrl != false">
-    <el-button type="primary" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
+    <el-button type="success" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
   </el-col>
 </el-row>
 
@@ -136,10 +136,10 @@
 
 
 <el-form-item label="Options">
-    <el-checkbox-group v-model="config.options">
-      <el-checkbox label="CPU" name="type"></el-checkbox>
-      <el-checkbox label="RAM" name="type"></el-checkbox>
-      <el-checkbox label="Framerate" name="type"></el-checkbox>
+    <el-checkbox-group  fill="#7BB144" v-model="config.options">
+      <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
+      <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
+      <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
     </el-checkbox-group>
   </el-form-item>
 
@@ -168,7 +168,7 @@ const { ipcRenderer, screen } = require('electron')
         fullsize: true,
         width: 1920,
         height: 1080,
-        screen: 0,
+        screen: screen.getPrimaryDisplay().id,
         gradient: true,
         bounds: false,
         animated: true,
