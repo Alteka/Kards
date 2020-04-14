@@ -95,8 +95,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Size">
-            <el-input v-model="config.grid.size"></el-input>
+          <el-form-item label="Size (pixels)">
+            <el-input-number v-model="config.grid.size" :step="5"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
