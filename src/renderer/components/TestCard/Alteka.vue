@@ -3,7 +3,14 @@
 
     <div id="centerbox">
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
+          <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+        </linearGradient>
+
         <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
+        <rect x="-40" y="0" width="80" height="10" fill="url(#grad1)" />
+        <text x="0" y="-5" text-anchor="middle" fill="blue" font-size="10px">"Something"</text>
       </svg>
     </div>
   </div>
