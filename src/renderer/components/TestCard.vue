@@ -57,11 +57,16 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         vm.config = args
       })
       ipcRenderer.send('getConfig')
+      this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
     }
   }
 </script>
 
 <style>
+@font-face {
+  font-family: Sansation;
+  src: url("~@/assets/Sansation-Regular.ttf");
+}
 #cards {
   position: absolute;
   top: 0px;
@@ -72,6 +77,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   overflow: hidden;
 }
 #bounds {
+  font-family: Sansation, Helvetica, sans-serif;
   position: absolute;
   top: 0px;
   left: 0px;
@@ -87,7 +93,10 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       linear-gradient(to right, red 1px, transparent 1px),
       linear-gradient(to bottom, red 1px, transparent 1px);
 }
-
+.modal {
+  font-family: Sansation;
+  font-size: 200%;
+}
 
  .black {
     background-color: rgb(16,16,16);
