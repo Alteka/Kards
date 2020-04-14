@@ -1,13 +1,15 @@
 <template>
   <div id="bars">
-    <div class="white75"></div>
-    <div class="yellow75"></div>
-    <div class="cyan75"></div>
-    <div class="green75"></div>
-    <div class="magenta75"></div>
-    <div class="red75"></div>
-    <div class="blue75"></div>
-    <div class="black"></div>
+    <div class="thebars">
+        <div style="background: #ffffff" :style="{opacity: opacity}"></div>
+        <div style="background: #ffff00" :style="{opacity: opacity}"></div>
+        <div style="background: #00ffff" :style="{opacity: opacity}"></div>
+        <div style="background: #00ff00" :style="{opacity: opacity}"></div>
+        <div style="background: #ff00ff" :style="{opacity: opacity}"></div>
+        <div style="background: #ff0000" :style="{opacity: opacity}"></div>
+        <div style="background: #0000ff" :style="{opacity: opacity}"></div>
+        <div class="black"></div>
+    </div>
   </div>
 </template>
 
@@ -15,6 +17,11 @@
   export default {
     props: {
       config: Object
+    },
+    computed: {
+      opacity: function() {
+        return this.config.bars.level/10000
+      }
     }
   }
 </script>
@@ -26,8 +33,11 @@
     left: 0px;
     height: 100%;
     width: 100%;
-    display: flex;
+    
     background: black;
+  }
+  .thebars {
+    display: flex;
   }
   #bars div {
     width: 100%;

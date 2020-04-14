@@ -18,7 +18,10 @@
 
 <el-row style="text-align: center">
     <el-radio-group fill="#7BB144" v-model="config.screen" :disabled="config.visible">
-      <el-radio-button v-for="scr in screens" :label="scr.id"><i class="el-icon-monitor"></i> {{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
+      <el-radio-button v-for="scr in screens" :label="scr.id">
+        <i v-if="scr.id != primaryScreen" class="el-icon-monitor"></i>
+        <i v-if="scr.id == primaryScreen" class="el-icon-star-on"></i>
+         {{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
       <el-radio-button label="0"><i class="el-icon-crop"></i> Window</el-radio-button>
     </el-radio-group>
 </el-row>
@@ -26,52 +29,129 @@
      
 <el-divider content-position="center">Select Card Type</el-divider>
 
-<el-row style="text-align: center">
-    <el-radio-group fill="#7BB144" v-model="config.cardType">
-      <el-radio-button label="alteka">Alteka</el-radio-button>
-      <el-radio-button label="smpte">SMPTE</el-radio-button>
-      <el-radio-button label="arib">ARIB</el-radio-button>
-      <el-radio-button label="grid">Grid</el-radio-button>
-      <el-radio-button label="bars">75% Bars</el-radio-button>
-      <el-radio-button label="placeholder">Placeholder</el-radio-button>
-    </el-radio-group>
-</el-row>
-
-
-<el-divider content-position="center">Options</el-divider>
-
-
 <el-form ref="form" :model="config" label-width="120px">
 
-<el-row>
-  <el-col :span="8">
-    <el-form-item label="Primary Colour">
-      <el-color-picker v-model="config.colourPri"></el-color-picker>
-    </el-form-item>
-  </el-col>
-  <el-col :span="8">
-    <el-form-item label="Second Colour">
-      <el-color-picker v-model="config.colourSec"></el-color-picker>
-    </el-form-item>
-  </el-col>
-  <el-col :span="8">
-    <el-form-item label="Gradient">
-      <el-switch active-color="#7BB144" v-model="config.gradient"></el-switch>
-    </el-form-item>
-  </el-col>
+<el-row style="margin-left: 20px; margin-right: 20px;">
+  <el-tabs v-model="config.cardType" :stretch="true">
+    <el-tab-pane label="Alteka" name="alteka">
+
+      <el-row>
+        <el-col :span="8">
+          <el-button type="success" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
+        </el-col>
+        <el-col :span="8">
+          <el-image style="width: 150px; height: 50px" :src="config.logoUrl" fit="contain">
+            <div slot="error" class="image-slot">
+              Using Alteka Logo
+            </div>
+          </el-image>
+        </el-col>
+        <el-col :span="8" v-if="config.logoUrl != false">
+          <el-button type="success" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
+        </el-col>
+      </el-row>
+      <el-checkbox-group  fill="#7BB144" v-model="config.options">
+        <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
+        <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
+        <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
+      </el-checkbox-group>
+
+    </el-tab-pane>
+    <el-tab-pane label="SMPTE" name="smpte">
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="Overlay Details">
+            <el-switch active-color="#7BB144" v-model="config.smpte.overlay"></el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="ARIB" name="arib">
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="Overlay Details">
+            <el-switch active-color="#7BB144" v-model="config.arib.overlay"></el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="Grid" name="grid">
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Background">
+            <el-color-picker v-model="config.grid.bg"></el-color-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Crosshair">
+            <el-color-picker v-model="config.grid.crosshair"></el-color-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Lines">
+            <el-color-picker v-model="config.grid.lines"></el-color-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Size">
+            <el-input v-model="config.grid.size"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="Bars" name="bars">
+      <el-row style="margin-right: 20px;">
+        <el-form-item label="Bar Level">
+          <el-slider v-model="config.bars.level" :max="10000" :show-tooltip="false" :marks="{10000: '109%', 9215: '100%', 7059: '75%'}"></el-slider>
+        </el-form-item>
+      </el-row>
+      <el-row style="margin-right: 20px;">
+        <el-form-item label="Overlay">
+          <el-switch active-color="#7BB144" v-model="config.bars.overlay"></el-switch>
+        </el-form-item>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="Placeholder" name="placeholder">
+
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="Background">
+            <el-color-picker v-model="config.placeholder.bg"></el-color-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Foreground">
+            <el-color-picker v-model="config.placeholder.fg"></el-color-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Gradient">
+            <el-switch active-color="#7BB144" v-model="config.placeholder.gradient"></el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Name">
+            <el-input v-model="config.placeholder.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Icon">
+            <el-input v-model="config.placeholder.icon"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+    </el-tab-pane>
+  </el-tabs>
 </el-row>
-  
 
 
-<el-row>
-  <el-col :span="24">
-    <el-form-item label="Name">
-      <el-input v-model="config.displayName"></el-input>
-    </el-form-item>
-  </el-col>
-</el-row>
-
-
+<el-divider content-position="center">Output Options</el-divider>
 
 <el-row>
   <el-col :span="8">
@@ -90,8 +170,6 @@
     </el-form-item>
   </el-col>
 </el-row>
-
-
 
   <el-form-item v-if="!config.fullsize" label="Canvas Size">
     <el-col :span="3" align="right">Width</el-col>
@@ -116,39 +194,7 @@
   </el-form-item>
 
 
-<el-row>
-  <el-col :span="8">
-    <el-button type="success" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
-  </el-col>
-  <el-col :span="8">
-    <el-image style="width: 150px; height: 50px" :src="config.logoUrl" fit="contain">
-      <div slot="error" class="image-slot">
-        Using Alteka Logo
-      </div>
-    </el-image>
-  </el-col>
-  <el-col :span="8" v-if="config.logoUrl != false">
-    <el-button type="success" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
-  </el-col>
-</el-row>
-
-
-
-
-<el-form-item label="Options">
-    <el-checkbox-group  fill="#7BB144" v-model="config.options">
-      <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
-      <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
-      <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
-    </el-checkbox-group>
-  </el-form-item>
-
-
-
-
 </el-form>
-
- 
 
   </div>
 </template>
@@ -166,20 +212,42 @@ const { ipcRenderer, screen } = require('electron')
         visible: false,
         cardType: 'alteka',
         fullsize: true,
+        placeholder: {
+          bg: "#d33",
+          fg: "#fff",
+          gradient: true,
+          name: require('os').hostname().split('.')[0],
+          icon: ""
+        },
+        bars: {
+          overlay: false,
+          level: 7045
+        },
+        grid: {
+          bg: "#000",
+          crosshair: "#fff",
+          lines: "#aaa",
+          size: 50
+        },
+        arib: {
+          overlay: false
+        },
+        smpte: {
+          overlay: false
+        },
+        alteka: {
+          logoUrl: "",
+          name: require('os').hostname().split('.')[0],
+          options: [],
+        },
         width: 1920,
         height: 1080,
         screen: screen.getPrimaryDisplay().id,
-        gradient: true,
         bounds: false,
         animated: true,
-        logoUrl: "",
-        colourSec: '#aaa',
-        colourPri: '#d33',
-        options: [],
-        displayName: require('os').hostname().split('.')[0],
-        
       },
-      screens: screen.getAllDisplays()
+      screens: screen.getAllDisplays(),
+      primaryScreen: screen.getPrimaryDisplay().id
     }
   },
   methods: {
