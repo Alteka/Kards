@@ -1,5 +1,5 @@
 <template>
-  <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen }">
+  <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack">
     <div id="cards" :style="computedStyle">
       <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
       <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
@@ -75,18 +75,19 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   position: absolute;
   top: 0px;
   left: 0px;
-  background: black;
+  /* background: black; */
   width: 100%;
   height: 100%;
   overflow: overlay;
+  
+}
+.showBounds {
+  outline: 2px solid red;
+  outline-offset: -2px;
   background-size: 50% 50%;
     background-image:
       linear-gradient(to right, red 1px, transparent 1px),
       linear-gradient(to bottom, red 1px, transparent 1px);
-}
-.showBounds {
-  outline: 1px solid red;
-  outline-offset: -1px;
 }
 
 
