@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, webContents, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, dialog, screen } from 'electron'
 const fs = require('fs')
 
 if (process.env.NODE_ENV !== 'development') {
@@ -23,7 +23,7 @@ function createWindow () {
   controlWindow = new BrowserWindow({
     height: 750,
     useContentSize: true,
-    width: 1000,
+    width: 600,
     webPreferences: {
       webSecurity: false
      }
@@ -66,36 +66,50 @@ ipcMain.on('closeTestCard', (event, arg) => {
 
 
 function manageTestCardWindow() {
+  let displays = screen.getAllDisplays()
+
+  let windowConfig = {
+    width: 900,
+    height: 600,
+    webPreferences: {
+      webSecurity: false
+     } 
+  }  
+
   if (testCardWindow == null && config.visible) {
-    console.log('showing test card!')
-    const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
+    console.log('showing test card!')  
+    
+    if (config.screen != 0) {
+      windowConfig.fullscreen = true
+      windowConfig.simpleFullscreen = false 
 
-    let fs = config.screen == 0 ? false : true
-
-    testCardWindow = new BrowserWindow({
-       width: 900,
-       height: 600,
-       fullscreen: fs,
-       simpleFullscreen: fs,
-       webPreferences: {
-         webSecurity: false
-        } 
-      })
-    testCardWindowScreen = config.screen
-    testCardWindow.on('close', function () { 
-      testCardWindow = null 
-      controlWindow.webContents.send('closeTestCard')
-    })
-    testCardWindow.loadURL(testCardUrl)
+      for (const disp of displays) {
+        if (disp.id == config.screen) {
+          windowConfig.x = disp.bounds.x
+          windowConfig.y = disp.bounds.y
+          windowConfig.width = disp.bounds.width
+          windowConfig.height = disp.bounds.height
+        }
+      }
+    }
+    showTestCardWindow(windowConfig)
   } else if (testCardWindow != null && !config.visible) {
     console.log('closing test card')
     testCardWindow.close()
   }
+}
 
-  if (testCardWindow != null && config.screen != testCardWindowScreen) {
-    // window has been changed screen. Do something about it.
-    console.log('moving test card... maybe...')
-  }
+
+function showTestCardWindow(windowConfig) {
+  const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
+  testCardWindow = new BrowserWindow(windowConfig)
+  testCardWindowScreen = config.screen
+  testCardWindow.on('close', function () { 
+    testCardWindow = null 
+    controlWindow.webContents.send('closeTestCard')
+  })
+  testCardWindow.loadURL(testCardUrl)
+
 }
 
 
