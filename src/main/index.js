@@ -109,7 +109,6 @@ function showTestCardWindow(windowConfig) {
     controlWindow.webContents.send('closeTestCard')
   })
   testCardWindow.loadURL(testCardUrl)
-
 }
 
 
@@ -121,7 +120,7 @@ ipcMain.on('selectImage', (event, arg) => {
    })
 
    if (result.length > 0) {
-    let dest = app.getPath('userData') + '/logo.png'
+    let dest = app.getPath('userData') + '/logo.picture'
 
     fs.copyFile(result[0], dest, (err) => {
       if (err) throw err;
@@ -131,5 +130,6 @@ ipcMain.on('selectImage', (event, arg) => {
     });
    } else {
      console.log('No file selected')
+     // need to think about NOT clearing out an old photo;.
    }
 })

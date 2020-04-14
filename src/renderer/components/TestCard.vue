@@ -75,11 +75,9 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   position: absolute;
   top: 0px;
   left: 0px;
-  /* background: black; */
   width: 100%;
   height: 100%;
   overflow: overlay;
-  
 }
 .showBounds {
   outline: 2px solid red;
