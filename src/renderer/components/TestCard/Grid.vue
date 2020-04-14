@@ -1,9 +1,9 @@
 <template>
-  <div id="grid">
-   <div class="quadrant topleft"></div>
-   <div class="quadrant topright"></div>
-   <div class="quadrant bottomleft"></div>
-   <div class="quadrant"></div>
+  <div id="grid" :style="{background: config.grid.bg}">
+   <div class="quadrant topleft" :style="quadrantStyle"></div>
+   <div class="quadrant topright" :style="quadrantStyle"></div>
+   <div class="quadrant bottomleft" :style="quadrantStyle"></div>
+   <div class="quadrant" :style="quadrantStyle"></div>
   </div>
 </template>
 
@@ -11,6 +11,15 @@
   export default {
     props: {
       config: Object
+    },
+    computed: {
+      quadrantStyle: function() {
+        return {
+          outline: '1px solid ' + this.config.grid.crosshair,
+          'background-size': this.config.grid.size + 'px ' + this.config.grid.size +'px',
+          'background-image': `linear-gradient(to right, ${this.config.grid.lines} 1px, transparent 1px), linear-gradient(to bottom, ${this.config.grid.lines} 1px, transparent 1px)`
+        }
+      }
     }
   }
 </script>
@@ -22,14 +31,11 @@
     background: black;
   }
   .quadrant {
-    height: calc(50% - 2px);
-    width: calc(50% - 2px);
-    border: 1px solid white;
+    outline: 1px solid red;
+    outline-offset: -1px;
+    height: 50%;
+    width: 50%;
     float: left;
-    background-size: 50px 50px;
-    background-image:
-      linear-gradient(to right, grey 1px, transparent 1px),
-      linear-gradient(to bottom, grey 1px, transparent 1px);
   }
   .topleft {
     background-position: bottom right;
