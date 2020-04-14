@@ -1,9 +1,11 @@
 <template>
   <div id="alteka" :class="{gradient : config.gradient}">
 
-   <div id="centercircle">
-     <div class="ramp"></div>
-   </div>
+    <div id="centerbox">
+      <svg viewBox="-50 -50 100 100" height="100%" width="100%">
+        <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -29,18 +31,15 @@
     color: white;
   }
 
-  #centercircle {
+  #centerbox {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-height: 75%;
-    max-width: 75%;
-    height: 75vw;
-    width: 75vh;
+    height: 75%;
+    width: 75%;
     border: 2px solid white;
     background: black;
-    border-radius: 50%;
     overflow: hidden;
   }
 
