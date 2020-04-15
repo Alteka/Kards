@@ -116,26 +116,26 @@
 
     <el-tab-pane label="Grid" name="grid">
       <el-row>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="Background">
             <el-color-picker v-model="config.grid.bg"></el-color-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item label="Crosshair">
             <el-color-picker v-model="config.grid.crosshair"></el-color-picker>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="Lines">
             <el-color-picker v-model="config.grid.lines"></el-color-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item label="Size (pixels)">
-            <el-input-number v-model="config.grid.size" :step="5"></el-input-number>
+            <el-input-number v-model="config.grid.size" :step="5" size="mini"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -198,27 +198,39 @@
   </el-col>
 </el-row>
 
-  <el-form-item v-if="!config.fullsize" label="Canvas Size">
-    <el-col :span="3" align="right">Width</el-col>
+  <el-row v-if="!config.fullsize">
+    <el-col :span="6">
+      <el-form-item label="Canvas Size"> 
+      </el-form-item>
+    </el-col>
      <el-col :span="8">
-      <el-input v-model="config.width"></el-input>
+       <el-form-item label="Width">
+        <el-input v-model="config.width"></el-input>
+       </el-form-item>
      </el-col>
-     <el-col :span="3" align="right">Height</el-col>
       <el-col :span="8">
-    <el-input v-model="config.height"></el-input>
+        <el-form-item label="Height">
+          <el-input v-model="config.height"></el-input>
+        </el-form-item>
       </el-col>
-  </el-form-item>
-
-    <el-form-item v-if="!config.fullsize" label="Canvas Offset">
-    <el-col :span="3" align="right">Top</el-col>
+    </el-row>
+   
+   <el-row v-if="!config.fullsize"> 
+    <el-col :span="6">
+      <el-form-item label="Canvas Position"> 
+      </el-form-item>
+    </el-col>
      <el-col :span="8">
-      <el-input v-model="config.top"></el-input>
+       <el-form-item label="Top">
+        <el-input v-model="config.top"></el-input>
+       </el-form-item>
      </el-col>
-     <el-col :span="3" align="right">Left</el-col>
       <el-col :span="8">
-    <el-input v-model="config.left"></el-input>
+        <el-form-item label="Left">
+          <el-input v-model="config.left"></el-input>
+        </el-form-item>
       </el-col>
-  </el-form-item>
+    </el-row>
 
 
 </el-form>
@@ -272,6 +284,8 @@ const { ipcRenderer, screen } = require('electron')
         },
         width: 1920,
         height: 1080,
+        top: 0,
+        left: 0,
         screen: screen.getPrimaryDisplay().id,
         bounds: false,
         animated: true,
