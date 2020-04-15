@@ -32,8 +32,8 @@
     <div class="row">
       <div class="endbit"><swatch colour="white" ire="75" :showText="config.arib.overlay"></swatch></div>
       <div class="centerbit">
-          <swatch colour="white" ire="-10" :showText="config.arib.overlay"></swatch>
-          <swatch colour="white" ire="-10" :showText="false"></swatch>
+          <swatch colour="white" ire="-7" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="-7" :showText="false"></swatch>
           <swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch>
           <swatch colour="white" ire="10" :showText="config.arib.overlay"></swatch>
           <swatch colour="white" ire="20" :showText="config.arib.overlay"></swatch>

@@ -26,7 +26,7 @@
         handleResize: function() {
             let h = this.$refs.swatch.clientHeight
             let w = this.$refs.swatch.clientWidth
-            if (h > w) { 
+            if (h > (w*1.25)) { 
                 this.vertical = true 
             } else {
                 this.vertical = false
@@ -91,6 +91,7 @@
                 white: [1, 1, 1],
                 grey: [1, 1, 1],
                 black: [1, 1, 1],
+                superblack: [1,1,1],
                 rec709yellow: 'rgb(178,180,79)',
                 rec709cyan: 'rgb(135,177,180)',
                 rec709green: 'rgb(128,177,74)',
