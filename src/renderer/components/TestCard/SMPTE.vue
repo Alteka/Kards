@@ -1,42 +1,44 @@
 <template>
   <div id="smpte">
     <div class="row">
-      <div class="white75"></div>
-      <div class="yellow75"></div>
-      <div class="cyan75"></div>
-      <div class="green75"></div>
-      <div class="magenta75"></div>
-      <div class="red75"></div>
-      <div class="blue75"></div>
+      <swatch colour="white" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="yellow" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="cyan" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="green" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="magenta" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="red" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="blue" ire="75" :showText="config.smpte.overlay"></swatch>
     </div>
     <div class="row" style="height: 8.25%">
-      <div class="blue75"></div>
-      <div class="black"></div>
-      <div class="magenta75"></div>
-      <div class="black"></div>
-      <div class="cyan75"></div>
-      <div class="black"></div>
-      <div class="white75"></div>
+      <swatch colour="blue" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="magenta" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="cyan" ire="75" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
+      <swatch colour="white" ire="75" :showText="config.smpte.overlay"></swatch>
     </div>
     <div class="row">
       <div class="row" style="flex-grow: 4; width: 500%;">
-        <div style="background-color:#00214c"></div>
-        <div class="white"></div>
-        <div style="background-color:#31006b"></div>
-        <div class="black"></div>
+        <swatch colour="ntscInphase" :showText="config.smpte.overlay"></swatch>
+        <swatch colour="white" ire="100" :showText="config.smpte.overlay"></swatch>
+        <swatch colour="ntscQuadrature" :showText="config.smpte.overlay"></swatch>
+        <swatch colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
       </div>
       <div class="row">
-        <div class="superblack"></div>
-        <div class="black"></div>
-        <div style="background-color:rgb(29,29,29)"></div>
+        <swatch colour="black" ire="3.5" :showText="config.smpte.overlay"></swatch>
+        <swatch colour="black" ire="7.5" :showText="config.smpte.overlay"></swatch>
+        <swatch colour="black" ire="11.5" :showText="config.smpte.overlay"></swatch>
       </div>
-      <div class="black"></div>
+      <swatch colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
     </div>
   </div>
 </template>
 
 <script>
+import Swatch from './Swatch'
   export default {
+    components: { Swatch },
     props: {
       config: Object
     }
@@ -59,5 +61,6 @@
   .row div {
     height: 100%;
     width: 100%;
+    overflow: hidden;
   }
 </style>

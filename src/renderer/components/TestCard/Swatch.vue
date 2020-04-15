@@ -2,9 +2,7 @@
   <div class="swatch" :style="bgCol" ref="swatch">
     <transition name="fade">
       <div class="text" v-if="showText == true" :class="{vertical: vertical}">
-          <strong>{{ colName }}</strong>
-          <br />
-          {{ ire }}% IRE
+          <strong>{{ colName }}</strong> <span class="subtitle" v-if="ire != null">{{ ire }}%</span>
       </div>
     </transition>
   </div>
@@ -39,7 +37,7 @@
         bgCol: function() {
             let bg
 
-            if (this.colour.includes('rec709')) {
+            if (this.colour.includes('rec709') || this.colour.includes('ntsc')) {
                 bg = this.colours[this.colour]
             } else {
                 let dec = this.ireToDecimal(this.ire)
@@ -64,6 +62,10 @@
                 col = 'grey'
             } else if (this.colour == 'white' && this.ire < 11) {
                 col = 'black'
+            } else if (this.colour == 'ntscQuadrature') {
+                col = '+Q'
+            } else if (this.colour == 'ntscInphase') {
+                col = '-I'
             }
             if (col.includes('rec709')) {
                 return 'Rec 709 ' + col.charAt(6).toUpperCase() + col.slice(7)
@@ -95,6 +97,8 @@
                 rec709magenta: 'rgb(163,72,176)',
                 rec709red: 'rgb(160,67,41)',
                 rec709blue: 'rgb(57,37,176)',
+                ntscQuadrature: '#31006b',
+                ntscInphase: '#00214c',
             }
         }
     }
