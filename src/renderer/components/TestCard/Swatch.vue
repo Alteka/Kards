@@ -1,10 +1,12 @@
 <template>
   <div class="swatch" :style="bgCol">
+    <transition name="fade">
       <div class="text" v-if="showText == true">
           {{ colName }}
           <br />
           {{ ire }}% IRE
       </div>
+    </transition>
   </div>
 </template>
 
@@ -26,17 +28,24 @@
     },
     computed: {
         bgCol: function() {
-            let dec = this.ireToDecimal(this.ire)
-            let r = dec * this.colours[this.colour][0]
-            let g = dec * this.colours[this.colour][1]
-            let b = dec * this.colours[this.colour][2]
+            let bg
+
+            if (this.colour.includes('rec709')) {
+                bg = this.colours[this.colour]
+            } else {
+                let dec = this.ireToDecimal(this.ire)
+                let r = dec * this.colours[this.colour][0]
+                let g = dec * this.colours[this.colour][1]
+                let b = dec * this.colours[this.colour][2]
+                bg = 'rgb(' + r + ', ' + g + ', ' + b + ')'
+            }
 
             let color = 'white'
-            if ((r+g+b) > 300) {
+            if (this.ire > 66) {
                 color = 'black'
             }
             return {
-                'background-color': 'rgb(' + r + ', ' + g + ', ' + b + ')',
+                'background-color': bg,
                 'color': color
             }
         },
@@ -47,7 +56,11 @@
             } else if (this.colour == 'white' && this.ire < 11) {
                 col = 'black'
             }
-            return col.charAt(0).toUpperCase() + col.slice(1)
+            if (col.includes('rec709')) {
+                return 'Rec 709 ' + col.charAt(6).toUpperCase() + col.slice(7)
+            } else {
+                return col.charAt(0).toUpperCase() + col.slice(1)
+            }
         }
     },
     data: function() {
@@ -60,7 +73,14 @@
                 green: [0, 1, 0],
                 cyan: [0, 1, 1],
                 white: [1, 1, 1],
-                black: [0, 0, 0],
+                grey: [1, 1, 1],
+                black: [1, 1, 1],
+                rec709yellow: 'rgb(178,180,79)',
+                rec709cyan: 'rgb(135,177,180)',
+                rec709green: 'rgb(128,177,74)',
+                rec709magenta: 'rgb(163,72,176)',
+                rec709red: 'rgb(160,67,41)',
+                rec709blue: 'rgb(57,37,176)',
             }
         }
     }
@@ -74,4 +94,10 @@
        padding: 5px;
        overflow: hidden;
    }
+   .fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>

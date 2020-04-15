@@ -58,27 +58,27 @@
 
     <div class="row black" style="height: 25%">
       <div class="centerbit" style="width: 12.5%">
-        <div class="rec709yellow"></div>
-        <div class="rec709cyan"></div>
-        <div class="rec709green"></div>
+        <swatch colour="rec709yellow" ire="75" :showText="config.arib.overlay"></swatch>
+        <swatch colour="rec709cyan" ire="75" :showText="config.arib.overlay"></swatch>
+        <swatch colour="rec709green" ire="75" :showText="config.arib.overlay"></swatch>
       </div>
       <div class="centerbit">
         <div style="width: 9.444%;"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
         <div class="centerbit" style="width: 24.02%;">
-          <swatch colour="white" ire="2.5" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="-2" :showText="config.arib.overlay"></swatch>
           <swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch>
-          <swatch colour="white" ire="5" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="2" :showText="config.arib.overlay"></swatch>
           <swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch>
-          <swatch colour="white" ire="7.5" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="4" :showText="config.arib.overlay"></swatch>
         </div>
         <div style="width: 16.52777%;"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
         <div style="width: 30.41666%;"><swatch colour="white" ire="75" :showText="config.arib.overlay"></swatch></div>
         <div style="width: 19.58333%;"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
       </div>
       <div class="centerbit" style="width: 12.5%">
-        <div class="rec709magenta"></div>
-        <div class="rec709red"></div>
-        <div class="rec709blue"></div>
+        <swatch colour="rec709magenta" ire="75" :showText="config.arib.overlay"></swatch>
+        <swatch colour="rec709red" ire="75" :showText="config.arib.overlay"></swatch>
+        <swatch colour="rec709blue" ire="75" :showText="config.arib.overlay"></swatch>
       </div>
     </div>
 
