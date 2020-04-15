@@ -50,6 +50,18 @@
           <el-button type="success" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Text colour">
+            <el-color-picker v-model="config.alteka.textColour"></el-color-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Text">
+            <el-input v-model="config.alteka.text"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-checkbox-group  fill="#7BB144" v-model="config.options">
         <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
         <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
@@ -239,6 +251,8 @@ const { ipcRenderer, screen } = require('electron')
           logoUrl: "",
           name: require('os').hostname().split('.')[0],
           options: [],
+          textColour: "#fff",
+          text: "Words"
         },
         width: 1920,
         height: 1080,

@@ -9,8 +9,12 @@
         </linearGradient>
 
         <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
-        <rect x="-40" y="0" width="80" height="10" fill="url(#grad1)" />
-        <text x="0" y="-5" text-anchor="middle" fill="blue" font-size="10px">"Something"</text>
+        <g id="spinny-box">
+          <rect x="-40" y="-5" width="80" height="10" fill="url(#grad1)" />
+          <animateTransform attributeName="transform" type="rotate" dur="7s" from="0" to="360" repeatCount="indefinite" />
+        </g>
+        <text x="0" y="-10" text-anchor="middle" fill="blue" font-size="10px">"Something"</text>
+        <text x="0" y="10" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.alteka.text}}</text>
       </svg>
     </div>
   </div>
