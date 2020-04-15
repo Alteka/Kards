@@ -67,17 +67,15 @@
           </el-form-item>
         </el-col>
       </el-row>
-
-      
-
-
-      <el-checkbox-group  fill="#7BB144" v-model="config.options">
-        <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
-        <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
-        <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
-      </el-checkbox-group>
-
+      <el-row>
+        <el-checkbox-group  fill="#7BB144" v-model="config.options">
+          <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
+          <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
+          <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
+        </el-checkbox-group>
+      </el-row>
     </el-tab-pane>
+
     <el-tab-pane label="SMPTE" name="smpte">
       <el-row>
         <el-col :span="24">
@@ -96,6 +94,26 @@
         </el-col>
       </el-row>
     </el-tab-pane>
+
+    <el-tab-pane label="Bars" name="bars">
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="Overlay Details">
+            <el-switch active-color="#7BB144" v-model="config.bars.overlay"></el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :span="16">
+          <el-form-item label="Bar Level">
+            <el-radio-group fill="#7BB144" v-model="config.bars.level" size="mini">
+              <el-radio-button label="75%" />
+              <el-radio-button label="100%" />
+              <el-radio-button label="109%" />
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-tab-pane>
+
     <el-tab-pane label="Grid" name="grid">
       <el-row>
         <el-col :span="12">
@@ -122,26 +140,8 @@
         </el-col>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane label="Bars" name="bars">
-      <el-row style="margin-right: 20px;">
-        <el-col :span="16">
-          <el-form-item label="Bar Level">
-            <el-radio-group fill="#7BB144" v-model="config.bars.level" size="mini">
-              <el-radio-button label="75%" />
-              <el-radio-button label="100%" />
-              <el-radio-button label="109%" />
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Overlay">
-            <el-switch active-color="#7BB144" v-model="config.bars.overlay"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-tab-pane>
+   
     <el-tab-pane label="Placeholder" name="placeholder">
-
       <el-row>
         <el-col :span="8">
           <el-form-item label="Background">
