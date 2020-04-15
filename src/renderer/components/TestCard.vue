@@ -8,7 +8,6 @@
       <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
       <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
       <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
-      <Ramp v-if="config.cardType =='ramp'" :config="config"></Ramp>
     </div>
   </div>
 </template>
@@ -22,7 +21,6 @@ import SMPTE from './TestCard/SMPTE'
 import ARIB from './TestCard/ARIB'
 import Bars from './TestCard/Bars'
 import Placeholder from './TestCard/Placeholder'
-import Ramp from './TestCard/Ramp'
 
 var Mousetrap = require('mousetrap');
 Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup');
