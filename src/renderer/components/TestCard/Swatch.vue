@@ -1,8 +1,8 @@
 <template>
-  <div class="swatch" :style="bgCol">
+  <div class="swatch" :style="bgCol" ref="swatch">
     <transition name="fade">
-      <div class="text" v-if="showText == true">
-          {{ colName }}
+      <div class="text" v-if="showText == true" :class="{vertical: vertical}">
+          <strong>{{ colName }}</strong>
           <br />
           {{ ire }}% IRE
       </div>
@@ -24,6 +24,15 @@
             let result =  ( ire - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
             if (result < 0) {result = 0}
             return Math.round(result)
+        },
+        handleResize: function() {
+            let h = this.$refs.swatch.clientHeight
+            let w = this.$refs.swatch.clientWidth
+            if (h > w) { 
+                this.vertical = true 
+            } else {
+                this.vertical = false
+            }
         }
     },
     computed: {
@@ -41,7 +50,7 @@
             }
 
             let color = 'white'
-            if (this.ire > 66) {
+            if (this.ire > 50) {
                 color = 'black'
             }
             return {
@@ -63,8 +72,13 @@
             }
         }
     },
+    mounted: function() {
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    },
     data: function() {
         return {
+            vertical: false,
             colours: {
                 red: [1, 0, 0],
                 magenta: [1, 0, 1],
@@ -94,10 +108,17 @@
        padding: 5px;
        overflow: hidden;
    }
+   .text {
+margin: auto;
+text-align: center;
+   }
    .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.vertical {
+    writing-mode: vertical-rl;
 }
 </style>
