@@ -120,7 +120,7 @@ ipcMain.on('selectImage', (event, arg) => {
    })
 
    if (result.length > 0) {
-    let dest = app.getPath('userData') + '/logo.picture'
+    let dest = app.getPath('userData') + '/logo.png'
 
     fs.copyFile(result[0], dest, (err) => {
       if (err) throw err;

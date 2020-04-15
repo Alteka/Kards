@@ -40,13 +40,13 @@
           <el-button type="success" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
         </el-col>
         <el-col :span="8">
-          <el-image style="width: 150px; height: 50px" :src="config.logoUrl" fit="contain">
+          <el-image style="width: 150px; height: 50px" :src="config.alteka.logoUrl" fit="contain">
             <div slot="error" class="image-slot">
-              Using Alteka Logo
+              <img src="~@/assets/bug.png" height="40px" />
             </div>
           </el-image>
         </el-col>
-        <el-col :span="8" v-if="config.logoUrl != false">
+        <el-col :span="8" v-if="config.alteka.logoUrl != false">
           <el-button type="success" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
         </el-col>
       </el-row>
@@ -68,7 +68,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-checkbox-group  fill="#7BB144" v-model="config.options">
+        <el-checkbox-group  fill="#7BB144" v-model="config.alteka.options">
           <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
           <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
           <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
@@ -286,7 +286,7 @@ const { ipcRenderer, screen } = require('electron')
     },
     clearImage: function() {
       // ipcRenderer.send('clearImage')
-      this.config.logoUrl = ""
+      this.config.alteka.logoUrl = ""
     }
   },
     mounted: function() {
@@ -295,7 +295,7 @@ const { ipcRenderer, screen } = require('electron')
         vm.config.visible = false
       })
       ipcRenderer.on('logoUrl', function(event, val) {
-        vm.config.logoUrl = val
+        vm.config.alteka.logoUrl = val
       })
     },
     watch: {
