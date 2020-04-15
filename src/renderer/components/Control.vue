@@ -32,7 +32,7 @@
 <el-form ref="form" :model="config" label-width="120px">
 
 <el-row style="margin-left: 20px; margin-right: 20px;">
-  <el-tabs v-model="config.cardType" :stretch="true">
+  <el-tabs type="border-card"  v-model="config.cardType" :stretch="true">
     <el-tab-pane label="Alteka" name="alteka">
 
       <el-row>
@@ -124,14 +124,20 @@
     </el-tab-pane>
     <el-tab-pane label="Bars" name="bars">
       <el-row style="margin-right: 20px;">
-        <el-form-item label="Bar Level">
-          <el-slider v-model="config.bars.level" :max="10000" :show-tooltip="false" :marks="{10000: '109%', 9215: '100%', 7059: '75%'}"></el-slider>
-        </el-form-item>
-      </el-row>
-      <el-row style="margin-right: 20px;">
-        <el-form-item label="Overlay">
-          <el-switch active-color="#7BB144" v-model="config.bars.overlay"></el-switch>
-        </el-form-item>
+        <el-col :span="16">
+          <el-form-item label="Bar Level">
+            <el-radio-group fill="#7BB144" v-model="config.bars.level" size="mini">
+              <el-radio-button label="75%" />
+              <el-radio-button label="100%" />
+              <el-radio-button label="109%" />
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Overlay">
+            <el-switch active-color="#7BB144" v-model="config.bars.overlay"></el-switch>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-tab-pane>
     <el-tab-pane label="Placeholder" name="placeholder">
@@ -242,7 +248,7 @@ const { ipcRenderer, screen } = require('electron')
         },
         bars: {
           overlay: false,
-          level: 7045
+          level: "100%"
         },
         grid: {
           bg: "#000",

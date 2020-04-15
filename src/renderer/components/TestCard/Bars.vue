@@ -20,7 +20,8 @@
     },
     computed: {
       opacity: function() {
-        return this.config.bars.level/10000
+        var LUT={"75%":0.7059, "100%":0.9215, "109%":1};
+        return LUT[this.config.bars.level];
       }
     }
   }
