@@ -140,6 +140,40 @@
         </el-col>
       </el-row>
     </el-tab-pane>
+
+    <el-tab-pane label="Ramp" name="ramp">
+
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="Direction">
+            <el-radio-group fill="#7BB144" v-model="config.ramp.direction" size="mini">
+              <el-radio-button label="Horizontal" />
+              <el-radio-button label="Vertical" />
+              <el-radio-button label="Diagonal" />
+              <el-radio-button label="Radial" />
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="Stepped">
+            <el-switch active-color="#7BB144" v-model="config.ramp.stepped"></el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Double">
+            <el-switch active-color="#7BB144" v-model="config.ramp.double"></el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Reverse">
+            <el-switch active-color="#7BB144" v-model="config.ramp.reverse"></el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+    </el-tab-pane>
    
     <el-tab-pane label="Placeholder" name="placeholder">
       <el-row>
@@ -281,6 +315,12 @@ const { ipcRenderer, screen } = require('electron')
           textColour: "#fff",
           text: "Words",
           gradient: true
+        },
+        ramp: {
+          direction: 'Horizontal',
+          reverse: false,
+          stepped: false,
+          double: false
         },
         width: 1920,
         height: 1080,

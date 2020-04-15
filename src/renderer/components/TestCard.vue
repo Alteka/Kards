@@ -6,6 +6,7 @@
       <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
       <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
       <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+      <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
       <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
     </div>
   </div>
@@ -14,6 +15,7 @@
 <script>
 const { ipcRenderer } = require('electron')
 import Grid from './TestCard/Grid'
+import Ramp from './TestCard/Ramp'
 import Alteka from './TestCard/Alteka'
 import SMPTE from './TestCard/SMPTE'
 import ARIB from './TestCard/ARIB'
@@ -25,7 +27,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
   export default {
     name: 'testcard',
-    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder },
+    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp },
     data: function() { 
       return {
         config: {
