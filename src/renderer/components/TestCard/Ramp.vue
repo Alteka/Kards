@@ -1,11 +1,13 @@
 <template>
   <div id="ramp">
-    {{ config.ramp }}
+    <div class="ramp"></div>
   </div>
 </template>
 
 <script>
+import Swatch from './Swatch'
   export default {
+    components: { Swatch },
     props: {
       config: Object
     }
@@ -22,5 +24,11 @@
     
     background: black;
   }
-
+ .ramp {
+    background: linear-gradient(90deg,black,white);
+  }
+  #ramp div {
+    width: 100%;
+    height: 100%;
+  }
 </style>
