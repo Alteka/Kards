@@ -1,7 +1,9 @@
 <template>
   <div id="placeholder" :style="{background : config.placeholder.bg}" :class="{gradient : config.placeholder.gradient}">
-   
-   <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px', delay: 200}" class="name" :style="{color:config.placeholder.fg}">{{ config.placeholder.name }}</div>
+    <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{color:config.placeholder.fg}">
+      <span v-if="config.placeholder.name != ''" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
+      <br v-if="config.placeholder.name != ''" />{{ config.placeholder.name }}
+    </div>
   </div>
 </template>
 
@@ -30,6 +32,9 @@ import ResizeText from 'vue-resize-text'
     width: 100%;
     height: 20%;
     text-align: center;
+  }
+  .name span {
+    font-size: 10%;
   }
   .gradient:before {
     content: '';
