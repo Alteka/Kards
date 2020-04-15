@@ -2,56 +2,57 @@
   <div id="arib">
   
     <div class="row grey40">
-      <div class="endbit grey40"></div>
+      <div class="endbit"><swatch colour="white" ire="40" :showText="config.arib.overlay"></swatch></div>
       <div class="centerbit">
-          <div class="white"></div>
-          <div class="yellow100"></div>
-          <div class="cyan100"></div>
-          <div class="green100"></div>
-          <div class="magenta100"></div>
-          <div class="red100"></div>
-          <div class="blue100"></div>
+          <swatch colour="white" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="yellow" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="cyan" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="green" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="magenta" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="red" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="blue" ire="100" :showText="config.arib.overlay"></swatch>
       </div>
-      <div class="grey40 endbit"></div>
+      <div class="endbit"><swatch colour="white" ire="40" :showText="config.arib.overlay"></swatch></div>
     </div>
 
     <div class="row grey40" style="height: 50%">
-      <div class="endbit grey40"></div>
+      <div class="endbit"><swatch colour="white" ire="40" :showText="false"></swatch></div>
       <div class="centerbit">
-        <div class="white75"></div>
-        <div class="yellow75"></div>
-        <div class="cyan75"></div>
-        <div class="green75"></div>
-        <div class="magenta75"></div>
-        <div class="red75"></div>
-        <div class="blue75"></div>
+        <swatch colour="white" ire="75" :showText="config.arib.overlay"></swatch>
+          <swatch colour="yellow" ire="75" :showText="config.arib.overlay"></swatch>
+          <swatch colour="cyan" ire="75" :showText="config.arib.overlay"></swatch>
+          <swatch colour="green" ire="75" :showText="config.arib.overlay"></swatch>
+          <swatch colour="magenta" ire="75" :showText="config.arib.overlay"></swatch>
+          <swatch colour="red" ire="75" :showText="config.arib.overlay"></swatch>
+          <swatch colour="blue" ire="75" :showText="config.arib.overlay"></swatch>
       </div>
-      <div class="grey40 endbit"></div>
+      <div class="endbit"><swatch colour="white" ire="40" :showText="false"></swatch></div>
     </div>
 
     <div class="row">
-      <div class="white75 endbit"></div>
+      <div class="endbit"><swatch colour="white" ire="75" :showText="config.arib.overlay"></swatch></div>
       <div class="centerbit">
-          <div class="superblack"></div>
-          <div class="superblack"></div> 
-          <div class="black"></div>
-          <div class="step10"></div>
-          <div class="step20"></div>
-          <div class="step30"></div>
-          <div class="step40"></div>
-          <div class="step50"></div>
-          <div class="step60"></div>
-          <div class="step70"></div>
-          <div class="step80"></div>
-          <div class="step90"></div>
-          <div class="white"></div>
-          <div class="superwhite"></div>
+          <swatch colour="white" ire="-10" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="-10" :showText="false"></swatch>
+          <swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="10" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="20" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="30" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="40" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="50" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="60" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="70" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="80" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="90" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="100" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="109" :showText="config.arib.overlay"></swatch>
+          
       </div>
-      <div class="white75 endbit"></div>
+      <div class="endbit"><swatch colour="white" ire="75" :showText="config.arib.overlay"></swatch></div>
     </div>
 
     <div class="row">
-      <div class="endbit black"></div>
+      <div class="endbit"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
       <div style="width: 87.5%; float: left" class="ramp"></div>
     </div>
 
@@ -62,17 +63,17 @@
         <div class="rec709green"></div>
       </div>
       <div class="centerbit">
-        <div class="black" style="width: 9.444%;"></div>
+        <div style="width: 9.444%;"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
         <div class="centerbit" style="width: 24.02%;">
-          <div style="background-color: rgb(12,12,12);"></div>
-          <div class="black"></div>
-          <div style="background-color: rgb(20,20,20);"></div>
-          <div class="black"></div>
-          <div style="background-color: rgb(25,25,25);"></div>
+          <swatch colour="white" ire="2.5" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="5" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch>
+          <swatch colour="white" ire="7.5" :showText="config.arib.overlay"></swatch>
         </div>
-        <div style="width: 16.52777%;" class="black"></div>
-        <div style="width: 30.41666%;" class="white75"></div>
-        <div style="width: 19.58333%;" class="black"></div>
+        <div style="width: 16.52777%;"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
+        <div style="width: 30.41666%;"><swatch colour="white" ire="75" :showText="config.arib.overlay"></swatch></div>
+        <div style="width: 19.58333%;"><swatch colour="white" ire="0" :showText="config.arib.overlay"></swatch></div>
       </div>
       <div class="centerbit" style="width: 12.5%">
         <div class="rec709magenta"></div>
@@ -85,7 +86,9 @@
 </template>
 
 <script>
+import Swatch from './Swatch'
   export default {
+    components: { Swatch },
     props: {
       config: Object
     }

@@ -1,28 +1,24 @@
 <template>
   <div id="bars">
     <div class="thebars">
-        <div style="background: #ffffff" :style="{opacity: opacity}"></div>
-        <div style="background: #ffff00" :style="{opacity: opacity}"></div>
-        <div style="background: #00ffff" :style="{opacity: opacity}"></div>
-        <div style="background: #00ff00" :style="{opacity: opacity}"></div>
-        <div style="background: #ff00ff" :style="{opacity: opacity}"></div>
-        <div style="background: #ff0000" :style="{opacity: opacity}"></div>
-        <div style="background: #0000ff" :style="{opacity: opacity}"></div>
-        <div class="black"></div>
+        <swatch colour="white" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="yellow" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="cyan" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="green" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="magenta" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="red" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="blue" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
+        <swatch colour="black" ire="0" :showText="config.bars.overlay"></swatch>
     </div>
   </div>
 </template>
 
 <script>
+import Swatch from './Swatch'
   export default {
+    components: { Swatch },
     props: {
       config: Object
-    },
-    computed: {
-      opacity: function() {
-        var LUT={"75%":0.7059, "100%":0.9215, "109%":1};
-        return LUT[this.config.bars.level];
-      }
     }
   }
 </script>

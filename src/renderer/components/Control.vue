@@ -105,9 +105,9 @@
         <el-col :span="16">
           <el-form-item label="Bar Level">
             <el-radio-group fill="#7BB144" v-model="config.bars.level" size="mini">
-              <el-radio-button label="75%" />
-              <el-radio-button label="100%" />
-              <el-radio-button label="109%" />
+              <el-radio-button label="75" />
+              <el-radio-button label="100" />
+              <el-radio-button label="109" />
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -248,7 +248,7 @@ const { ipcRenderer, screen } = require('electron')
         },
         bars: {
           overlay: false,
-          level: "100%"
+          level: "75"
         },
         grid: {
           bg: "#000",
