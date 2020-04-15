@@ -1,5 +1,5 @@
 <template>
-  <div id="alteka" :class="{gradient : config.gradient}">
+  <div id="alteka" :class="{gradient : config.alteka.gradient}">
 
     <div id="centerbox">
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">

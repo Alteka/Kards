@@ -51,17 +51,26 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="Text colour">
             <el-color-picker v-model="config.alteka.textColour"></el-color-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="Text">
             <el-input v-model="config.alteka.text"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="Gradient">
+            <el-switch active-color="#7BB144" v-model="config.alteka.gradient"></el-switch>
+          </el-form-item>
+        </el-col>
       </el-row>
+
+      
+
+
       <el-checkbox-group  fill="#7BB144" v-model="config.options">
         <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
         <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
@@ -252,7 +261,8 @@ const { ipcRenderer, screen } = require('electron')
           name: require('os').hostname().split('.')[0],
           options: [],
           textColour: "#fff",
-          text: "Words"
+          text: "Words",
+          gradient: true
         },
         width: 1920,
         height: 1080,
