@@ -22,7 +22,7 @@ import Swatch from './Swatch'
     },
     data: function() {
       return {
-        steps: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        steps: ['-7.5', '0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '109']
       }
     },
     computed: {
@@ -66,11 +66,15 @@ import Swatch from './Swatch'
         } else {
           result = { background: 'linear-gradient(' + this.gradientAngle + 'deg, ' + this.computedColours + ')' }
         }
-        if (this.config.ramp.direction == 'Diagonal' || this.config.ramp.direction == 'Radial') {
-          if (this.config.ramp.double) {
+
+        if (this.config.ramp.double) {
+          if (this.config.ramp.direction == 'Diagonal' || this.config.ramp.direction == 'Radial') {   
             result.height= '50%'
+          } else if (this.config.ramp.direction == 'Vertical') {
+            result.width = '50%'
           }
         }
+        
         return result
       },
       computedRamp2: function() {

@@ -1,7 +1,7 @@
 <template>
   <div class="swatch" :style="bgCol" ref="swatch">
     <transition name="fade">
-      <div class="text" v-if="showText == true" :class="{vertical: vertical}">
+      <div class="text" v-if="showText == true">
           <strong>{{ colName }}</strong> <span class="subtitle" v-if="ire != null">{{ ire }}%</span>
       </div>
     </transition>
@@ -23,15 +23,6 @@
             if (result < 0) {result = 0}
             return Math.round(result)
         },
-        handleResize: function() {
-            let h = this.$refs.swatch.clientHeight
-            let w = this.$refs.swatch.clientWidth
-            if (h > (w*1.25)) { 
-                this.vertical = true 
-            } else {
-                this.vertical = false
-            }
-        }
     },
     computed: {
         bgCol: function() {
@@ -74,10 +65,6 @@
             }
         }
     },
-    mounted: function() {
-        window.addEventListener('resize', this.handleResize)
-        this.handleResize()
-    },
     data: function() {
         return {
             vertical: false,
@@ -114,16 +101,13 @@
        overflow: hidden;
    }
    .text {
-margin: auto;
-text-align: center;
+        margin: auto;
+        text-align: center;
    }
    .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
-}
-.vertical {
-    writing-mode: vertical-rl;
 }
 </style>
