@@ -13,207 +13,45 @@
       </el-col>
     </el-row>
 
+<el-form ref="form" :model="config" label-width="120px">
 
 <el-divider content-position="center">Select Output</el-divider>
-
-<el-row style="text-align: center">
-    <el-radio-group fill="#7BB144" v-model="config.screen" :disabled="config.visible">
-      <el-radio-button v-for="scr in screens" :key="scr.id" :label="scr.id">
-        <i v-if="scr.id != primaryScreen" class="el-icon-monitor"></i>
-        <i v-if="scr.id == primaryScreen" class="el-icon-star-on"></i>
-         {{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
-      <el-radio-button label="0"><i class="el-icon-crop"></i> Window</el-radio-button>
-    </el-radio-group>
-</el-row>
+<control-screen :config="config"></control-screen>
 
      
 <el-divider content-position="center">Select Card Type</el-divider>
 
-<el-form ref="form" :model="config" label-width="120px">
-
 <el-row style="margin-left: 20px; margin-right: 20px;">
   <el-tabs type="border-card"  v-model="config.cardType" :stretch="true">
+    
     <el-tab-pane label="Alteka" name="alteka">
-
-      <el-row>
-        <el-col :span="8">
-          <el-button type="success" icon="el-icon-picture" v-on:click="selectImage()">Select Image</el-button>
-        </el-col>
-        <el-col :span="8">
-          <el-image style="width: 150px; height: 50px" :src="config.alteka.logoUrl" fit="contain">
-            <div slot="error" class="image-slot">
-              <img src="~@/assets/bug.png" height="40px" />
-            </div>
-          </el-image>
-        </el-col>
-        <el-col :span="8" v-if="config.alteka.logoUrl != false">
-          <el-button type="success" icon="el-icon-delete" v-on:click="clearImage()">Clear</el-button>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Text colour">
-            <el-color-picker v-model="config.alteka.textColour"></el-color-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Text">
-            <el-input v-model="config.alteka.text"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Gradient">
-            <el-switch active-color="#7BB144" v-model="config.alteka.gradient"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-checkbox-group  fill="#7BB144" v-model="config.alteka.options">
-          <el-checkbox-button label="CPU" name="type"></el-checkbox-button>
-          <el-checkbox-button label="RAM" name="type"></el-checkbox-button>
-          <el-checkbox-button label="Framerate" name="type"></el-checkbox-button>
-        </el-checkbox-group>
-      </el-row>
+      <control-alteka :alteka="config.alteka"></control-alteka>
     </el-tab-pane>
 
     <el-tab-pane label="SMPTE" name="smpte">
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="Overlay Details">
-            <el-switch active-color="#7BB144" v-model="config.smpte.overlay"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <control-smpte :smpte="config.smpte"></control-smpte>
     </el-tab-pane>
+
     <el-tab-pane label="ARIB" name="arib">
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="Overlay Details">
-            <el-switch active-color="#7BB144" v-model="config.arib.overlay"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <control-arib :arib="config.arib"></control-arib>
     </el-tab-pane>
 
     <el-tab-pane label="Bars" name="bars">
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Overlay Details">
-            <el-switch active-color="#7BB144" v-model="config.bars.overlay"></el-switch>
-          </el-form-item>
-        </el-col>
-        <el-col :span="16">
-          <el-form-item label="Bar Level">
-            <el-radio-group fill="#7BB144" v-model="config.bars.level" size="mini">
-              <el-radio-button label="75" />
-              <el-radio-button label="100" />
-              <el-radio-button label="109" />
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <control-bars :bars="config.bars"></control-bars>
     </el-tab-pane>
 
     <el-tab-pane label="Grid" name="grid">
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Background">
-            <el-color-picker v-model="config.grid.bg"></el-color-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="16">
-          <el-form-item label="Crosshair">
-            <el-color-picker v-model="config.grid.crosshair"></el-color-picker>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Lines">
-            <el-color-picker v-model="config.grid.lines"></el-color-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="16">
-          <el-form-item label="Size (pixels)">
-            <el-input-number v-model="config.grid.size" :step="5" size="mini"></el-input-number>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <control-grid :grid="config.grid"></control-grid>
     </el-tab-pane>
 
     <el-tab-pane label="Ramp" name="ramp">
-
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="Direction">
-            <el-radio-group fill="#7BB144" v-model="config.ramp.direction" size="mini">
-              <el-radio-button label="Horizontal" />
-              <el-radio-button label="Vertical" />
-              <el-radio-button label="Diagonal" />
-              <el-radio-button label="Radial" />
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Stepped">
-            <el-switch active-color="#7BB144" v-model="config.ramp.stepped"></el-switch>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Double">
-            <el-switch active-color="#7BB144" v-model="config.ramp.double"></el-switch>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Reverse">
-            <el-switch active-color="#7BB144" v-model="config.ramp.reverse"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
-<el-row>
-        <el-col :span="24">
-          <el-form-item label="Overlay Details">
-            <el-switch active-color="#7BB144" v-model="config.ramp.overlay"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <control-ramp :ramp="config.ramp"></control-ramp>
     </el-tab-pane>
    
     <el-tab-pane label="Placeholder" name="placeholder">
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Background">
-            <el-color-picker v-model="config.placeholder.bg"></el-color-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Foreground">
-            <el-color-picker v-model="config.placeholder.fg"></el-color-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="Gradient">
-            <el-switch active-color="#7BB144" v-model="config.placeholder.gradient"></el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="Name">
-            <el-input v-model="config.placeholder.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="Icon">
-            <el-input v-model="config.placeholder.icon"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
+      <control-placeholder :placeholder="config.placeholder"></control-placeholder>
     </el-tab-pane>
+
   </el-tabs>
 </el-row>
 
@@ -280,11 +118,19 @@
 
 <script>
 const { ipcRenderer, screen } = require('electron')
-  
+import ControlBars from './Control/ControlBars.vue'
+import ControlGrid from './Control/ControlGrid.vue'
+import ControlRamp from './Control/ControlRamp.vue'
+import ControlPlaceholder from './Control/ControlPlaceholder.vue'
+import ControlAlteka from './Control/ControlAlteka.vue'
+import ControlArib from './Control/ControlARIB.vue'
+import ControlSmpte from './Control/ControlSMPTE.vue'
+
+import ControlScreen from './Control/ControlScreen.vue'
 
   export default {
     name: 'control',
-    // components: { SystemInformation },
+    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlArib, ControlSmpte, ControlScreen },
     data: function () {
     return {
       config: {
@@ -336,27 +182,13 @@ const { ipcRenderer, screen } = require('electron')
         screen: screen.getPrimaryDisplay().id,
         bounds: false,
         animated: true,
-      },
-      screens: screen.getAllDisplays(),
-      primaryScreen: screen.getPrimaryDisplay().id
-    }
-  },
-  methods: {
-    selectImage: function() {
-      ipcRenderer.send('selectImage')
-    },
-    clearImage: function() {
-      // ipcRenderer.send('clearImage')
-      this.config.alteka.logoUrl = ""
+      }
     }
   },
     mounted: function() {
       let vm = this
       ipcRenderer.on('closeTestCard', function(event, val) {
         vm.config.visible = false
-      })
-      ipcRenderer.on('logoUrl', function(event, val) {
-        vm.config.alteka.logoUrl = val
       })
     },
     watch: {
