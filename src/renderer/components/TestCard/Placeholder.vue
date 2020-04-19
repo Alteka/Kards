@@ -27,14 +27,14 @@ import ResizeText from 'vue-resize-text'
   }
   .name {
     position: absolute;
-    vertical-align: middle;
-    top: 40%;
     width: 100%;
-    height: 20%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
   }
   .name span {
-    font-size: 10%;
+    font-size: 1%;
   }
   .gradient:before {
     content: '';
@@ -43,6 +43,6 @@ import ResizeText from 'vue-resize-text'
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+    background-image: radial-gradient(circle, rgba(0,0,0,0) 25%, rgba(0,0,0,0.3) 100%);
   }
 </style>
