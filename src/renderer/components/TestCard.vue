@@ -1,13 +1,50 @@
 <template>
   <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack">
     <div id="cards" :style="computedStyle">
-      <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-      <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
-      <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
-      <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
-      <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
-      <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
-      <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+
+      <div class="testcard" :class="{animated: config.animated}">
+        <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
+        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+      </div>
+
+
+
+      <div v-if="config.animated" class="testcard" :class="{animatedAbove: config.animated}">
+        <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
+        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+      </div>
+
+      <div v-if="config.animated" class="testcard" :class="{animatedLeft: config.animated}">
+        <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
+        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+      </div>
+
+      <div v-if="config.animated" class="testcard" :class="{animatedAboveLeft: config.animated}">
+        <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
+        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+      </div>
+    
+    
     </div>
   </div>
 </template>
@@ -87,13 +124,56 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   height: 100%;
   overflow: overlay;
 }
+.testcard {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.animated {
+  animation: diagonal 10s infinite;
+  animation-timing-function: linear;
+}
+@keyframes diagonal {
+    0%       { transform: translatex(0%) translatey(0%) }
+    100%     { transform: translatex(100%) translatey(100%) }
+}
+
+.animatedAbove {
+  animation: diagonalAbove 10s infinite;
+  animation-timing-function: linear;
+}
+@keyframes diagonalAbove {
+    0%       { transform: translatex(0%) translatey(-100%) }
+    100%     { transform: translatex(100%) translatey(0%) }
+}
+
+.animatedLeft {
+  animation: diagonalLeft 10s infinite;
+  animation-timing-function: linear;
+}
+@keyframes diagonalLeft {
+    0%       { transform: translatex(-100%) translatey(0%) }
+    100%     { transform: translatex(0%) translatey(100%) }
+}
+
+.animatedAboveLeft {
+  animation: diagonalAboveLeft 10s infinite;
+  animation-timing-function: linear;
+}
+@keyframes diagonalAboveLeft {
+    0%       { transform: translatex(-100%) translatey(-100%) }
+    100%     { transform: translatex(0%) translatey(0%) }
+}
+
 .showBounds {
   outline: 2px solid red;
   outline-offset: -2px;
   background-size: 50% 50%;
-    background-image:
-      linear-gradient(to right, red 1px, transparent 1px),
-      linear-gradient(to bottom, red 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, red 1px, transparent 1px),
+    linear-gradient(to bottom, red 1px, transparent 1px);
 }
 .modal {
   font-family: Sansation;
