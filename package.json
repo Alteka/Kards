@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
+    "electron-store": "^5.1.1",
     "element-ui": "^2.13.0",
     "mousetrap": "^1.6.5",
     "vue": "^2.5.16",

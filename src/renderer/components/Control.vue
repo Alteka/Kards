@@ -2,14 +2,17 @@
   <div id="wrapper">
 
     <el-row>
-      <el-col :span="11" style="margin-top: 20px; padding-left: 20px;">
+      <el-col :span="8" style="margin-top: 20px; padding-left: 20px;">
         <el-switch active-color="#7BB144" v-model="config.visible" active-text="Enabled">Enable</el-switch>
       </el-col>
       <el-col :span="2">
         <img src="~@/assets/bug.png" width="100%" />
       </el-col>
-      <el-col :span="11" style="color: #7BB144; padding-left: 10px;">
+      <el-col :span="10" style="color: #7BB144; padding-left: 10px;">
         <h2 class="logo">ALTEKA Test Card</h2>
+      </el-col>
+      <el-col :span="4">
+        <el-button type="success" plain size="mini" v-on:click="resetDefault" round><i class="fas fa-undo"></i> Reset</el-button>
       </el-col>
     </el-row>
 
@@ -133,71 +136,35 @@ import ControlScreen from './Control/ControlScreen.vue'
     components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlArib, ControlSmpte, ControlScreen },
     data: function () {
     return {
-      config: {
-        visible: false,
-        cardType: 'alteka',
-        fullsize: true,
-        placeholder: {
-          bg: "#d33",
-          fg: "#fff",
-          gradient: true,
-          name: require('os').hostname().split('.')[0],
-          icon: "fa-laptop"
-        },
-        bars: {
-          overlay: false,
-          level: "75"
-        },
-        grid: {
-          bg: "#000",
-          crosshair: "#fff",
-          lines: "#aaa",
-          size: 50
-        },
-        arib: {
-          overlay: false
-        },
-        smpte: {
-          overlay: false
-        },
-        alteka: {
-          logoUrl: "",
-          name: require('os').hostname().split('.')[0],
-          options: [],
-          textColour: "#fff",
-          text: "Words",
-          gradient: true
-        },
-        ramp: {
-          direction: 'Horizontal',
-          reverse: false,
-          stepped: false,
-          double: false,
-          overlay: false
-        },
-        width: 1920,
-        height: 1080,
-        top: 0,
-        left: 0,
-        screen: screen.getPrimaryDisplay().id,
-        bounds: false,
-        animated: true,
-      }
+      config: require('../../main/defaultConfig.json'),
+      sync: false
     }
   },
-    mounted: function() {
+    created: function() {
       let vm = this
       ipcRenderer.on('closeTestCard', function(event, val) {
         vm.config.visible = false
       })
+      ipcRenderer.on('config', function(event, val) {
+        vm.config = val
+        vm.sync = true
+      })
+      ipcRenderer.send('getConfigControl')
     },
     watch: {
       config: {
         handler: function (val, oldVal) { 
-          ipcRenderer.send('config', val)
+          if (this.sync) {
+            ipcRenderer.send('config', val)
+          }
          },
         deep: true
       },
+    },
+    methods: {
+      resetDefault: function() {
+        ipcRenderer.send('resetDefault')
+      }
     }
   }
 </script>
@@ -205,7 +172,6 @@ import ControlScreen from './Control/ControlScreen.vue'
 <style>
  #app {
   font-family: Sansation, Helvetica, sans-serif;
-  /* text-align: center; */
 }
 @font-face {
   font-family: Sansation;

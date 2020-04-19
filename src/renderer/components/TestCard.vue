@@ -95,7 +95,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       ipcRenderer.on('config', function(event, args) {
         vm.config = args
       })
-      ipcRenderer.send('getConfig')
+      ipcRenderer.send('getConfigTestCard')
       this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
     }
   }

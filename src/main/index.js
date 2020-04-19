@@ -1,5 +1,9 @@
 import { app, BrowserWindow, ipcMain, webContents, dialog, screen } from 'electron'
+import { create } from 'domain';
 const fs = require('fs')
+const Store = require('electron-store')
+
+const store = new Store();
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -11,6 +15,7 @@ process.on('uncaughtException', function (error) {
 
 let controlWindow
 let testCardWindow
+
 let config
 
 let testCardWindowScreen
@@ -34,7 +39,11 @@ function createWindow () {
    })
 }
 
-app.on('ready', createWindow)
+app.on('ready', function() {
+  config = store.get('config', getDefaultConfig())
+  console.log('Loaded Config: ', config)
+  createWindow()
+})
 
 app.on('window-all-closed', () => {
     app.quit()
@@ -54,16 +63,34 @@ ipcMain.on('config', (event, arg) => {
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
   }
+  store.set('config', config)
 })
 
-ipcMain.on('getConfig', (event, arg) => {
+ipcMain.on('getConfigTestCard', (event, arg) => {
   testCardWindow.webContents.send('config', config)
+})
+
+ipcMain.on('getConfigControl', (event, arg) => {
+  controlWindow.webContents.send('config', config)
 })
 
 ipcMain.on('closeTestCard', (event, arg) => {
   controlWindow.webContents.send('closeTestCard')
 })
 
+ipcMain.on('resetDefault', (event, arg) => {
+  controlWindow.webContents.send('config', getDefaultConfig())
+})
+
+function getDefaultConfig() {
+  let defaultConfig = require('./defaultConfig.json')
+
+  defaultConfig.alteka.name = require('os').hostname().split('.')[0]
+  defaultConfig.placeholder.name = defaultConfig.alteka.name
+  defaultConfig.screen = screen.getPrimaryDisplay().id
+
+  return defaultConfig
+}
 
 function manageTestCardWindow() {
   let displays = screen.getAllDisplays()

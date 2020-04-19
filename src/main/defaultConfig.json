@@ -1,0 +1,50 @@
+{
+    "visible": false,
+"cardType": "alteka",
+"fullsize": true,
+"placeholder": {
+    "bg": "#d33",
+    "fg": "#fff",
+    "gradient": true,
+    "name": "PPT Main",
+    "icon": "fa-laptop"
+},
+"bars": {
+    "overlay": false,
+    "level": "75"
+},
+"grid": {
+    "bg": "#000",
+    "crosshair": "#fff",
+    "lines": "#aaa",
+    "size": 50
+},
+"arib": {
+    "overlay": false
+},
+"smpte": {
+    "overlay": false
+},
+"alteka": {
+    "logoUrl": "",
+    "name": "PPT Main",
+    "options": [],
+    "textColour": "#fff",
+    "text": "Words",
+    "gradient": true
+},
+"ramp": {
+    "direction": "Horizontal",
+    "reverse": false,
+    "stepped": false,
+    "double": false,
+    "overlay": false
+},
+"width": 1920,
+"height": 1080,
+"top": 0,
+"left": 0,
+"screen": 0,
+"bounds": false,
+"animated": false
+}
