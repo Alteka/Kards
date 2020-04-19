@@ -130,6 +130,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   position: absolute;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 .animated {
   animation: diagonal 10s infinite;
