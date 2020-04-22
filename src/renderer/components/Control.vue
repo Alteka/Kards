@@ -16,7 +16,7 @@
       </el-col>
     </el-row>
 
-<el-form ref="form" :model="config" label-width="120px">
+<el-form ref="form" :model="config" label-width="120px" size="small">
 
 <el-divider content-position="center">Select Output</el-divider>
 <control-screen :config="config"></control-screen>
