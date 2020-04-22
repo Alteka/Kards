@@ -1,8 +1,8 @@
 <template>
   <div id="placeholder" :style="{background : config.placeholder.bg}" :class="{gradient : config.placeholder.gradient}">
     <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{color:config.placeholder.fg}">
-      <span v-if="config.placeholder.name != ''" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
-      <br v-if="config.placeholder.name != ''" />{{ config.placeholder.name }}
+      <span v-if="config.name != ''" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
+      <br v-if="config.name != ''" />{{ config.name }}
     </div>
   </div>
 </template>

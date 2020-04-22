@@ -85,8 +85,7 @@ ipcMain.on('resetDefault', (event, arg) => {
 function getDefaultConfig() {
   let defaultConfig = require('./defaultConfig.json')
 
-  defaultConfig.alteka.name = require('os').hostname().split('.')[0]
-  defaultConfig.placeholder.name = defaultConfig.alteka.name
+  defaultConfig.name = require('os').hostname().split('.')[0]
   defaultConfig.screen = screen.getPrimaryDisplay().id
 
   return defaultConfig

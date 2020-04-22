@@ -20,15 +20,17 @@
       </el-row>
 
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="Name">
-            <el-input v-model="placeholder.name"></el-input>
+        <el-col :span="16">
+          <el-form-item label="Icon">
+            <el-radio-group v-model="placeholder.icon" size="mini">
+              <el-radio-button v-for="icon in icons" :key="icon" :label="icon"><i :class="icon"></i></el-radio-button>
+            </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="Icon">
+        <el-col :span="8">
+
             <el-input v-model="placeholder.icon"></el-input>
-          </el-form-item>
+
         </el-col>
       </el-row>
       </div>
@@ -38,6 +40,11 @@
   export default {
     props: {
       placeholder: Object
+    },
+    data: function() {
+      return {
+        icons: ['el-icon-s-opportunity', 'el-icon-picture-outline', 'el-icon-phone-outline', 'el-icon-upload', 'el-icon-video-camera', 'el-icon-monitor', 'el-icon-data-analysis', 'el-icon-chat-dot-round', 'el-icon-mic', 'el-icon-alarm-clock', 'el-icon-timer', 'el-icon-service']
+      }
     }
   }
 </script>

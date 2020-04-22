@@ -6,8 +6,7 @@
     "bg": "#d33",
     "fg": "#fff",
     "gradient": true,
-    "name": "PPT Main",
-    "icon": "fa-laptop"
+    "icon": "el-icon-picture-outline"
 },
 "bars": {
     "overlay": false,
@@ -27,7 +26,6 @@
 },
 "alteka": {
     "logoUrl": "",
-    "name": "PPT Main",
     "options": [],
     "textColour": "#fff",
     "text": "Words",
@@ -40,6 +38,7 @@
     "double": false,
     "overlay": false
 },
+"name": "PPT Main",
 "width": 1920,
 "height": 1080,
 "top": 0,
