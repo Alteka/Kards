@@ -62,9 +62,16 @@
 <el-divider content-position="center">Output Options</el-divider>
 
 <el-row>
-  <el-form-item label="Computer Name">
-    <el-input v-model="config.name"></el-input>
-  </el-form-item>
+  <el-col :span="16">
+    <el-form-item label="Computer Name">
+      <el-input v-model="config.name"></el-input>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item label="Show Info">
+      <el-switch active-color="#7BB144" v-model="config.showInfo"></el-switch>
+    </el-form-item>
+  </el-col>
 </el-row>
 
 <el-row>

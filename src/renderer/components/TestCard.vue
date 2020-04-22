@@ -2,6 +2,8 @@
   <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack">
     <div id="cards" :style="computedStyle">
 
+      
+
       <div class="testcard" :class="{animated: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
@@ -44,7 +46,13 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
     
-    
+    <transition name="fade">
+      <div v-if="config.showInfo" class="info">
+        {{ config.name}} <br />
+        Resolution?
+      </div>
+    </transition>
+
     </div>
   </div>
 </template>
@@ -124,6 +132,20 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   height: 100%;
   overflow: overlay;
 }
+.info {
+    position: absolute;
+    min-width: 150px;
+    height: 100px;
+    padding-top: 50px;
+    margin: auto;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    text-align: center;
+    background: rgba(0,0,0,0.2);
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.5);
+}
 .testcard {
   height: 100%;
   width: 100%;
@@ -200,5 +222,12 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
     background-color: rgb(180,180,180);
   }
  
+
+ .fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 
 </style>

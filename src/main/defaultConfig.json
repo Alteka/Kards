@@ -2,6 +2,7 @@
 "visible": false,
 "cardType": "alteka",
 "fullsize": true,
+"showInfo": true,
 "placeholder": {
     "bg": "#d33",
     "fg": "#fff",
