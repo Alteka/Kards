@@ -48,12 +48,19 @@
     
     <transition name="fade">
       <div v-if="config.showInfo" class="info">
-        {{ config.name}} <br />
-        Resolution?
+        <strong>{{ config.name}}</strong> <br />
+        {{ cardResolution }}
       </div>
     </transition>
 
     </div>
+
+    <transition name="fade">
+      <div v-if="config.bounds" class="info infoBounds">
+        <strong>{{ config.name}}</strong> <br />
+        {{ boundsInfo }}
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -76,7 +83,8 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
     data: function() { 
       return {
         config: {
-        }
+        },
+        boundsInfo: window.visualViewport.width + ' x ' + window.visualViewport.height,
       }
     },
     computed: {
@@ -90,6 +98,13 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
             top: this.config.top + 'px',
             left: this.config.left + 'px',
           }
+        }
+      },
+      cardResolution: function() {
+        if (this.config.fullsize) {
+          return this.boundsInfo
+        } else {
+          return this.config.width + ' x ' + this.config.height
         }
       }
     },
@@ -105,6 +120,9 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       })
       ipcRenderer.send('getConfigTestCard')
       this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
+      window.addEventListener('resize', function() {
+        vm.boundsInfo = window.visualViewport.width + ' x ' + window.visualViewport.height
+      })
     }
   }
 </script>
@@ -131,20 +149,28 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   width: 100%;
   height: 100%;
   overflow: overlay;
+  z-index: -10;
 }
 .info {
     position: absolute;
-    min-width: 150px;
-    height: 100px;
-    padding-top: 50px;
+    font-size: 20px;
+    width: 150px;
+    height: 95px;
+    padding-top: 55px;
     margin: auto;
-    left: calc(50% - 100px);
-    top: calc(50% - 100px);
+    left: calc(50% - 75px);
+    top: calc(50% - 75px);
     text-align: center;
     background: rgba(0,0,0,0.2);
-    vertical-align: middle;
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.5);
+    overflow: hidden;
+}
+.infoBounds {
+  color: red;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,0,0,1);
+  z-index: -1;
 }
 .testcard {
   height: 100%;
