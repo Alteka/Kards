@@ -23,6 +23,14 @@ const { screen } = require('electron')
         screens: screen.getAllDisplays(),
         primaryScreen: screen.getPrimaryDisplay().id
       }
+    },
+    mounted: function() {
+      screen.on('display-added', function() {
+        this.screens = screen.getAllDisplays()
+      })
+      screen.on('display-removed', function() {
+        this.screens = getAllDisplays()
+      })
     }
   }
 </script>
