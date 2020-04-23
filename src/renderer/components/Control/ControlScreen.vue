@@ -24,12 +24,18 @@ const { screen } = require('electron')
         primaryScreen: screen.getPrimaryDisplay().id
       }
     },
-    mounted: function() {
-      screen.on('display-added', function() {
+    methods: {
+      updateScreens: function() {
         this.screens = screen.getAllDisplays()
+      }
+    },
+    mounted: function() {
+      let vm = this
+      screen.on('display-added', function() {
+        setTimeout(vm.updateScreens(), 500)
       })
       screen.on('display-removed', function() {
-        this.screens = getAllDisplays()
+        setTimeout(vm.updateScreens(), 500)
       })
     }
   }
