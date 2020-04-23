@@ -19,7 +19,7 @@
       <swatch colour="white" ire="75" :showText="config.smpte.overlay"></swatch>
     </div>
     <div class="row">
-      <div class="row" style="flex-grow: 4; width: 500%;">
+      <div class="row" style="width: 500%;">
         <swatch colour="ntscInphase" :showText="config.smpte.overlay"></swatch>
         <swatch colour="white" ire="100" :showText="config.smpte.overlay"></swatch>
         <swatch colour="ntscQuadrature" :showText="config.smpte.overlay"></swatch>
@@ -30,7 +30,7 @@
         <swatch colour="black" ire="7.5" :showText="config.smpte.overlay"></swatch>
         <swatch colour="black" ire="11.5" :showText="config.smpte.overlay"></swatch>
       </div>
-      <swatch colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
+      <swatch style="padding: 0" colour="black" ire="0" :showText="config.smpte.overlay"></swatch>
     </div>
   </div>
 </template>
