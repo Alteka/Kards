@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain, webContents, dialog, screen } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar } from 'electron'
 import { create } from 'domain';
 const fs = require('fs')
 const Store = require('electron-store')
+const touchBar = require('./touchBar.js')
 
 const store = new Store();
 
@@ -34,6 +35,8 @@ function createWindow () {
      }
   })
   controlWindow.loadURL(winURL)
+  controlWindow.setTouchBar(touchBar.touchBar)
+  // console.log('Setting touchbar: ', touchBar.touchBar)
   controlWindow.on('closed', () => { 
     app.quit()
    })
@@ -63,6 +66,7 @@ ipcMain.on('config', (event, arg) => {
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
   }
+  // controlWindow.setTouchBar(touchBar.touchBar)
   store.set('config', config)
 })
 
