@@ -11,5 +11,7 @@
 </script>
 
 <style>
-  /* CSS */
+  body {
+    user-select: none;
+  }
 </style>
