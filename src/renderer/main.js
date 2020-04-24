@@ -22,5 +22,10 @@ Vue.config.productionTip = false
 new Vue({
   components: { App },
   router,
-  template: '<App/>'
+  template: '<App/>',
+  mounted: function() {
+    var webFrame = require('electron').webFrame;
+    webFrame.setVisualZoomLevelLimits(1, 1);
+    webFrame.setLayoutZoomLevelLimits(0, 0);
+  }
 }).$mount('#app')
