@@ -36,7 +36,7 @@ function createWindow () {
   })
   controlWindow.loadURL(winURL)
   controlWindow.setTouchBar(touchBar.touchBar)
-  // console.log('Setting touchbar: ', touchBar.touchBar)
+  touchBar.setWindow(controlWindow)
   controlWindow.on('closed', () => { 
     app.quit()
    })
@@ -66,7 +66,7 @@ ipcMain.on('config', (event, arg) => {
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
   }
-  // controlWindow.setTouchBar(touchBar.touchBar)
+  touchBar.setConfig(config)
   store.set('config', config)
 })
 
@@ -134,6 +134,7 @@ function showTestCardWindow(windowConfig) {
   const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
   testCardWindow = new BrowserWindow(windowConfig)
   testCardWindowScreen = config.screen
+  testCardWindow.setTouchBar(touchBar.touchBar)
   testCardWindow.on('close', function () { 
     testCardWindow = null 
     controlWindow.webContents.send('closeTestCard')
