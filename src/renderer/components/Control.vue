@@ -166,18 +166,14 @@ import ControlScreen from './Control/ControlScreen.vue'
     },
     methods: {
       handleResize: function({ width, height }) {
-        console.log('resize', height)
         ipcRenderer.send('controlResize', width, height)
-      },
-      resetDefault: function() {
-        ipcRenderer.send('resetDefault')
       }
     }
   }
 </script>
 
 <style>
- #app {
+ body {
   font-family: Sansation, Helvetica, sans-serif;
 }
 @font-face {

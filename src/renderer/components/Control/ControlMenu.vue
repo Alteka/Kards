@@ -27,9 +27,15 @@
 </template>
 
 <script>
+const { ipcRenderer } = require('electron')
   export default {
     props: {
       config: Object
+    },
+    methods: {
+      resetDefault: function() {
+        ipcRenderer.send('resetDefault')
+      }
     }
   }
 </script>

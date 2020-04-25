@@ -29,6 +29,7 @@ function createWindow () {
   controlWindow = new BrowserWindow({
     height: 750,
     resizable: false,
+    maximizable: false,
     useContentSize: true,
     width: 620,
     webPreferences: {
@@ -62,7 +63,7 @@ app.on('activate', () => {
 
 ipcMain.on('config', (event, arg) => {
   config = arg
-  console.log('config change via ipc: ', config)
+  // console.log('config change via ipc: ', config)
   manageTestCardWindow()
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
