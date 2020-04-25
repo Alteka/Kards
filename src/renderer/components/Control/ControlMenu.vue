@@ -9,7 +9,15 @@
  
   <el-menu-item>Enabled <el-switch active-color="#7BB144" v-model="config.visible"></el-switch></el-menu-item>
 
-<el-submenu index="2">
+<el-submenu>
+    <template slot="title"><i class="fas fa-image"></i> Image</template>
+    <el-menu-item v-on:click="testCardToPNG">Test Card to PNG</el-menu-item>
+    <el-menu-item v-on:click="outputToPNG">Output to PNG</el-menu-item>
+    <!-- <el-menu-item>Test Card as Wallpaper</el-menu-item>
+    <el-menu-item>Output as Wallpaper</el-menu-item> -->
+  </el-submenu>
+
+<el-submenu index="3">
     <template slot="title"><i class="fas fa-volume-up"></i> Sound</template>
     <el-menu-item index="2-1">item one</el-menu-item>
     <el-menu-item index="2-2">item two</el-menu-item>
@@ -35,6 +43,12 @@ const { ipcRenderer } = require('electron')
     methods: {
       resetDefault: function() {
         ipcRenderer.send('resetDefault')
+      },
+      testCardToPNG: function() {
+        ipcRenderer.send('testCardToPNG')
+      },
+      outputToPNG: function() {
+        ipcRenderer.send('outputToPNG')
       }
     }
   }

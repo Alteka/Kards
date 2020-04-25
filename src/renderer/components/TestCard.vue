@@ -2,9 +2,7 @@
   <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack">
     <div id="cards" :style="computedStyle">
 
-      
-
-      <div class="testcard" :class="{animated: config.animated}">
+      <div id="cardForPNG" class="testcard" :class="{animated: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
         <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
@@ -74,8 +72,10 @@ import ARIB from './TestCard/ARIB'
 import Bars from './TestCard/Bars'
 import Placeholder from './TestCard/Placeholder'
 
-var Mousetrap = require('mousetrap');
-Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup');
+import domtoimage from 'dom-to-image'
+
+var Mousetrap = require('mousetrap')
+Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
   export default {
     name: 'testcard',
@@ -111,6 +111,18 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
     methods: {
       closeTestCard: function () {
         ipcRenderer.send('closeTestCard')
+      },
+      testCardToPNG: function() {
+        domtoimage.toPng(document.getElementById('cardForPNG'))
+          .then(function (dataUrl) {
+          ipcRenderer.send('saveAsPNG', dataUrl)
+        })
+      },
+      boundsToPNG: function() {
+        domtoimage.toPng(document.getElementById('bounds'))
+          .then(function (dataUrl) {
+          ipcRenderer.send('saveAsPNG', dataUrl)
+        })
       }
     },
     mounted: function() {
@@ -122,6 +134,13 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {
         vm.boundsInfo = window.visualViewport.width + ' x ' + window.visualViewport.height
+      })
+
+      ipcRenderer.on('testCardToPNG', function(event, args) {
+        vm.testCardToPNG()
+      })
+      ipcRenderer.on('outputToPNG', function(event, args) {
+        vm.boundsToPNG()
       })
     }
   }
@@ -143,6 +162,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 }
 #bounds {
   font-family: Sansation, Helvetica, sans-serif;
+  /* background: black; */
   position: absolute;
   top: 0px;
   left: 0px;

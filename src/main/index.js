@@ -89,6 +89,24 @@ ipcMain.on('controlResize', (event, width, height) => {
   controlWindow.setSize(620, height + 20)
 })
 
+ipcMain.on('testCardToPNG', (event) => {
+  testCardWindow.webContents.send('testCardToPNG')
+})
+ipcMain.on('outputToPNG', (event) => {
+  testCardWindow.webContents.send('outputToPNG')
+})
+
+ipcMain.on('saveAsPNG', (event, arg) => {
+  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', filters: [{name: 'Images', extensions: ['png']}]}, (path) => {
+    console.log(arg)
+    var base64Data = arg.replace(/^data:image\/png;base64,/, "");
+    fs.writeFile(path, base64Data, 'base64', function(err) {
+      console.log('Couldnt save file: ', err);
+    });
+    console.log('File saved to: ', path);
+  })
+})
+
 ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())
 })
