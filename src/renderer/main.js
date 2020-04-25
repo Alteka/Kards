@@ -9,6 +9,10 @@ import locale from 'element-ui/lib/locale/lang/en'
 
 import '@fortawesome/fontawesome-free/css/all.css'
 
+import 'vue-resize/dist/vue-resize.css'
+import VueResize from 'vue-resize'
+Vue.use(VueResize)
+
 import VueResizeText from 'vue-resize-text'
 Vue.use(VueResizeText)
 

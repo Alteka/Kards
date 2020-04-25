@@ -1,24 +1,9 @@
 <template>
-  <div id="wrapper">
+  <div id="wrapper" style="position: relative;">
 
-    <el-row>
-      <el-col :span="8" style="margin-top: 20px; padding-left: 20px;">
-        <el-switch active-color="#7BB144" v-model="config.visible" active-text="Enabled">Enable</el-switch>
-      </el-col>
-      <el-col :span="2">
-        <img src="~@/assets/bug.png" width="100%" />
-      </el-col>
-      <el-col :span="10" style="color: #7BB144; padding-left: 10px;">
-        <h2 class="logo">ALTEKA Test Card</h2>
-      </el-col>
-      <el-col :span="4">
-        <el-button type="success" plain size="mini" v-on:click="resetDefault" round><i class="fas fa-undo"></i> Reset</el-button>
-      </el-col>
-    </el-row>
-
+   
 <el-form ref="form" :model="config" label-width="120px" size="small">
 
-<el-divider content-position="center">Select Output</el-divider>
 <control-screen :config="config"></control-screen>
 
      
@@ -127,8 +112,12 @@
     </el-row>
 
 
-</el-form>
+ <control-menu :config="config"></control-menu>
 
+
+
+</el-form>
+<resize-observer @notify="handleResize" />
   </div>
 </template>
 
@@ -141,12 +130,13 @@ import ControlPlaceholder from './Control/ControlPlaceholder.vue'
 import ControlAlteka from './Control/ControlAlteka.vue'
 import ControlArib from './Control/ControlARIB.vue'
 import ControlSmpte from './Control/ControlSMPTE.vue'
+import ControlMenu from './Control/ControlMenu.vue'
 
 import ControlScreen from './Control/ControlScreen.vue'
 
   export default {
     name: 'control',
-    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlArib, ControlSmpte, ControlScreen },
+    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlArib, ControlSmpte, ControlScreen, ControlMenu },
     data: function () {
     return {
       config: require('../../main/defaultConfig.json'),
@@ -175,6 +165,10 @@ import ControlScreen from './Control/ControlScreen.vue'
       },
     },
     methods: {
+      handleResize: function({ width, height }) {
+        console.log('resize', height)
+        ipcRenderer.send('controlResize', width, height)
+      },
       resetDefault: function() {
         ipcRenderer.send('resetDefault')
       }

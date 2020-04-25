@@ -28,8 +28,9 @@ function createWindow () {
 
   controlWindow = new BrowserWindow({
     height: 750,
+    resizable: false,
     useContentSize: true,
-    width: 600,
+    width: 620,
     webPreferences: {
       webSecurity: false
      }
@@ -80,6 +81,11 @@ ipcMain.on('getConfigControl', (event, arg) => {
 
 ipcMain.on('closeTestCard', (event, arg) => {
   controlWindow.webContents.send('closeTestCard')
+})
+
+ipcMain.on('controlResize', (event, width, height) => {
+  // console.log(height)
+  controlWindow.setSize(620, height + 20)
 })
 
 ipcMain.on('resetDefault', (event, arg) => {
