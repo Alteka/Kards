@@ -19,12 +19,12 @@
 
 <el-submenu index="3">
     <template slot="title"><i class="fas fa-volume-up"></i> Sound</template>
-    <el-menu-item index="2-1">item one</el-menu-item>
-    <el-menu-item index="2-2">item two</el-menu-item>
-    <el-menu-item index="2-3">item three</el-menu-item>
+    <el-menu-item v-on:click="startAudio">Start</el-menu-item>
+    <el-menu-item v-on:click="stopAudio">Stop</el-menu-item>
+    
     <el-submenu index="2-4">
-      <template slot="title">item four</template>
-      <el-menu-item index="2-4-1">item one</el-menu-item>
+      <template slot="title">Voice</template>
+      <el-menu-item index="2-4-1" v-for="voice in voices">{{ voice.name }}</el-menu-item>
       <el-menu-item index="2-4-2">item two</el-menu-item>
       <el-menu-item index="2-4-3">item three</el-menu-item>
     </el-submenu>
@@ -40,6 +40,16 @@ const { ipcRenderer } = require('electron')
     props: {
       config: Object
     },
+    data: function() {
+      return {
+        timer: null,
+        voices: window.speechSynthesis.getVoices(),
+      }
+    },
+    mounted: function() {
+      this.voices = window.speechSynthesis.getVoices()
+
+    },
     methods: {
       resetDefault: function() {
         ipcRenderer.send('resetDefault')
@@ -49,6 +59,18 @@ const { ipcRenderer } = require('electron')
       },
       outputToPNG: function() {
         ipcRenderer.send('outputToPNG')
+      },
+      startAudio: function() {
+        this.playAudio()
+        this.timer = setInterval(this.playAudio, 5000)
+      },
+      stopAudio: function() {
+        clearInterval(this.timer)
+      },
+      playAudio: function() {
+        console.log('PlayAudio')
+        var utter = new SpeechSynthesisUtterance('This is ' + this.config.name)
+        window.speechSynthesis.speak(utter)
       }
     }
   }
