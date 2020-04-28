@@ -7,7 +7,7 @@
   
 
   <el-col :span="8">
-      <el-button type="success" size="mini" round v-on:click="drawerAudio = true"><i class="fas fa-volume-up"></i> Audio</el-button>
+      <el-button type="success" size="mini" round v-on:click="drawerAudio = true"><i v-if="config.audio.enabled" class="fas fa-volume-up"></i><i v-if="!config.audio.enabled" class="fas fa-volume-mute"></i> Audio</el-button>
       <el-button type="success" size="mini" round v-on:click="drawerImage = true"><i class="fas fa-image"></i> Image</el-button>
   </el-col>
 
