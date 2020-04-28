@@ -123,6 +123,18 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
           .then(function (dataUrl) {
           ipcRenderer.send('saveAsPNG', dataUrl)
         })
+      },
+      testCardToWallpaper: function() {
+        domtoimage.toPng(document.getElementById('cardForPNG'))
+          .then(function (dataUrl) {
+          ipcRenderer.send('setAsWallpaper', dataUrl)
+        })
+      },
+      boundsToWallpaper: function() {
+        domtoimage.toPng(document.getElementById('bounds'))
+          .then(function (dataUrl) {
+          ipcRenderer.send('setAsWallpaper', dataUrl)
+        })
       }
     },
     mounted: function() {
@@ -141,6 +153,12 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       })
       ipcRenderer.on('outputToPNG', function(event, args) {
         vm.boundsToPNG()
+      })
+      ipcRenderer.on('testCardToWallpaper', function(event, args) {
+        vm.testCardToWallpaper()
+      })
+      ipcRenderer.on('outputToWallpaper', function(event, args) {
+        vm.boundsToWallpaper()
       })
     }
   }

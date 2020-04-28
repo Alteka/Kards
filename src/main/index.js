@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar } from 'electron'
 import { create } from 'domain';
+const wallpaper = require('wallpaper');
 const fs = require('fs')
 const Store = require('electron-store')
 const touchBar = require('./touchBar.js')
@@ -95,6 +96,12 @@ ipcMain.on('testCardToPNG', (event) => {
 ipcMain.on('outputToPNG', (event) => {
   testCardWindow.webContents.send('outputToPNG')
 })
+ipcMain.on('testCardToWallpaper', (event) => {
+  testCardWindow.webContents.send('testCardToWallpaper')
+})
+ipcMain.on('outputToWallpaper', (event) => {
+  testCardWindow.webContents.send('outputToWallpaper')
+})
 
 ipcMain.on('saveAsPNG', (event, arg) => {
   dialog.showSaveDialog(controlWindow, {title: 'Save PNG', filters: [{name: 'Images', extensions: ['png']}]}, (path) => {
@@ -106,6 +113,29 @@ ipcMain.on('saveAsPNG', (event, arg) => {
     console.log('File saved to: ', path);
   })
 })
+ipcMain.on('setAsWallpaper', (event, arg) => {
+  let dest = app.getPath('userData') + '/wallpaper.png'
+  var base64Data = arg.replace(/^data:image\/png;base64,/, "")
+  fs.writeFile(dest, base64Data, 'base64', err => {
+    if (err) {
+      console.log('Couldnt save wallpaper file ', err)
+      return
+    }
+    
+    (async () => {
+      await wallpaper.set(dest);
+   
+      await wallpaper.get();
+      //=> '/Users/sindresorhus/unicorn.jpg'
+  })();
+
+
+  })
+
+    
+  })
+  
+
 
 ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())

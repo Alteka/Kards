@@ -42,10 +42,10 @@
    </el-row>
    <el-row class="drawerContent">
      <el-col :span="12">
-      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('testCardToPNG')">Test Card to Wallpaper</el-button>
+      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('testCardToWallpaper')">Test Card to Wallpaper</el-button>
      </el-col>
      <el-col :span="12">
-      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToPNG')">Output to Wallpaper</el-button>
+      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToWallpaper')">Output to Wallpaper</el-button>
      </el-col>
    </el-row>
 </el-drawer>
@@ -86,6 +86,7 @@ const { ipcRenderer } = require('electron')
     methods: {
       ipcSend: function(val) {
         ipcRenderer.send(val)
+        this.drawerImage = false
       },
       startAudio: function() {
         this.timer = setInterval(this.playAudio, 8000)
