@@ -86,7 +86,7 @@ ipcMain.on('closeTestCard', (event, arg) => {
 
 ipcMain.on('controlResize', (event, width, height) => {
   // console.log(height)
-  controlWindow.setSize(620, height + 20)
+  controlWindow.setSize(620, height + 30)
 })
 
 ipcMain.on('testCardToPNG', (event) => {

@@ -1,37 +1,56 @@
 <template>
-  <el-menu
-  :default-active="activeIndex2"
-  class="el-menu"
-  mode="horizontal"
-  background-color="#545c64"
-  text-color="#fff"
-  active-text-color="#7BB144">
- 
-  <el-menu-item>Enabled <el-switch active-color="#7BB144" v-model="config.visible"></el-switch></el-menu-item>
+<el-row class="menu">
 
-<el-submenu>
-    <template slot="title"><i class="fas fa-image"></i> Image</template>
-    <el-menu-item v-on:click="testCardToPNG">Test Card to PNG</el-menu-item>
-    <el-menu-item v-on:click="outputToPNG">Output to PNG</el-menu-item>
-    <!-- <el-menu-item>Test Card as Wallpaper</el-menu-item>
-    <el-menu-item>Output as Wallpaper</el-menu-item> -->
-  </el-submenu>
+  <el-col :span="8">
+    Enable <el-switch active-color="#7BB144" v-model="config.visible"></el-switch>
+  </el-col>
+  
 
-<el-submenu index="3">
-    <template slot="title"><i class="fas fa-volume-up"></i> Sound</template>
-    <el-menu-item v-on:click="startAudio">Start</el-menu-item>
-    <el-menu-item v-on:click="stopAudio">Stop</el-menu-item>
-    
-    <el-submenu index="2-4">
-      <template slot="title">Voice</template>
-      <el-menu-item index="2-4-1" v-for="voice in voices">{{ voice.name }}</el-menu-item>
-      <el-menu-item index="2-4-2">item two</el-menu-item>
-      <el-menu-item index="2-4-3">item three</el-menu-item>
-    </el-submenu>
-  </el-submenu>
+  <el-col :span="8">
+      <el-button type="success" size="mini" round v-on:click="drawerAudio = true"><i class="fas fa-volume-up"></i> Audio</el-button>
+      <el-button type="success" size="mini" round v-on:click="drawerImage = true"><i class="fas fa-image"></i> Image</el-button>
+  </el-col>
 
-  <el-menu-item v-on:click="resetDefault"><i class="fas fa-undo"></i> Reset</el-menu-item>
-</el-menu>
+  <el-col :span="8" style="text-align: right">
+    <el-button type="success" size="mini" round v-on:click="ipcSend('resetDefault')">Reset</el-button>
+  </el-col>
+
+
+
+
+  <el-drawer :with-header="false" :visible.sync="drawerAudio" direction="btt">
+    <el-row class="drawerContent">
+      <el-col :span="8">
+        <el-form-item label="Enable Output">
+          <el-switch active-color="#7BB144" v-model="config.audio.enabled"></el-switch>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-drawer>
+
+
+
+
+ <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt">
+   <el-row class="drawerContent">
+     <el-col :span="12">
+      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('testCardToPNG')">Test Card to PNG</el-button>
+     </el-col>
+     <el-col :span="12">
+      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToPNG')">Output to PNG</el-button>
+     </el-col>
+   </el-row>
+   <el-row class="drawerContent">
+     <el-col :span="12">
+      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('testCardToPNG')">Test Card to Wallpaper</el-button>
+     </el-col>
+     <el-col :span="12">
+      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToPNG')">Output to Wallpaper</el-button>
+     </el-col>
+   </el-row>
+</el-drawer>
+
+</el-row>
 </template>
 
 <script>
@@ -44,32 +63,45 @@ const { ipcRenderer } = require('electron')
       return {
         timer: null,
         voices: window.speechSynthesis.getVoices(),
+        drawerAudio: false,
+        drawerImage: false
       }
+    },
+     watch: {
+      config: {
+        handler: function (val, oldVal) { 
+          console.log(val.audio.enabled)
+          if (val.audio.enabled) {
+            this.startAudio()
+          } else {
+            this.stopAudio()
+          }
+         },
+        deep: true
+      },
     },
     mounted: function() {
       this.voices = window.speechSynthesis.getVoices()
 
     },
     methods: {
-      resetDefault: function() {
-        ipcRenderer.send('resetDefault')
-      },
-      testCardToPNG: function() {
-        ipcRenderer.send('testCardToPNG')
-      },
-      outputToPNG: function() {
-        ipcRenderer.send('outputToPNG')
+      ipcSend: function(val) {
+        ipcRenderer.send(val)
       },
       startAudio: function() {
-        this.playAudio()
-        this.timer = setInterval(this.playAudio, 5000)
+        console.log('Starting Audio')
+        // this.playAudio()
+        this.timer = setInterval(this.playAudio, 8000)
       },
       stopAudio: function() {
+        console.log('Stopping Audio')
         clearInterval(this.timer)
       },
       playAudio: function() {
         console.log('PlayAudio')
-        var utter = new SpeechSynthesisUtterance('This is ' + this.config.name)
+        var utter = new SpeechSynthesisUtterance('This is audio from - ' + this.config.name)
+        utter.pitch = 0.8
+        utter.rate = 0.8
         window.speechSynthesis.speak(utter)
       }
     }
@@ -77,7 +109,15 @@ const { ipcRenderer } = require('electron')
 </script>
 
 <style scoped>
-  .el-menu {
-    margin-bottom: 8px;
+  .menu {
+    padding: 8px;
+    background-color: #545c64;
+    color: white;
+    border-top: 3px solid #7BB144;
+  }
+  .drawerContent {
+    text-align: center;
+    padding: 10px;
+    outline: none;
   }
 </style>
