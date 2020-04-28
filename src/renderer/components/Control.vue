@@ -175,6 +175,7 @@ import ControlScreen from './Control/ControlScreen.vue'
 <style>
  body {
   font-family: Sansation, Helvetica, sans-serif;
+  overflow: hidden !important;
 }
 @font-face {
   font-family: Sansation;
