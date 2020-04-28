@@ -1,6 +1,6 @@
 <template>
   <div> 
-    <el-row style="text-align: center">
+    <el-row style="text-align: center; margin-top: 10px;">
       <el-radio-group fill="#7BB144" v-model="config.screen" :disabled="config.visible">
         <el-radio-button v-for="scr in screens" :key="scr.id" :label="scr.id">
           <i v-if="scr.id != primaryScreen" class="el-icon-monitor"></i>
