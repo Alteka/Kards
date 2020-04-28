@@ -3,7 +3,7 @@
 <div>
       <el-row>
         <el-col :span="18">
-          <el-form-item label="Direction">
+          <el-form-item label="Direction" label-width="80">
             <el-radio-group fill="#7BB144" v-model="ramp.direction" size="mini">
               <el-radio-button label="Horizontal" />
               <el-radio-button label="Vertical" />
@@ -13,24 +13,24 @@
           </el-form-item>
         </el-col>
          <el-col :span="6">
-          <el-form-item label="Overlay">
+          <el-form-item label="Overlay" label-width="80">
             <el-switch active-color="#7BB144" v-model="ramp.overlay"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="Stepped">
+          <el-form-item label="Stepped" label-width="80">
             <el-switch active-color="#7BB144" v-model="ramp.stepped"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="Double">
+          <el-form-item label="Double" label-width="80">
             <el-switch active-color="#7BB144" v-model="ramp.double"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="Reverse">
+          <el-form-item label="Reverse" label-width="80">
             <el-switch active-color="#7BB144" v-model="ramp.reverse"></el-switch>
           </el-form-item>
         </el-col>
