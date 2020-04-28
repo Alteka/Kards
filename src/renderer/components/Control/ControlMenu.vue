@@ -70,7 +70,6 @@ const { ipcRenderer } = require('electron')
      watch: {
       config: {
         handler: function (val, oldVal) { 
-          console.log(val.audio.enabled)
           if (val.audio.enabled) {
             this.startAudio()
           } else {
@@ -89,16 +88,12 @@ const { ipcRenderer } = require('electron')
         ipcRenderer.send(val)
       },
       startAudio: function() {
-        console.log('Starting Audio')
-        // this.playAudio()
         this.timer = setInterval(this.playAudio, 8000)
       },
       stopAudio: function() {
-        console.log('Stopping Audio')
         clearInterval(this.timer)
       },
       playAudio: function() {
-        console.log('PlayAudio')
         var utter = new SpeechSynthesisUtterance('This is audio from - ' + this.config.name)
         utter.pitch = 0.8
         utter.rate = 0.8
