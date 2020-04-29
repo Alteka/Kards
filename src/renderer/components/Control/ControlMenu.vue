@@ -2,7 +2,7 @@
 <el-row class="menu">
 
   <el-col :span="8">
-    Enable <el-switch active-color="#7BB144" v-model="config.visible"></el-switch>
+    Enable <el-switch v-model="config.visible"></el-switch>
   </el-col>
   
 
@@ -12,7 +12,7 @@
   </el-col>
 
   <el-col :span="8" style="text-align: right">
-    <el-button type="success" size="mini" round v-on:click="ipcSend('resetDefault')">Reset</el-button>
+    <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault')">Reset</el-button>
   </el-col>
 
 
@@ -22,7 +22,7 @@
     <el-row class="drawerContent">
       <el-col :span="8">
         <el-form-item label="Enable Output">
-          <el-switch active-color="#7BB144" v-model="config.audio.enabled"></el-switch>
+          <el-switch v-model="config.audio.enabled"></el-switch>
         </el-form-item>
       </el-col>
     </el-row>
@@ -43,18 +43,18 @@
  <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt">
    <el-row class="drawerContent">
      <el-col :span="12">
-      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('testCardToPNG')">Test Card to PNG</el-button>
+      <el-button :disabled="!config.visible" v-on:click="ipcSend('testCardToPNG')">Test Card to PNG</el-button>
      </el-col>
      <el-col :span="12">
-      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToPNG')">Output to PNG</el-button>
+      <el-button :disabled="!config.visible" v-on:click="ipcSend('outputToPNG')">Output to PNG</el-button>
      </el-col>
    </el-row>
    <el-row class="drawerContent">
      <el-col :span="12">
-      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('testCardToWallpaper')">Test Card to Wallpaper</el-button>
+      <el-button :disabled="!config.visible" v-on:click="ipcSend('testCardToWallpaper')">Test Card to Wallpaper</el-button>
      </el-col>
      <el-col :span="12">
-      <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToWallpaper')">Output to Wallpaper</el-button>
+      <el-button :disabled="!config.visible" v-on:click="ipcSend('outputToWallpaper')">Output to Wallpaper</el-button>
      </el-col>
    </el-row>
    <el-row v-if="!config.visible" style="text-align: center; color: grey;">

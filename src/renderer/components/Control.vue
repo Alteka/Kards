@@ -54,7 +54,7 @@
   </el-col>
   <el-col :span="8">
     <el-form-item label="Show Info">
-      <el-switch active-color="#7BB144" v-model="config.showInfo"></el-switch>
+      <el-switch v-model="config.showInfo"></el-switch>
     </el-form-item>
   </el-col>
 </el-row>
@@ -62,17 +62,17 @@
 <el-row>
   <el-col :span="8">
     <el-form-item label="Fill Output">
-      <el-switch active-color="#7BB144" v-model="config.fullsize"></el-switch>
+      <el-switch v-model="config.fullsize"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
     <el-form-item label="Diagonal Motion">
-      <el-switch active-color="#7BB144" v-model="config.animated"></el-switch>
+      <el-switch v-model="config.animated"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
     <el-form-item v-if="!config.fullsize" label="Show Bounds">
-      <el-switch active-color="#7BB144" v-model="config.bounds"></el-switch>
+      <el-switch v-model="config.bounds"></el-switch>
     </el-form-item>
   </el-col>
 </el-row>
