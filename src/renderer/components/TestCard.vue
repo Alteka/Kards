@@ -84,7 +84,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       return {
         config: {
         },
-        boundsInfo: window.screen.width + ' x ' + window.screen.height,
+        boundsInfo: visualViewport.width + ' x ' + visualViewport.height,
       }
     },
     computed: {
@@ -145,7 +145,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       ipcRenderer.send('getConfigTestCard')
       this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {
-        vm.boundsInfo = window.screen.width + ' x ' + window.screen.height
+        vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
       })
 
       ipcRenderer.on('testCardToPNG', function(event, args) {
