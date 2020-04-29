@@ -14,7 +14,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="Gradient">
-            <el-switch active-color="#7BB144" v-model="placeholder.gradient"></el-switch>
+            <el-switch v-model="placeholder.gradient"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>

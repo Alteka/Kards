@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="18">
           <el-form-item label="Direction" label-width="80">
-            <el-radio-group fill="#7BB144" v-model="ramp.direction" size="mini">
+            <el-radio-group v-model="ramp.direction" size="mini">
               <el-radio-button label="Horizontal" />
               <el-radio-button label="Vertical" />
               <el-radio-button label="Diagonal" />
@@ -14,24 +14,24 @@
         </el-col>
          <el-col :span="6">
           <el-form-item label="Overlay" label-width="80">
-            <el-switch active-color="#7BB144" v-model="ramp.overlay"></el-switch>
+            <el-switch v-model="ramp.overlay"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
           <el-form-item label="Stepped" label-width="80">
-            <el-switch active-color="#7BB144" v-model="ramp.stepped"></el-switch>
+            <el-switch v-model="ramp.stepped"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Double" label-width="80">
-            <el-switch active-color="#7BB144" v-model="ramp.double"></el-switch>
+            <el-switch v-model="ramp.double"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Reverse" label-width="80">
-            <el-switch active-color="#7BB144" v-model="ramp.reverse"></el-switch>
+            <el-switch v-model="ramp.reverse"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
