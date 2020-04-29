@@ -26,6 +26,15 @@
         </el-form-item>
       </el-col>
     </el-row>
+    <el-row class="drawerContent">
+      <el-checkbox-group v-model="config.audio.options">
+        <el-checkbox label="voice">Voice</el-checkbox>
+        <el-checkbox label="tone">1KHz Tone</el-checkbox>
+        <el-checkbox label="pink">Pink Noise</el-checkbox>
+        <el-checkbox label="white">White Noise</el-checkbox>
+        <el-checkbox label="stereo">Stereo Check</el-checkbox>
+      </el-checkbox-group>
+    </el-row>
   </el-drawer>
 
 
@@ -47,6 +56,9 @@
      <el-col :span="12">
       <el-button type="success" :disabled="!config.visible" v-on:click="ipcSend('outputToWallpaper')">Output to Wallpaper</el-button>
      </el-col>
+   </el-row>
+   <el-row v-if="!config.visible" style="text-align: center; color: grey;">
+     <span>Must enable output first</span>
    </el-row>
 </el-drawer>
 

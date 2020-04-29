@@ -48,6 +48,7 @@
 "bounds": false,
 "animated": false,
 "audio": {
-    "enabled": false    
+    "enabled": false,
+    "options": ["voice"]
 }
 }
