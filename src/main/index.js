@@ -17,9 +17,7 @@ process.on('uncaughtException', function (error) {
 
 let controlWindow
 let testCardWindow
-
 let config
-
 let testCardWindowScreen
 
 function createWindow () {
@@ -28,7 +26,7 @@ function createWindow () {
   : `file://${__dirname}/index.html`
 
   controlWindow = new BrowserWindow({
-    height: 750,
+    height: 450,
     resizable: false,
     maximizable: false,
     useContentSize: true,
@@ -47,6 +45,7 @@ function createWindow () {
 
 app.on('ready', function() {
   config = store.get('config', getDefaultConfig())
+  config.visible = false
   console.log('Loaded Config: ', config)
   createWindow()
 })
@@ -64,7 +63,6 @@ app.on('activate', () => {
 
 ipcMain.on('config', (event, arg) => {
   config = arg
-  // console.log('config change via ipc: ', config)
   manageTestCardWindow()
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
@@ -86,7 +84,6 @@ ipcMain.on('closeTestCard', (event, arg) => {
 })
 
 ipcMain.on('controlResize', (event, width, height) => {
-  // console.log(height)
   controlWindow.setSize(620, height + 30)
 })
 
@@ -121,18 +118,10 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
       console.log('Couldnt save wallpaper file ', err)
       return
     }
-    
     (async () => {
       await wallpaper.set(dest);
-   
-      await wallpaper.get();
-      //=> '/Users/sindresorhus/unicorn.jpg'
-  })();
-
-
-  })
-
-    
+      })();
+    })
   })
   
 
@@ -143,10 +132,9 @@ ipcMain.on('resetDefault', (event, arg) => {
 
 function getDefaultConfig() {
   let defaultConfig = require('./defaultConfig.json')
-
   defaultConfig.name = require('os').hostname().split('.')[0]
   defaultConfig.screen = screen.getPrimaryDisplay().id
-
+  defaultConfig.visible = false
   return defaultConfig
 }
 
