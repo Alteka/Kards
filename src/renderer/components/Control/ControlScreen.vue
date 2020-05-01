@@ -24,9 +24,30 @@ const { screen } = require('electron')
         primaryScreen: screen.getPrimaryDisplay().id
       }
     },
+    watch: {
+      config: {
+        handler: function (val, oldVal) { 
+          if (val.screen != 0 && val.fullsize) {
+            this.setOutputToMatchScreen()
+          }
+         },
+        deep: true
+      },
+    },
     methods: {
       updateScreens: function() {
         this.screens = screen.getAllDisplays()
+      },
+      setOutputToMatchScreen: function() {
+        for (const scr of this.screens) {
+          if (scr.id == this.config.screen) {
+            console.log(scr)
+            this.config.top = 0
+            this.config.left = 0
+            this.config.width = scr.size.width
+            this.config.height = scr.size.height
+          }
+        }
       }
     },
     mounted: function() {
