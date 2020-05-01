@@ -27,10 +27,11 @@
 },
 "alteka": {
     "logoUrl": "",
-    "options": [],
+    "showLogo": false,
+    "audioSync": false,
     "textColour": "#fff",
-    "text": "Words",
-    "gradient": true
+    "cornerColour": "#6AB42F",
+    "animated": false
 },
 "ramp": {
     "direction": "Horizontal",
