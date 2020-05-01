@@ -1,7 +1,7 @@
 <template>
 <el-row class="menu">
 
-  <el-col :span="8">
+  <el-col :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
     Enable <el-switch v-model="config.visible"></el-switch>
   </el-col>
   
@@ -73,41 +73,48 @@ const { ipcRenderer } = require('electron')
     },
     data: function() {
       return {
-        timer: null,
-        voices: window.speechSynthesis.getVoices(),
         drawerAudio: false,
-        drawerImage: false
+        drawerImage: false,
+        curAudio: null
       }
     },
-     watch: {
-      config: {
-        handler: function (val, oldVal) { 
-          if (val.audio.enabled) {
-            this.startAudio()
-          } else {
-            this.stopAudio()
-          }
-         },
-        deep: true
-      },
-    },
     mounted: function() {
-      this.voices = window.speechSynthesis.getVoices()
-
+      setInterval(this.audioTick, 3000)
     },
     methods: {
       ipcSend: function(val) {
         ipcRenderer.send(val)
         this.drawerImage = false
       },
-      startAudio: function() {
-        this.timer = setInterval(this.playAudio, 8000)
+      audioTick: function() {
+        if (this.config.audio.enabled && !window.speechSynthesis.speaking) {
+          let opts = this.config.audio.options
+
+          if (this.curAudio == null && opts.length > 0) {
+            this.curAudio = opts[0]
+          } else if (opts.length > 0) {
+            var curIndex = opts.indexOf(this.curAudio)
+            if (opts[curIndex + 1] == undefined) {
+              this.curAudio = opts[0]
+            } else {
+              this.curAudio = opts[curIndex + 1]
+            }
+          }
+          if (this.curAudio == 'voice') {
+            this.playVoice()
+          } else {
+            this.playFile(this.curAudio)
+          }
+        }
       },
-      stopAudio: function() {
-        clearInterval(this.timer)
+      playFile: function(file) {
+        var x = document.createElement("AUDIO")
+        x.src = '../../assets/audio/' + file + '.wav'
+        x.play()
+        setTimeout(function() { x.pause() }, 2000)
       },
-      playAudio: function() {
-        var utter = new SpeechSynthesisUtterance('This is audio from - ' + this.config.name)
+      playVoice: function() {
+        var utter = new SpeechSynthesisUtterance('This is - ' + this.config.name)
         utter.pitch = 0.8
         utter.rate = 0.8
         window.speechSynthesis.speak(utter)
@@ -119,13 +126,16 @@ const { ipcRenderer } = require('electron')
 <style scoped>
   .menu {
     padding: 8px;
-    background-color: #545c64;
+    background-color: #3D3D3B;
     color: white;
-    border-top: 3px solid #7BB144;
+    border-top: 3px solid #6AB42F;
   }
   .drawerContent {
     text-align: center;
     padding: 10px;
     outline: none;
+  }
+  .enabledText {
+    color: #6AB42F;
   }
 </style>
