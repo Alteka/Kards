@@ -40,7 +40,6 @@ const { screen } = require('electron')
         if (this.config.screen !=0 && this.config.fullsize) {
           for (const scr of this.screens) {
             if (scr.id == this.config.screen) {
-              console.log(scr)
               this.config.top = 0
               this.config.left = 0
               this.config.width = scr.size.width
