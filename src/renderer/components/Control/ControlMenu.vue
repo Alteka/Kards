@@ -32,7 +32,8 @@
         <el-checkbox label="tone">1KHz Tone</el-checkbox>
         <el-checkbox label="pink">Pink Noise</el-checkbox>
         <el-checkbox label="white">White Noise</el-checkbox>
-        <el-checkbox label="stereo">Stereo Check</el-checkbox>
+        <el-checkbox label="stereo">Stereo</el-checkbox>
+        <el-checkbox label="phase">Phase</el-checkbox>
       </el-checkbox-group>
     </el-row>
   </el-drawer>
@@ -61,6 +62,12 @@
      <span>Must enable output first</span>
    </el-row>
 </el-drawer>
+
+<audio src="~@/assets/audio/stereo.wav" id="stereo" />
+<audio src="~@/assets/audio/phase.wav" id="phase" />
+<audio src="~@/assets/audio/pink.wav" id="pink" />
+<audio src="~@/assets/audio/white.wav" id="white" />
+<audio src="~@/assets/audio/tone.wav" id="tone" />
 
 </el-row>
 </template>
@@ -108,8 +115,7 @@ const { ipcRenderer } = require('electron')
         }
       },
       playFile: function(file) {
-        var x = document.createElement("AUDIO")
-        x.src = '../../assets/audio/' + file + '.wav'
+        var x = document.getElementById(file)
         x.play()
         setTimeout(function() { x.pause() }, 2000)
       },
