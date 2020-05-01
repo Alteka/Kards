@@ -27,9 +27,7 @@ const { screen } = require('electron')
     watch: {
       config: {
         handler: function (val, oldVal) { 
-          if (val.screen != 0 && val.fullsize) {
             this.setOutputToMatchScreen()
-          }
          },
         deep: true
       },
@@ -39,13 +37,15 @@ const { screen } = require('electron')
         this.screens = screen.getAllDisplays()
       },
       setOutputToMatchScreen: function() {
-        for (const scr of this.screens) {
-          if (scr.id == this.config.screen) {
-            console.log(scr)
-            this.config.top = 0
-            this.config.left = 0
-            this.config.width = scr.size.width
-            this.config.height = scr.size.height
+        if (this.config.screen !=0 && this.config.fullsize) {
+          for (const scr of this.screens) {
+            if (scr.id == this.config.screen) {
+              console.log(scr)
+              this.config.top = 0
+              this.config.left = 0
+              this.config.width = scr.size.width
+              this.config.height = scr.size.height
+            }
           }
         }
       }
@@ -58,6 +58,7 @@ const { screen } = require('electron')
       screen.on('display-removed', function() {
         setTimeout(vm.updateScreens(), 500)
       })
+      this.setOutputToMatchScreen()
     }
   }
 </script>
