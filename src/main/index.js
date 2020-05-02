@@ -46,6 +46,7 @@ function createWindow () {
 app.on('ready', function() {
   config = store.get('config', getDefaultConfig())
   config.visible = false
+  config.audio.enabled = false
   console.log('Loaded Config: ', config)
   createWindow()
 })

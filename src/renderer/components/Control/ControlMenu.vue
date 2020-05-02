@@ -4,7 +4,6 @@
   <el-col :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
     Enable <el-switch v-model="config.visible"></el-switch>
   </el-col>
-  
 
   <el-col :span="8">
       <el-button type="success" size="mini" round v-on:click="drawerAudio = true"><i v-if="config.audio.enabled" class="fas fa-volume-up"></i><i v-if="!config.audio.enabled" class="fas fa-volume-mute"></i> Audio</el-button>
@@ -16,20 +15,18 @@
   </el-col>
 
 
-
-
   <el-drawer :with-header="false" :visible.sync="drawerAudio" direction="btt">
     <el-row class="drawerContent">
       <el-col :span="8">
         <el-form-item label="Enable Output">
-          <el-switch v-model="config.audio.enabled"></el-switch>
+          <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
         </el-form-item>
       </el-col>
     </el-row>
     <el-row class="drawerContent">
       <el-checkbox-group v-model="config.audio.options">
         <el-checkbox label="voice">Voice</el-checkbox>
-        <el-checkbox label="tone">1KHz Tone</el-checkbox>
+        <el-checkbox label="tone">Tone</el-checkbox>
         <el-checkbox label="pink">Pink Noise</el-checkbox>
         <el-checkbox label="white">White Noise</el-checkbox>
         <el-checkbox label="stereo">Stereo</el-checkbox>
@@ -38,6 +35,11 @@
     </el-row>
   </el-drawer>
 
+  <audio src="~@/assets/audio/stereo.wav" id="stereo" />
+  <audio src="~@/assets/audio/phase.wav" id="phase" />
+  <audio src="~@/assets/audio/pink.wav" id="pink" />
+  <audio src="~@/assets/audio/white.wav" id="white" />
+  <audio src="~@/assets/audio/tone.wav" id="tone" />
 
 
 
@@ -63,12 +65,6 @@
    </el-row>
 </el-drawer>
 
-<audio src="~@/assets/audio/stereo.wav" id="stereo" />
-<audio src="~@/assets/audio/phase.wav" id="phase" />
-<audio src="~@/assets/audio/pink.wav" id="pink" />
-<audio src="~@/assets/audio/white.wav" id="white" />
-<audio src="~@/assets/audio/tone.wav" id="tone" />
-
 </el-row>
 </template>
 
@@ -82,19 +78,32 @@ const { ipcRenderer } = require('electron')
       return {
         drawerAudio: false,
         drawerImage: false,
-        curAudio: null
+        curAudio: null,
+        playing: false
       }
     },
-    mounted: function() {
-      setInterval(this.audioTick, 3000)
+    watch: {
+      config: {
+        handler: function (val, oldVal) { 
+            if (val.audio.enabled && !this.playing) {
+              this.curAudio = null // so it starts from the first item
+              this.playNext()
+            }
+            if (val.audio.options.length == 0) {
+              this.config.audio.enabled = false // stop playing if no options selected
+            }
+         },
+        deep: true
+      },
     },
     methods: {
       ipcSend: function(val) {
         ipcRenderer.send(val)
         this.drawerImage = false
       },
-      audioTick: function() {
-        if (this.config.audio.enabled && !window.speechSynthesis.speaking) {
+      playNext: function() {
+        if (this.config.audio.enabled) {
+          this.playing = true
           let opts = this.config.audio.options
 
           if (this.curAudio == null && opts.length > 0) {
@@ -112,18 +121,27 @@ const { ipcRenderer } = require('electron')
           } else {
             this.playFile(this.curAudio)
           }
+        } else {
+          this.playing = false
         }
       },
       playFile: function(file) {
+        let vm = this
         var x = document.getElementById(file)
         x.play()
-        setTimeout(function() { x.pause() }, 2000)
+        x.onended = function() {
+          vm.playNext()
+        }
       },
       playVoice: function() {
+        let vm = this
         var utter = new SpeechSynthesisUtterance('This is - ' + this.config.name)
         utter.pitch = 0.8
         utter.rate = 0.8
         window.speechSynthesis.speak(utter)
+        utter.addEventListener('end', function(event) { 
+          vm.playNext()
+        });
       }
     }
   }
