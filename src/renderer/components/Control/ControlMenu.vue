@@ -70,6 +70,8 @@
 </template>
 
 <script>
+const log = require('electron-log')
+
 const { ipcRenderer } = require('electron')
   export default {
     props: {
@@ -87,10 +89,12 @@ const { ipcRenderer } = require('electron')
       config: {
         handler: function (val, oldVal) { 
             if (val.audio.enabled && !this.playing) {
+              log.info('Starting audio output')
               this.curAudio = null // so it starts from the first item
               this.playNext()
             }
             if (val.audio.options.length == 0) {
+              log.info('Stopping audio output')
               this.config.audio.enabled = false // stop playing if no options selected
             }
          },
@@ -103,6 +107,7 @@ const { ipcRenderer } = require('electron')
         this.drawerImage = false
       },
       openUrl: function(link) {
+        log.info('Opening external url: ' + link)
         require("electron").shell.openExternal(link)
       },
       playNext: function() {

@@ -157,7 +157,7 @@ function manageTestCardWindow() {
   }  
 
   if (testCardWindow == null && config.visible) {
-    log.info('Showing test card')  
+    log.info('Showing test card with config: ', config)  
     
     if (config.screen != 0) {
       windowConfig.fullscreen = true

@@ -77,6 +77,8 @@ import domtoimage from 'dom-to-image'
 var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
+const log = require('electron-log')
+
   export default {
     name: 'testcard',
     components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp },
@@ -113,24 +115,28 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         ipcRenderer.send('closeTestCard')
       },
       testCardToPNG: function() {
+        log.info('Attempt to capture test card as PNG')
         domtoimage.toPng(document.getElementById('cardForPNG'))
           .then(function (dataUrl) {
           ipcRenderer.send('saveAsPNG', dataUrl)
         })
       },
       boundsToPNG: function() {
+        log.info('Attempt to capture output window as PNG')
         domtoimage.toPng(document.getElementById('bounds'))
           .then(function (dataUrl) {
           ipcRenderer.send('saveAsPNG', dataUrl)
         })
       },
       testCardToWallpaper: function() {
+        log.info('Attempt to capture test card and set as Wallpaper')
         domtoimage.toPng(document.getElementById('cardForPNG'))
           .then(function (dataUrl) {
           ipcRenderer.send('setAsWallpaper', dataUrl)
         })
       },
       boundsToWallpaper: function() {
+        log.info('Attempt to capture output window and set as Wallpaper')
         domtoimage.toPng(document.getElementById('bounds'))
           .then(function (dataUrl) {
           ipcRenderer.send('setAsWallpaper', dataUrl)
@@ -138,6 +144,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       }
     },
     mounted: function() {
+      log.info('Test card mounted')
       let vm = this
       ipcRenderer.on('config', function(event, args) {
         vm.config = args
