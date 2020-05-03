@@ -2,19 +2,26 @@
   <div id="alteka" :class="{gradient : config.alteka.gradient}">
 
     <div id="centerbox">
+
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
+
         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
           <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
         </linearGradient>
 
-        <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
+        <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="black" />
+        
+
         <g id="spinny-box">
-          <rect x="-40" y="-5" width="80" height="10" fill="url(#grad1)" />
+          <rect x="-45" y="-5" width="90" height="10" fill="url(#grad1)" />
           <animateTransform v-if="config.animated" attributeName="transform" type="rotate" dur="5s" from="0" to="360" repeatCount="indefinite" />
         </g>
-        <text x="0" y="-10" text-anchor="middle" fill="blue" font-size="10px">"Something"</text>
-        <text x="0" y="10" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
+
+        <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
+
+        <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
+
       </svg>
     </div>
   </div>
@@ -47,10 +54,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 75%;
-    width: 75%;
-    border: 2px solid white;
-    background: black;
+    height: 66%;
+    width: 66%;
     overflow: hidden;
   }
 

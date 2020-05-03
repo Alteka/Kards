@@ -4,15 +4,17 @@ const wallpaper = require('wallpaper');
 const fs = require('fs')
 const Store = require('electron-store')
 const touchBar = require('./touchBar.js')
+const log = require('electron-log');
 
 const store = new Store();
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  log.info('Running in production mode')
 }
 
 process.on('uncaughtException', function (error) {
-  console.log('Error: ', error)
+  log.warn('Error: ', error)
 })
 
 let controlWindow
@@ -21,6 +23,7 @@ let config
 let testCardWindowScreen
 
 function createWindow () {
+  log.info('Showing control window')
   const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -44,14 +47,16 @@ function createWindow () {
 }
 
 app.on('ready', function() {
+  log.info('Launching Kards')
   config = store.get('config', getDefaultConfig())
   config.visible = false
   config.audio.enabled = false
-  console.log('Loaded Config: ', config)
+  log.info('Loaded Config: ', config)
   createWindow()
 })
 
 app.on('window-all-closed', () => {
+    log.info('Windows closed, quitting app')
     app.quit()
 })
 
@@ -103,12 +108,11 @@ ipcMain.on('outputToWallpaper', (event) => {
 
 ipcMain.on('saveAsPNG', (event, arg) => {
   dialog.showSaveDialog(controlWindow, {title: 'Save PNG', filters: [{name: 'Images', extensions: ['png']}]}, (path) => {
-    console.log(arg)
     var base64Data = arg.replace(/^data:image\/png;base64,/, "");
     fs.writeFile(path, base64Data, 'base64', function(err) {
-      console.log('Couldnt save file: ', err);
+      log.error('Couldnt save file: ', err);
     });
-    console.log('File saved to: ', path);
+    log.info('PNG saved to: ', path);
   })
 })
 ipcMain.on('setAsWallpaper', (event, arg) => {
@@ -116,11 +120,12 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
   var base64Data = arg.replace(/^data:image\/png;base64,/, "")
   fs.writeFile(dest, base64Data, 'base64', err => {
     if (err) {
-      console.log('Couldnt save wallpaper file ', err)
+      log.error('Couldnt save wallpaper file ', err)
       return
     }
     (async () => {
       await wallpaper.set(dest);
+      log.info('Setting png as wallpaper')
       })();
     })
   })
@@ -129,6 +134,7 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
 
 ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())
+  log.info('Resetting to default')
 })
 
 function getDefaultConfig() {
@@ -151,7 +157,7 @@ function manageTestCardWindow() {
   }  
 
   if (testCardWindow == null && config.visible) {
-    console.log('showing test card!')  
+    log.info('Showing test card')  
     
     if (config.screen != 0) {
       windowConfig.fullscreen = true
@@ -168,7 +174,7 @@ function manageTestCardWindow() {
     }
     showTestCardWindow(windowConfig)
   } else if (testCardWindow != null && !config.visible) {
-    console.log('closing test card')
+    log.info('Closing test card')
     testCardWindow.close()
   }
 }
@@ -199,12 +205,12 @@ ipcMain.on('selectImage', (event, arg) => {
 
     fs.copyFile(result[0], dest, (err) => {
       if (err) throw err;
-      console.log(result[0] + ' was copied to ' + dest);
+      log.info('Selected image: ' + result[0] + ' was copied to ' + dest);
       let logoUrl = 'file://' + dest + '?bust=' + Math.round((Math.random()*100000))
       controlWindow.webContents.send('logoUrl', logoUrl)
     });
    } else {
-     console.log('No file selected')
+     log.info('No file selected')
      // need to think about NOT clearing out an old photo;.
    }
 })
