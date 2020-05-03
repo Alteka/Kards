@@ -12,6 +12,7 @@
 
   <el-col :span="8" style="text-align: right">
     <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault')">Reset</el-button>
+    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')">Help</el-button>
   </el-col>
 
 
@@ -100,6 +101,9 @@ const { ipcRenderer } = require('electron')
       ipcSend: function(val) {
         ipcRenderer.send(val)
         this.drawerImage = false
+      },
+      openUrl: function(link) {
+        require("electron").shell.openExternal(link)
       },
       playNext: function() {
         if (this.config.audio.enabled) {
