@@ -5,6 +5,10 @@ const path = require('path')
 let config = {}
 let window = null
 
+if (process.env.NODE_ENV !== 'development') {
+  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+}
+
 const enabled = nativeImage.createFromPath(path.join(__static, '/enabled.png')).resize({ width: 20, height: 10})
 const disabled = nativeImage.createFromPath(path.join(__static, '/disabled.png')).resize({ width: 20, height: 10})
 
