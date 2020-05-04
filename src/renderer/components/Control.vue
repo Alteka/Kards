@@ -153,6 +153,9 @@ import ControlScreen from './Control/ControlScreen.vue'
         vm.sync = true
       })
       ipcRenderer.send('getConfigControl')
+
+      let h = document.getElementById('wrapper').clientHeight
+      ipcRenderer.send('controlResize', null, h)
     },
     watch: {
       config: {
@@ -176,6 +179,7 @@ import ControlScreen from './Control/ControlScreen.vue'
  body {
   font-family: Sansation, Helvetica, sans-serif;
   overflow: hidden !important;
+   -webkit-user-select: none;
 }
 @font-face {
   font-family: Sansation;

@@ -155,6 +155,7 @@ function manageTestCardWindow() {
   let windowConfig = {
     width: 900,
     height: 600,
+    frame: false,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true
@@ -200,7 +201,6 @@ function showTestCardWindow(windowConfig) {
   const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
   testCardWindow = new BrowserWindow(windowConfig)
   testCardWindowScreen = config.screen
-  testCardWindow.setTouchBar(touchBar.touchBar)
   testCardWindow.on('close', function () { 
     testCardWindow = null 
     controlWindow.webContents.send('closeTestCard')

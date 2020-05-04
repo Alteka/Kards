@@ -186,6 +186,7 @@ const log = require('electron-log')
   overflow: hidden;
 }
 #bounds {
+  -webkit-app-region: drag;
   font-family: Sansation, Helvetica, sans-serif;
   /* background: black; */
   position: absolute;
