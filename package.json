@@ -30,7 +30,8 @@
       "dist/electron/**/*"
     ],
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "target": "pkg"
     },
     "win": {
       "icon": "build/icons/icon.ico"
@@ -70,7 +71,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^8.2.5",
-    "electron-builder": "^20.19.2",
+    "electron-builder": "^22.6.0",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
     "file-loader": "^1.1.11",

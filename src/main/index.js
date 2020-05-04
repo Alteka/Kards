@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar, Menu } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar, Menu, MenuItem } from 'electron'
 import { create } from 'domain';
 const wallpaper = require('wallpaper');
 const fs = require('fs')
@@ -40,7 +40,11 @@ function createWindow () {
      }
   })
 
-  Menu.setApplicationMenu(null)
+  if (process.platform == 'darwin') {
+    // TODO - Need to add a simple barebones menu
+  } else {
+    Menu.setApplicationMenu(null)
+  }
 
   controlWindow.loadURL(winURL)
   controlWindow.setTouchBar(touchBar.touchBar)
