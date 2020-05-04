@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar, Menu } from 'electron'
 import { create } from 'domain';
 const wallpaper = require('wallpaper');
 const fs = require('fs')
@@ -39,6 +39,9 @@ function createWindow () {
       nodeIntegration: true
      }
   })
+
+  Menu.setApplicationMenu(null)
+
   controlWindow.loadURL(winURL)
   controlWindow.setTouchBar(touchBar.touchBar)
   touchBar.setWindow(controlWindow)
@@ -90,8 +93,8 @@ ipcMain.on('closeTestCard', (event, arg) => {
   controlWindow.webContents.send('closeTestCard')
 })
 
-ipcMain.on('controlResize', (event, width, height) => {
-  controlWindow.setSize(620, height + 30)
+ipcMain.on('controlResize', (event, w, h) => {
+  controlWindow.setContentSize(w, h)
 })
 
 ipcMain.on('testCardToPNG', (event) => {

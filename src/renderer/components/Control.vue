@@ -166,7 +166,6 @@ import ControlScreen from './Control/ControlScreen.vue'
     },
     methods: {
       handleResize: function({ width, height }) {
-        console.log(height)
         ipcRenderer.send('controlResize', width, height)
       }
     }
