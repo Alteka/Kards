@@ -161,10 +161,21 @@ function manageTestCardWindow() {
     
     if (config.screen != 0) {
       windowConfig.fullscreen = true
-      windowConfig.simpleFullscreen = false 
-
+      
       for (const disp of displays) {
         if (disp.id == config.screen) {
+
+          // Check and manage for seperate spaces configurations
+          if (process.platform !== 'darwin') {
+            if (disp.bounds.height != disp.workArea.height) {
+              log.info('Running in seperate spaces mode')
+              windowConfig.simpleFullscreen = false 
+            } else {
+              log.info('Using legacy full screen mode')
+              windowConfig.simpleFullscreen = true 
+            }
+          }
+
           windowConfig.x = disp.bounds.x
           windowConfig.y = disp.bounds.y
           windowConfig.width = disp.bounds.width
