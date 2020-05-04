@@ -172,7 +172,7 @@ function manageTestCardWindow() {
         if (disp.id == config.screen) {
 
           // Check and manage for seperate spaces configurations
-          if (process.platform !== 'darwin') {
+          if (process.platform == 'darwin') {
             if (disp.bounds.height != disp.workArea.height) {
               log.info('Running in seperate spaces mode')
               windowConfig.simpleFullscreen = false 
