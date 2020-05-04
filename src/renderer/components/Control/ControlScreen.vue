@@ -13,7 +13,7 @@
 </template>
 
 <script>
-const { screen } = require('electron')
+const { screen } = require('electron').remote
   export default {
     props: {
       config: Object

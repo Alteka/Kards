@@ -35,7 +35,8 @@ function createWindow () {
     useContentSize: true,
     width: 620,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
      }
   })
   controlWindow.loadURL(winURL)
@@ -152,7 +153,8 @@ function manageTestCardWindow() {
     width: 900,
     height: 600,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
      } 
   }  
 
