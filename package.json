@@ -1,9 +1,13 @@
 {
   "name": "kards",
-  "version": "0.0.1",
-  "author": "Drew Perry <drew@event.engineering>",
-  "description": "An electron-vue project",
-  "license": null,
+  "version": "0.1.0",
+  "author": "Alteka Solutions <info@alteka.solutions>",
+  "description": "A cross-platform test card generator for AV professionals",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alteka/Kards"
+  },
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -60,9 +64,9 @@
     "babel-register": "^6.26.0",
     "cfonts": "^2.8.2",
     "chalk": "^2.4.1",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^5.1.6",
-    "css-loader": "^0.28.11",
+    "css-loader": "^3.5.3",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^8.2.5",
