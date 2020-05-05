@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Alteka Solutions <info@alteka.solutions>",
   "description": "A cross-platform test card generator for AV professionals",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "repository": {
     "type": "git",
     "url": "https://github.com/Alteka/Kards"
