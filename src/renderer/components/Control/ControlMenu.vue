@@ -94,8 +94,11 @@ const { ipcRenderer } = require('electron')
               this.playNext()
             }
             if (val.audio.options.length == 0) {
-              log.info('Stopping audio output')
+              this.stopAudio()
               this.config.audio.enabled = false // stop playing if no options selected
+            }
+            if (!val.audio.enabled && this.playing) {
+              this.stopAudio()
             }
          },
         deep: true
@@ -109,6 +112,21 @@ const { ipcRenderer } = require('electron')
       openUrl: function(link) {
         log.info('Opening external url: ' + link)
         require("electron").shell.openExternal(link)
+      },
+      stopAudio: function() {
+        log.info('Stopping audio output')
+        window.speechSynthesis.cancel()
+        this.stopFile('tone')
+        this.stopFile('white')
+        this.stopFile('pink')
+        this.stopFile('phase')
+        this.stopFile('stereo')
+        this.playing = false
+      },
+      stopFile: function(file) {
+        let f = document.getElementById(file);
+        f.pause()
+        f.currentTime = 0
       },
       playNext: function() {
         if (this.config.audio.enabled) {
@@ -139,7 +157,7 @@ const { ipcRenderer } = require('electron')
         var x = document.getElementById(file)
         x.play()
         x.onended = function() {
-          vm.playNext()
+          setTimeout(vm.playNext(), 500)
         }
       },
       playVoice: function() {
@@ -149,7 +167,7 @@ const { ipcRenderer } = require('electron')
         utter.rate = 0.8
         window.speechSynthesis.speak(utter)
         utter.addEventListener('end', function(event) { 
-          vm.playNext()
+          setTimeout(vm.playNext(), 500)
         });
       }
     }
