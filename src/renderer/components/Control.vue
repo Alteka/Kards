@@ -153,10 +153,17 @@ import ControlScreen from './Control/ControlScreen.vue'
         vm.sync = true
       })
       ipcRenderer.send('getConfigControl')
-
-      let h = document.getElementById('wrapper').clientHeight
-      ipcRenderer.send('controlResize', null, h)
     },
+
+    mounted: function(){
+      this.$nextTick(function () {
+        let h = document.getElementById('wrapper').clientHeight
+        let w = document.getElementById('wrapper').clientWidth
+        ipcRenderer.send('controlResize', w, h)
+      })
+    },
+
+
     watch: {
       config: {
         handler: function (val, oldVal) { 
