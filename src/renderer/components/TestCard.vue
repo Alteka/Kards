@@ -1,5 +1,6 @@
 <template>
   <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack">
+    <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated}">
@@ -202,7 +203,6 @@ window.addEventListener('contextmenu', (e) => {
   overflow: hidden;
 }
 #bounds {
-  -webkit-app-region: drag;
   font-family: Sansation, Helvetica, sans-serif;
   /* background: black; */
   position: absolute;
@@ -213,6 +213,18 @@ window.addEventListener('contextmenu', (e) => {
   overflow: overlay;
   z-index: -10;
 }
+
+.drag-region {
+  top: 4px;
+  left: 4px;
+  display: block;
+  position: absolute;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  z-index: -1;
+  -webkit-app-region: drag;
+}
+
 .info {
     position: absolute;
     font-size: 20px;
