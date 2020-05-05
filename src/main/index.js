@@ -29,6 +29,7 @@ function createWindow () {
   : `file://${__dirname}/index.html`
 
   controlWindow = new BrowserWindow({
+    show: false,
     height: 450,
     resizable: false,
     maximizable: false,
@@ -38,6 +39,10 @@ function createWindow () {
       webSecurity: false,
       nodeIntegration: true
      }
+  })
+
+  controlWindow.once('ready-to-show', () => {
+    controlWindow.show()
   })
 
   if (process.platform == 'darwin') {
