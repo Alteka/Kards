@@ -1,8 +1,19 @@
-# testcard
+# Alteka Kards
 
-> An electron-vue project
+A cross-platform test card generator for AV professionals.
+
+#### Accuracy
+
+A note to say that whilst the app generates specific levels, which match standard cards (where 100% White is 235, 235, 235) however display profiles and operating system settings can override these settings. Whilst this may seem like a bad thing, it's likely the same thing is being done to whatever app you want to use. 
+
+#### Design
+
+The app is based around Electron to create and manage the windows. The content is heavily Vue.js driven, with some custom components to create the test cards.
 
 #### Build Setup
+Clone the repo into a folder, cd into the folder and run the below. 
+
+You'll need to have node.js installed.
 
 ``` bash
 # install dependencies
@@ -13,10 +24,8 @@ npm run dev
 
 # build electron application for production
 npm run build
-
-
 ```
 
 ---
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[45a3e22](https://github.com/SimulatedGREG/electron-vue/tree/45a3e224e7bb8fc71909021ccfdcfec0f461f634) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+For mor information please see our website: [Alteka Solutions](https://alteka.solutions/kards)
