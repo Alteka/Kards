@@ -1,0 +1,32 @@
+const { app, Menu, MenuItem } = require('electron')
+
+const menu = new Menu()
+
+menu.append(new MenuItem({
+    label: app.name,
+    submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]    
+    }))
+
+
+
+
+// menu.append(new MenuItem({
+//     label: 'DrewTest',
+//     submenu: [
+//         { role: 'cut' },
+//         { role: 'copy' },
+//         { role: 'paste' }
+//       ]
+// }))
+
+exports.menu = menu

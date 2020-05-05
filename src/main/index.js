@@ -4,6 +4,7 @@ const wallpaper = require('wallpaper');
 const fs = require('fs')
 const Store = require('electron-store')
 const touchBar = require('./touchBar.js')
+const menu = require('./menu.js').menu
 const log = require('electron-log');
 
 const store = new Store();
@@ -46,7 +47,8 @@ function createWindow () {
   })
 
   if (process.platform == 'darwin') {
-    // TODO - Need to add a simple barebones menu
+    Menu.setApplicationMenu(menu)
+
   } else {
     Menu.setApplicationMenu(null)
   }
@@ -106,7 +108,7 @@ ipcMain.on('closeTestCard', (event, arg) => {
 })
 
 ipcMain.on('controlResize', (event, w, h) => {
-  controlWindow.setContentSize(w, h)
+  controlWindow.setContentSize(620, h)
 })
 
 ipcMain.on('testCardToPNG', (event) => {
