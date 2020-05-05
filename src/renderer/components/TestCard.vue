@@ -90,10 +90,6 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
   ipcRenderer.send('closeTestCard')
 } }))
 
-window.addEventListener('contextmenu', (e) => {
-  e.preventDefault()
-  menu.popup({ window: remote.getCurrentWindow() })
-}, false)
 
 
   export default {
@@ -171,7 +167,6 @@ window.addEventListener('contextmenu', (e) => {
       window.addEventListener('resize', function() {
         vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
       })
-
       ipcRenderer.on('testCardToPNG', function(event, args) {
         vm.testCardToPNG()
       })
@@ -184,6 +179,12 @@ window.addEventListener('contextmenu', (e) => {
       ipcRenderer.on('outputToWallpaper', function(event, args) {
         vm.boundsToWallpaper()
       })
+
+      window.addEventListener('contextmenu', (e) => {
+        e.preventDefault()
+        menu.popup({ window: remote.getCurrentWindow() })
+      }, false)
+
     }
   }
 </script>
