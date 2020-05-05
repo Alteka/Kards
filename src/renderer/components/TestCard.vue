@@ -108,7 +108,7 @@ window.addEventListener('contextmenu', (e) => {
     },
     computed: {
       computedStyle: function() {
-        if (this.config.fullsize) {
+        if (this.config.fullsize || this.config.screen == 0) {
           return {}
         } else {
           return {
@@ -120,7 +120,7 @@ window.addEventListener('contextmenu', (e) => {
         }
       },
       cardResolution: function() {
-        if (this.config.fullsize) {
+        if (this.config.fullsize || this.config.screen == 0) {
           return this.boundsInfo
         } else {
           return this.config.width + ' x ' + this.config.height

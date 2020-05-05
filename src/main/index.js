@@ -85,6 +85,9 @@ ipcMain.on('config', (event, arg) => {
   manageTestCardWindow()
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
+    if (config.screen == 0) {
+      testCardWindow.setContentSize(parseInt(config.winWidth), parseInt(config.winHeight))
+    }
   }
   touchBar.setConfig(config)
   store.set('config', config)
@@ -215,7 +218,20 @@ function showTestCardWindow(windowConfig) {
     controlWindow.webContents.send('closeTestCard')
   })
   testCardWindow.loadURL(testCardUrl)
+
+  testCardWindow.on('resize', function() {
+    clearTimeout(testCardWindowResizeTimer)
+    testCardWindowResizeTimer = setTimeout(handleTestCardResize, 500)
+  })
 }
+
+function handleTestCardResize() {
+  let bounds = testCardWindow.getBounds()
+  config.winWidth = bounds.width
+  config.winHeight = bounds.height
+  controlWindow.webContents.send('config', config)
+}
+let testCardWindowResizeTimer
 
 
 ipcMain.on('selectImage', (event, arg) => {

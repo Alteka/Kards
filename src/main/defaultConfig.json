@@ -51,5 +51,7 @@
 "audio": {
     "enabled": false,
     "options": ["voice"]
-}
+},
+"winWidth": 1280,
+"winHeight": 720
 }

@@ -47,8 +47,8 @@
 <el-divider content-position="center">Output Options</el-divider>
 
 <el-row>
-  <el-col :span="16">
-    <el-form-item label="Computer Name">
+  <el-col :span="8">
+    <el-form-item label="Name" label-width="70px">
       <el-input v-model="config.name"></el-input>
     </el-form-item>
   </el-col>
@@ -57,17 +57,17 @@
       <el-switch v-model="config.showInfo"></el-switch>
     </el-form-item>
   </el-col>
+<el-col :span="8">
+    <el-form-item label="Diagonal Motion">
+      <el-switch v-model="config.animated"></el-switch>
+    </el-form-item>
+  </el-col>
 </el-row>
 
-<el-row>
+<el-row v-if="config.screen!=0">
   <el-col :span="8">
     <el-form-item label="Fill Output">
       <el-switch v-model="config.fullsize"></el-switch>
-    </el-form-item>
-  </el-col>
-  <el-col :span="8">
-    <el-form-item label="Diagonal Motion">
-      <el-switch v-model="config.animated"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
@@ -77,39 +77,58 @@
   </el-col>
 </el-row>
 
-  <el-row v-if="!config.fullsize">
+  <el-row v-if="!config.fullsize && config.screen!=0">
     <el-col :span="6">
       <el-form-item label="Canvas Size"> 
       </el-form-item>
     </el-col>
      <el-col :span="8">
-       <el-form-item label="Width">
+       <el-form-item label="Width" label-width="80px">
         <el-input v-model="config.width"></el-input>
        </el-form-item>
      </el-col>
       <el-col :span="8">
-        <el-form-item label="Height">
+        <el-form-item label="Height" label-width="80px">
           <el-input v-model="config.height"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
    
-   <el-row v-if="!config.fullsize"> 
+   <el-row v-if="!config.fullsize && config.screen!=0"> 
     <el-col :span="6">
       <el-form-item label="Canvas Position"> 
       </el-form-item>
     </el-col>
      <el-col :span="8">
-       <el-form-item label="Top">
+       <el-form-item label="Top" label-width="80px">
         <el-input v-model="config.top"></el-input>
        </el-form-item>
      </el-col>
       <el-col :span="8">
-        <el-form-item label="Left">
+        <el-form-item label="Left" label-width="80px">
           <el-input v-model="config.left"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
+
+<el-row v-if="config.screen==0">
+  <el-col :span="6">
+  <el-form-item label="Window Size"> 
+  </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item label="Width" label-width="80px">
+      <el-input-number v-model="config.winWidth" controls-position="right" :step="5"></el-input-number>
+    
+    </el-form-item>
+  </el-col>
+  <el-col :span="8">
+    <el-form-item label="Height" label-width="80px">
+      <el-input-number v-model="config.winHeight" controls-position="right" :step="5"></el-input-number>
+    </el-form-item>
+  </el-col>
+</el-row>
+    
 
 
  <control-menu :config="config"></control-menu>
@@ -151,6 +170,10 @@ import ControlScreen from './Control/ControlScreen.vue'
       ipcRenderer.on('config', function(event, val) {
         vm.config = val
         vm.sync = true
+      })
+      ipcRenderer.on('testCardResize', function(event, w, h) {
+        vm.config.winWidth = w
+        vm.config.winHeight = h
       })
       ipcRenderer.send('getConfigControl')
     },
