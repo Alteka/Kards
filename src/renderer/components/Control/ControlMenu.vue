@@ -25,13 +25,13 @@
       </el-col>
     </el-row>
     <el-row class="drawerContent">
-      <el-checkbox-group v-model="config.audio.options">
-        <el-checkbox label="voice">Voice</el-checkbox>
-        <el-checkbox label="tone">Tone</el-checkbox>
-        <el-checkbox label="pink">Pink Noise</el-checkbox>
-        <el-checkbox label="white">White Noise</el-checkbox>
-        <el-checkbox label="stereo">Stereo</el-checkbox>
-        <el-checkbox label="phase">Phase</el-checkbox>
+      <el-checkbox-group v-model="config.audio.options" size="medium">
+        <el-checkbox-button label="voice">Voice</el-checkbox-button>
+        <el-checkbox-button label="tone">Tone</el-checkbox-button>
+        <el-checkbox-button label="pink">Pink Noise</el-checkbox-button>
+        <el-checkbox-button label="white">White Noise</el-checkbox-button>
+        <el-checkbox-button label="stereo">Stereo</el-checkbox-button>
+        <el-checkbox-button label="phase">Phase</el-checkbox-button>
       </el-checkbox-group>
     </el-row>
   </el-drawer>
