@@ -8,18 +8,18 @@ A cross-platform test card generator for AV professionals.
 
 #### Accuracy
 
-A note to say that whilst the app generates specific levels, which match standard cards (where 100% White is 235, 235, 235) however display profiles and operating system settings can override these settings. Whilst this may seem like a bad thing, it's likely the same thing is being done to whatever app you want to use. 
+A note to say that whilst the app generates specific levels, which match standard cards (where 100% White is 235, 235, 235) however display profiles and operating system settings can override these settings. Whilst this may seem like a bad thing, it's likely that the same is being done to whatever app you want to use. More information and guide on using the cards will come soon. 
 
 #### Design
 
 The app is based around Electron to create and manage the windows. The content is heavily Vue.js driven, with some custom components to create the test cards.
 
 #### Build Setup
-Clone the repo into a folder, cd into the folder and run the below. 
-
-You'll need to have node.js installed.
-
 ``` bash
+#Clone the repo into a folder
+# cd into the folder and run the below
+#You'll need to have node.js installed
+
 # install dependencies
 npm install
 
@@ -32,4 +32,4 @@ npm run build
 
 ---
 
-For mor information please see our website: [Alteka Solutions](https://alteka.solutions/kards)
+For more information please see our website: [Alteka Solutions](https://alteka.solutions/kards)
