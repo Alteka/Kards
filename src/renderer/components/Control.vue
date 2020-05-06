@@ -84,12 +84,12 @@
     </el-col>
      <el-col :span="8">
        <el-form-item label="Width" label-width="80px">
-        <el-input v-model="config.width"></el-input>
+        <el-input-number v-model="config.width" controls-position="right" :step="5"></el-input-number>
        </el-form-item>
      </el-col>
       <el-col :span="8">
         <el-form-item label="Height" label-width="80px">
-          <el-input v-model="config.height"></el-input>
+          <el-input-number v-model="config.height" controls-position="right" :step="5"></el-input-number>
         </el-form-item>
       </el-col>
     </el-row>
@@ -101,12 +101,12 @@
     </el-col>
      <el-col :span="8">
        <el-form-item label="Top" label-width="80px">
-        <el-input v-model="config.top"></el-input>
+        <el-input-number v-model="config.top" controls-position="right" :step="5"></el-input-number>
        </el-form-item>
      </el-col>
       <el-col :span="8">
         <el-form-item label="Left" label-width="80px">
-          <el-input v-model="config.left"></el-input>
+          <el-input-number v-model="config.left" controls-position="right" :step="5"></el-input-number>
         </el-form-item>
       </el-col>
     </el-row>
