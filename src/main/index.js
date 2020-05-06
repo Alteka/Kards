@@ -42,10 +42,6 @@ function createWindow () {
      }
   })
 
-  controlWindow.once('ready-to-show', () => {
-    controlWindow.show()
-  })
-
   if (process.platform == 'darwin') {
     Menu.setApplicationMenu(menu)
 
@@ -54,6 +50,11 @@ function createWindow () {
   }
 
   controlWindow.loadURL(winURL)
+
+  controlWindow.once('ready-to-show', () => {
+    controlWindow.show()
+  })
+
   controlWindow.setTouchBar(touchBar.touchBar)
   touchBar.setWindow(controlWindow)
   controlWindow.on('closed', () => { 
@@ -80,7 +81,6 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
 
 ipcMain.on('config', (event, arg) => {
   config = arg
@@ -114,12 +114,15 @@ ipcMain.on('controlResize', (event, w, h) => {
 ipcMain.on('testCardToPNG', (event) => {
   testCardWindow.webContents.send('testCardToPNG')
 })
+
 ipcMain.on('outputToPNG', (event) => {
   testCardWindow.webContents.send('outputToPNG')
 })
+
 ipcMain.on('testCardToWallpaper', (event) => {
   testCardWindow.webContents.send('testCardToWallpaper')
 })
+
 ipcMain.on('outputToWallpaper', (event) => {
   testCardWindow.webContents.send('outputToWallpaper')
 })
@@ -133,6 +136,7 @@ ipcMain.on('saveAsPNG', (event, arg) => {
     log.info('PNG saved to: ', path);
   })
 })
+
 ipcMain.on('setAsWallpaper', (event, arg) => {
   let dest = app.getPath('userData') + '/wallpaper.png'
   var base64Data = arg.replace(/^data:image\/png;base64,/, "")
@@ -148,8 +152,6 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
     })
   })
   
-
-
 ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())
   log.info('Resetting to default')
@@ -165,8 +167,9 @@ function getDefaultConfig() {
 
 function manageTestCardWindow() {
   let displays = screen.getAllDisplays()
-
+  
   let windowConfig = {
+    show: false,
     width: 900,
     height: 600,
     frame: false,
@@ -219,7 +222,12 @@ function showTestCardWindow(windowConfig) {
     testCardWindow = null 
     controlWindow.webContents.send('closeTestCard')
   })
+
   testCardWindow.loadURL(testCardUrl)
+
+  testCardWindow.once('ready-to-show', () => {
+    testCardWindow.show()
+  })
 
   testCardWindow.on('resize', function() {
     clearTimeout(testCardWindowResizeTimer)
