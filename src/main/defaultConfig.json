@@ -53,5 +53,7 @@
     "options": ["voice"]
 },
 "winWidth": 1280,
-"winHeight": 720
+"winHeight": 720,
+"maxWidth": 800,
+"maxHeight": 600
 }
