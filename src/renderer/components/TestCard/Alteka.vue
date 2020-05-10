@@ -1,6 +1,6 @@
 <template>
   <div id="alteka" :class="{gradient : config.alteka.gradient}">
-
+    <resize-observer @notify="handleResize" />
     <div class="grid">
       <div class="gridQuadrant" style="background-position: bottom right"></div>
       <div class="gridQuadrant" style="background-position: bottom left"></div>
@@ -27,6 +27,14 @@
       <div class="arrowRight" :style="{'border-left-color': this.config.alteka.cornerColour}"></div>
       <div class="arrowBottom" :style="{'border-top-color': this.config.alteka.cornerColour}"></div>
       <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.cornerColour}"></div>
+    </div>
+
+    <div id="pillarLeft">
+
+    </div>
+
+    <div id="pillarRight">
+
     </div>
 
     <div id="centerbox">
@@ -83,6 +91,22 @@
     },
     props: {
       config: Object
+    },
+    methods: {
+      handleResize: function({width, height}) {
+        let w = Math.round(width/50*0.066)*50
+        document.getElementById('pillarLeft').style.width = w + 'px'
+        document.getElementById('pillarRight').style.width = w + 'px'
+
+        let h = Math.round(height/100*0.66)*100
+        document.getElementById('pillarLeft').style.height = h + 'px'
+        document.getElementById('pillarRight').style.height = h + 'px'
+
+        let circleWidth = document.getElementById('clipCircle').getBoundingClientRect().width
+        let left = (Math.ceil((circleWidth/2)/50)*50) + width/2
+        document.getElementById('pillarRight').style.left = left + 'px'
+        document.getElementById('pillarLeft').style.left = (width - left - w) + 'px'
+      }
     }
   }
 </script>
@@ -211,6 +235,25 @@
   border-top: 50px solid transparent;
   border-left: 50px solid #6AB42E;
   border-bottom: 50px solid transparent;
+}
+
+#pillarLeft {
+  position: absolute;
+  width: 100px;
+  height: 75%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 20%;
+  background: black;
+}
+#pillarRight {
+  position: absolute;
+  width: 100px;
+  height: 75%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 70%;
+  background: black;
 }
 
    #alteka {
