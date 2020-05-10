@@ -39,8 +39,8 @@
       <swatch colour="black" ire="50" :showText="false"></swatch>
       <swatch colour="black" ire="60" :showText="false"></swatch>
       <swatch colour="black" ire="70" :showText="false"></swatch>
-      <swatch colour="black" ire="90" :showText="false"></swatch>
       <swatch colour="black" ire="80" :showText="false"></swatch>
+      <swatch colour="black" ire="90" :showText="false"></swatch>
       <swatch colour="black" ire="100" :showText="false"></swatch>
       <swatch colour="black" ire="109" :showText="false"></swatch>
     </div>
@@ -126,6 +126,13 @@ import Swatch from './Swatch'
         document.getElementById('pillarRight').style.left = left + 'px'
         document.getElementById('pillarLeft').style.left = (width - left - w) + 'px'
       }
+    },
+    mounted: function() {
+      let size = {
+        width: document.getElementById('alteka').getBoundingClientRect().width,
+        height: document.getElementById('alteka').getBoundingClientRect().height
+      }
+      this.handleResize(size)
     }
   }
 </script>
