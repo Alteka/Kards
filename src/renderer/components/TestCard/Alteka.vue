@@ -1,6 +1,27 @@
 <template>
   <div id="alteka" :class="{gradient : config.alteka.gradient}">
 
+    <div class="grid">
+      <div class="gridQuadrant" style="background-position: bottom right"></div>
+      <div class="gridQuadrant" style="background-position: bottom left"></div>
+      <div class="gridQuadrant" style="background-position: top right"></div>
+      <div class="gridQuadrant"></div>
+    </div>
+
+    <div class="border">
+      <div class="borderTop"></div>
+      <div class="borderBottom"></div>
+      <div class="borderLeft"></div>
+      <div class="borderRight"></div>
+    </div>
+
+    <div class="corners">
+      <div class="cornerTopLeft" :style="cornerStyle"></div>
+      <div class="cornerTopRight" :style="cornerStyle"></div>
+      <div class="cornerBottomLeft" :style="cornerStyle"></div>
+      <div class="cornerBottomRight" :style="cornerStyle"></div>
+    </div>
+
     <div id="centerbox">
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
         <defs>
@@ -55,13 +76,110 @@
     },
     props: {
       config: Object
+    },
+    computed: {
+      cornerStyle: function() {
+        return {
+          'border-color': this.config.alteka.cornerColour
+        }
+      }
     }
   }
 </script>
 
 <style scoped>
+
+  .grid {
+    height: 100%;
+    width: 100%;
+  }
+  .gridQuadrant {
+    height: 50%;
+    width: 50%;
+    outline: 2px solid white;
+    outline-offset: -2px;
+    float: left;
+    background-size: 50px 50px;
+    background-image:
+      linear-gradient(to right, #666 1px, transparent 1px),
+      linear-gradient(to bottom, #666 1px, transparent 1px);
+  }
+
+  .border {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
+  .border div {
+    position: absolute;
+    background-size: 100px 100px;
+    background-position: 50%;
+  }
+  .borderTop {
+    background: black;
+    background-image: linear-gradient(270deg, transparent 50%, currentColor 50%);
+    height: 25px;
+    width: 100%;
+    top: 0px;
+  }
+  .borderBottom {
+    background: black;
+    background-image: linear-gradient(90deg, transparent 50%, currentColor 50%);
+    height: 25px;
+    bottom: 0px;
+    width: 100%;
+  }
+  .borderLeft {
+    left: 0;
+    width: 25px;
+    height: 100%;
+    background: black;
+    background-image: linear-gradient(0deg, transparent 50%, currentColor 50%);
+  }
+  .borderRight {
+    right: 0;
+    width: 25px;
+    height: 100%;
+    background: black;
+    background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
+  }
+  
+.corners {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0;
+}
+.corners div {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+}
+.cornerTopLeft {
+  top: 0; left: 0;
+  border-top: 25px solid red;
+  border-left: 25px solid red;
+}
+.cornerTopRight {
+  top: 0; right: 0;
+  border-top: 25px solid red;
+  border-right: 25px solid red;
+}
+.cornerBottomLeft {
+  bottom: 0; left: 0;
+  border-bottom: 25px solid red;
+  border-left: 25px solid red;
+}
+.cornerBottomRight {
+  bottom: 0; right: 0;
+  border-bottom: 25px solid red;
+  border-right: 25px solid red;
+}
+
    #alteka {
-    background: #d33;
+    background: #3d3d3d;
     height: 100%;
     width: 100%;
     color: white;
