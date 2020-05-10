@@ -29,12 +29,29 @@
       <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.cornerColour}"></div>
     </div>
 
-    <div id="pillarLeft">
-
+    <div id="pillarLeft" class="pillar">
+      <swatch colour="black" ire="-7.5" :showText="false"></swatch>
+      <swatch colour="black" ire="0" :showText="false"></swatch>
+      <swatch colour="black" ire="10" :showText="false"></swatch>
+      <swatch colour="black" ire="20" :showText="false"></swatch>
+      <swatch colour="black" ire="30" :showText="false"></swatch>
+      <swatch colour="black" ire="40" :showText="false"></swatch>
+      <swatch colour="black" ire="50" :showText="false"></swatch>
+      <swatch colour="black" ire="60" :showText="false"></swatch>
+      <swatch colour="black" ire="70" :showText="false"></swatch>
+      <swatch colour="black" ire="90" :showText="false"></swatch>
+      <swatch colour="black" ire="80" :showText="false"></swatch>
+      <swatch colour="black" ire="100" :showText="false"></swatch>
+      <swatch colour="black" ire="109" :showText="false"></swatch>
     </div>
 
-    <div id="pillarRight">
-
+    <div id="pillarRight" class="pillar">
+      <div class="stripe-v-1"></div>
+      <div class="stripe-v-2"></div>
+      <div class="stripe-v-4"></div>
+      <div class="stripe-h-4"></div>
+      <div class="stripe-h-2"></div>
+      <div class="stripe-h-1"></div>
     </div>
 
     <div id="centerbox">
@@ -82,7 +99,9 @@
 </template>
 
 <script>
+import Swatch from './Swatch'
   export default {
+    components: { Swatch },
     data () {
       return {
         electron: process.versions.electron,
@@ -236,24 +255,43 @@
   border-left: 50px solid #6AB42E;
   border-bottom: 50px solid transparent;
 }
-
-#pillarLeft {
+.pillar {
   position: absolute;
   width: 100px;
   height: 75%;
   top: 50%;
   transform: translateY(-50%);
-  left: 20%;
-  background: black;
+  display: flex;
+  flex-direction: column;
 }
-#pillarRight {
-  position: absolute;
-  width: 100px;
-  height: 75%;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 70%;
-  background: black;
+.pillar div {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+.stripe-v-1 {
+  background-image: repeating-linear-gradient(0deg, white, white 1px, black 1px, black);
+  background-size: 2px 2px;
+}
+.stripe-v-2 {
+  background-image: repeating-linear-gradient(0deg, white, white 2px, black 2px, black);
+  background-size: 4px 4px;
+}
+.stripe-v-4 {
+  background-image: repeating-linear-gradient(0deg, white, white 4px, black 4px, black);
+  background-size: 8px 8px;
+}
+.stripe-h-1 {
+  background-image: repeating-linear-gradient(90deg, white, white 1px, black 1px, black);
+  background-size: 2px 2px;
+}
+.stripe-h-2 {
+  background-image: repeating-linear-gradient(90deg, white, white 2px, black 2px, black);
+  background-size: 4px 4px;
+}
+.stripe-h-4 {
+  background-image: repeating-linear-gradient(90deg, white, white 4px, black 4px, black);
+  background-size: 8px 8px;
 }
 
    #alteka {
