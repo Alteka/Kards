@@ -1,6 +1,13 @@
 <template>
   <div id="alteka" :class="{gradient : config.alteka.gradient}">
 
+    <div class="grid">
+      <div class="gridQuadrant" style="background-position: bottom right"></div>
+      <div class="gridQuadrant" style="background-position: bottom left"></div>
+      <div class="gridQuadrant" style="background-position: top right"></div>
+      <div class="gridQuadrant"></div>
+    </div>
+
     <div id="centerbox">
 
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
@@ -42,8 +49,25 @@
 </script>
 
 <style scoped>
+
+  .grid {
+    height: 100%;
+    width: 100%;
+  }
+  .gridQuadrant {
+    height: 50%;
+    width: 50%;
+    outline: 2px solid white;
+    outline-offset: -2px;
+    float: left;
+    background-size: 50px 50px;
+    background-image:
+      linear-gradient(to right, #999 1px, transparent 1px),
+      linear-gradient(to bottom, #999 1px, transparent 1px);
+  }
+
    #alteka {
-    background: #d33;
+    background: #3d3d3d;
     height: 100%;
     width: 100%;
     color: white;
