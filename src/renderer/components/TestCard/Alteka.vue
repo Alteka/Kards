@@ -2,26 +2,44 @@
   <div id="alteka" :class="{gradient : config.alteka.gradient}">
 
     <div id="centerbox">
-
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
+        <defs>
+          <clipPath id="clipCircle">
+            <circle cx="0" cy="0" r="45" />
+          </clipPath>
+          <linearGradient id="hLuma" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="parade" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0" stop-color="rgb(234,16,16)"/>
+            <stop offset="0.333" stop-color="rgb(234,234,16)"/>
+            <stop offset="0.5" stop-color="rgb(16,234,16)"/>
+            <stop offset="0.666" stop-color="rgb(16,234,234)"/>
+            <stop offset="0.833" stop-color="rgb(16,16,234)"/>
+            <stop offset="1" stop-color="rgb(234,16,234)"/>
+          </linearGradient>
+          <linearGradient id="vLuma" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="vAlpha" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(234,234,234);stop-opacity:0" />
+            <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+          </linearGradient>
+        </defs>
 
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
-          <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
-        </linearGradient>
-
-        <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="black" />
-        
-
-        <g id="spinny-box">
-          <rect x="-45" y="-5" width="90" height="10" fill="url(#grad1)" />
-          <animateTransform v-if="config.animated" attributeName="transform" type="rotate" dur="5s" from="0" to="360" repeatCount="indefinite" />
+        <g id="clip-me" clip-path="url('#clipCircle')">  
+          <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
+          <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
+          <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
+          <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}" >{{config.name}}</text>
+          <g v-if="config.alteka.animated" id="spinny-box">
+            <animateTransform attributeName="transform" type="rotate" dur="5s" from="0" to="360" repeatCount="indefinite" />
+            <rect x="0" y="-5" width="50" height="5" fill="url('#vAlpha')" />
+          </g>
+          <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
         </g>
-
-        <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
-
-        <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
-
       </svg>
     </div>
   </div>
