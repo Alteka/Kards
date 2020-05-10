@@ -16,10 +16,17 @@
     </div>
 
     <div class="corners">
-      <div class="cornerTopLeft" :style="cornerStyle"></div>
-      <div class="cornerTopRight" :style="cornerStyle"></div>
-      <div class="cornerBottomLeft" :style="cornerStyle"></div>
-      <div class="cornerBottomRight" :style="cornerStyle"></div>
+      <div class="cornerTopLeft" :style="{'border-color': this.config.alteka.cornerColour}"></div>
+      <div class="cornerTopRight" :style="{'border-color': this.config.alteka.cornerColour}"></div>
+      <div class="cornerBottomLeft" :style="{'border-color': this.config.alteka.cornerColour}"></div>
+      <div class="cornerBottomRight" :style="{'border-color': this.config.alteka.cornerColour}"></div>
+    </div>
+
+    <div class="arrows">
+      <div class="arrowTop" :style="{'border-bottom-color': this.config.alteka.cornerColour}"></div>
+      <div class="arrowRight" :style="{'border-left-color': this.config.alteka.cornerColour}"></div>
+      <div class="arrowBottom" :style="{'border-top-color': this.config.alteka.cornerColour}"></div>
+      <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.cornerColour}"></div>
     </div>
 
     <div id="centerbox">
@@ -76,13 +83,6 @@
     },
     props: {
       config: Object
-    },
-    computed: {
-      cornerStyle: function() {
-        return {
-          'border-color': this.config.alteka.cornerColour
-        }
-      }
     }
   }
 </script>
@@ -176,6 +176,41 @@
   bottom: 0; right: 0;
   border-bottom: 25px solid red;
   border-right: 25px solid red;
+}
+
+.arrows {
+  position: absolute;
+  top: 0; left: 0; height: 100%; width: 100%;
+}
+.arrows div {
+  position: absolute;
+  width: 0; height: 0;
+}
+.arrowTop {
+  left: calc(50% - 50px);
+  border-right: 50px solid transparent;
+  border-bottom: 50px solid #6AB42E;
+  border-left: 50px solid transparent;
+}
+.arrowBottom {
+  left: calc(50% - 50px);
+  bottom: 0;
+  border-right: 50px solid transparent;
+  border-top: 50px solid #6AB42E;
+  border-left: 50px solid transparent;
+}
+.arrowLeft {
+  top: calc(50% - 50px);
+  border-top: 50px solid transparent;
+  border-right: 50px solid #6AB42E;
+  border-bottom: 50px solid transparent;
+}
+.arrowRight {
+  top: calc(50% - 50px);
+  right: 0;
+  border-top: 50px solid transparent;
+  border-left: 50px solid #6AB42E;
+  border-bottom: 50px solid transparent;
 }
 
    #alteka {
