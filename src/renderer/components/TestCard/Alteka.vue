@@ -150,11 +150,11 @@
         </defs>
 
         <g id="clip-me" clip-path="url('#clipCircle')">
-          <circle cx="0" cy="0" r="45" stroke="none" fill="#6AB42F" />
+          <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
-          <text x="0" y="10" w="50" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.fg}">{{config.name}}</text>
+          <text x="0" y="10" w="50" text-anchor="middle" font-size="10px" :style="{fill: text}">{{config.name}}</text>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
             <path d='M0,0 L45,0 A45,45 0 0,1 44.83,3.92z' fill="url('#vAlpha')" />
@@ -178,6 +178,23 @@ export default {
   },
   props: {
     config: Object
+  },
+  computed: {
+    text: function() {
+      var c = this.config.alteka.fg.substring(1);      // strip #
+      var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+      var r = (rgb >> 16) & 0xff;  // extract red
+      var g = (rgb >>  8) & 0xff;  // extract green
+      var b = (rgb >>  0) & 0xff;  // extract blue
+      var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+      console.log('luma', luma)
+      if (luma > 127) {
+        return "#000"
+      } else {
+        return "#fff"
+      }
+    }
   },
   methods: {
     handleResize: function({ width, height }) {
