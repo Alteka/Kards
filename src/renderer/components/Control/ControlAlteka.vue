@@ -3,14 +3,19 @@
 <div> 
   
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="Text Colour">
-            <el-color-picker v-model="alteka.textColour"></el-color-picker>
+        <el-col :span="8">
+          <el-form-item label="Background">
+            <el-color-picker v-model="alteka.bg"></el-color-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="Corner Colour">
-            <el-color-picker v-model="alteka.cornerColour"></el-color-picker>
+        <el-col :span="8">
+          <el-form-item label="Foreground">
+            <el-color-picker v-model="alteka.fg"></el-color-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Gradient">
+            <el-switch v-model="alteka.gradient"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>

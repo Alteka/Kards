@@ -1,5 +1,5 @@
 <template>
-  <div id="alteka" :class="{gradient : config.alteka.gradient}">
+  <div id="alteka" :class="{gradient : config.alteka.gradient}" :style="{background : config.alteka.bg}" >
     <resize-observer @notify="handleResize" />
     <div class="grid">
       <div class="gridQuadrant" style="background-position: bottom right"></div>
@@ -16,17 +16,17 @@
     </div>
 
     <div class="corners">
-      <div class="cornerTopLeft" :style="{'border-color': this.config.alteka.cornerColour}"></div>
-      <div class="cornerTopRight" :style="{'border-color': this.config.alteka.cornerColour}"></div>
-      <div class="cornerBottomLeft" :style="{'border-color': this.config.alteka.cornerColour}"></div>
-      <div class="cornerBottomRight" :style="{'border-color': this.config.alteka.cornerColour}"></div>
+      <div class="cornerTopLeft" :style="{'border-color': this.config.alteka.fg}"></div>
+      <div class="cornerTopRight" :style="{'border-color': this.config.alteka.fg}"></div>
+      <div class="cornerBottomLeft" :style="{'border-color': this.config.alteka.fg}"></div>
+      <div class="cornerBottomRight" :style="{'border-color': this.config.alteka.fg}"></div>
     </div>
 
     <div class="arrows">
-      <div class="arrowTop" :style="{'border-bottom-color': this.config.alteka.cornerColour}"></div>
-      <div class="arrowRight" :style="{'border-left-color': this.config.alteka.cornerColour}"></div>
-      <div class="arrowBottom" :style="{'border-top-color': this.config.alteka.cornerColour}"></div>
-      <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.cornerColour}"></div>
+      <div class="arrowTop" :style="{'border-bottom-color': this.config.alteka.fg}"></div>
+      <div class="arrowRight" :style="{'border-left-color': this.config.alteka.fg}"></div>
+      <div class="arrowBottom" :style="{'border-top-color': this.config.alteka.fg}"></div>
+      <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.fg}"></div>
     </div>
 
     <div id="pillarLeft" class="pillar">
@@ -154,7 +154,7 @@
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
-          <text x="0" y="10" w="50" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
+          <text x="0" y="10" w="50" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.fg}">{{config.name}}</text>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
             <path d='M0,0 L45,0 A45,45 0 0,1 44.83,3.92z' fill="url('#vAlpha')" />
@@ -196,10 +196,9 @@ export default {
       let gap = 0
       if (ratio > 1.5) { gap = 50 }
       if (ratio > 2.5) { gap = 100 }
-      let left = (Math.ceil((circleWidth + 25) / 2 / 50) * 50 + width / 2) + gap;
-      document.getElementById("pillarRight").style.left = left + "px";
-      document.getElementById("pillarLeft").style.left =
-        width - left - w + "px";
+      let left = (Math.ceil((circleWidth + 25) / 2 / 50) * 50 + width / 2) + gap
+      document.getElementById("pillarRight").style.left = left + "px"
+      document.getElementById("pillarLeft").style.left = width - left - w + "px"
     }
   },
   mounted: function() {
@@ -227,6 +226,15 @@ export default {
   background-image: linear-gradient(to right, #666 1px, transparent 1px),
     linear-gradient(to bottom, #666 1px, transparent 1px);
 }
+.gradient:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%);
+  }
 
 .border {
   position: absolute;

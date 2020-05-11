@@ -29,8 +29,8 @@
     "logoUrl": "",
     "showLogo": false,
     "audioSync": false,
-    "textColour": "#fff",
-    "cornerColour": "#6AB42F",
+    "bg": "#666",
+    "fg": "#6AB42F",
     "animated": false
 },
 "ramp": {
