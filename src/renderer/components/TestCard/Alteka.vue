@@ -62,7 +62,7 @@
           </clipPath>
           <g v-if="config.animated" id="spinny-radar">
               <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
-              <rect x="0" y="-2" width="25" height="2" fill="url('#vAlpha')" />
+              <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' fill="url('#vAlpha')" />
           </g>
         </defs>
       </svg>
@@ -150,13 +150,14 @@
         </defs>
 
         <g id="clip-me" clip-path="url('#clipCircle')">
+          <circle cx="0" cy="0" r="45" stroke="none" fill="#6AB42F" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
-          <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
+          <text x="0" y="10" w="50" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
-            <rect x="0" y="-5" width="50" height="5" fill="url('#vAlpha')" />
+            <path d='M0,0 L45,0 A45,45 0 0,1 44.83,3.92z' fill="url('#vAlpha')" />
           </g>
           <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
         </g>
