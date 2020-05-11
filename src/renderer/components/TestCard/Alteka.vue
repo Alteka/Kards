@@ -62,7 +62,7 @@
           </clipPath>
           <g v-if="config.animated" id="spinny-radar">
               <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
-              <rect x="0" y="-2" width="25" height="2" fill="url('#vAlpha')" />
+              <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' fill="url('#vAlpha')" />
           </g>
         </defs>
       </svg>
@@ -156,7 +156,7 @@
           <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
-            <rect x="0" y="-5" width="50" height="5" fill="url('#vAlpha')" />
+            <path d='M0,0 L45,0 A45,45 0 0,1 44.83,3.92z' fill="url('#vAlpha')" />
           </g>
           <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
         </g>
@@ -180,18 +180,22 @@ export default {
   },
   methods: {
     handleResize: function({ width, height }) {
+      
+      let ratio = width/height
+
       let w = Math.round((width / 50) * 0.066) * 50;
       document.getElementById("pillarLeft").style.width = w + "px";
       document.getElementById("pillarRight").style.width = w + "px";
 
-      let h = Math.round((height / 100) * 0.66) * 100;
+      let h = (Math.floor((height / 100) * 0.6)) * 100;
       document.getElementById("pillarLeft").style.height = h + "px";
       document.getElementById("pillarRight").style.height = h + "px";
 
-      let circleWidth = document
-        .getElementById("clipCircle")
-        .getBoundingClientRect().width;
-      let left = Math.ceil(circleWidth / 2 / 50) * 50 + width / 2;
+      let circleWidth = document.getElementById("clipCircle").getBoundingClientRect().width
+      let gap = 0
+      if (ratio > 1.5) { gap = 50 }
+      if (ratio > 2.5) { gap = 100 }
+      let left = (Math.ceil((circleWidth + 25) / 2 / 50) * 50 + width / 2) + gap;
       document.getElementById("pillarRight").style.left = left + "px";
       document.getElementById("pillarLeft").style.left =
         width - left - w + "px";
