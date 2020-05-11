@@ -2,10 +2,10 @@
   <div id="alteka" :class="{gradient : config.alteka.gradient}" :style="{background : config.alteka.bg}" >
     <resize-observer @notify="handleResize" />
     <div class="grid">
-      <div class="gridQuadrant" style="background-position: bottom right"></div>
-      <div class="gridQuadrant" style="background-position: bottom left"></div>
-      <div class="gridQuadrant" style="background-position: top right"></div>
-      <div class="gridQuadrant"></div>
+      <div class="gridQuadrant gridtopleft" :style="grid"></div>
+      <div class="gridQuadrant gridtopright" :style="grid"></div>
+      <div class="gridQuadrant gridbottomleft" :style="grid"></div>
+      <div class="gridQuadrant" :style="grid"></div>
     </div>
 
     <div class="border">
@@ -181,22 +181,39 @@ export default {
   },
   computed: {
     text: function() {
-      var c = this.config.alteka.fg.substring(1);      // strip #
-      var rgb = parseInt(c, 16);   // convert rrggbb to decimal
-      var r = (rgb >> 16) & 0xff;  // extract red
-      var g = (rgb >>  8) & 0xff;  // extract green
-      var b = (rgb >>  0) & 0xff;  // extract blue
-      var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-
-      console.log('luma', luma)
+      var luma = this.toLuma(this.config.alteka.fg)
       if (luma > 127) {
         return "#000"
       } else {
         return "#fff"
       }
+    },
+    grid: function() {
+      var luma = this.toLuma(this.config.alteka.bg)
+      if (luma > 127) {
+        return {
+          'outline': '2px solid #000',
+          'background-size': '50px 50px',
+          'background-image': `linear-gradient(to right, #444 1px, transparent 1px), linear-gradient(to bottom, #444 1px, transparent 1px)`
+        }
+      } else {
+        return {
+          'outline': '2px solid white',
+          'background-size': '50px 50px',
+          'background-image': `linear-gradient(to right, #bbb 1px, transparent 1px), linear-gradient(to bottom, #bbb 1px, transparent 1px)`
+        }
+      }
     }
   },
   methods: {
+    toLuma: function(hex) {
+      var c = hex.substring(1);      // strip #
+      var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+      var r = (rgb >> 16) & 0xff;  // extract red
+      var g = (rgb >>  8) & 0xff;  // extract green
+      var b = (rgb >>  0) & 0xff;  // extract blue
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+    },
     handleResize: function({ width, height }) {
       
       let ratio = width/height
@@ -243,6 +260,15 @@ export default {
   background-image: linear-gradient(to right, #666 1px, transparent 1px),
     linear-gradient(to bottom, #666 1px, transparent 1px);
 }
+.gridtopleft {
+    background-position: bottom right;
+  }
+  .gridtopright {
+    background-position: bottom left;
+  }
+  .gridbottomleft {
+    background-position: top right;
+  }
 .gradient:before {
     content: '';
     position: absolute;
