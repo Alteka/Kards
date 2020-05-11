@@ -9,10 +9,10 @@
     </div>
 
     <div class="border">
-      <div class="borderTop"></div>
-      <div class="borderBottom"></div>
-      <div class="borderLeft"></div>
-      <div class="borderRight"></div>
+      <div class="borderTop" :class="{borderAnimatedl2r : config.animated}"></div>
+      <div class="borderBottom" :class="{borderAnimatedr2l : config.animated}"></div>
+      <div class="borderLeft" :class="{borderAnimatedbtt : config.animated}"></div>
+      <div class="borderRight" :class="{borderAnimatedttb : config.animated}"></div>
     </div>
 
     <div class="corners">
@@ -46,12 +46,12 @@
     </div>
 
     <div id="pillarRight" class="pillar">
-      <div class="stripe-v-1"></div>
-      <div class="stripe-v-2"></div>
       <div class="stripe-v-4"></div>
-      <div class="stripe-h-4"></div>
-      <div class="stripe-h-2"></div>
+      <div class="stripe-v-2"></div>
+      <div class="stripe-v-1"></div>
       <div class="stripe-h-1"></div>
+      <div class="stripe-h-2"></div>
+      <div class="stripe-h-4"></div>
     </div>
 
     <div class="cornerCircles">
@@ -262,6 +262,38 @@ export default {
   height: 100%;
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
+}
+.borderAnimatedl2r {
+  animation: left-to-right 10s infinite;
+  animation-timing-function: linear;
+}
+.borderAnimatedr2l {
+  animation: right-to-left 10s infinite;
+  animation-timing-function: linear;
+}
+.borderAnimatedbtt {
+  animation: bottom-to-top 10s infinite;
+  animation-timing-function: linear;
+}
+.borderAnimatedttb {
+  animation: top-to-bottom 10s infinite;
+  animation-timing-function: linear;
+}
+@keyframes left-to-right {
+    0%       { background-position: 0%; }
+    100%     { background-position: 100%; }
+}
+@keyframes right-to-left {
+    0%       { background-position: 100%; }
+    100%     { background-position: 0%; }
+}
+@keyframes top-to-bottom {
+    0%       { background-position: top; }
+    100%     { background-position: bottom; }
+}
+@keyframes bottom-to-top {
+    0%       { background-position: bottom; }
+    100%     { background-position: top; }
 }
 
 .corners {
