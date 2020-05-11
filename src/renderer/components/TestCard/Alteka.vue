@@ -60,7 +60,7 @@
           <clipPath id="clipSmallCircle">
             <circle cx="0" cy="0" r="25" />
           </clipPath>
-          <g v-if="config.alteka.animated" id="spinny-radar">
+          <g v-if="config.animated" id="spinny-radar">
               <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
               <rect x="0" y="-2" width="25" height="2" fill="url('#vAlpha')" />
           </g>
@@ -154,7 +154,7 @@
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
-          <g v-if="config.alteka.animated" id="spinny-box">
+          <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
             <rect x="0" y="-5" width="50" height="5" fill="url('#vAlpha')" />
           </g>

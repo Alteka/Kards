@@ -17,17 +17,12 @@
 
 
       <el-row>
-        <el-col :span="8">
-          <el-form-item label="Animation">
-            <el-switch v-model="alteka.animated"></el-switch>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="Audio Sync">
             <el-switch v-model="alteka.audioSync"></el-switch>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="Custom Logo">
             <el-switch v-model="alteka.showLogo"></el-switch>
           </el-form-item>
