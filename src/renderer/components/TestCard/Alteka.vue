@@ -46,12 +46,12 @@
     </div>
 
     <div id="pillarRight" class="pillar">
-      <div class="stripe-v-1"></div>
-      <div class="stripe-v-2"></div>
       <div class="stripe-v-4"></div>
-      <div class="stripe-h-4"></div>
-      <div class="stripe-h-2"></div>
+      <div class="stripe-v-2"></div>
+      <div class="stripe-v-1"></div>
       <div class="stripe-h-1"></div>
+      <div class="stripe-h-2"></div>
+      <div class="stripe-h-4"></div>
     </div>
 
     <div class="cornerCircles">
@@ -129,22 +129,22 @@
           </clipPath>
           <linearGradient id="hLuma" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
-            <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgb(235,235,235);stop-opacity:1" />
           </linearGradient>
           <linearGradient id="parade" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0" stop-color="rgb(234,16,16)" />
-            <stop offset="0.333" stop-color="rgb(234,234,16)" />
-            <stop offset="0.5" stop-color="rgb(16,234,16)" />
-            <stop offset="0.666" stop-color="rgb(16,234,234)" />
-            <stop offset="0.833" stop-color="rgb(16,16,234)" />
-            <stop offset="1" stop-color="rgb(234,16,234)" />
+            <stop offset="0" stop-color="rgb(235 0 0)" />
+            <stop offset="0.333" stop-color="rgb(235 235 0)" />
+            <stop offset="0.5" stop-color="rgb(0 235 0)" />
+            <stop offset="0.666" stop-color="rgb(0 235 235)" />
+            <stop offset="0.833" stop-color="rgb(0 0 235)" />
+            <stop offset="1" stop-color="rgb(235 0 235)" />
           </linearGradient>
           <linearGradient id="vLuma" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+            <stop offset="0%" style="stop-color:rgb(235,235,235);stop-opacity:1" />
             <stop offset="100%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
           </linearGradient>
           <linearGradient id="vAlpha" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgb(234,234,234);stop-opacity:0" />
+            <stop offset="0%" style="stop-color:rgb(235,235,235);stop-opacity:0" />
             <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
           </linearGradient>
         </defs>
