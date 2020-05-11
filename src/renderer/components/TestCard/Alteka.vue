@@ -181,18 +181,22 @@ export default {
   },
   methods: {
     handleResize: function({ width, height }) {
+      
+      let ratio = width/height
+
       let w = Math.round((width / 50) * 0.066) * 50;
       document.getElementById("pillarLeft").style.width = w + "px";
       document.getElementById("pillarRight").style.width = w + "px";
 
-      let h = Math.round((height / 100) * 0.66) * 100;
+      let h = (Math.floor((height / 100) * 0.6)) * 100;
       document.getElementById("pillarLeft").style.height = h + "px";
       document.getElementById("pillarRight").style.height = h + "px";
 
-      let circleWidth = document
-        .getElementById("clipCircle")
-        .getBoundingClientRect().width;
-      let left = Math.ceil(circleWidth / 2 / 50) * 50 + width / 2;
+      let circleWidth = document.getElementById("clipCircle").getBoundingClientRect().width
+      let gap = 0
+      if (ratio > 1.5) { gap = 50 }
+      if (ratio > 2.5) { gap = 100 }
+      let left = (Math.ceil((circleWidth + 25) / 2 / 50) * 50 + width / 2) + gap;
       document.getElementById("pillarRight").style.left = left + "px";
       document.getElementById("pillarLeft").style.left =
         width - left - w + "px";
