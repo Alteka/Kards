@@ -58,7 +58,7 @@
     </el-form-item>
   </el-col>
 <el-col :span="8">
-    <el-form-item label="Diagonal Motion">
+    <el-form-item label="Motion">
       <el-switch v-model="config.animated"></el-switch>
     </el-form-item>
   </el-col>
