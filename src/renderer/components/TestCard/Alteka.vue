@@ -9,10 +9,10 @@
     </div>
 
     <div class="border">
-      <div class="borderTop"></div>
-      <div class="borderBottom"></div>
-      <div class="borderLeft"></div>
-      <div class="borderRight"></div>
+      <div class="borderTop" :class="{borderAnimatedl2r : config.animated}"></div>
+      <div class="borderBottom" :class="{borderAnimatedr2l : config.animated}"></div>
+      <div class="borderLeft" :class="{borderAnimatedbtt : config.animated}"></div>
+      <div class="borderRight" :class="{borderAnimatedttb : config.animated}"></div>
     </div>
 
     <div class="corners">
@@ -60,7 +60,7 @@
           <clipPath id="clipSmallCircle">
             <circle cx="0" cy="0" r="25" />
           </clipPath>
-          <g v-if="config.alteka.animated" id="spinny-radar">
+          <g v-if="config.animated" id="spinny-radar">
               <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
               <rect x="0" y="-2" width="25" height="2" fill="url('#vAlpha')" />
           </g>
@@ -154,7 +154,7 @@
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <text x="0" y="10" w="90" text-anchor="middle" font-size="10px" :style="{fill: config.alteka.textColour}">{{config.name}}</text>
-          <g v-if="config.alteka.animated" id="spinny-box">
+          <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
             <rect x="0" y="-5" width="50" height="5" fill="url('#vAlpha')" />
           </g>
@@ -262,6 +262,38 @@ export default {
   height: 100%;
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
+}
+.borderAnimatedl2r {
+  animation: left-to-right 10s infinite;
+  animation-timing-function: linear;
+}
+.borderAnimatedr2l {
+  animation: right-to-left 10s infinite;
+  animation-timing-function: linear;
+}
+.borderAnimatedbtt {
+  animation: bottom-to-top 10s infinite;
+  animation-timing-function: linear;
+}
+.borderAnimatedttb {
+  animation: top-to-bottom 10s infinite;
+  animation-timing-function: linear;
+}
+@keyframes left-to-right {
+    0%       { background-position: 0%; }
+    100%     { background-position: 100%; }
+}
+@keyframes right-to-left {
+    0%       { background-position: 100%; }
+    100%     { background-position: 0%; }
+}
+@keyframes top-to-bottom {
+    0%       { background-position: top; }
+    100%     { background-position: bottom; }
+}
+@keyframes bottom-to-top {
+    0%       { background-position: bottom; }
+    100%     { background-position: top; }
 }
 
 .corners {

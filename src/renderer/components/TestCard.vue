@@ -3,7 +3,7 @@
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
-      <div id="cardForPNG" class="testcard" :class="{animated: config.animated}">
+      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka'}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
         <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
@@ -15,9 +15,8 @@
 
 
 
-      <div v-if="config.animated" class="testcard" :class="{animatedAbove: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka'" class="testcard" :class="{animatedAbove: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
         <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
         <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
         <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
@@ -25,9 +24,8 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
 
-      <div v-if="config.animated" class="testcard" :class="{animatedLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka'" class="testcard" :class="{animatedLeft: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
         <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
         <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
         <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
@@ -35,9 +33,8 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
 
-      <div v-if="config.animated" class="testcard" :class="{animatedAboveLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka'" class="testcard" :class="{animatedAboveLeft: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-        <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
         <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
         <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
         <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
@@ -46,7 +43,7 @@
       </div>
     
     <transition name="fade">
-      <div v-if="config.showInfo" class="info">
+      <div v-if="config.showInfo && config.cardType !='alteka'" class="info">
         <strong>{{ config.name}}</strong> <br />
         {{ cardResolution }}
       </div>
