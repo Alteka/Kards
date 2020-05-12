@@ -233,7 +233,7 @@ export default {
       let circle = document.getElementById("clipCircle")
       let circleWidth = circle.getBoundingClientRect().width
 
-      if (ratio > 1) {
+      if (ratio >= 1) {
         let pillarWidth = Math.round((width / 50) * 0.055) * 50
         let pillarHeight = (Math.floor((height / 100) * 0.6)) * 100
 
@@ -326,7 +326,7 @@ export default {
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0.4) 100%);
   }
 
 .border {
@@ -399,36 +399,36 @@ export default {
 }
 
 .borderAnimatedl2r {
-  animation: left-to-right 10s infinite;
+  animation: left-to-right 4s infinite;
   animation-timing-function: linear;
 }
 .borderAnimatedr2l {
-  animation: right-to-left 10s infinite;
+  animation: right-to-left 4s infinite;
   animation-timing-function: linear;
 }
 .borderAnimatedbtt {
-  animation: bottom-to-top 10s infinite;
+  animation: bottom-to-top 4s infinite;
   animation-timing-function: linear;
 }
 .borderAnimatedttb {
-  animation: top-to-bottom 10s infinite;
+  animation: top-to-bottom 4s infinite;
   animation-timing-function: linear;
 }
 @keyframes left-to-right {
     0%       { background-position: 0%; }
-    100%     { background-position: 100%; }
+    100%     { background-position: 100px; }
 }
 @keyframes right-to-left {
-    0%       { background-position: 100%; }
+    0%       { background-position: 100px; }
     100%     { background-position: 0%; }
 }
 @keyframes top-to-bottom {
-    0%       { background-position: top; }
-    100%     { background-position: bottom; }
+    0%       { background-position: 0 0%; }
+    100%     { background-position: 0 100px; }
 }
 @keyframes bottom-to-top {
-    0%       { background-position: bottom; }
-    100%     { background-position: top; }
+    0%       { background-position: 0 100px; }
+    100%     { background-position: 0 0%; }
 }
 
 .corners {
