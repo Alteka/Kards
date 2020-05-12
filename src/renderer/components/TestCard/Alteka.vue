@@ -242,7 +242,7 @@ export default {
         if (ratio > 1.5) { gap = 50 }
         if (ratio > 2.2) { gap = 100 }
         if (ratio > 3) { gap = 150 }
-        
+
         let left = (Math.ceil(circleWidth / 2 / 50) * 50 + width / 2) + gap
         pillarRight.style.left = left + "px"
         pillarLeft.style.left = width - left - pillarWidth + "px"
@@ -358,6 +358,35 @@ export default {
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
 }
+@media screen and (max-height: 700px), (max-width: 700px) {
+  .borderLeft {
+    width: 16px;
+  }
+  .borderRight {
+    width: 16px;
+  }
+  .borderTop {
+    height: 16px;
+  }
+  .borderBottom {
+    height: 16px;
+  }
+}
+@media screen and (max-height: 500px), (max-width: 500px) {
+  .borderLeft {
+    width: 10px;
+  }
+  .borderRight {
+    width: 10px;
+  }
+  .borderTop {
+    height: 10px;
+  }
+  .borderBottom {
+    height: 10px;
+  }
+}
+
 .borderAnimatedl2r {
   animation: left-to-right 10s infinite;
   animation-timing-function: linear;
@@ -427,6 +456,42 @@ export default {
   border-bottom: 25px solid red;
   border-right: 25px solid red;
 }
+@media screen and (max-height: 700px), (max-width: 700px) {
+  .corners div {
+    height: 32px;
+    width: 32px;
+  }
+  .cornerTopLeft {
+    border-width: 16px;
+  }
+  .cornerTopRight {
+    border-width: 16px;
+  }
+  .cornerBottomLeft {
+    border-width: 16px;
+  }
+  .cornerBottomRight {
+    border-width: 16px;
+  }
+}
+@media screen and (max-height: 500px), (max-width: 500px) {
+  .corners div {
+    height: 20px;
+    width: 20px;
+  }
+  .cornerTopLeft {
+    border-width: 10px;
+  }
+  .cornerTopRight {
+    border-width: 10px;
+  }
+  .cornerBottomLeft {
+    border-width: 10px;
+  }
+  .cornerBottomRight {
+    border-width: 10px;
+  }
+}
 
 .arrows {
   position: absolute;
@@ -466,6 +531,44 @@ export default {
   border-left: 50px solid #6ab42e;
   border-bottom: 50px solid transparent;
 }
+@media screen and (max-height: 700px), (max-width: 700px) {
+  .arrowTop {
+    border-width: 20px;
+    left: calc(50% - 20px)
+  }
+  .arrowBottom {
+    border-width: 20px;
+    left: calc(50% - 20px)
+  }
+  .arrowLeft {
+    border-width: 20px;
+    top: calc(50% - 20px)
+  }
+  .arrowRight {
+    border-width: 20px;
+    top: calc(50% - 20px)
+  }
+}
+
+@media screen and (max-height: 500px), (max-width: 500px) {
+  .arrowTop {
+    border-width: 15px;
+    left: calc(50% - 15px)
+  }
+  .arrowBottom {
+    border-width: 15px;
+    left: calc(50% - 15px)
+  }
+  .arrowLeft {
+    border-width: 15px;
+    top: calc(50% - 15px)
+  }
+  .arrowRight {
+    border-width: 15px;
+    top: calc(50% - 15px)
+  }
+}
+
 .pillar {
   position: absolute;
   display: flex;
