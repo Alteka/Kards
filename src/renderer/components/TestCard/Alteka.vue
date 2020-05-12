@@ -682,6 +682,44 @@ export default {
   right: 50px;
 }
 
+@media screen and (max-height: 700px), (max-width: 700px) {
+  .circleTopLeft {
+    top: 32px;
+    left: 32px;
+  }
+  .circleTopRight {
+    top: 32px;
+    right: 32px;
+  }
+  .circleBottomLeft {
+    bottom: 32px;
+    left: 32px;
+  }
+  .circleBottomRight {
+    bottom: 32px;
+    right: 32px;
+  }
+}
+
+@media screen and (max-height: 500px), (max-width: 500px) {
+    .circleTopLeft {
+    top: 20px;
+    left: 20px;
+  }
+  .circleTopRight {
+    top: 20px;
+    right: 20px;
+  }
+  .circleBottomLeft {
+    bottom: 20px;
+    left: 20px;
+  }
+  .circleBottomRight {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
 #alteka {
   background: #3d3d3d;
   height: 100%;
