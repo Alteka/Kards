@@ -60,10 +60,14 @@
           <clipPath id="clipSmallCircle">
             <circle cx="0" cy="0" r="25" />
           </clipPath>
-          <g v-if="config.animated" id="spinny-radar">
+          <g v-if="config.animated" id="spinny-radar" >
               <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
-              <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' fill="url('#vAlpha')" />
+              <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' />
           </g>
+          <linearGradient id="vAlphaB" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(0 0 0);stop-opacity:0" />
+            <stop offset="100%" style="stop-color:rgb(0 0 0);stop-opacity:1" />
+          </linearGradient>
         </defs>
       </svg>
       <div class="circleTopLeft">
@@ -73,7 +77,7 @@
             <rect x="0" y="-25" height="26" width="25" fill="rgb(16 16 16)" />
             <rect x="-25" y="0" height="25" width="26" fill="rgb(16 16 16)" />
             <rect x="0" y="0" height="25" width="25" fill="rgb(0 0 0)" />
-            <use href="#spinny-radar" />
+            <use href="#spinny-radar" fill="url('#vAlpha')"/>
             <circle cx="0" cy="0" r="25" stroke="white" stroke-width="1" fill="none" />
           </g>
         </svg>
@@ -85,7 +89,7 @@
             <rect x="0" y="-25" height="26" width="25" fill="rgb(234 234 234)" />
             <rect x="-25" y="0" height="25" width="26" fill="rgb(234 234 234)" />
             <rect x="0" y="0" height="25" width="25" fill="rgb(255 255 255)" />
-            <use href="#spinny-radar" />
+            <use href="#spinny-radar" fill="url('#vAlphaB')" />
             <circle cx="0" cy="0" r="25" stroke="white" stroke-width="1" fill="none" />
           </g>
         </svg>
@@ -100,7 +104,7 @@
             <path d='M0,0 L-45,0 A45,45 0 0,1 -22.5,-38.97z' fill="rgb(0 255 255)" />
             <path d='M0,0 L-22.5,-38.97 A45,45 0 0,1 22.5,-38.97z' fill="rgb(255 0 255)" />
             <path d='M0,0 L22.5,-38.97 A45,45 0 0,1 45,0z' fill="rgb(255 255 0)" />
-            <use href="#spinny-radar" />
+            <use href="#spinny-radar" fill="url('#vAlphaB')"/>
             <circle cx="0" cy="0" r="25" stroke="white" stroke-width="1" fill="none" />
           </g>
         </svg>
@@ -114,7 +118,7 @@
             <path d='M0,0 L-45,0 A45,45 0 0,1 -22.5,-38.97z' fill="rgb(235 0 0)" />
             <path d='M0,0 L-22.5,-38.97 A45,45 0 0,1 22.5,-38.97z' fill="rgb(0 235 0)" />
             <path d='M0,0 L22.5,-38.97 A45,45 0 0,1 45,0z' fill="rgb(0 0 235)" />
-            <use href="#spinny-radar" />
+            <use href="#spinny-radar" fill="url('#vAlpha')"/>
             <circle cx="0" cy="0" r="25" stroke="white" stroke-width="1" fill="none" />
           </g>
         </svg>
@@ -140,17 +144,19 @@
             <stop offset="1" stop-color="rgb(235 0 235)" />
           </linearGradient>
           <linearGradient id="vLuma" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgb(235,235,235);stop-opacity:1" />
-            <stop offset="100%" style="stop-color:rgb(16,16,16);stop-opacity:1" />
+            <stop offset="0%" style="stop-color:rgb(235 235 235);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgb(16 16 16);stop-opacity:1" />
           </linearGradient>
           <linearGradient id="vAlpha" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgb(235,235,235);stop-opacity:0" />
-            <stop offset="100%" style="stop-color:rgb(234,234,234);stop-opacity:1" />
+            <stop offset="0%" style="stop-color:rgb(235 235 235);stop-opacity:0" />
+            <stop offset="100%" style="stop-color:rgb(235 235 235);stop-opacity:1" />
           </linearGradient>
         </defs>
 
         <g id="clip-me" clip-path="url('#clipCircle')">
           <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
+          <image v-if="!config.alteka.showLogo" href="~@/assets/spatter.png" x="-45" y="-15" width="90" height="30" />
+          <image v-if="config.alteka.showLogo" :href="config.alteka.logoUrl" x="-45" y="-15" width="90" height="30" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
