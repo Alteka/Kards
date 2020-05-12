@@ -156,7 +156,7 @@
         <g id="clip-me" clip-path="url('#clipCircle')">
           <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
           <image v-if="!config.alteka.showLogo" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
-          <image v-if="config.alteka.showLogo" :href="config.alteka.logoUrl" x="-45" y="-15" width="90" height="30" />
+          <image v-if="config.alteka.showLogo" :href="config.alteka.logoUrl" preserveAspectRatio="xMidYMid slice" x="-45" y="-15" width="90" height="30" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
