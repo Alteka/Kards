@@ -245,7 +245,7 @@ let testCardWindowResizeTimer
 
 
 ipcMain.on('selectImage', (event, arg) => {
-  let result = dialog.showOpenDialog({ 
+  let result = dialog.showOpenDialogSync({ 
     title: "Select Image",
     properties: ['openFile'],
     filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif']}],
