@@ -161,10 +161,12 @@
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <g v-if="config.showInfo">
-            <text x="0" y="-9" w="50" text-anchor="middle" font-size="6px" :style="{fill: text}">{{config.name}}</text>
-            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :style="{fill: text}">Alteka Kards </text>
-            <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.width}}x{{config.height}}</text>
-            <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.winWidth}} x {{config.winHeight}}</text>
+            <rect x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="75%" />
+            <rect x="-45" y="-15" width="90" height="7" :fill="config.alteka.bg" fill-opacity="75%" />
+            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :fill="config.alteka.fg">{{config.name}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :fill="config.alteka.fg">Alteka Kards </text>
+            <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :fill="config.alteka.fg">{{config.width}}x{{config.height}}</text>
+            <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :fill="config.alteka.fg">{{config.winWidth}} x {{config.winHeight}}</text>
           </g>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
