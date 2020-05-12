@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import Swatch from "./Swatch";
+import Swatch from "./Swatch"
 export default {
   components: { Swatch },
   data() {
@@ -213,32 +213,71 @@ export default {
   },
   methods: {
     toLuma: function(hex) {
-      var c = hex.substring(1);      // strip #
-      var rgb = parseInt(c, 16);   // convert rrggbb to decimal
-      var r = (rgb >> 16) & 0xff;  // extract red
-      var g = (rgb >>  8) & 0xff;  // extract green
-      var b = (rgb >>  0) & 0xff;  // extract blue
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+      var c = hex.substring(1)
+      var rgb = parseInt(c, 16)
+      var r = (rgb >> 16) & 0xff
+      var g = (rgb >>  8) & 0xff
+      var b = (rgb >>  0) & 0xff
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b
     },
     handleResize: function({ width, height }) {
-      
       let ratio = width/height
+      
+      let pillarLeft = document.getElementById("pillarLeft")
+      let pillarRight = document.getElementById("pillarRight")
+      let circle = document.getElementById("clipCircle")
+      let circleWidth = circle.getBoundingClientRect().width
 
-      let w = Math.round((width / 50) * 0.066) * 50;
-      document.getElementById("pillarLeft").style.width = w + "px";
-      document.getElementById("pillarRight").style.width = w + "px";
+      if (ratio > 1) {
+        let pillarWidth = Math.round((width / 50) * 0.055) * 50
+        let pillarHeight = (Math.floor((height / 100) * 0.6)) * 100
 
-      let h = (Math.floor((height / 100) * 0.6)) * 100;
-      document.getElementById("pillarLeft").style.height = h + "px";
-      document.getElementById("pillarRight").style.height = h + "px";
+        pillarLeft.style.width = pillarWidth + "px"
+        pillarRight.style.width = pillarWidth + "px"
+        pillarLeft.style.height = pillarHeight + "px"
+        pillarRight.style.height = pillarHeight + "px"
+        pillarLeft.style.flexDirection = "column"
+        pillarRight.style.flexDirection = "column"
+        pillarLeft.style.bottom = '50%'
+        pillarLeft.style.transform = 'none'
+        pillarLeft.style.transform = 'translateY(+50%)'
+        pillarRight.style.top = '50%'
+        pillarRight.style.transform = 'translateY(-50%)'
+        
+        let gap = 0
+        if (ratio > 1.5) { gap = 50 }
+        if (ratio > 2.2) { gap = 100 }
+        if (ratio > 3) { gap = 150 }
+        
+        let left = (Math.ceil(circleWidth / 2 / 50) * 50 + width / 2) + gap
+        pillarRight.style.left = left + "px"
+        pillarLeft.style.left = width - left - pillarWidth + "px"
+      } else {
+        let pillarWidth = Math.floor((width / 100) * 0.6) * 100
+        let pillarHeight = (Math.floor((height / 50) * 0.1)) * 50
 
-      let circleWidth = document.getElementById("clipCircle").getBoundingClientRect().width
-      let gap = 0
-      if (ratio > 1.5) { gap = 50 }
-      if (ratio > 2.5) { gap = 100 }
-      let left = (Math.ceil((circleWidth + 25) / 2 / 50) * 50 + width / 2) + gap
-      document.getElementById("pillarRight").style.left = left + "px"
-      document.getElementById("pillarLeft").style.left = width - left - w + "px"
+        pillarLeft.style.width = pillarWidth + "px"
+        pillarRight.style.width = pillarWidth + "px"
+        pillarLeft.style.height = pillarHeight + "px"
+        pillarRight.style.height = pillarHeight + "px"
+
+        pillarLeft.style.flexDirection = "row"
+        pillarRight.style.flexDirection = "row"
+
+        pillarLeft.style.left = '50%'
+        pillarRight.style.left = '50%'
+        pillarLeft.style.transform = 'translateX(-50%)'
+        pillarRight.style.transform = 'translateX(-50%)'
+
+        let gap = 0
+        if (ratio < 0.8) { gap = 50 }
+        if (ratio < 0.6) { gap = 100 }
+        if (ratio < 0.4) { gap = 150 }
+
+        let leftBottom = (height/2) + (Math.ceil(circleWidth / 2 / 50) * 50) + gap
+        pillarLeft.style.bottom = leftBottom + 'px'
+        pillarRight.style.top = leftBottom + 'px'
+      }
     }
   },
   mounted: function() {
@@ -248,7 +287,7 @@ export default {
     };
     this.handleResize(size);
   }
-};
+}
 </script>
 
 <style scoped>
@@ -435,12 +474,7 @@ export default {
 }
 .pillar {
   position: absolute;
-  width: 100px;
-  height: 75%;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
 }
 .pillar div {
   width: 100%;
