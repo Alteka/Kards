@@ -155,12 +155,17 @@
 
         <g id="clip-me" clip-path="url('#clipCircle')">
           <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
-          <image v-if="!config.alteka.showLogo" href="~@/assets/spatter.png" x="-45" y="-15" width="90" height="30" />
+          <image v-if="!config.alteka.showLogo" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
           <image v-if="config.alteka.showLogo" :href="config.alteka.logoUrl" x="-45" y="-15" width="90" height="30" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
-          <text x="0" y="10" w="50" text-anchor="middle" font-size="10px" :style="{fill: text}">{{config.name}}</text>
+          <g v-if="config.showInfo">
+            <text x="0" y="-9" w="50" text-anchor="middle" font-size="6px" :style="{fill: text}">{{config.name}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :style="{fill: text}">Alteka Kards </text>
+            <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.width}}x{{config.height}}</text>
+            <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.winWidth}} x {{config.winHeight}}</text>
+          </g>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
             <path d='M0,0 L45,0 A45,45 0 0,1 44.83,3.92z' fill="url('#vAlpha')" />
