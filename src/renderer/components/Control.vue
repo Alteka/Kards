@@ -79,7 +79,7 @@
 
   <el-row v-if="!config.fullsize && config.screen!=0">
     <el-col :span="6">
-      <el-form-item label="Canvas Size"> 
+      <el-form-item label="Card Size"> 
       </el-form-item>
     </el-col>
      <el-col :span="8">
@@ -96,18 +96,18 @@
    
    <el-row v-if="!config.fullsize && config.screen!=0"> 
     <el-col :span="6">
-      <el-form-item label="Canvas Position"> 
+      <el-form-item label="Card Position"> 
       </el-form-item>
     </el-col>
      <el-col :span="8">
-       <el-form-item label="Top" label-width="80px">
-        <el-input-number v-model="config.top" controls-position="right" :step="5"></el-input-number>
-       </el-form-item>
-     </el-col>
-      <el-col :span="8">
         <el-form-item label="Left" label-width="80px">
           <el-input-number v-model="config.left" controls-position="right" :step="5"></el-input-number>
         </el-form-item>
+     </el-col>
+      <el-col :span="8">
+       <el-form-item label="Top" label-width="80px">
+        <el-input-number v-model="config.top" controls-position="right" :step="5"></el-input-number>
+       </el-form-item>
       </el-col>
     </el-row>
 

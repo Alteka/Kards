@@ -7,7 +7,7 @@
 
   <el-col :span="8">
       <el-button type="success" size="mini" round v-on:click="drawerAudio = true"><i v-if="config.audio.enabled" class="fas fa-volume-up"></i><i v-if="!config.audio.enabled" class="fas fa-volume-mute"></i> Audio</el-button>
-      <el-button type="success" size="mini" round v-on:click="drawerImage = true"><i class="fas fa-image"></i> Image</el-button>
+      <el-button type="success" size="mini" round v-on:click="drawerImage = true"><i class="fas fa-image"></i> Export</el-button>
   </el-col>
 
   <el-col :span="8" style="text-align: right">
@@ -44,26 +44,28 @@
 
 
 
- <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt">
+ <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt" size="100px">
    <el-row class="drawerContent">
-     <el-col :span="12">
-      <el-button :disabled="!config.visible" v-on:click="ipcSend('testCardToPNG')">Test Card to PNG</el-button>
+     <el-col :span="10">
+       <el-radio-group v-model="imageSource" size="medium" :disabled="!config.visible || config.fullsize">
+         <el-radio-button label="card">Test Card</el-radio-button>
+         <el-radio-button label="canvas">Whole Canvas</el-radio-button>
+       </el-radio-group>
      </el-col>
-     <el-col :span="12">
-      <el-button :disabled="!config.visible" v-on:click="ipcSend('outputToPNG')">Output to PNG</el-button>
+     <el-col :span="11">
+       <el-radio-group v-model="imageDest" size="medium" :disabled="!config.visible">
+         <el-radio-button label="file">Save to File</el-radio-button>
+         <el-radio-button label="wallpaper">Set Wallpaper</el-radio-button>
+       </el-radio-group>
+     </el-col>
+     <el-col :span="3">
+       <el-button size="medium" :disabled="!config.visible" v-on:click="exportCard">OK</el-button>
      </el-col>
    </el-row>
-   <el-row class="drawerContent">
-     <el-col :span="12">
-      <el-button :disabled="!config.visible" v-on:click="ipcSend('testCardToWallpaper')">Test Card to Wallpaper</el-button>
-     </el-col>
-     <el-col :span="12">
-      <el-button :disabled="!config.visible" v-on:click="ipcSend('outputToWallpaper')">Output to Wallpaper</el-button>
-     </el-col>
-   </el-row>
-   <el-row v-if="!config.visible" style="text-align: center; color: grey;">
-     <span>Must enable output first</span>
-   </el-row>
+   <el-row>
+     <el-alert v-if="!config.visible" title="Enable output first" type="success" center show-icon effect="dark" close-text="Enable" @close="enabler"></el-alert>
+     <el-alert v-if="config.fullsize" title="Disable 'Fill Output' to create test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+  </el-row>
 </el-drawer>
 
 </el-row>
@@ -82,7 +84,9 @@ const { ipcRenderer } = require('electron')
         drawerAudio: false,
         drawerImage: false,
         curAudio: null,
-        playing: false
+        playing: false,
+        imageSource: "card",
+        imageDest: "file"
       }
     },
     watch: {
@@ -105,8 +109,23 @@ const { ipcRenderer } = require('electron')
       },
     },
     methods: {
-      ipcSend: function(val) {
-        ipcRenderer.send(val)
+      exportCard: function() {
+        if (this.imageSource=="card") {
+          if(this.imageDest=="file") {
+            ipcRenderer.send('testCardToPNG')
+          }
+          else if (this.imageDest=="wallpaper") {
+            ipcRenderer.send("testCardToWallpaper")
+          }
+        }
+        else if (this.imageSource=="canvas") {
+          if(this.imageDest=="file") {
+            ipcRenderer.send("canvasToPNG")
+          }
+          else if (this.imageDest=="wallpaper") {
+            ipcRenderer.send("canvasToWallpaper")
+          }
+        }
         this.drawerImage = false
       },
       openUrl: function(link) {
@@ -169,6 +188,9 @@ const { ipcRenderer } = require('electron')
         utter.addEventListener('end', function(event) { 
           setTimeout(vm.playNext(), 500)
         });
+      },
+      enabler: function() {
+        this.config.visible = true
       }
     }
   }
@@ -188,5 +210,9 @@ const { ipcRenderer } = require('electron')
   }
   .enabledText {
     color: #6AB42F;
+  }
+  .el-alert {
+    width: 95%;
+    margin-left: 2.5%;
   }
 </style>

@@ -115,7 +115,7 @@ ipcMain.on('testCardToPNG', (event) => {
   testCardWindow.webContents.send('testCardToPNG')
 })
 
-ipcMain.on('outputToPNG', (event) => {
+ipcMain.on('canvasToPNG', (event) => {
   testCardWindow.webContents.send('outputToPNG')
 })
 
@@ -123,7 +123,7 @@ ipcMain.on('testCardToWallpaper', (event) => {
   testCardWindow.webContents.send('testCardToWallpaper')
 })
 
-ipcMain.on('outputToWallpaper', (event) => {
+ipcMain.on('canvasToWallpaper', (event) => {
   testCardWindow.webContents.send('outputToWallpaper')
 })
 
