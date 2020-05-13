@@ -161,12 +161,13 @@
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <g v-if="config.showInfo">
-            <rect v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="75%" />
-            <rect v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" x="-45" y="-15" width="90" height="7" :fill="config.alteka.bg" fill-opacity="75%" />
+            <g v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" :fill="config.alteka.bg" fill-opacity="75%">
+              <rect x="-45" y="10" width="90" height="5" />
+              <rect x="-45" y="-15" width="90" height="7" />
+            </g>
             <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :style="{fill: text}">{{config.name}}</text>
             <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :style="{fill: text}">Alteka Kards {{require('./../../../../package.json').version}}</text>
-            <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.width}}x{{config.height}}</text>
-            <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.winWidth}} x {{config.winHeight}}</text>
+            <text x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{cardSize}}</text>
           </g>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
@@ -198,6 +199,13 @@ export default {
         return this.config.alteka.fg
       } else {
         return "#fff"
+      }
+    },
+    cardSize: function() {
+      if (this.config.screen == 0) {
+        return this.config.winWidth + ' x ' + this.config.winHeight
+      } else {
+        return this.config.width + ' x ' + this.config.height
       }
     },
     grid: function() {
