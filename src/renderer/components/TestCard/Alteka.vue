@@ -157,15 +157,14 @@
           <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
           <image v-if="!config.alteka.showLogo" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
           <image v-if="config.alteka.showLogo" :href="config.alteka.logoUrl" preserveAspectRatio="xMidYMid slice" x="-45" y="-15" width="90" height="30" />
-          <rect x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="40%" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <g v-if="config.showInfo">
-            <rect x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="75%" />
-            <rect x="-45" y="-15" width="90" height="7" :fill="config.alteka.bg" fill-opacity="75%" />
-            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :fill="config.alteka.fg">{{config.name}}</text>
-            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :fill="config.alteka.fg">Alteka Kards {{require('./../../../../package.json').version}}</text>
+            <rect x="-45" y="10" width="90" height="5" v-if="config.alteka.showLogo" :fill="config.alteka.bg" fill-opacity="75%" />
+            <rect x="-45" y="-15" width="90" height="7" v-if="config.alteka.showLogo" :fill="config.alteka.bg" fill-opacity="75%" />
+            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :fill="config.alteka.textColour">{{config.name}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :fill="config.alteka.textColour">Alteka Kards {{require('./../../../../package.json').version}}</text>
             <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :fill="config.alteka.fg">{{config.width}}x{{config.height}}</text>
             <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :fill="config.alteka.fg">{{config.winWidth}} x {{config.winHeight}}</text>
           </g>

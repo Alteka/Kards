@@ -28,10 +28,9 @@
 "alteka": {
     "logoUrl": "",
     "showLogo": false,
-    "audioSync": false,
     "bg": "#666",
     "fg": "#6AB42F",
-    "animated": false
+    "textColour": "#ffffff"
 },
 "ramp": {
     "direction": "Horizontal",
