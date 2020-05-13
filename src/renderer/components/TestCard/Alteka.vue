@@ -155,19 +155,18 @@
 
         <g id="clip-me" clip-path="url('#clipCircle')">
           <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
-          <image v-if="!config.alteka.showLogo" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
-          <image v-if="config.alteka.showLogo" :href="config.alteka.logoUrl" preserveAspectRatio="xMidYMid slice" x="-45" y="-15" width="90" height="30" />
-          <rect x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="40%" />
+          <image v-if="!config.alteka.showLogo || config.alteka.logoUrl == ''" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
+          <image v-show="config.alteka.showLogo" :href="config.alteka.logoUrl" preserveAspectRatio="xMidYMid slice" x="-45" y="-15" width="90" height="30" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <g v-if="config.showInfo">
-            <rect x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="75%" />
-            <rect x="-45" y="-15" width="90" height="7" :fill="config.alteka.bg" fill-opacity="75%" />
-            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :fill="config.alteka.fg">{{config.name}}</text>
-            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :fill="config.alteka.fg">Alteka Kards {{require('./../../../../package.json').version}}</text>
-            <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :fill="config.alteka.fg">{{config.width}}x{{config.height}}</text>
-            <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :fill="config.alteka.fg">{{config.winWidth}} x {{config.winHeight}}</text>
+            <rect v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" x="-45" y="10" width="90" height="5" :fill="config.alteka.bg" fill-opacity="75%" />
+            <rect v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" x="-45" y="-15" width="90" height="7" :fill="config.alteka.bg" fill-opacity="75%" />
+            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :style="{fill: text}">{{config.name}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :style="{fill: text}">Alteka Kards {{require('./../../../../package.json').version}}</text>
+            <text v-if="config.screen!=0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.width}}x{{config.height}}</text>
+            <text v-if="config.screen==0" x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{config.winWidth}} x {{config.winHeight}}</text>
           </g>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
@@ -195,9 +194,8 @@ export default {
   },
   computed: {
     text: function() {
-      var luma = this.toLuma(this.config.alteka.fg)
-      if (luma > 127) {
-        return "#000"
+      if (this.config.alteka.showLogo && this.config.alteka.logoUrl != '') {
+        return this.config.alteka.fg
       } else {
         return "#fff"
       }
