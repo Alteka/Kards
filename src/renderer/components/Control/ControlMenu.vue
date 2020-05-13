@@ -110,6 +110,9 @@ const { ipcRenderer } = require('electron')
       },
     },
     methods: {
+      ipcSend: function(val) {
+        ipcRenderer.send(val)
+      },
       exportCard: function() {
         if (this.imageSource=="card") {
           if(this.imageDest=="file") {
