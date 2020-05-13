@@ -64,7 +64,8 @@
    </el-row>
    <el-row>
      <el-alert v-if="!config.visible" title="Enable output first" type="success" center show-icon effect="dark" close-text="Enable" @close="enabler"></el-alert>
-     <el-alert v-if="config.fullsize" title="Disable 'Fill Output' to create test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+     <el-alert v-if="config.fullsize && config.screen != 0" title="Disable 'Fill Output' to create test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+     <el-alert v-if="config.screen == 0" title="Use a fullscreen output and disable 'Fill Output' to create test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
   </el-row>
 </el-drawer>
 
