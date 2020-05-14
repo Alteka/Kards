@@ -16,14 +16,7 @@
   </el-col>
 
 
-  <el-drawer :with-header="false" :visible.sync="drawerAudio" direction="btt">
-    <el-row class="drawerContent">
-      <el-col :span="8">
-        <el-form-item label="Enable Output">
-          <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
-        </el-form-item>
-      </el-col>
-    </el-row>
+  <el-drawer :with-header="false" :visible.sync="drawerAudio" direction="btt" size="100px">
     <el-row class="drawerContent">
       <el-checkbox-group v-model="config.audio.options" size="medium">
         <el-checkbox-button label="voice">Voice</el-checkbox-button>
@@ -34,6 +27,12 @@
         <el-checkbox-button label="phase">Phase</el-checkbox-button>
       </el-checkbox-group>
     </el-row>
+    <el-row >
+      <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="8" :class="{ enabledText: config.audio.enabled }">
+        Enable <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
+      </el-col>
+    </el-row>
+
   </el-drawer>
 
   <audio src="~@/assets/audio/stereo.wav" id="stereo" />
@@ -216,7 +215,7 @@ const { ipcRenderer } = require('electron')
     outline: none;
   }
   .enabledText {
-    color: #6AB42F;
+    color: #6AB42F !important;
   }
   .el-alert {
     width: 95%;
