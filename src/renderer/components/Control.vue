@@ -32,7 +32,7 @@
       <control-placeholder :placeholder="config.placeholder"></control-placeholder>
     </el-tab-pane>
 
-    <el-tab-pane label="AV Sync" name="audiosync">
+    <el-tab-pane label="AV Sync" name="audioSync">
       <control-audio-sync :audioSync="config.audioSync"></control-audio-sync>
     </el-tab-pane>
 

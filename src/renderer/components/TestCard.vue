@@ -3,9 +3,21 @@
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
-      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka'}">
+      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync'}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
+        <AudioSync v-if="config.cardType=='audioSync'" :config="config"></AudioSync>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
+      </div>
+
+
+
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
+        <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config"></ARIB>
         <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config"></Bars>
@@ -13,31 +25,20 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
 
-
-
-      <div v-if="config.animated && config.cardType !='alteka'" class="testcard" :class="{animatedAbove: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedLeft: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
-        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
-        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config"></Bars>
         <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka'" class="testcard" :class="{animatedLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAboveLeft: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
-        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
-        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
-      </div>
-
-      <div v-if="config.animated && config.cardType !='alteka'" class="testcard" :class="{animatedAboveLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
-        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
-        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
-        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config"></Bars>
         <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
@@ -68,6 +69,7 @@ import Alteka from './TestCard/Alteka'
 import SMPTE from './TestCard/SMPTE'
 import ARIB from './TestCard/ARIB'
 import Bars from './TestCard/Bars'
+import AudioSync from './TestCard/AudioSync'
 import Placeholder from './TestCard/Placeholder'
 
 import domtoimage from 'dom-to-image'
@@ -91,7 +93,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 
   export default {
     name: 'testcard',
-    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp },
+    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync },
     data: function() { 
       return {
         config: {
