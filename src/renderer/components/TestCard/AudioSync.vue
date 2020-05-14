@@ -22,6 +22,8 @@
       <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.fg}"></div>
     </div>
 
+    <video id="vt" src="../../assets/audiosync.mp4" loop />
+
   </div>
 </template>
 
@@ -29,11 +31,33 @@
 export default {
   props: {
     config: Object
-  }
+  },
+  watch: {
+      config: {
+        handler: function (val, oldVal) { 
+          if (val.audioSync.play) {
+            document.getElementById('vt').play()
+          } else {
+            document.getElementById('vt').pause()
+          }
+         },
+        deep: true
+      },
+    },
 }
 </script>
 
 <style scoped>
+
+#vt {
+  position: absolute;
+  width: calc(100% - 50px);
+  height: calc(100% - 50px);
+  top: 25px;
+  left: 25px;
+  right: 25px;
+  bottom:25px;
+}
 
 .border {
   position: absolute;
@@ -155,7 +179,7 @@ export default {
 }
 
 #audioSync {
-  background: #3d3d3d;
+  background: black;
   height: 100%;
   width: 100%;
   color: white;
