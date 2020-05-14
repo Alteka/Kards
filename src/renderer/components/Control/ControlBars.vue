@@ -1,11 +1,22 @@
 <template>
-
-  <el-row>
-        <el-col :span="8">
+  <div>
+    <el-row>
+      <el-col :span="16">
+      <el-form-item label="Bars Style">
+        <el-radio-group v-model="bars.type" size="small">
+          <el-radio-button label="simple">Simple</el-radio-button>
+          <el-radio-button label="smpte">SMPTE</el-radio-button>
+          <el-radio-button label="arib">ARIB</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      </el-col>
+      <el-col :span="8">
           <el-form-item label="Overlay Details">
             <el-switch v-model="bars.overlay"></el-switch>
           </el-form-item>
         </el-col>
+    </el-row>
+    <el-row v-if="bars.type=='simple'">
         <el-col :span="16">
           <el-form-item label="Bar Level">
             <el-radio-group v-model="bars.level" size="mini">
@@ -16,7 +27,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-
+  </div>
 </template>
 
 <script>

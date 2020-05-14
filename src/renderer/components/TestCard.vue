@@ -6,9 +6,9 @@
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka'}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <Alteka v-if="config.cardType == 'alteka'" :config="config"></Alteka>
-        <SMPTE v-if="config.cardType == 'smpte'" :config="config"></SMPTE>
-        <ARIB v-if="config.cardType == 'arib'" :config="config"></ARIB>
-        <Bars v-if="config.cardType == 'bars'" :config="config"></Bars>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config"></Bars>
         <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>

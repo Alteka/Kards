@@ -10,6 +10,7 @@
     "icon": "el-icon-picture-outline"
 },
 "bars": {
+    "type": "smpte",
     "overlay": false,
     "level": "75"
 },
@@ -19,11 +20,8 @@
     "lines": "#aaa",
     "size": 50
 },
-"arib": {
-    "overlay": false
-},
-"smpte": {
-    "overlay": false
+"audioSync": {
+    "play": false
 },
 "alteka": {
     "logoUrl": "",

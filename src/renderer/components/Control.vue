@@ -16,14 +16,6 @@
       <control-alteka :alteka="config.alteka"></control-alteka>
     </el-tab-pane>
 
-    <el-tab-pane label="SMPTE" name="smpte">
-      <control-smpte :smpte="config.smpte"></control-smpte>
-    </el-tab-pane>
-
-    <el-tab-pane label="ARIB" name="arib">
-      <control-arib :arib="config.arib"></control-arib>
-    </el-tab-pane>
-
     <el-tab-pane label="Bars" name="bars">
       <control-bars :bars="config.bars"></control-bars>
     </el-tab-pane>
@@ -36,8 +28,12 @@
       <control-ramp :ramp="config.ramp"></control-ramp>
     </el-tab-pane>
    
-    <el-tab-pane label="Placeholder" name="placeholder">
+    <el-tab-pane label="Name" name="placeholder">
       <control-placeholder :placeholder="config.placeholder"></control-placeholder>
+    </el-tab-pane>
+
+    <el-tab-pane label="AV Sync" name="audiosync">
+      <control-audio-sync :audioSync="config.audioSync"></control-audio-sync>
     </el-tab-pane>
 
   </el-tabs>
@@ -147,15 +143,14 @@ import ControlGrid from './Control/ControlGrid.vue'
 import ControlRamp from './Control/ControlRamp.vue'
 import ControlPlaceholder from './Control/ControlPlaceholder.vue'
 import ControlAlteka from './Control/ControlAlteka.vue'
-import ControlArib from './Control/ControlARIB.vue'
-import ControlSmpte from './Control/ControlSMPTE.vue'
+import ControlAudioSync from './Control/ControlAudioSync.vue'
 import ControlMenu from './Control/ControlMenu.vue'
 
 import ControlScreen from './Control/ControlScreen.vue'
 
   export default {
     name: 'control',
-    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlArib, ControlSmpte, ControlScreen, ControlMenu },
+    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu },
     data: function () {
     return {
       config: require('../../main/defaultConfig.json'),

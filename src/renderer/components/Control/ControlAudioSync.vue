@@ -1,17 +1,15 @@
 <template>
   <el-row>
-    <el-col :span="24">
-      <el-form-item label="Overlay Details">
-        <el-switch v-model="arib.overlay"></el-switch>
+      <el-form-item label="Play" label-width="80">
+        <el-switch v-model="audioSync.play"></el-switch>
       </el-form-item>
-    </el-col>
   </el-row>
 </template>
 
 <script>
   export default {
     props: {
-      arib: Object
+      audioSync: Object
     }
   }
 </script>
