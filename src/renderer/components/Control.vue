@@ -55,7 +55,7 @@
   </el-col>
 <el-col :span="8">
     <el-form-item label="Motion">
-      <el-switch v-model="config.animated"></el-switch>
+      <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync'"></el-switch>
     </el-form-item>
   </el-col>
 </el-row>
