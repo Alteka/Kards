@@ -47,9 +47,9 @@
  <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt" size="100px">
    <el-row class="drawerContent">
      <el-col :span="10">
-       <el-radio-group v-model="imageSource" size="medium" :disabled="!config.visible || config.fullsize">
+       <el-radio-group v-model="imageSource" size="medium" :disabled="!config.visible">
          <el-radio-button label="card">Test Card</el-radio-button>
-         <el-radio-button label="canvas">Whole Canvas</el-radio-button>
+         <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
        </el-radio-group>
      </el-col>
      <el-col :span="11">
@@ -64,8 +64,8 @@
    </el-row>
    <el-row>
      <el-alert v-if="!config.visible" title="Enable output first" type="success" center show-icon effect="dark" close-text="Enable" @close="enabler"></el-alert>
-     <el-alert v-if="config.fullsize && config.screen != 0" title="Disable 'Fill Output' to create test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
-     <el-alert v-if="config.screen == 0" title="Use a fullscreen output and disable 'Fill Output' to create test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+     <el-alert v-if="config.fullsize && config.screen != 0" title="Disable 'Fill Output' to save test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+     <el-alert v-if="config.screen == 0" title="Use a fullscreen output and disable 'Fill Output' to save test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
   </el-row>
 </el-drawer>
 
@@ -104,6 +104,9 @@ const { ipcRenderer } = require('electron')
             }
             if (!val.audio.enabled && this.playing) {
               this.stopAudio()
+            }
+            if (val.fullsize == 1) {
+              this.imageSource = "card"
             }
          },
         deep: true
