@@ -28,10 +28,13 @@
           <el-switch v-model="alteka.showLogo"></el-switch>
         </el-form-item>
       </el-col>
-      <el-col :span="8" v-if="alteka.showLogo">
+      <el-col :span="9" v-if="alteka.showLogo">
+        <el-button-group>
         <el-button icon="el-icon-picture" size="small" v-on:click="selectImage()">Select Image</el-button>
+        <el-button size="small" v-on:click="clearImage()">Clear</el-button>
+        </el-button-group>
       </el-col>
-      <el-col  v-if="alteka.showLogo" :span="8">
+      <el-col  v-if="alteka.showLogo" :span="7">
         <el-image v-if="alteka.logoUrl != ''" style="width: 135px; height: 45px" :src="alteka.logoUrl" fit="cover"></el-image>
       </el-col>
     </el-row>
@@ -47,6 +50,9 @@ const { ipcRenderer } = require('electron')
     methods: {
       selectImage: function() {
         ipcRenderer.send('selectImage')
+      },
+      clearImage: function() {
+        this.alteka.logoUrl = ""
       }
     },
     mounted: function() {
