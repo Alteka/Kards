@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="16">
       <el-form-item label="Bars Style">
-        <el-radio-group v-model="bars.type" size="small">
+        <el-radio-group v-model="bars.type" size="mini">
           <el-radio-button label="simple">Simple</el-radio-button>
           <el-radio-button label="smpte">SMPTE</el-radio-button>
           <el-radio-button label="arib">ARIB</el-radio-button>
