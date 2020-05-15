@@ -30,14 +30,11 @@
       "dist/electron/**/*"
     ],
     "mac": {
-      "icon": "build/icons/icon.icns",
+      "icon": "build/icons/icon.png",
       "target": "pkg"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
-    },
-    "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons/icon.png"
     }
   },
   "dependencies": {
