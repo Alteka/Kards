@@ -196,7 +196,7 @@ export default {
   computed: {
     text: function() {
       if (this.config.alteka.showLogo && this.config.alteka.logoUrl != '') {
-        return this.config.alteka.fg
+        return this.config.alteka.textColour
       } else {
         return "#fff"
       }
