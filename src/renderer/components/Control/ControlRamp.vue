@@ -13,7 +13,7 @@
           </el-form-item>
         </el-col>
          <el-col :span="6">
-          <el-form-item label="Overlay" label-width="80">
+          <el-form-item v-if="ramp.stepped && (ramp.direction == 'Horizontal' || ramp.direction == 'Vertical')" label="Overlay" label-width="80">
             <el-switch v-model="ramp.overlay"></el-switch>
           </el-form-item>
         </el-col>
