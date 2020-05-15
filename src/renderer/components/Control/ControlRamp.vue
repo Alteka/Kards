@@ -19,17 +19,17 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="8">
+        <el-col :span="9">
           <el-form-item label="Stepped" label-width="80">
             <el-switch v-model="ramp.stepped"></el-switch>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="9">
           <el-form-item label="Double" label-width="80">
             <el-switch v-model="ramp.double"></el-switch>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="Reverse" label-width="80">
             <el-switch v-model="ramp.reverse"></el-switch>
           </el-form-item>
