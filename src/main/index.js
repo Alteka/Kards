@@ -128,12 +128,17 @@ ipcMain.on('canvasToWallpaper', (event) => {
 })
 
 ipcMain.on('saveAsPNG', (event, arg) => {
-  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', filters: [{name: 'Images', extensions: ['png']}]}, (path) => {
-    var base64Data = arg.replace(/^data:image\/png;base64,/, "");
+  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
+    console.log('result ', result.filePath)
+    let path = result.filePath
+    var base64Data = arg.replace(/^data:image\/png;base64,/, "")
     fs.writeFile(path, base64Data, 'base64', function(err) {
-      log.error('Couldnt save file: ', err);
-    });
-    log.info('PNG saved to: ', path);
+      if (err) {
+        log.error('Couldnt save file: ', err)
+      } else {
+        log.info('PNG saved to: ', path)
+      }
+    })
   })
 })
 
