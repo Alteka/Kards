@@ -128,7 +128,8 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       },
       testCardToPNG: function() {
         log.info('Attempt to capture test card as PNG')
-        domtoimage.toPng(document.getElementById('cardForPNG'))
+        let size = document.getElementById('cardForPNG').getBoundingClientRect()
+        domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
           .then(function (dataUrl) {
           ipcRenderer.send('saveAsPNG', dataUrl)
         })
@@ -142,7 +143,8 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       },
       testCardToWallpaper: function() {
         log.info('Attempt to capture test card and set as Wallpaper')
-        domtoimage.toPng(document.getElementById('cardForPNG'))
+        let size = document.getElementById('cardForPNG').getBoundingClientRect()
+        domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
           .then(function (dataUrl) {
           ipcRenderer.send('setAsWallpaper', dataUrl)
         })
