@@ -20,7 +20,7 @@
       <el-row>
         <el-col :span="16">
           <el-form-item label="Size (pixels)">
-            <el-input-number v-model="grid.size" :step="5" size="mini"></el-input-number>
+            <el-input-number v-model="grid.size" :step="5" size="mini" controls-position="right"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
