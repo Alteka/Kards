@@ -15,6 +15,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 process.on('uncaughtException', function (error) {
+  dialog.showErrorBox('Unexpected Error', 'Because.. You know - normally we expect them. \r\n\r\n' + JSON.stringify(error))
   log.warn('Error: ', error)
 })
 
@@ -134,6 +135,7 @@ ipcMain.on('saveAsPNG', (event, arg) => {
     var base64Data = arg.replace(/^data:image\/png;base64,/, "")
     fs.writeFile(path, base64Data, 'base64', function(err) {
       if (err) {
+        dialog.showErrorBox('Error Saving File', JSON.stringify(err))
         log.error('Couldnt save file: ', err)
       } else {
         log.info('PNG saved to: ', path)
@@ -147,6 +149,7 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
   var base64Data = arg.replace(/^data:image\/png;base64,/, "")
   fs.writeFile(dest, base64Data, 'base64', err => {
     if (err) {
+      dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
       log.error('Couldnt save wallpaper file ', err)
       return
     }
