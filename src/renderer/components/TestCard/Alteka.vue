@@ -126,6 +126,8 @@
     </div>
 
     <div id="centerbox">
+      <img id="customLogo" :src="config.alteka.logoUrl" />      
+      
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
         <defs>
           <clipPath id="clipCircle">
@@ -154,9 +156,7 @@
         </defs>
 
         <g id="clip-me" clip-path="url('#clipCircle')">
-          <circle cx="0" cy="0" r="45" stroke="none" :fill="config.alteka.fg" />
           <image v-if="!config.alteka.showLogo || config.alteka.logoUrl == ''" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
-          <image v-show="config.alteka.showLogo" :href="config.alteka.logoUrl" preserveAspectRatio="xMidYMid slice" x="-45" y="-15" width="90" height="30" />
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
@@ -240,7 +240,11 @@ export default {
       let pillarLeft = document.getElementById("pillarLeft")
       let pillarRight = document.getElementById("pillarRight")
       let circle = document.getElementById("clipCircle")
+      let customLogo = document.getElementById("customLogo")
       let circleWidth = circle.getBoundingClientRect().width
+
+      customLogo.style.width = circleWidth + 'px'
+      customLogo.style.height = (circle.getBoundingClientRect().height / 3) + 2 + 'px'
 
       if (ratio >= 1) {
         let pillarWidth = Math.round((width / 50) * 0.055) * 50
@@ -305,6 +309,15 @@ export default {
 </script>
 
 <style scoped>
+#customLogo {
+  position: absolute;
+  z-index: -10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  clip-path: circle(66.7%);
+}
 .grid {
   height: 100%;
   width: 100%;
