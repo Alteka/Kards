@@ -22,7 +22,7 @@
       <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.fg}"></div>
     </div>
 
-    <video id="vt" src="../../assets/audiosync.mp4" loop />
+    <video id="vt" src="../../assets/audiosync.mp4" loop autoplay />
 
   </div>
 </template>
@@ -35,15 +35,14 @@ export default {
   watch: {
       config: {
         handler: function (val, oldVal) { 
-          if (val.audioSync.play) {
-            document.getElementById('vt').play()
-          } else {
-            document.getElementById('vt').pause()
-          }
+          document.getElementById('vt').setSinkId(val.audioSync.deviceId)
          },
         deep: true
       },
     },
+    mounted: function() {
+      document.getElementById('vt').setSinkId(this.config.audioSync.deviceId)
+    }
 }
 </script>
 

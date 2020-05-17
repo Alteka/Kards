@@ -21,7 +21,8 @@
     "size": 50
 },
 "audioSync": {
-    "play": false
+    "deviceId": "default",
+    "rate": 60
 },
 "alteka": {
     "logoUrl": "",
@@ -46,6 +47,7 @@
 "bounds": false,
 "animated": false,
 "audio": {
+    "deviceId": "default",
     "enabled": false,
     "options": ["voice"]
 },

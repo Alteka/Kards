@@ -28,8 +28,15 @@
       </el-checkbox-group>
     </el-row>
     <el-row >
-      <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="8" :class="{ enabledText: config.audio.enabled }">
+      <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="6" :class="{ enabledText: config.audio.enabled }">
         Enable <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
+      </el-col>
+      <el-col :span="16">
+        <el-form-item label="Audio Device">
+        <el-select v-model="config.audio.deviceId" placeholder="Select">
+            <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
+        </el-select>
+      </el-form-item>
       </el-col>
     </el-row>
 
@@ -87,12 +94,24 @@ const { ipcRenderer } = require('electron')
         curAudio: null,
         playing: false,
         imageSource: "card",
-        imageDest: "file"
+        imageDest: "file",
+        audioDevices: []
       }
+    },
+    mounted: function() {
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
+      }) 
     },
     watch: {
       config: {
         handler: function (val, oldVal) { 
+          document.getElementById('stereo').setSinkId(val.audioSync.deviceId)
+          document.getElementById('phase').setSinkId(val.audioSync.deviceId)
+          document.getElementById('pink').setSinkId(val.audioSync.deviceId)
+          document.getElementById('white').setSinkId(val.audioSync.deviceId)
+          document.getElementById('tone').setSinkId(val.audioSync.deviceId)
+
             if (val.audio.enabled && !this.playing) {
               log.info('Starting audio output')
               this.curAudio = null // so it starts from the first item
@@ -189,6 +208,7 @@ const { ipcRenderer } = require('electron')
       playVoice: function() {
         let vm = this
         var utter = new SpeechSynthesisUtterance('This is - ' + this.config.name)
+        
         utter.pitch = 0.8
         utter.rate = 0.8
         window.speechSynthesis.speak(utter)
