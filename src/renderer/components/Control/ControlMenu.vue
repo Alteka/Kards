@@ -106,11 +106,11 @@ const { ipcRenderer } = require('electron')
     watch: {
       config: {
         handler: function (val, oldVal) { 
-          document.getElementById('stereo').setSinkId(val.audioSync.deviceId)
-          document.getElementById('phase').setSinkId(val.audioSync.deviceId)
-          document.getElementById('pink').setSinkId(val.audioSync.deviceId)
-          document.getElementById('white').setSinkId(val.audioSync.deviceId)
-          document.getElementById('tone').setSinkId(val.audioSync.deviceId)
+          document.getElementById('stereo').setSinkId(val.audio.deviceId)
+          document.getElementById('phase').setSinkId(val.audio.deviceId)
+          document.getElementById('pink').setSinkId(val.audio.deviceId)
+          document.getElementById('white').setSinkId(val.audio.deviceId)
+          document.getElementById('tone').setSinkId(val.audio.deviceId)
 
             if (val.audio.enabled && !this.playing) {
               log.info('Starting audio output')
