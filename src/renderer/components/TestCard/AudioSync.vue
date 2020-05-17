@@ -22,7 +22,7 @@
       <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.fg}"></div>
     </div>
 
-    <video id="vt" src="../../assets/audiosync.mp4" loop autoplay />
+    <video id="vt" src="~@/assets/audiosync/60.mp4" loop autoplay />
 
   </div>
 </template>
@@ -50,12 +50,12 @@ export default {
 
 #vt {
   position: absolute;
-  width: calc(100% - 50px);
-  height: calc(100% - 50px);
-  top: 25px;
-  left: 25px;
-  right: 25px;
-  bottom:25px;
+  width: calc(100% - 100px);
+  height: calc(100% - 100px);
+  top: 50px;
+  left: 50px;
+  right: 50px;
+  bottom: 50px;
 }
 
 .border {
@@ -178,7 +178,7 @@ export default {
 }
 
 #audioSync {
-  background: black;
+  background: #454543;
   height: 100%;
   width: 100%;
   color: white;
