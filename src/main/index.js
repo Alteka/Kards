@@ -260,7 +260,10 @@ ipcMain.on('selectImage', (event, arg) => {
     let dest = app.getPath('userData') + '/logo.png'
 
     fs.copyFile(result[0], dest, (err) => {
-      if (err) throw err;
+      if (err) {
+        dialog.showErrorBox('Error Copying File', JSON.stringify(err))
+        return
+      }
       log.info('Selected image: ' + result[0] + ' was copied to ' + dest);
       let logoUrl = 'file://' + dest + '?bust=' + Math.round((Math.random()*100000))
       controlWindow.webContents.send('logoUrl', logoUrl)

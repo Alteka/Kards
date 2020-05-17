@@ -127,7 +127,7 @@
 
     <div id="centerbox">
       <img id="customLogo" :src="config.alteka.logoUrl" />      
-      
+
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
         <defs>
           <clipPath id="clipCircle">
@@ -317,6 +317,7 @@ export default {
   transform: translate(-50%, -50%);
   object-fit: cover;
   clip-path: circle(66.7%);
+  background-color: #6ab42e;
 }
 .grid {
   height: 100%;
