@@ -44,9 +44,13 @@ export default {
         handler: function (val, oldVal) { 
           let vt = document.getElementById('vt')
           vt.setSinkId(val.audioSync.deviceId)
-
           navigator.mediaDevices.enumerateDevices().then((devices) => {
-          this.description = devices.filter(device => device.deviceId === val.audioSync.deviceId)[0].label
+            devices = devices.filter(device => device.kind === 'audiooutput')
+            for (const dev of devices) {
+              if (dev.deviceId == val.audioSync.deviceId) {
+                this.description = dev.label
+              }
+            }
           })
          },
         deep: true
