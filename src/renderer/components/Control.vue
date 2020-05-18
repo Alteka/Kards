@@ -10,7 +10,7 @@
 <el-divider content-position="center">Select Card Type</el-divider>
 
 <el-row style="margin-left: 16px; margin-right: 16px;">
-  <el-tabs type="border-card"  v-model="config.cardType" :stretch="true">
+  <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px;">
     
     <el-tab-pane label="Alteka" name="alteka">
       <control-alteka :alteka="config.alteka"></control-alteka>

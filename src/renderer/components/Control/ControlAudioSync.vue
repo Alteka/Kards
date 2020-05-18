@@ -1,20 +1,20 @@
 <template>
+<div>
   <el-row>
-    <el-col :span="8">
-      <el-form-item label="Video Rate">
-        <el-select v-model="audioSync.rate" placeholder="Select">
-            <el-option v-for="item in rates" :key="item" :label="item" :value="item"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span="16">
-      <el-form-item label="Audio Device">
-        <el-select v-model="audioSync.deviceId" placeholder="Select">
-            <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-col>
+    <el-form-item label="Audio Device">
+      <el-select v-model="audioSync.deviceId" placeholder="Select" style="width: 360px;">
+          <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
+      </el-select>
+    </el-form-item>
   </el-row>
+  <el-row>
+    <el-form-item label="Video Rate">
+      <el-select v-model="audioSync.rate" placeholder="Select">
+          <el-option v-for="item in rates" :key="item" :label="item + ' FPS'" :value="item"></el-option>
+      </el-select>
+    </el-form-item>
+  </el-row>
+</div>
 </template>
 
 <script>
