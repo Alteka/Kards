@@ -32,7 +32,7 @@
     methods: {
       updateDevices: function() {
         navigator.mediaDevices.enumerateDevices().then((devices) => {
-          this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
+          this.audioDevices = devices.filter(device => device.kind === 'audiooutput').filter(device => device.deviceId != 'communications')
         })  
       }
     },
