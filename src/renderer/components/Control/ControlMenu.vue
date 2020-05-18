@@ -97,7 +97,7 @@ const { ipcRenderer, remote } = require('electron')
         imageSource: "card",
         imageDest: "file",
         name: "",
-        voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav',
+        voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav' + '?bust=' + Math.round((Math.random()*100000)),
         audioDevices: []
       }
     },
@@ -223,6 +223,13 @@ const { ipcRenderer, remote } = require('electron')
             return console.error(err)
           }
           console.log('Updated name (' + name + ') has been saved to ', dest)
+          let voice = document.getElementById('voice')
+          if (this.curAudio == 'voice') {
+            voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
+            voice.play()
+          } else {
+            voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
+          }
         })
       },
       enabler: function() {
