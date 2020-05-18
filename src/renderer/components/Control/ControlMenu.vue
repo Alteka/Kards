@@ -102,9 +102,8 @@ const { ipcRenderer, remote } = require('electron')
       }
     },
     mounted: function() {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
-      }) 
+      this.updateDevices()
+      setInterval(this.updateDevices, 5000)
       this.updateName(this.config.name)
     },
     watch: {
@@ -142,6 +141,11 @@ const { ipcRenderer, remote } = require('electron')
       },
     },
     methods: {
+      updateDevices: function() {
+        navigator.mediaDevices.enumerateDevices().then((devices) => {
+          this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
+        })  
+      },
       ipcSend: function(val) {
         ipcRenderer.send(val)
       },
