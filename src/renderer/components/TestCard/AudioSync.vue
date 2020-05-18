@@ -24,7 +24,7 @@
 
     <video id="vt" :src="videoSource" loop autoplay />
 
-    <div id="deviceLabel">{{ description }}</div>
+    <div id="deviceLabel"><i class="fas fa-volume-up" /> {{ description }}</div>
 
   </div>
 </template>
