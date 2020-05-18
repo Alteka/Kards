@@ -47,6 +47,7 @@
   <audio src="~@/assets/audio/pink.wav" id="pink" />
   <audio src="~@/assets/audio/white.wav" id="white" />
   <audio src="~@/assets/audio/tone.wav" id="tone" />
+  <audio :src="voiceSrc" id="voice" />
 
 
 
@@ -81,8 +82,8 @@
 
 <script>
 const log = require('electron-log')
-
-const { ipcRenderer } = require('electron')
+const say = require('say')
+const { ipcRenderer, remote } = require('electron')
   export default {
     props: {
       config: Object
@@ -95,6 +96,8 @@ const { ipcRenderer } = require('electron')
         playing: false,
         imageSource: "card",
         imageDest: "file",
+        name: "",
+        voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav',
         audioDevices: []
       }
     },
@@ -102,6 +105,7 @@ const { ipcRenderer } = require('electron')
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
       }) 
+      this.updateName(this.config.name)
     },
     watch: {
       config: {
@@ -111,6 +115,12 @@ const { ipcRenderer } = require('electron')
           document.getElementById('pink').setSinkId(val.audio.deviceId)
           document.getElementById('white').setSinkId(val.audio.deviceId)
           document.getElementById('tone').setSinkId(val.audio.deviceId)
+          document.getElementById('voice').setSinkId(val.audio.deviceId)
+
+          if (val.name != this.name) {
+            this.name = val.name
+            this.updateName(val.name)
+          }
 
             if (val.audio.enabled && !this.playing) {
               log.info('Starting audio output')
@@ -188,11 +198,8 @@ const { ipcRenderer } = require('electron')
               this.curAudio = opts[curIndex + 1]
             }
           }
-          if (this.curAudio == 'voice') {
-            this.playVoice()
-          } else {
-            this.playFile(this.curAudio)
-          }
+    
+          this.playFile(this.curAudio)
         } else {
           this.playing = false
         }
@@ -205,16 +212,14 @@ const { ipcRenderer } = require('electron')
           setTimeout(vm.playNext(), 500)
         }
       },
-      playVoice: function() {
-        let vm = this
-        var utter = new SpeechSynthesisUtterance('This is - ' + this.config.name)
-        
-        utter.pitch = 0.8
-        utter.rate = 0.8
-        window.speechSynthesis.speak(utter)
-        utter.addEventListener('end', function(event) { 
-          setTimeout(vm.playNext(), 500)
-        });
+      updateName: function(name) {
+        let dest = remote.app.getPath('userData') + '/voice.wav'
+        say.export("This is - " + name, null, null, dest, (err) => {
+          if (err) {
+            return console.error(err)
+          }
+          console.log('Updated name (' + name + ') has been saved to ', dest)
+        })
       },
       enabler: function() {
         this.config.visible = true
