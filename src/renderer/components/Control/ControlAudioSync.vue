@@ -29,10 +29,16 @@
         rates: [24, 25, 29.97, 30, 50, 59.94, 60]
       }
     },
+    methods: {
+      updateDevices: function() {
+        navigator.mediaDevices.enumerateDevices().then((devices) => {
+          this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
+        })  
+      }
+    },
     mounted: function() {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        this.audioDevices = devices.filter(device => device.kind === 'audiooutput')
-      }) 
+      this.updateDevices()
+      setInterval(this.updateDevices, 5000)
     }
   }
 </script>
