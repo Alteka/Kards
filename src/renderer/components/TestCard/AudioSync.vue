@@ -24,6 +24,8 @@
 
     <video id="vt" :src="videoSource" loop autoplay />
 
+    <div id="deviceLabel">{{ description }}</div>
+
   </div>
 </template>
 
@@ -32,11 +34,20 @@ export default {
   props: {
     config: Object
   },
+  data: function() {
+    return {
+      description: "Default Interface"
+    }
+  },
   watch: {
       config: {
         handler: function (val, oldVal) { 
           let vt = document.getElementById('vt')
           vt.setSinkId(val.audioSync.deviceId)
+
+          navigator.mediaDevices.enumerateDevices().then((devices) => {
+          this.description = devices.filter(device => device.deviceId === val.audioSync.deviceId)[0].label
+          })
          },
         deep: true
       },
@@ -53,6 +64,17 @@ export default {
 </script>
 
 <style scoped>
+
+#deviceLabel {
+  position: absolute;
+  width: 100%;
+  height: 38px;
+  top: 26px;
+  left: 0;
+  font-size: 20px;
+  text-align: center;
+  color: black;
+}
 
 #vt {
   position: absolute;
@@ -184,7 +206,7 @@ export default {
 }
 
 #audioSync {
-  background: #454543;
+  background: rgb(235,235,235);
   height: 100%;
   width: 100%;
   color: white;
