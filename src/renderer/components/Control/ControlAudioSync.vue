@@ -9,7 +9,7 @@
   </el-row>
   <el-row>
     <el-form-item label="Video Rate">
-      <el-select v-model="audioSync.rate" placeholder="Select">
+      <el-select v-model="audioSync.rate" placeholder="Select" style="width: 110px;">
           <el-option v-for="item in rates" :key="item" :label="item + ' FPS'" :value="item"></el-option>
       </el-select>
     </el-form-item>

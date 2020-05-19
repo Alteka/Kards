@@ -28,12 +28,12 @@
       </el-checkbox-group>
     </el-row>
     <el-row >
-      <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="6" :class="{ enabledText: config.audio.enabled }">
+      <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="4" :class="{ enabledText: config.audio.enabled }">
         Enable <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="18">
         <el-form-item label="Audio Device">
-        <el-select v-model="config.audio.deviceId" placeholder="Select">
+        <el-select v-model="config.audio.deviceId" placeholder="Select" style="width: 321px;">
             <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
         </el-select>
       </el-form-item>
