@@ -58,7 +58,7 @@ export default {
     },
     computed: {
       videoSource: function() {
-        return 'file://' + __static + '/audiosync/' + this.config.audioSync.rate + '.mp4'
+        return 'file://' + __static + '/audiosync/' + this.config.audioSync.rate + '.webm'
       }
     },
     mounted: function() {
@@ -73,11 +73,10 @@ export default {
   position: absolute;
   width: 100%;
   height: 38px;
-  top: 26px;
+  bottom: 26px;
   left: 0;
   font-size: 20px;
   text-align: center;
-  color: black;
 }
 
 #vt {
@@ -210,7 +209,7 @@ export default {
 }
 
 #audioSync {
-  background: rgb(235,235,235);
+  background: #272727;
   height: 100%;
   width: 100%;
   color: white;
