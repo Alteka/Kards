@@ -257,9 +257,8 @@ ipcMain.on('selectImage', (event, arg) => {
     title: "Select Image",
     properties: ['openFile'],
     filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif']}],
-   })
-
-   if (result.length > 0) {
+  })
+  if (result != null) {
     let dest = app.getPath('userData') + '/logo.png'
 
     fs.copyFile(result[0], dest, (err) => {
@@ -271,8 +270,8 @@ ipcMain.on('selectImage', (event, arg) => {
       let logoUrl = 'file://' + dest + '?bust=' + Math.round((Math.random()*100000))
       controlWindow.webContents.send('logoUrl', logoUrl)
     });
-   } else {
-     log.info('No file selected')
-     // need to think about NOT clearing out an old photo;.
-   }
+  } else {
+    log.info('No file selected')
+    // need to think about NOT clearing out an old photo;.
+  }
 })
