@@ -30,8 +30,10 @@
       </el-col>
       <el-col :span="9" v-if="alteka.showLogo">
         <el-button-group>
-        <el-button icon="el-icon-picture" size="small" v-on:click="selectImage()">Select Image</el-button>
-        <el-button size="small" v-on:click="clearImage()">Clear</el-button>
+          <el-tooltip effect="dark" content="Image will be masked to 3:1 aspect ratio" placement="bottom" open-delay="500">
+            <el-button icon="el-icon-picture" size="small" v-on:click="selectImage()">Select Image</el-button>
+          </el-tooltip>
+          <el-button size="small" v-on:click="clearImage()">Clear</el-button>
         </el-button-group>
       </el-col>
       <el-col  v-if="alteka.showLogo" :span="7">
