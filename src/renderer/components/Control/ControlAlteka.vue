@@ -13,7 +13,9 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="Center Text" label-width="100">
-          <el-color-picker v-model="alteka.textColour"></el-color-picker>
+          <el-tooltip effect="dark" content="Only applies to text over custom logo" placement="bottom" :open-delay="500" :disabled="alteka.showLogo">
+            <el-color-picker v-model="alteka.textColour" :disabled="!alteka.showLogo"></el-color-picker>
+          </el-tooltip>
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -30,7 +32,7 @@
       </el-col>
       <el-col :span="9" v-if="alteka.showLogo">
         <el-button-group>
-          <el-tooltip effect="dark" content="Image will be masked to 3:1 aspect ratio" placement="bottom" open-delay="500">
+          <el-tooltip effect="dark" content="Image will be masked to 3:1 aspect ratio" placement="bottom" :open-delay="500">
             <el-button icon="el-icon-picture" size="small" v-on:click="selectImage()">Select Image</el-button>
           </el-tooltip>
           <el-button size="small" v-on:click="clearImage()">Clear</el-button>
