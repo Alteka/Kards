@@ -15,7 +15,9 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 process.on('uncaughtException', function (error) {
-  dialog.showErrorBox('Unexpected Error', 'Because.. You know - normally we expect them. \r\n\r\n' + JSON.stringify(error))
+  if (process.env.NODE_ENV === 'development') {
+    dialog.showErrorBox('Unexpected Error', 'Because.. You know - normally we expect them. \r\n\r\n' + error + '\r\n\r\n' + JSON.stringify(error))
+  }
   log.warn('Error: ', error)
 })
 
@@ -58,7 +60,9 @@ function createWindow () {
 
   controlWindow.setTouchBar(touchBar.touchBar)
   touchBar.setWindow(controlWindow)
-  controlWindow.on('closed', () => { 
+
+  controlWindow.on('closed', (event) => { 
+    event.preventDefault()
     app.quit()
    })
 }
@@ -72,10 +76,6 @@ app.on('ready', function() {
   createWindow()
 })
 
-app.on('window-all-closed', () => {
-    log.info('Windows closed, quitting app')
-    app.quit()
-})
 
 app.on('activate', () => {
   if (controlWindow === null) {
@@ -228,7 +228,6 @@ function showTestCardWindow(windowConfig) {
   testCardWindowScreen = config.screen
   testCardWindow.on('close', function () { 
     testCardWindow = null 
-    controlWindow.webContents.send('closeTestCard')
   })
 
   testCardWindow.loadURL(testCardUrl)
