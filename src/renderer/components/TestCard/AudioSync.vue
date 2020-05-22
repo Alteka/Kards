@@ -24,20 +24,24 @@
 
     <video id="vt" :src="videoSource" loop autoplay />
 
-    <span id="cardName">Kards - Audio Sync</span>
-    <span id="frameRate">{{ config.audioSync.rate }} FPS</span>
+    <div id="topText" class="textRow">
+      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" style="text-align: left">Audio Sync</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" v-if="config.showInfo">{{ cardResolution }}</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" style="text-align: right">{{ config.audioSync.rate }} FPS</span>
+    </div>
 
-    <transition name="fade">
-      <div v-if="config.showInfo">
-        <div id="deviceLabel"><i class="fas fa-volume-up" /> {{ description }}</div>
-        <div id="infoText">{{ config.name }}<br />{{cardResolution}}</div>
-      </div>
-    </transition>
+    <div id="bottomText" class="textRow" v-if="config.showInfo">
+      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
+      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ config.name }}</span>
+    </div>
+
   </div>
 </template>
 
 <script>
+import ResizeText from 'vue-resize-text'
 export default {
+  directives: { ResizeText },
   props: {
     config: Object
   },
@@ -89,39 +93,31 @@ export default {
 
 <style scoped>
 
-#cardName {
+.textRow {
   position: absolute;
-  top: 30px;
-  font-size: 200%;
-  width: 50%;
-  left: 50px;
-  text-align: left;
+  font-size: 28px;
+  width: calc(100% - 80px);
+  left: 40px;
+  right: 40px;
+  text-align: center;
   opacity: 0.8;
-}
-#frameRate {
-  position: absolute;
-  top: 30px;
-  right: 50px;
-  font-size: 200%;
-  width: 33%;
-  opacity: 0.8;
-  text-align: right;
-}
-#deviceLabel {
-  position: absolute;
-  width: calc(50% - 50px);
-  height: 40px;
-  bottom: 20px;
-  left: 50px;
-  text-align: left;
-}
-#infoText {
-  position: absolute;
-  width: calc(50% - 50px);
+  display: flex;
   height: 38px;
-  bottom: 26px;
-  right: 50px;
-  text-align: right;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+#topText {
+  top: 30px;
+  
+}
+.textRow span {
+  width: 100%;
+  vertical-align: bottom;
+}
+
+#bottomText {
+  bottom: 25px;
 }
 
 #vt {
@@ -251,6 +247,61 @@ export default {
   border-top: 25px solid transparent;
   border-left: 25px solid #6ab42e;
   border-bottom: 25px solid transparent;
+}
+
+@media screen and (max-height: 600px), (max-width: 600px) {
+  .borderLeft {
+    width: 15px;
+  }
+  .borderRight {
+    width: 15px;
+  }
+  .borderTop {
+    height: 15px;
+  }
+  .borderBottom {
+    height: 15px;
+  }
+  #bottomText {
+    bottom: 15px;
+  }
+  #topText {
+    bottom: 15px;
+  }
+
+  .corners div {
+    height: 30px;
+    width: 30px;
+  }
+  .cornerTopLeft {
+    border-width: 15px;
+  }
+  .cornerTopRight {
+    border-width: 15px;
+  }
+  .cornerBottomLeft {
+    border-width: 15px;
+  }
+  .cornerBottomRight {
+    border-width: 15px;
+  }
+
+  .arrowTop {
+    border-width: 15px;
+    left: calc(50% - 15px)
+  }
+  .arrowBottom {
+    border-width: 15px;
+    left: calc(50% - 15px)
+  }
+  .arrowLeft {
+    border-width: 15px;
+    top: calc(50% - 15px)
+  }
+  .arrowRight {
+    border-width: 15px;
+    top: calc(50% - 15px)
+  }
 }
 
 #audioSync {
