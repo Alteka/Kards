@@ -190,7 +190,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 #bounds {
   font-family: Sansation, Helvetica, sans-serif;
-  /* background: black; */
+  overflow: hidden !important;
   position: absolute;
   top: 0px;
   left: 0px;
