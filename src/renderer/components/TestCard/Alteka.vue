@@ -265,7 +265,8 @@ export default {
         pillarRight.style.transform = 'translateY(-50%)'
         
         let gap = 0
-        if (ratio > 1.5) { gap = 50 }
+        if (ratio > 1.5 && width > 1000) { gap = 50 }
+        if (ratio > 1.8 && width > 800) { gap = 50 }
         if (ratio > 2.2) { gap = 100 }
         if (ratio > 3) { gap = 150 }
 
