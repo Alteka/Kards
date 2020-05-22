@@ -2,34 +2,37 @@
   <div id="audioSync">
 
     <div class="border">
-      <div class="borderTop" :class="{borderAnimatedl2r : config.animated}"></div>
-      <div class="borderBottom" :class="{borderAnimatedr2l : config.animated}"></div>
-      <div class="borderLeft" :class="{borderAnimatedbtt : config.animated}"></div>
-      <div class="borderRight" :class="{borderAnimatedttb : config.animated}"></div>
+      <div class="borderTop"></div>
+      <div class="borderBottom"></div>
+      <div class="borderLeft"></div>
+      <div class="borderRight"></div>
     </div>
 
     <div class="corners">
-      <div class="cornerTopLeft" :style="{'border-color': this.config.alteka.fg}"></div>
-      <div class="cornerTopRight" :style="{'border-color': this.config.alteka.fg}"></div>
-      <div class="cornerBottomLeft" :style="{'border-color': this.config.alteka.fg}"></div>
-      <div class="cornerBottomRight" :style="{'border-color': this.config.alteka.fg}"></div>
+      <div class="cornerTopLeft"></div>
+      <div class="cornerTopRight"></div>
+      <div class="cornerBottomLeft"></div>
+      <div class="cornerBottomRight"></div>
     </div>
 
     <div class="arrows">
-      <div class="arrowTop" :style="{'border-bottom-color': this.config.alteka.fg}"></div>
-      <div class="arrowRight" :style="{'border-left-color': this.config.alteka.fg}"></div>
-      <div class="arrowBottom" :style="{'border-top-color': this.config.alteka.fg}"></div>
-      <div class="arrowLeft" :style="{'border-right-color': this.config.alteka.fg}"></div>
+      <div class="arrowTop"></div>
+      <div class="arrowRight"></div>
+      <div class="arrowBottom"></div>
+      <div class="arrowLeft"></div>
     </div>
 
     <video id="vt" :src="videoSource" loop autoplay />
 
-<transition name="fade">
-    <div v-if="config.showInfo">
-      <div id="deviceLabel"><i class="fas fa-volume-up" /> {{ description }}</div>
-      <div id="infoText">{{ config.name }}<br />{{cardResolution}}</div>
-    </div>
-</transition>
+    <span id="cardName">Kards - Audio Sync</span>
+    <span id="frameRate">{{ config.audioSync.rate }} FPS</span>
+
+    <transition name="fade">
+      <div v-if="config.showInfo">
+        <div id="deviceLabel"><i class="fas fa-volume-up" /> {{ description }}</div>
+        <div id="infoText">{{ config.name }}<br />{{cardResolution}}</div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -46,19 +49,24 @@ export default {
   watch: {
       config: {
         handler: function (val, oldVal) { 
-          let vt = document.getElementById('vt')
-          vt.setSinkId(val.audioSync.deviceId)
-          navigator.mediaDevices.enumerateDevices().then((devices) => {
-            devices = devices.filter(device => device.kind === 'audiooutput')
-            for (const dev of devices) {
-              if (dev.deviceId == val.audioSync.deviceId) {
-                this.description = dev.label
-              }
-            }
-          })
+          this.updateDeviceName(val)
          },
         deep: true
       },
+    },
+    methods: {
+      updateDeviceName: function(val) {
+        let vt = document.getElementById('vt')
+        vt.setSinkId(val.audioSync.deviceId)
+        navigator.mediaDevices.enumerateDevices().then((devices) => {
+          devices = devices.filter(device => device.kind === 'audiooutput')
+          for (const dev of devices) {
+            if (dev.deviceId == val.audioSync.deviceId) {
+              this.description = dev.label
+            }
+          }
+        })
+      }
     },
     computed: {
       videoSource: function() {
@@ -66,7 +74,7 @@ export default {
       },
       cardResolution: function() {
         if (this.config.fullsize || this.config.screen == 0) {
-          return visualViewport.width + ' x ' + visualViewport.height
+          return this.config.winWidth + ' x ' + this.config.winHeight
         } else {
           return this.config.width + ' x ' + this.config.height
         }
@@ -74,19 +82,37 @@ export default {
     },
     mounted: function() {
       document.getElementById('vt').setSinkId(this.config.audioSync.deviceId)
+      this.updateDeviceName(this.config)
     }
 }
 </script>
 
 <style scoped>
 
+#cardName {
+  position: absolute;
+  top: 30px;
+  font-size: 200%;
+  width: 50%;
+  left: 50px;
+  text-align: left;
+  opacity: 0.8;
+}
+#frameRate {
+  position: absolute;
+  top: 30px;
+  right: 50px;
+  font-size: 200%;
+  width: 33%;
+  opacity: 0.8;
+  text-align: right;
+}
 #deviceLabel {
   position: absolute;
   width: calc(50% - 50px);
-  height: 38px;
+  height: 40px;
   bottom: 20px;
   left: 50px;
-  font-size: 16px;
   text-align: left;
 }
 #infoText {
@@ -95,7 +121,6 @@ export default {
   height: 38px;
   bottom: 26px;
   right: 50px;
-  font-size: 16px;
   text-align: right;
 }
 
@@ -166,26 +191,26 @@ export default {
 .cornerTopLeft {
   top: 0;
   left: 0;
-  border-top: 25px solid red;
-  border-left: 25px solid red;
+  border-top: 25px solid #6ab42e;
+  border-left: 25px solid #6ab42e;
 }
 .cornerTopRight {
   top: 0;
   right: 0;
-  border-top: 25px solid red;
-  border-right: 25px solid red;
+  border-top: 25px solid #6ab42e;
+  border-right: 25px solid #6ab42e;
 }
 .cornerBottomLeft {
   bottom: 0;
   left: 0;
-  border-bottom: 25px solid red;
-  border-left: 25px solid red;
+  border-bottom: 25px solid #6ab42e;
+  border-left: 25px solid #6ab42e;
 }
 .cornerBottomRight {
   bottom: 0;
   right: 0;
-  border-bottom: 25px solid red;
-  border-right: 25px solid red;
+  border-bottom: 25px solid #6ab42e;
+  border-right: 25px solid #6ab42e;
 }
 
 
@@ -233,6 +258,7 @@ export default {
   height: 100%;
   width: 100%;
   color: white;
+  font-size: 16px;
 }
 
 </style>
