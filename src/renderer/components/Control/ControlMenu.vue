@@ -11,7 +11,13 @@
   </el-col>
 
   <el-col :span="8" style="text-align: right">
-    <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault')">Reset</el-button>
+    <el-popover v-model="confirmResetVisible" ref="confirmReset" placement="top-end" :offset="-12">
+      <el-row>Reset all settings to default?</el-row>
+      <el-row style="text-align: right; margin-top: 10px;">
+        <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false">Reset</el-button>
+      </el-row>
+    </el-popover>
+    <el-button type="primary" size="mini" round v-popover:confirmReset>Reset</el-button>
     <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')">Help</el-button>
   </el-col>
 
@@ -90,6 +96,7 @@ const { ipcRenderer, remote } = require('electron')
     },
     data: function() {
       return {
+        confirmResetVisible: false,
         drawerAudio: false,
         drawerImage: false,
         curAudio: null,
@@ -257,6 +264,6 @@ const { ipcRenderer, remote } = require('electron')
   .el-alert {
     width: 95%;
     margin-left: 2.5%;
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
 </style>
