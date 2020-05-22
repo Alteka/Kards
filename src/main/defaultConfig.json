@@ -18,7 +18,8 @@
     "bg": "#000",
     "crosshair": "#fff",
     "lines": "#aaa",
-    "size": 50
+    "size": 50,
+    "circles": false
 },
 "audioSync": {
     "deviceId": "default",
