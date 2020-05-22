@@ -14,8 +14,6 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
 
-
-
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config"></Grid>
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config"></SMPTE>
@@ -42,18 +40,11 @@
         <Ramp v-if="config.cardType == 'ramp'" :config="config"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config"></Placeholder>
       </div>
-    
-    <transition name="fade">
-      <div v-if="config.showInfo && config.cardType !='alteka'" class="info">
-        <strong>{{ config.name}}</strong> <br />
-        {{ cardResolution }}
-      </div>
-    </transition>
 
     </div>
 
     <transition name="fade">
-      <div v-if="config.bounds" class="info infoBounds">
+      <div v-if="config.bounds" class="infoBounds">
         <strong>{{ config.name}}</strong> <br />
         {{ boundsInfo }}
       </div>
@@ -112,13 +103,6 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
             top: this.config.top + 'px',
             left: this.config.left + 'px',
           }
-        }
-      },
-      cardResolution: function() {
-        if (this.config.fullsize || this.config.screen == 0) {
-          return this.boundsInfo
-        } else {
-          return this.config.width + ' x ' + this.config.height
         }
       }
     },
@@ -227,22 +211,18 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
   -webkit-app-region: drag;
 }
 
-.info {
-    position: absolute;
-    font-size: 20px;
-    width: 150px;
-    height: 95px;
-    padding-top: 55px;
-    margin: auto;
-    left: calc(50% - 75px);
-    top: calc(50% - 75px);
-    text-align: center;
-    background: rgba(0,0,0,0.2);
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.5);
-    overflow: hidden;
-}
 .infoBounds {
+  position: absolute;
+  font-size: 20px;
+  width: 150px;
+  height: 95px;
+  padding-top: 55px;
+  margin: auto;
+  left: calc(50% - 75px);
+  top: calc(50% - 75px);
+  text-align: center;
+  border-radius: 50%;
+  overflow: hidden;
   color: red;
   background: rgba(0,0,0,0.6);
   border: 1px solid rgba(255,0,0,1);

@@ -1,5 +1,6 @@
 <template>
   <div id="bars">
+    <info-circle :config="config" />
     <div class="thebars">
         <swatch colour="white" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
         <swatch colour="yellow" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
@@ -15,8 +16,9 @@
 
 <script>
 import Swatch from './Swatch'
+import InfoCircle from './InfoCircle'
   export default {
-    components: { Swatch },
+    components: { Swatch, InfoCircle },
     props: {
       config: Object
     }
@@ -30,13 +32,13 @@ import Swatch from './Swatch'
     left: 0px;
     height: 100%;
     width: 100%;
-    
     background: black;
   }
   .thebars {
     display: flex;
+    height: 100%;
   }
-  #bars div {
+  .thebars div {
     width: 100%;
     height: 100%;
   }

@@ -1,5 +1,7 @@
 <template>
   <div id="arib">
+
+    <info-circle :config="config" />
   
     <div class="row grey40">
       <div class="endbit"><swatch colour="white" ire="40" :showText="config.bars.overlay"></swatch></div>
@@ -87,8 +89,9 @@
 
 <script>
 import Swatch from './Swatch'
+import InfoCircle from './InfoCircle'
   export default {
-    components: { Swatch },
+    components: { Swatch, InfoCircle },
     props: {
       config: Object
     }

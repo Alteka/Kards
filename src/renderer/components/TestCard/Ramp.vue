@@ -1,6 +1,7 @@
 <template>
   <div id="ramp">
-    <div id="ramp1" :style="computedRamp1">
+      <info-circle :config="config" />
+      <div id="ramp1" :style="computedRamp1">
       <div v-if="showSteps" class="steps" :style="computedSteps1">
         <swatch v-for="step in steps" :key="step" colour="white" :ire="step" :showText="config.ramp.overlay"></swatch>
       </div>
@@ -15,8 +16,9 @@
 
 <script>
 import Swatch from './Swatch'
+import InfoCircle from './InfoCircle'
   export default {
-    components: { Swatch },
+    components: { Swatch, InfoCircle },
     props: {
       config: Object
     },

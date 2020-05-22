@@ -24,8 +24,12 @@
 
     <video id="vt" :src="videoSource" loop autoplay />
 
-    <div id="deviceLabel"><i class="fas fa-volume-up" /> {{ description }}</div>
-
+<transition name="fade">
+    <div v-if="config.showInfo">
+      <div id="deviceLabel"><i class="fas fa-volume-up" /> {{ description }}</div>
+      <div id="infoText">{{ config.name }}<br />{{cardResolution}}</div>
+    </div>
+</transition>
   </div>
 </template>
 
@@ -59,6 +63,13 @@ export default {
     computed: {
       videoSource: function() {
         return 'file://' + __static + '/audiosync/' + this.config.audioSync.rate + '.webm'
+      },
+      cardResolution: function() {
+        if (this.config.fullsize || this.config.screen == 0) {
+          return visualViewport.width + ' x ' + visualViewport.height
+        } else {
+          return this.config.width + ' x ' + this.config.height
+        }
       }
     },
     mounted: function() {
@@ -71,12 +82,21 @@ export default {
 
 #deviceLabel {
   position: absolute;
-  width: 100%;
+  width: calc(50% - 50px);
+  height: 38px;
+  bottom: 20px;
+  left: 50px;
+  font-size: 16px;
+  text-align: left;
+}
+#infoText {
+  position: absolute;
+  width: calc(50% - 50px);
   height: 38px;
   bottom: 26px;
-  left: 0;
-  font-size: 20px;
-  text-align: center;
+  right: 50px;
+  font-size: 16px;
+  text-align: right;
 }
 
 #vt {

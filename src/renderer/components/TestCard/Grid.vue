@@ -1,5 +1,6 @@
 <template>
   <div id="grid" :style="{background: config.grid.bg}">
+    <info-circle :config="config" />
    <div class="quadrant topleft" :style="quadrantStyle"></div>
    <div class="quadrant topright" :style="quadrantStyle"></div>
    <div class="quadrant bottomleft" :style="quadrantStyle"></div>
@@ -8,7 +9,9 @@
 </template>
 
 <script>
+import InfoCircle from './InfoCircle'
   export default {
+    components: { InfoCircle },
     props: {
       config: Object
     },

@@ -1,5 +1,6 @@
 <template>
   <div id="smpte">
+    <info-circle :config="config" />
     <div class="row">
       <swatch colour="white" ire="75" :showText="config.bars.overlay"></swatch>
       <swatch colour="yellow" ire="75" :showText="config.bars.overlay"></swatch>
@@ -37,8 +38,9 @@
 
 <script>
 import Swatch from './Swatch'
+import InfoCircle from './InfoCircle'
   export default {
-    components: { Swatch },
+    components: { Swatch, InfoCircle },
     props: {
       config: Object
     }

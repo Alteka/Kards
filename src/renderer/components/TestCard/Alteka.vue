@@ -243,8 +243,10 @@ export default {
       let customLogo = document.getElementById("customLogo")
       let circleWidth = circle.getBoundingClientRect().width
 
-      customLogo.style.width = circleWidth + 'px'
-      customLogo.style.height = (circle.getBoundingClientRect().height / 3) + 2 + 'px'
+      if (customLogo) {
+        customLogo.style.width = circleWidth + 'px'
+        customLogo.style.height = (circle.getBoundingClientRect().height / 3) + 2 + 'px'
+      }
 
       if (ratio >= 1) {
         let pillarWidth = Math.round((width / 50) * 0.055) * 50
