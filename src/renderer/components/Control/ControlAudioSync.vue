@@ -2,16 +2,16 @@
 <div>
   <el-row>
     <el-form-item label="Audio Device">
-      <el-select v-model="audioSync.deviceId" placeholder="Select" style="width: 360px;">
+      <el-select v-model="audioSync.deviceId" placeholder="Select" style="width: 353px;">
           <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
       </el-select>
     </el-form-item>
   </el-row>
   <el-row>
-    <el-form-item label="Video Rate">
-      <el-select v-model="audioSync.rate" placeholder="Select" style="width: 110px;">
-          <el-option v-for="item in rates" :key="item" :label="item + ' FPS'" :value="item"></el-option>
-      </el-select>
+    <el-form-item label="Video Rate (FPS)">
+      <el-radio-group v-model="audioSync.rate" size="small">
+          <el-radio-button v-for="item in rates" :key="item" :label="item">{{item}}</el-radio-button>
+      </el-radio-group>
     </el-form-item>
   </el-row>
 </div>
