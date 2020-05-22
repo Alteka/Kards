@@ -4,6 +4,12 @@
       <span v-if="config.name != ''" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
       <br v-if="config.name != ''" />{{ config.name }}
     </div>
+
+    <transition name="fade">
+      <div v-if="config.showInfo" id="infoText" :style="{color:config.placeholder.fg}">
+        {{cardResolution}}
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -15,6 +21,15 @@ import ResizeText from 'vue-resize-text'
     },
     props: {
       config: Object
+    },
+    computed: {
+      cardResolution: function() {
+        if (this.config.fullsize || this.config.screen == 0) {
+          return visualViewport.width + ' x ' + visualViewport.height
+        } else {
+          return this.config.width + ' x ' + this.config.height
+        }
+      }
     }
   }
 </script>
@@ -24,6 +39,14 @@ import ResizeText from 'vue-resize-text'
     background: #d33;
     height: 100%;
     width: 100%;
+  }
+  #infoText {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    font-size: 26px;
+    bottom: 10px;
+    text-align: center;
   }
   .name {
     position: absolute;
