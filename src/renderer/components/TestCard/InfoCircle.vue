@@ -1,8 +1,10 @@
 <template>
       <transition name="fade">
       <div v-if="config.showInfo" class="info">
-        <strong>{{ config.name}}</strong> <br />
-        {{ cardResolution }}
+        <div class="infoText">
+          <strong>{{ config.name}}</strong><br />
+          {{ cardResolution }}
+        </div>
       </div>
     </transition>
 </template>
@@ -19,7 +21,7 @@ import ResizeText from 'vue-resize-text'
     computed: {
       cardResolution: function() {
         if (this.config.fullsize || this.config.screen == 0) {
-          return visualViewport.width + ' x ' + visualViewport.height
+          return this.config.winWidth + ' x ' + this.config.winHeight
         } else {
           return this.config.width + ' x ' + this.config.height
         }
@@ -31,18 +33,22 @@ import ResizeText from 'vue-resize-text'
 <style scoped>
   .info {
     position: absolute;
-    font-size: 20px;
-    width: 150px;
-    height: 95px;
-    padding-top: 55px;
+    font-size: 26px;
+    width: 200px;
+    height: 200px;
     margin: auto;
-    left: calc(50% - 75px);
-    top: calc(50% - 75px);
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
     text-align: center;
     background: rgba(0,0,0,0.2);
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.5);
     overflow: hidden;
+}
+.infoText {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
  .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
