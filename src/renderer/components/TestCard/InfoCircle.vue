@@ -33,7 +33,7 @@ import ResizeText from 'vue-resize-text'
 <style scoped>
   .info {
     position: absolute;
-    font-size: 26px;
+    font-size: 24px;
     width: 200px;
     height: 200px;
     margin: auto;
@@ -44,6 +44,7 @@ import ResizeText from 'vue-resize-text'
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.5);
     overflow: hidden;
+    z-index: 100;
 }
 .infoText {
   position: relative;
