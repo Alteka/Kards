@@ -129,7 +129,7 @@ ipcMain.on('canvasToWallpaper', (event) => {
 })
 
 ipcMain.on('saveAsPNG', (event, arg) => {
-  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
+  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: 'TestKard.png', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
     if (!result.canceled) {
       let path = result.filePath
       var base64Data = arg.replace(/^data:image\/png;base64,/, "")
