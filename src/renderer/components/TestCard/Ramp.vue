@@ -1,6 +1,6 @@
 <template>
   <div id="ramp">
-      <info-circle :config="config" />
+      <info-circle :config="config" :cardSize="cardSize" />
       <div id="ramp1" :style="computedRamp1">
       <div v-if="showSteps" class="steps" :style="computedSteps1">
         <swatch v-for="step in steps" :key="step" colour="white" :ire="step" :showText="config.ramp.overlay"></swatch>
@@ -20,7 +20,8 @@ import InfoCircle from './InfoCircle'
   export default {
     components: { Swatch, InfoCircle },
     props: {
-      config: Object
+      config: Object,
+      cardSize: String
     },
     data: function() {
       return {

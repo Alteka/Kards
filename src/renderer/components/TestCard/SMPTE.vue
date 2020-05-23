@@ -1,6 +1,6 @@
 <template>
   <div id="smpte">
-    <info-circle :config="config" />
+    <info-circle :config="config" :cardSize="cardSize"/>
     <div class="row">
       <swatch colour="white" ire="75" :showText="config.bars.overlay"></swatch>
       <swatch colour="yellow" ire="75" :showText="config.bars.overlay"></swatch>
@@ -42,7 +42,8 @@ import InfoCircle from './InfoCircle'
   export default {
     components: { Swatch, InfoCircle },
     props: {
-      config: Object
+      config: Object,
+      cardSize: String
     }
   }
 </script>

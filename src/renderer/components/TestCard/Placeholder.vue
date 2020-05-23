@@ -7,7 +7,7 @@
 
     <transition name="fade">
       <div v-if="config.showInfo" id="infoText" :style="{color:config.placeholder.fg}">
-        {{cardResolution}}
+        {{ cardSize }}
       </div>
     </transition>
   </div>
@@ -20,16 +20,8 @@ import ResizeText from 'vue-resize-text'
       ResizeText
     },
     props: {
-      config: Object
-    },
-    computed: {
-      cardResolution: function() {
-        if (this.config.fullsize || this.config.screen == 0) {
-          return visualViewport.width + ' x ' + visualViewport.height
-        } else {
-          return this.config.width + ' x ' + this.config.height
-        }
-      }
+      config: Object,
+      cardSize: String
     }
   }
 </script>

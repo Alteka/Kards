@@ -191,7 +191,8 @@ export default {
     };
   },
   props: {
-    config: Object
+    config: Object,
+    cardSize: String
   },
   computed: {
     text: function() {
@@ -199,13 +200,6 @@ export default {
         return this.config.alteka.textColour
       } else {
         return "#fff"
-      }
-    },
-    cardSize: function() {
-      if (this.config.screen == 0) {
-        return this.config.winWidth + ' x ' + this.config.winHeight
-      } else {
-        return this.config.width + ' x ' + this.config.height
       }
     },
     grid: function() {

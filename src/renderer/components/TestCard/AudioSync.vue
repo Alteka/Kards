@@ -26,7 +26,7 @@
 
     <div id="topText" class="textRow">
       <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" style="text-align: left">Audio Sync</span>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" v-if="config.showInfo">{{ cardResolution }}</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" v-if="config.showInfo">{{ cardSize }}</span>
       <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" style="text-align: right">{{ config.audioSync.rate }} FPS</span>
     </div>
 
@@ -43,7 +43,8 @@ import ResizeText from 'vue-resize-text'
 export default {
   directives: { ResizeText },
   props: {
-    config: Object
+    config: Object,
+    cardSize: String
   },
   data: function() {
     return {
@@ -75,13 +76,6 @@ export default {
     computed: {
       videoSource: function() {
         return 'file://' + __static + '/audiosync/' + this.config.audioSync.rate + '.webm'
-      },
-      cardResolution: function() {
-        if (this.config.fullsize || this.config.screen == 0) {
-          return this.config.winWidth + ' x ' + this.config.winHeight
-        } else {
-          return this.config.width + ' x ' + this.config.height
-        }
       }
     },
     mounted: function() {
@@ -109,7 +103,7 @@ export default {
 
 #topText {
   top: 30px;
-  
+  height: 50px;
 }
 .textRow span {
   width: 100%;
