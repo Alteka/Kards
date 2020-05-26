@@ -25,9 +25,9 @@
     <video id="vt" :src="videoSource" loop autoplay />
 
     <div id="topText" class="textRow">
-      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" style="text-align: left">Audio Sync</span>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" v-if="config.showInfo">{{ cardSize }}</span>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '64px'}" style="text-align: right">{{ config.audioSync.rate }} FPS</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: left">Audio Sync</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo">{{ cardSize }}</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: right">{{ config.audioSync.rate }} FPS</span>
     </div>
 
     <div id="bottomText" class="textRow" v-if="config.showInfo">
