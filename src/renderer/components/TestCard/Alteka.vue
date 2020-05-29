@@ -246,6 +246,9 @@ export default {
         let pillarWidth = Math.round((width / 50) * 0.055) * 50
         let pillarHeight = (Math.floor((height / 100) * 0.6)) * 100
 
+        if (ratio > 2 && height > 300) { pillarHeight += 100 }
+        if (ratio > 3 && width > 800) { pillarWidth += 50 }
+
         pillarLeft.style.width = pillarWidth + "px"
         pillarRight.style.width = pillarWidth + "px"
         pillarLeft.style.height = pillarHeight + "px"
@@ -259,6 +262,7 @@ export default {
         pillarRight.style.transform = 'translateY(-50%)'
         
         let gap = 0
+        if (ratio > 1.1 && width > 1400) { gap = 50 }
         if (ratio > 1.5 && width > 1000) { gap = 50 }
         if (ratio > 1.8 && width > 800) { gap = 50 }
         if (ratio > 2.2) { gap = 100 }

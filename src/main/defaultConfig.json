@@ -4,20 +4,20 @@
 "fullsize": true,
 "showInfo": true,
 "placeholder": {
-    "bg": "#d33",
+    "bg": "#6ab42f",
     "fg": "#fff",
     "gradient": true,
     "icon": "el-icon-picture-outline"
 },
 "bars": {
-    "type": "smpte",
+    "type": "simple",
     "overlay": false,
     "level": "75"
 },
 "grid": {
     "bg": "#000",
-    "crosshair": "#fff",
-    "lines": "#aaa",
+    "crosshair": "#ffffff",
+    "lines": "#888888",
     "size": 50,
     "circles": false
 },
@@ -50,7 +50,7 @@
 "audio": {
     "deviceId": "default",
     "enabled": false,
-    "options": ["voice"]
+    "options": ["voice", "tone"]
 },
 "winWidth": 1280,
 "winHeight": 720,
