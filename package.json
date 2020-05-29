@@ -1,6 +1,6 @@
 {
   "name": "kards",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "Alteka Solutions <info@alteka.solutions>",
   "description": "A cross-platform test card generator for AV professionals",
   "license": "GPL-3.0-only",
@@ -35,6 +35,10 @@
     },
     "win": {
       "icon": "build/icons/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "createDesktopShortcut": false
     }
   },
   "dependencies": {
