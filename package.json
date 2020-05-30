@@ -38,7 +38,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "createDesktopShortcut": false
+      "createDesktopShortcut": false,
+      "menuCategory": true
     }
   },
   "dependencies": {
