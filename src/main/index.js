@@ -170,7 +170,7 @@ ipcMain.on('resetDefault', (event, arg) => {
 
 function getDefaultConfig() {
   let defaultConfig = require('./defaultConfig.json')
-  defaultConfig.name = require('os').hostname().split('.')[0].replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, "$1 $2").replace('/-|_|\.|\||\+|=|~|<|>|\/|\\/g', ' ')
+  defaultConfig.name = require('os').hostname().split('.')[0].replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, "$1 $2").replace(/-|_|\.|\||\+|=|~|<|>|\/|\\/g, ' ')
   defaultConfig.screen = screen.getPrimaryDisplay().id
   defaultConfig.visible = false
   return defaultConfig
