@@ -199,15 +199,22 @@ function manageTestCardWindow() {
       for (const disp of displays) {
         if (disp.id == config.screen) {
 
-          // Check and manage for seperate spaces configurations
-          if (process.platform == 'darwin') {
-            if (disp.bounds.height != disp.workArea.height) {
-              log.info('Running in seperate spaces mode')
+           // Check and manage for seperate spaces configurations
+           if (process.platform == 'darwin') {
+          	let catalina = (process.getSystemVersion().split('.')[1] >= 15) ? true : false
+
+            if (disp.bounds.height != disp.workArea.height && catalina) {
+              log.info('Running in seperate spaces mode - this is Catalina or newer')
               windowConfig.simpleFullscreen = false 
+            } else if (!catalina) {
+              log.info('Using legacy full screen mode as this is not Catalina (or newer)')
+              windowConfig.simpleFullscreen = true 
             } else {
               log.info('Using legacy full screen mode')
               windowConfig.simpleFullscreen = true 
             }
+          } else {
+            log.info('Using windows full screen system. Easy.')
           }
 
           windowConfig.x = disp.bounds.x
