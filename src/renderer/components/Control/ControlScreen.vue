@@ -6,6 +6,7 @@
       <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#6ab42f;" v-if="config.screen == scr.id" />
       <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/2" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/6" text-anchor="middle" fill="white">{{ scr.size.width }} x {{ scr.size.height }}</text>
       <text v-if="scr.id == primaryScreen" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*7/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6">Primary</text>
+      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*1/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa">&#xf040;</text>
     </g>
   </svg>
   </div>
@@ -25,26 +26,30 @@ const { screen } = require('electron').remote
     },
     computed: {
       viewBox: function() {
-        let minX = 0
-        let maxX = 0
-        let minY = 0
-        let maxY = 0
+        let left = 0
+        let right = 0
+        let top = 0
+        let bottom = 0
+
 
         for (const scr of this.screens) {
-          if (scr.bounds.x < minX) {
-            minX = scr.bounds.x
+          if (scr.bounds.x < left) {
+            left = scr.bounds.x
           } 
-          if ((Math.abs(scr.bounds.x) + scr.bounds.width) > maxX) {
-            maxX = Math.abs(scr.bounds.x) + scr.bounds.width
+          if (scr.bounds.y < top) {
+            top = scr.bounds.y
           }
-          if (scr.bounds.y < minY) {
-            minY = scr.bounds.y
+
+          if ((scr.bounds.x + scr.bounds.width) > right) {
+            right = scr.bounds.x + scr.bounds.width
           }
-          if ((Math.abs(scr.bounds.y) + scr.bounds.height) > maxY) {
-            maxY = Math.abs(scr.bounds.y) + scr.bounds.height
+          
+          if ((scr.bounds.y + scr.bounds.height) > bottom) {
+            bottom = scr.bounds.y + scr.bounds.height
           }
         }
-        return minX + " " + minY + " " + maxX + " " + (maxY + minY)
+ 
+        return left + " " + top + " " + Math.abs(right - left) + " " + Math.abs(bottom - top)
       }
     },
     watch: {
@@ -88,5 +93,7 @@ const { screen } = require('electron').remote
 </script>
 
 <style scoped>
-  
+  .fa {
+    font-family: FontAwesome;
+  }
 </style>
