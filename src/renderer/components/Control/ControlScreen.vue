@@ -1,15 +1,13 @@
 <template>
   <div> 
-  <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 150px;">
-    <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
-      <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#3d3d3d;" />
-      <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#6ab42f;" v-if="config.screen == scr.id" />
-      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.75" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
-      <text v-if="scr.id == primaryScreen" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*7/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6">Primary</text>
-      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.3" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/4" class="fa">{{ scr.icon }}</text>
-    </g>
-  </svg>
-  <i data-fa-symbol="edit" class="fas fa-pencil fa-fw"></i>
+    <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 150px;">
+      <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
+        <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#3d3d3d;" />
+        <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#6ab42f;" v-if="config.screen == scr.id" />
+        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.25" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
+        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.45" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/3" class="fa">{{ scr.icon }}</text>
+      </g>
+    </svg>
   </div>
 </template>
 
