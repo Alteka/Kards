@@ -4,7 +4,7 @@
     <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
       <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#3d3d3d;" />
       <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#6ab42f;" v-if="config.screen == scr.id" />
-      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/2" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/6" text-anchor="middle" fill="white">{{ scr.size.width }} x {{ scr.size.height }}</text>
+      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/2" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/6" text-anchor="middle" fill="white">{{ scr.description }}</text>
       <text v-if="scr.id == primaryScreen" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*7/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6">Primary</text>
       <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*1/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa">&#xf040;</text>
     </g>
@@ -21,16 +21,26 @@ const { screen } = require('electron').remote
     data: function() {
       return {
         screens: screen.getAllDisplays(),
-        primaryScreen: screen.getPrimaryDisplay().id
+        primaryScreen: screen.getPrimaryDisplay().id,
+        viewBox: '0 0 0 0'
       }
     },
-    computed: {
-      viewBox: function() {
+    watch: {
+      config: {
+        handler: function (val, oldVal) { 
+            this.setOutputToMatchScreen()
+         },
+        deep: true
+      },
+    },
+    methods: {
+      updateScreens: function() {
+        this.screens = screen.getAllDisplays()
+
         let left = 0
         let right = 0
         let top = 0
         let bottom = 0
-
 
         for (const scr of this.screens) {
           if (scr.bounds.x < left) {
@@ -47,22 +57,22 @@ const { screen } = require('electron').remote
           if ((scr.bounds.y + scr.bounds.height) > bottom) {
             bottom = scr.bounds.y + scr.bounds.height
           }
+          scr.description = scr.size.width + ' x ' + scr.size.height
         }
- 
-        return left + " " + top + " " + Math.abs(right - left) + " " + Math.abs(bottom - top)
-      }
-    },
-    watch: {
-      config: {
-        handler: function (val, oldVal) { 
-            this.setOutputToMatchScreen()
-         },
-        deep: true
-      },
-    },
-    methods: {
-      updateScreens: function() {
-        this.screens = screen.getAllDisplays()
+
+        let pri = screen.getPrimaryDisplay()
+        this.viewBox = left + " " + top + " " + Math.abs((right + pri.bounds.width) - left) + " " + Math.abs(bottom - top)
+
+        this.screens.push({
+          id: 0,
+          bounds: {
+            x: right,
+            y: pri.bounds.y,
+            height: pri.bounds.height,
+            width: pri.bounds.width,
+          },
+          description: "Windowed"
+        })
       },
       setOutputToMatchScreen: function() {
         if (this.config.screen !=0 && this.config.fullsize) {
@@ -88,6 +98,7 @@ const { screen } = require('electron').remote
         setTimeout(vm.updateScreens(), 500)
       })
       this.setOutputToMatchScreen()
+      this.updateScreens()
     }
   }
 </script>
