@@ -111,7 +111,7 @@ const { ipcRenderer, remote } = require('electron')
     mounted: function() {
       this.updateDevices()
       setInterval(this.updateDevices, 5000)
-      this.updateName(this.config.name)
+      setTimeout(this.updateName, 2000)
     },
     watch: {
       config: {
@@ -125,7 +125,7 @@ const { ipcRenderer, remote } = require('electron')
 
           if (val.name != this.name) {
             this.name = val.name
-            this.updateName(val.name)
+            this.updateName()
           }
 
             if (val.audio.enabled && !this.playing) {
@@ -223,8 +223,9 @@ const { ipcRenderer, remote } = require('electron')
           setTimeout(vm.playNext(), 500)
         }
       },
-      updateName: function(name) {
+      updateName: function() {
         let dest = remote.app.getPath('userData') + '/voice.wav'
+        let name = this.config.name
         say.export("This is - " + name, null, null, dest, (err) => {
           if (err) {
             return console.error(err)
