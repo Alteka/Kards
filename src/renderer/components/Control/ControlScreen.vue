@@ -66,7 +66,7 @@ const { screen } = require('electron').remote
         }
 
         let pri = screen.getPrimaryDisplay()
-        this.viewBox = left + " " + top + " " + Math.abs((right + pri.bounds.width) - left) + " " + Math.abs(bottom - top)
+        this.viewBox = left + " " + (top - 50) + " " + Math.abs((right + pri.bounds.width) - left) + " " + (Math.abs(bottom - top) + 50)
 
         this.screens.push({
           id: 0,
