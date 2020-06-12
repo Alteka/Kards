@@ -249,6 +249,7 @@ function manageTestCardWindow() {
           testCardWindowScreen = disp.id
         } else {
           testCardWindow.close()
+          setTimeout(manageTestCardWindow, 500)
         }  
       }
     }
@@ -256,12 +257,12 @@ function manageTestCardWindow() {
     if (testCardWindow.isFullScreen() || testCardWindow.isSimpleFullScreen()) {
       if (config.windowed) {
         testCardWindow.close()
-        manageTestCardWindow()
+        setTimeout(manageTestCardWindow, 500)
       }
     } else if (!testCardWindow.isFullScreen() && !testCardWindow.isSimpleFullScreen()) {
       if (!config.windowed) {
         testCardWindow.close()
-        manageTestCardWindow()
+        setTimeout(manageTestCardWindow, 500)
       }
     }
   }
