@@ -4,11 +4,12 @@
     <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
       <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#3d3d3d;" />
       <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#6ab42f;" v-if="config.screen == scr.id" />
-      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/2" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/6" text-anchor="middle" fill="white">{{ scr.description }}</text>
+      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.75" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
       <text v-if="scr.id == primaryScreen" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*7/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6">Primary</text>
-      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*1/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa">&#xf040;</text>
+      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.3" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/4" class="fa">{{ scr.icon }}</text>
     </g>
   </svg>
+  <i data-fa-symbol="edit" class="fas fa-pencil fa-fw"></i>
   </div>
 </template>
 
@@ -58,6 +59,12 @@ const { screen } = require('electron').remote
             bottom = scr.bounds.y + scr.bounds.height
           }
           scr.description = scr.size.width + ' x ' + scr.size.height
+
+          if (scr.internal || scr.id == this.primaryScreen) {
+            scr.icon = "\uf109"
+          } else {
+            scr.icon = "\uf108"
+          }
         }
 
         let pri = screen.getPrimaryDisplay()
@@ -71,7 +78,8 @@ const { screen } = require('electron').remote
             height: pri.bounds.height,
             width: pri.bounds.width,
           },
-          description: "Windowed"
+          description: "Windowed",
+          icon: '\uf565'
         })
       },
       setOutputToMatchScreen: function() {
@@ -104,7 +112,5 @@ const { screen } = require('electron').remote
 </script>
 
 <style scoped>
-  .fa {
-    font-family: FontAwesome;
-  }
+
 </style>
