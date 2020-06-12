@@ -1,14 +1,13 @@
 <template>
   <div> 
-    <el-row style="text-align: center; padding-top: 10px;">
-      <el-radio-group v-model="config.screen" :disabled="config.visible">
-        <el-radio-button v-for="scr in screens" :key="scr.id" :label="scr.id">
-          <i v-if="scr.id != primaryScreen" class="el-icon-monitor"></i>
-          <i v-if="scr.id == primaryScreen" class="el-icon-star-on"></i>
-          {{ scr.size.width }} x {{ scr.size.height }}</el-radio-button>
-        <el-radio-button label="0"><i class="el-icon-crop"></i> Window</el-radio-button>
-      </el-radio-group>
-    </el-row>
+  <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 150px;">
+    <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
+      <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#3d3d3d;" />
+      <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:1%;stroke:rgb(200,200,200);fill:#6ab42f;" v-if="config.screen == scr.id" />
+      <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/2" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/6" text-anchor="middle" fill="white">{{ scr.size.width }} x {{ scr.size.height }}</text>
+      <text v-if="scr.id == primaryScreen" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*7/8" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6">Primary</text>
+    </g>
+  </svg>
   </div>
 </template>
 
@@ -22,6 +21,30 @@ const { screen } = require('electron').remote
       return {
         screens: screen.getAllDisplays(),
         primaryScreen: screen.getPrimaryDisplay().id
+      }
+    },
+    computed: {
+      viewBox: function() {
+        let minX = 0
+        let maxX = 0
+        let minY = 0
+        let maxY = 0
+
+        for (const scr of this.screens) {
+          if (scr.bounds.x < minX) {
+            minX = scr.bounds.x
+          } 
+          if ((Math.abs(scr.bounds.x) + scr.bounds.width) > maxX) {
+            maxX = Math.abs(scr.bounds.x) + scr.bounds.width
+          }
+          if (scr.bounds.y < minY) {
+            minY = scr.bounds.y
+          }
+          if ((Math.abs(scr.bounds.y) + scr.bounds.height) > maxY) {
+            maxY = Math.abs(scr.bounds.y) + scr.bounds.height
+          }
+        }
+        return minX + " " + minY + " " + maxX + " " + (maxY + minY)
       }
     },
     watch: {
