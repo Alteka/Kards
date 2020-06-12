@@ -64,21 +64,8 @@ const { screen } = require('electron').remote
             scr.icon = "\uf108"
           }
         }
-
-        let pri = screen.getPrimaryDisplay()
-        this.viewBox = left + " " + (top - 50) + " " + Math.abs((right + pri.bounds.width) - left) + " " + (Math.abs(bottom - top) + 50)
-
-        this.screens.push({
-          id: 0,
-          bounds: {
-            x: right,
-            y: pri.bounds.y,
-            height: pri.bounds.height,
-            width: pri.bounds.width,
-          },
-          description: "Windowed",
-          icon: '\uf565'
-        })
+        
+        this.viewBox = left + " " + (top - 50) + " " + Math.abs(right - left) + " " + (Math.abs(bottom - top) + 50)
       },
       setOutputToMatchScreen: function() {
         if (this.config.screen !=0 && this.config.fullsize) {
@@ -101,6 +88,9 @@ const { screen } = require('electron').remote
         setTimeout(vm.updateScreens(), 500)
       })
       screen.on('display-removed', function() {
+        setTimeout(vm.updateScreens(), 500)
+      })
+      screen.on('display-metrics-changed', function() {
         setTimeout(vm.updateScreens(), 500)
       })
       this.setOutputToMatchScreen()

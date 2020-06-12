@@ -88,7 +88,7 @@ ipcMain.on('config', (event, arg) => {
   manageTestCardWindow()
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
-    if (config.screen == 0) {
+    if (config.windowed) {
       testCardWindow.setContentSize(parseInt(config.winWidth), parseInt(config.winHeight))
     }
   }
@@ -181,8 +181,8 @@ function manageTestCardWindow() {
   
   let windowConfig = {
     show: false,
-    width: 900,
-    height: 600,
+    width: config.winWidth,
+    height: config.winHeight,
     frame: false,
     webPreferences: {
       webSecurity: false,
@@ -193,7 +193,7 @@ function manageTestCardWindow() {
   if (testCardWindow == null && config.visible) {
     log.info('Showing test card with config: ', config)  
     
-    if (config.screen != 0) {
+    if (!config.windowed) {
       windowConfig.fullscreen = true
       
       for (const disp of displays) {
@@ -223,11 +223,47 @@ function manageTestCardWindow() {
           windowConfig.height = disp.bounds.height
         }
       }
+    } else {
+      for (const disp of displays) {
+        if (disp.id == config.screen) {
+          windowConfig.x = disp.bounds.x + (disp.bounds.width - config.winWidth)/2
+          windowConfig.y = disp.bounds.y + (disp.bounds.height - config.winHeight)/2
+        }
+      }
     }
     showTestCardWindow(windowConfig)
   } else if (testCardWindow != null && !config.visible) {
     log.info('Closing test card')
     testCardWindow.close()
+  } else if (testCardWindow != null && config.visible && config.screen != testCardWindowScreen) {
+    // a different screen as been selected..
+    for (const disp of displays) {
+      if (disp.id == config.screen) {
+        if (config.windowed) {
+          testCardWindow.setBounds({
+            x: disp.bounds.x + (disp.bounds.width - config.winWidth)/2,
+            y: disp.bounds.y + (disp.bounds.height - config.winHeight)/2,
+            width: config.winWidth,
+            height: config.winHeight
+          })
+          testCardWindowScreen = disp.id
+        } else {
+          testCardWindow.close()
+        }  
+      }
+    }
+  } else if (testCardWindow!=null) {
+    if (testCardWindow.isFullScreen() || testCardWindow.isSimpleFullScreen()) {
+      if (config.windowed) {
+        testCardWindow.close()
+        manageTestCardWindow()
+      }
+    } else if (!testCardWindow.isFullScreen() && !testCardWindow.isSimpleFullScreen()) {
+      if (!config.windowed) {
+        testCardWindow.close()
+        manageTestCardWindow()
+      }
+    }
   }
 }
 
@@ -249,6 +285,22 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.on('resize', function() {
     clearTimeout(testCardWindowResizeTimer)
     testCardWindowResizeTimer = setTimeout(handleTestCardResize, 500)
+  })
+
+  testCardWindow.on('move', function() {
+    let x = testCardWindow.getBounds().x
+    let y = testCardWindow.getBounds().y
+    let displays = screen.getAllDisplays()
+
+    for (const disp of displays) {
+      if (x > disp.bounds.x && x < (disp.bounds.x + disp.bounds.width) && y > disp.bounds.y && y < (disp.bounds.y + disp.bounds.height)) {
+        if (testCardWindowScreen!=disp.id) {
+          config.screen = disp.id
+          controlWindow.webContents.send('config', config)
+        }
+      }
+    }
+
   })
 }
 
