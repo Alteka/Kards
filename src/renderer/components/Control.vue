@@ -62,6 +62,11 @@
 
 <el-row v-if="config.screen!=0">
   <el-col :span="8">
+    <el-form-item label="Windowed">
+      <el-switch v-model="config.windowed"></el-switch>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8" v-if="!config.windowed">
     <el-form-item label="Fill Output">
       <el-switch v-model="config.fullsize"></el-switch>
     </el-form-item>
@@ -107,7 +112,7 @@
       </el-col>
     </el-row>
 
-<el-row v-if="config.screen==0">
+<el-row v-if="config.windowed">
   <el-col :span="6">
   <el-form-item label="Window Size"> 
   </el-form-item>
@@ -169,6 +174,9 @@ import ControlScreen from './Control/ControlScreen.vue'
       ipcRenderer.on('testCardResize', function(event, w, h) {
         vm.config.winWidth = w
         vm.config.winHeight = h
+      })
+      ipcRenderer.on('testCardMoveToScreen', function(event, id) {
+        vm.config.screen = id
       })
       ipcRenderer.send('getConfigControl')
     },
