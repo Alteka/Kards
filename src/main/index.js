@@ -262,7 +262,7 @@ function manageTestCardWindow() {
     } else if (!testCardWindow.isFullScreen() && !testCardWindow.isSimpleFullScreen()) {
       if (!config.windowed) {
         testCardWindow.close()
-        setTimeout(manageTestCardWindow, 500)
+        setTimeout(manageTestCardWindow, 500) 
       }
     }
   }
