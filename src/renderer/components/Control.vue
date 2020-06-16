@@ -196,6 +196,9 @@ import ControlScreen from './Control/ControlScreen.vue'
           if (this.sync) {
             ipcRenderer.send('config', val)
           }
+          if (val.windowed) {
+            this.config.fullsize = true
+          }
          },
         deep: true
       },
