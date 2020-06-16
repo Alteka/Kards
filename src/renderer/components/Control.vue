@@ -66,6 +66,16 @@
       <el-switch v-model="config.windowed"></el-switch>
     </el-form-item>
   </el-col>
+  <el-col :span="8" v-if="config.windowed">
+    <el-form-item label="Width" label-width="50px">
+      <el-input-number v-model="config.winWidth" controls-position="right" :step="5" :min="48"></el-input-number>
+    </el-form-item>
+  </el-col>
+  <el-col :span="8" v-if="config.windowed">
+    <el-form-item label="Height" label-width="50px">
+      <el-input-number v-model="config.winHeight" controls-position="right" :step="5" :min="39"></el-input-number>
+    </el-form-item>
+  </el-col>
   <el-col :span="8" v-if="!config.windowed">
     <el-form-item label="Fill Output">
       <el-switch v-model="config.fullsize"></el-switch>
@@ -112,24 +122,7 @@
       </el-col>
     </el-row>
 
-<el-row v-if="config.windowed">
-  <el-col :span="6">
-  <el-form-item label="Window Size"> 
-  </el-form-item>
-  </el-col>
-  <el-col :span="8">
-    <el-form-item label="Width" label-width="80px">
-      <el-input-number v-model="config.winWidth" controls-position="right" :step="5" :min="48"></el-input-number>
-    
-    </el-form-item>
-  </el-col>
-  <el-col :span="8">
-    <el-form-item label="Height" label-width="80px">
-      <el-input-number v-model="config.winHeight" controls-position="right" :step="5" :min="39"></el-input-number>
-    </el-form-item>
-  </el-col>
-</el-row>
-    
+   
 
 
  <control-menu :config="config"></control-menu>
