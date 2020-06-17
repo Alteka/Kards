@@ -159,18 +159,18 @@ const { ipcRenderer, remote } = require('electron')
       exportCard: function() {
         if (this.imageSource=="card") {
           if(this.imageDest=="file") {
-            ipcRenderer.send('testCardToPNG')
+            ipcRenderer.send('exportCard', 'testCardToPNG')
           }
           else if (this.imageDest=="wallpaper") {
-            ipcRenderer.send("testCardToWallpaper")
+            ipcRenderer.send('exportCard', "testCardToWallpaper")
           }
         }
         else if (this.imageSource=="canvas") {
           if(this.imageDest=="file") {
-            ipcRenderer.send("canvasToPNG")
+            ipcRenderer.send('exportCard', "canvasToPNG")
           }
           else if (this.imageDest=="wallpaper") {
-            ipcRenderer.send("canvasToWallpaper")
+            ipcRenderer.send('exportCard', "canvasToWallpaper")
           }
         }
         this.drawerImage = false

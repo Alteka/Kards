@@ -165,17 +165,22 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       window.addEventListener('resize', function() {
         vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
       })
-      ipcRenderer.on('testCardToPNG', function(event, args) {
-        vm.testCardToPNG()
-      })
-      ipcRenderer.on('outputToPNG', function(event, args) {
-        vm.boundsToPNG()
-      })
-      ipcRenderer.on('testCardToWallpaper', function(event, args) {
-        vm.testCardToWallpaper()
-      })
-      ipcRenderer.on('outputToWallpaper', function(event, args) {
-        vm.boundsToWallpaper()
+      ipcRenderer.on('exportCard', function(event, args) {
+        console.log('exportCard', args)
+        switch (args) {
+          case 'testCardToPNG':
+            vm.testCardToPNG()
+          break;
+          case 'outputToPNG':
+            vm.boundsToPNG()
+          break
+          case 'testCardToWallpaper':
+            vm.testCardToWallpaper()
+          break
+          case 'outputToWallpaper':
+            vm.boundsToWallpaper()
+          break
+        }
       })
 
       window.addEventListener('contextmenu', (e) => {

@@ -112,21 +112,10 @@ ipcMain.on('controlResize', (event, w, h) => {
   controlWindow.setContentSize(620, h)
 })
 
-ipcMain.on('testCardToPNG', (event) => {
-  testCardWindow.webContents.send('testCardToPNG')
+ipcMain.on('exportCard', (event, type) => {
+  testCardWindow.webContents.send('exportCard', type)
 })
 
-ipcMain.on('canvasToPNG', (event) => {
-  testCardWindow.webContents.send('outputToPNG')
-})
-
-ipcMain.on('testCardToWallpaper', (event) => {
-  testCardWindow.webContents.send('testCardToWallpaper')
-})
-
-ipcMain.on('canvasToWallpaper', (event) => {
-  testCardWindow.webContents.send('outputToWallpaper')
-})
 
 ipcMain.on('saveAsPNG', (event, arg) => {
   dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: 'TestKard.png', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
@@ -172,7 +161,6 @@ function getDefaultConfig() {
   let defaultConfig = require('./defaultConfig.json')
   defaultConfig.name = require('os').hostname().split('.')[0].replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, "$1 $2").replace(/-|_|\.|\||\+|=|~|<|>|\/|\\/g, ' ')
   defaultConfig.screen = screen.getPrimaryDisplay().id
-  defaultConfig.visible = false
   return defaultConfig
 }
 
@@ -253,7 +241,7 @@ function manageTestCardWindow() {
         }  
       }
     }
-  } else if (testCardWindow!=null) {
+  } else if (testCardWindow != null) {
     if (testCardWindow.isFullScreen() || testCardWindow.isSimpleFullScreen()) {
       if (config.windowed) {
         testCardWindow.close()
