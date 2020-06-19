@@ -126,7 +126,7 @@
     </div>
 
     <div id="centerbox">
-      <img v-show="config.alteka.logoUrl != ''" id="customLogo" :src="config.alteka.logoUrl" />      
+      <img v-if="config.alteka.logoUrl != ''" id="customLogo" :src="config.alteka.logoUrl" />      
 
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
         <defs>
