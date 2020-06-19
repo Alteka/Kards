@@ -1,6 +1,6 @@
 <template>
   <div> 
-    <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 150px;">
+    <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 125px;">
       <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
         <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:25;stroke:#3d3d3d;fill:#666;" />
         <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:25;stroke:#3d3d3d;fill:#6ab42f;" v-if="config.screen == scr.id" />
