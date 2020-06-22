@@ -65,7 +65,7 @@ const { screen } = require('electron').remote
           }
         }
         
-        this.viewBox = left + " " + (top - 50) + " " + Math.abs(right - left) + " " + (Math.abs(bottom - top) + 50)
+        this.viewBox = (left - 25) + " " + (top - 25) + " " + (Math.abs(right - left) + 50) + " " + (Math.abs(bottom - top) + 50)
       },
       setOutputToMatchScreen: function() {
         if (this.config.screen !=0 && this.config.fullsize) {
