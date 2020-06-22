@@ -74,6 +74,10 @@ app.on('ready', function() {
   config.audio.enabled = false
   log.info('Loaded Config: ', config)
   createWindow()
+
+  screen.on('display-metrics-changed', function() {
+    setTimeout(manageTestCardWindow, 500)
+  })
 })
 
 
