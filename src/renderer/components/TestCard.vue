@@ -121,11 +121,18 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
         }
       },
       testCardToPNG: function() {
+        var wasAnimated = this.config.animated
+        var vm = this
+        this.config.animated = false
+
         log.info('Attempt to capture test card as PNG')
         let size = document.getElementById('cardForPNG').getBoundingClientRect()
+        
         domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
           .then(function (dataUrl) {
           ipcRenderer.send('saveAsPNG', dataUrl)
+          console.log('Resetting animated to ', wasAnimated)
+          vm.config.animated = wasAnimated
         })
       },
       boundsToPNG: function() {
