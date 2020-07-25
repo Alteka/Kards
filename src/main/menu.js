@@ -23,7 +23,9 @@ menu.append(new MenuItem({
     submenu: [
         { role: 'cut' },
         { role: 'copy' },
-        { role: 'paste' }
+        { role: 'paste' },
+        { type: 'separator' },
+        { role: 'selectAll' }
       ]
 }))
 
