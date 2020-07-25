@@ -189,6 +189,14 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         vm.config.visible = !vm.config.visible
         return false;
       })
+      Mousetrap.bind(['command+i', 'ctrl+i'], function() {
+        vm.config.showInfo = !vm.config.showInfo
+        return false;
+      })
+      Mousetrap.bind(['command+m', 'ctrl+m'], function() {
+        vm.config.animated = !vm.config.animated
+        return false;
+      })
     },
 
 
