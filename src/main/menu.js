@@ -18,15 +18,14 @@ menu.append(new MenuItem({
     }))
 
 
+menu.append(new MenuItem({
+    label: 'Edit',
+    submenu: [
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' }
+      ]
+}))
 
-
-// menu.append(new MenuItem({
-//     label: 'DrewTest',
-//     submenu: [
-//         { role: 'cut' },
-//         { role: 'copy' },
-//         { role: 'paste' }
-//       ]
-// }))
 
 exports.menu = menu

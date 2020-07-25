@@ -45,7 +45,7 @@
 <el-row>
   <el-col :span="8">
     <el-form-item label="Name" label-width="70px">
-      <el-input v-model="config.name"></el-input>
+      <el-input v-model="config.name" placeholder=""></el-input>
     </el-form-item>
   </el-col>
   <el-col :span="8">
@@ -146,6 +146,9 @@ import ControlMenu from './Control/ControlMenu.vue'
 
 import ControlScreen from './Control/ControlScreen.vue'
 
+var Mousetrap = require('mousetrap')
+Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
+
   export default {
     name: 'control',
     components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu },
@@ -176,10 +179,15 @@ import ControlScreen from './Control/ControlScreen.vue'
     },
 
     mounted: function(){
+      let vm = this
       this.$nextTick(function () {
         let h = document.getElementById('wrapper').clientHeight
         let w = document.getElementById('wrapper').clientWidth
         ipcRenderer.send('controlResize', w, h)
+      })
+      Mousetrap.bind(['command+f', 'ctrl+f'], function() {
+        vm.config.visible = !vm.config.visible
+        return false;
       })
     },
 
@@ -209,7 +217,6 @@ import ControlScreen from './Control/ControlScreen.vue'
  body {
   font-family: Sansation, Helvetica, sans-serif;
   overflow: hidden !important;
-   -webkit-user-select: none;
 }
 @font-face {
   font-family: Sansation;
