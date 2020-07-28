@@ -127,17 +127,17 @@ let loadingInstance
     watch: {
       config: {
         handler: function (val, oldVal) { 
-          document.getElementById('stereo').setSinkId(val.audio.deviceId)
-          document.getElementById('phase').setSinkId(val.audio.deviceId)
-          document.getElementById('pink').setSinkId(val.audio.deviceId)
-          document.getElementById('white').setSinkId(val.audio.deviceId)
-          document.getElementById('tone').setSinkId(val.audio.deviceId)
-          document.getElementById('voice').setSinkId(val.audio.deviceId)
+            document.getElementById('stereo').setSinkId(val.audio.deviceId)
+            document.getElementById('phase').setSinkId(val.audio.deviceId)
+            document.getElementById('pink').setSinkId(val.audio.deviceId)
+            document.getElementById('white').setSinkId(val.audio.deviceId)
+            document.getElementById('tone').setSinkId(val.audio.deviceId)
+            document.getElementById('voice').setSinkId(val.audio.deviceId)
 
-          if (val.name != this.name) {
-            this.name = val.name
-            this.updateName()
-          }
+            if (val.name != this.name) {
+              this.name = val.name
+              this.updateName()
+            }
 
             if (val.audio.enabled && !this.playing) {
               log.info('Starting audio output')
@@ -153,6 +153,10 @@ let loadingInstance
             }
             if (val.fullsize == 1) {
               this.imageSource = "card"
+            }
+
+            if (val.fullsize || val.windowed ) {
+              this.config.export.imageSource = "card"
             }
          },
         deep: true
