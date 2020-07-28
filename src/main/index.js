@@ -112,8 +112,25 @@ ipcMain.on('controlResize', (event, w, h) => {
   controlWindow.setContentSize(620, h)
 })
 
-ipcMain.on('exportCard', (event, type) => {
-  testCardWindow.webContents.send('exportCard', type)
+
+ipcMain.on('exportCard', (event) => {
+  if (testCardWindow != null) {
+    testCardWindow.webContents.send('exportCard')
+  } else {
+    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
+    if (!config.windowed) {
+      for (const disp of screen.getAllDisplays()) {
+        if (disp.id == config.screen) {
+          c.width = disp.bounds.width
+          c.height = disp.bounds.height
+        }
+      }
+    }
+    showTestCardWindow(c) 
+    log.info('Creating dummy test card window to capture image')
+    // once shown it will make the image, and once that's made the window will be closed. 
+  }
+  
 })
 
 
@@ -134,10 +151,14 @@ ipcMain.on('saveAsPNG', (event, arg) => {
       log.info('Save dialog closed')
     }
   })
+  if (!config.visible) {
+    log.info('Closing dummy test card window')
+    testCardWindow.close()
+  }
 })
 
 ipcMain.on('setAsWallpaper', (event, arg) => {
-  let dest = app.getPath('userData') + '/wallpaper.png'
+  let dest = app.getPath('userData') + '/wallpaper' + Math.round((Math.random()*100000)) + '.png'
   var base64Data = arg.replace(/^data:image\/png;base64,/, "")
   fs.writeFile(dest, base64Data, 'base64', err => {
     if (err) {
@@ -150,6 +171,10 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
       log.info('Setting png as wallpaper')
       })();
     })
+    if (!config.visible) {
+      log.info('Closing dummy test card window')
+      testCardWindow.close()
+    }
   })
   
 ipcMain.on('resetDefault', (event, arg) => {
@@ -278,7 +303,12 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.loadURL(testCardUrl)
 
   testCardWindow.once('ready-to-show', () => {
-    testCardWindow.show()
+    if (config.visible) {
+      testCardWindow.show()
+    } else {
+      console.log('A dummy test card is ready to turn into an image')
+      testCardWindow.webContents.send('exportCard')
+    }
   })
 
   testCardWindow.on('resize', function() {

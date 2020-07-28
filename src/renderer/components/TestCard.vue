@@ -112,49 +112,37 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
         ipcRenderer.send('closeTestCard')
       },
       updateCardSize: function() {
-        if (this.config.screen == 0) {
+        if (this.config.windowed) {
           this.cardSize = this.config.winWidth + ' x ' + this.config.winHeight
-        } else if (this.config.fullsize) {
-          this.cardSize = visualViewport.width + ' x ' + visualViewport.height
         } else {
           this.cardSize = this.config.width + ' x ' + this.config.height
         }
       },
-      testCardToPNG: function() {
+      exportTestCard: function(settings) {
         var wasAnimated = this.config.animated
         var vm = this
-        this.config.animated = false
+        this.config.animated = false // stop animations in order to capture image
 
-        log.info('Attempt to capture test card as PNG')
-        let size = document.getElementById('cardForPNG').getBoundingClientRect()
+        log.info('Attempt to capture ' + settings.imageSource + ' as ' + settings.target)
         
-        domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
-          .then(function (dataUrl) {
-          ipcRenderer.send('saveAsPNG', dataUrl)
+        let opts = {}
+        let element = 'bounds'
+
+        if (settings.imageSource == 'card') {
+          let size = document.getElementById('cardForPNG').getBoundingClientRect()
+          opts.width = size.width
+          opts.height = size.height
+          element = 'cardForPNG'
+        }
+        
+        domtoimage.toPng(document.getElementById(element), opts).then(function (dataUrl) {
+          if (settings.target == 'file') {
+            ipcRenderer.send('saveAsPNG', dataUrl)
+          } else {
+            ipcRenderer.send('setAsWallpaper', dataUrl)
+          }
           console.log('Resetting animated to ', wasAnimated)
           vm.config.animated = wasAnimated
-        })
-      },
-      boundsToPNG: function() {
-        log.info('Attempt to capture output window as PNG')
-        domtoimage.toPng(document.getElementById('bounds'))
-          .then(function (dataUrl) {
-          ipcRenderer.send('saveAsPNG', dataUrl)
-        })
-      },
-      testCardToWallpaper: function() {
-        log.info('Attempt to capture test card and set as Wallpaper')
-        let size = document.getElementById('cardForPNG').getBoundingClientRect()
-        domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
-          .then(function (dataUrl) {
-          ipcRenderer.send('setAsWallpaper', dataUrl)
-        })
-      },
-      boundsToWallpaper: function() {
-        log.info('Attempt to capture output window and set as Wallpaper')
-        domtoimage.toPng(document.getElementById('bounds'))
-          .then(function (dataUrl) {
-          ipcRenderer.send('setAsWallpaper', dataUrl)
         })
       }
     },
@@ -172,22 +160,9 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       window.addEventListener('resize', function() {
         vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
       })
-      ipcRenderer.on('exportCard', function(event, args) {
-        console.log('exportCard', args)
-        switch (args) {
-          case 'testCardToPNG':
-            vm.testCardToPNG()
-          break;
-          case 'outputToPNG':
-            vm.boundsToPNG()
-          break
-          case 'testCardToWallpaper':
-            vm.testCardToWallpaper()
-          break
-          case 'outputToWallpaper':
-            vm.boundsToWallpaper()
-          break
-        }
+      ipcRenderer.on('exportCard', function(event) {
+        console.log('exportCard', vm.config.export)
+        vm.exportTestCard(vm.config.export)
       })
 
       window.addEventListener('contextmenu', (e) => {

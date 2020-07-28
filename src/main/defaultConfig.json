@@ -40,6 +40,10 @@
     "double": false,
     "overlay": false
 },
+"export": {
+    "imageSource": "card",
+    "target": "file"
+},
 "name": "PPT Main",
 "width": 1920,
 "height": 1080,

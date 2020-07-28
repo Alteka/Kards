@@ -60,26 +60,29 @@
  <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt" size="100px">
    <el-row class="drawerContent">
      <el-col :span="10">
-       <el-radio-group v-model="imageSource" size="medium" :disabled="!config.visible || config.cardType=='audioSync'">
+       <el-radio-group v-model="config.export.imageSource" size="medium" :disabled="config.cardType=='audioSync'">
          <el-radio-button label="card">Test Card</el-radio-button>
-         <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
+         <el-tooltip :disabled="!config.windowed" effect="dark" content="Disable windowed output and then disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+          <el-tooltip :disabled="!config.fullsize" effect="dark" content="Disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+            <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
+          </el-tooltip>
+         </el-tooltip>
        </el-radio-group>
      </el-col>
      <el-col :span="11">
-       <el-radio-group v-model="imageDest" size="medium" :disabled="!config.visible || config.cardType=='audioSync'">
+       <el-radio-group v-model="config.export.target" size="medium" :disabled="config.cardType=='audioSync'">
          <el-radio-button label="file">Save to File</el-radio-button>
          <el-radio-button label="wallpaper">Set Wallpaper</el-radio-button>
        </el-radio-group>
      </el-col>
      <el-col :span="3">
-       <el-button size="medium" :disabled="!config.visible || config.cardType=='audioSync'" v-on:click="exportCard">OK</el-button>
+       <el-button size="medium" :disabled="config.cardType=='audioSync'" v-on:click="exportCard">OK</el-button>
      </el-col>
    </el-row>
    <el-row>
      <el-alert v-if="config.cardType == 'audioSync'" title = "Choose a different card - Even we can't save AV Sync to a  still image..." type="error" center show-icon effect="dark" :closable="false"></el-alert>
-     <el-alert v-if="!config.visible" title="Enable output first" type="success" center show-icon effect="dark" close-text="Enable" @close="enabler"></el-alert>
-     <el-alert v-if="config.fullsize && config.screen != 0" title="Disable 'Fill Output' to save test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
-     <el-alert v-if="config.screen == 0" title="Use a fullscreen output and disable 'Fill Output' to save test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+     
+     
   </el-row>
 </el-drawer>
 
@@ -101,8 +104,6 @@ const { ipcRenderer, remote } = require('electron')
         drawerImage: false,
         curAudio: null,
         playing: false,
-        imageSource: "card",
-        imageDest: "file",
         name: "",
         voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav' + '?bust=' + Math.round((Math.random()*100000)),
         audioDevices: []
@@ -157,22 +158,7 @@ const { ipcRenderer, remote } = require('electron')
         ipcRenderer.send(val)
       },
       exportCard: function() {
-        if (this.imageSource=="card") {
-          if(this.imageDest=="file") {
-            ipcRenderer.send('exportCard', 'testCardToPNG')
-          }
-          else if (this.imageDest=="wallpaper") {
-            ipcRenderer.send('exportCard', "testCardToWallpaper")
-          }
-        }
-        else if (this.imageSource=="canvas") {
-          if(this.imageDest=="file") {
-            ipcRenderer.send('exportCard', "canvasToPNG")
-          }
-          else if (this.imageDest=="wallpaper") {
-            ipcRenderer.send('exportCard', "canvasToWallpaper")
-          }
-        }
+        ipcRenderer.send('exportCard')
         this.drawerImage = false
       },
       openUrl: function(link) {
@@ -239,9 +225,6 @@ const { ipcRenderer, remote } = require('electron')
             voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
           }
         })
-      },
-      enabler: function() {
-        this.config.visible = true
       }
     }
   }
