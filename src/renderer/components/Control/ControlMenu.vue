@@ -1,8 +1,8 @@
 <template>
 <el-row class="menu">
 
-  <el-col :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
-    Enable <el-switch v-model="config.visible"></el-switch>
+  <el-col :span="8" style="margin-top: 3px; font-size: 18px;" :class="{ enabledText: config.visible }">
+    <strong>Enable</strong> <el-switch v-model="config.visible"></el-switch>
   </el-col>
 
   <el-col :span="8">
