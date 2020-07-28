@@ -143,12 +143,15 @@ ipcMain.on('saveAsPNG', (event, arg) => {
         if (err) {
           dialog.showErrorBox('Error Saving File', JSON.stringify(err))
           log.error('Couldnt save file: ', err)
+          controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
           log.info('PNG saved to: ', path)
+          controlWindow.webContents.send('exportCardCompleted')
         }
       })
     } else {
       log.info('Save dialog closed')
+      controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
     }
   })
   if (!config.visible) {
@@ -164,11 +167,13 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
     if (err) {
       dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
       log.error('Couldnt save wallpaper file ', err)
+      controlWindow.webContents.send('exportCardCompleted', 'Could not write temporary file')
       return
     }
     (async () => {
       await wallpaper.set(dest);
       log.info('Setting png as wallpaper')
+      controlWindow.webContents.send('exportCardCompleted')
       })();
     })
     if (!config.visible) {

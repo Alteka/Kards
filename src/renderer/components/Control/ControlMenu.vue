@@ -93,6 +93,9 @@
 const log = require('electron-log')
 const say = require('say')
 const { ipcRenderer, remote } = require('electron')
+import { Loading, Notification } from 'element-ui'
+let loadingInstance
+
   export default {
     props: {
       config: Object
@@ -113,6 +116,13 @@ const { ipcRenderer, remote } = require('electron')
       this.updateDevices()
       setInterval(this.updateDevices, 5000)
       setTimeout(this.updateName, 2000)
+
+      ipcRenderer.on('exportCardCompleted', function(event, msg) {
+        if (msg) {
+          Notification.warning({title: 'Oops', message: msg})
+        } 
+        loadingInstance.close()
+      })
     },
     watch: {
       config: {
@@ -159,7 +169,8 @@ const { ipcRenderer, remote } = require('electron')
       },
       exportCard: function() {
         ipcRenderer.send('exportCard')
-        this.drawerImage = false
+        loadingInstance = Loading.service({ fullscreen: true, text:"Capturing Test Card", background: 'rgba(0, 0, 0, 0.85)'})
+        this.drawerImage = false        
       },
       openUrl: function(link) {
         log.info('Opening external url: ' + link)
