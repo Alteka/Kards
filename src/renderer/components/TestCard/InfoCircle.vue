@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="config.showInfo" class="info">
+    <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
       <div class="infoText">
         <strong>{{ config.name}}</strong><br /><br v-if="spacer" />
         {{ cardSize }}
@@ -104,4 +104,11 @@ import ResizeText from 'vue-resize-text'
     top: calc(50% - 50px);
   }
 }
+.fullsize {
+    font-size: 24px;
+    width: 200px;
+    height: 200px;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+  }
 </style>
