@@ -165,9 +165,9 @@
               <rect x="-45" y="10" width="90" height="5" />
               <rect x="-45" y="-15" width="90" height="7" />
             </g>
-            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :style="{fill: text}">{{config.name}}</text>
-            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :style="{fill: text}">Alteka Kards {{require('./../../../../package.json').version}}</text>
-            <text x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{cardSize}}</text>
+            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">ALTEKA Kards {{require('./../../../../package.json').version}}</text>
+            <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{cardSize}}</text>
           </g>
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
