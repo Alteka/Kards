@@ -225,22 +225,32 @@ function manageTestCardWindow() {
     testCardWindow.close()
   } else if (testCardWindow != null && config.visible && config.screen != testCardWindowScreen) {
     // a different screen as been selected..
-    for (const disp of displays) {
-      if (disp.id == config.screen) {
-        if (config.windowed) {
-          testCardWindow.setBounds({
-            x: disp.bounds.x + (disp.bounds.width - config.winWidth)/2,
-            y: disp.bounds.y + (disp.bounds.height - config.winHeight)/2,
+    if (config.windowed) {
+      for (const disp of displays) {
+        if (disp.id == config.screen) {
+          if (config.winWidth > disp.bounds.width) {
+            config.winWidth = disp.bounds.width
+            controlWindow.webContents.send('config', config)
+          }
+          if (config.winHeight > disp.bounds.height) {
+            config.winHeight = disp.bounds.height
+            controlWindow.webContents.send('config', config)
+          }
+          let newBounds = {
+            x: Math.round(disp.bounds.x + (disp.bounds.width - config.winWidth)/2),
+            y: Math.round(disp.bounds.y + (disp.bounds.height - config.winHeight)/2),
             width: config.winWidth,
             height: config.winHeight
-          })
+          }
+          console.log('Moving window to: ', newBounds)
+          testCardWindow.setBounds(newBounds)
           testCardWindowScreen = disp.id
-        } else {
-          testCardWindow.close()
-          setTimeout(manageTestCardWindow, 500)
-        }  
+        }
       }
-    }
+    } else {
+      testCardWindow.close()
+      setTimeout(manageTestCardWindow, 500)
+    }  
   } else if (testCardWindow != null) {
     if (testCardWindow.isFullScreen() || testCardWindow.isSimpleFullScreen()) {
       if (config.windowed) {
