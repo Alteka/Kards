@@ -81,6 +81,9 @@ const { screen } = require('electron').remote
             }
           }
         }
+        if (!this.screens.includes(this.config.screen)) {
+          this.config.screen = this.primaryScreen
+        }
       }
     },
     mounted: function() {
