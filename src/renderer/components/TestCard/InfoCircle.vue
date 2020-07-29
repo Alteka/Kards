@@ -1,28 +1,17 @@
 <template>
   <transition name="fade">
     <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
-      <div class="infoText">
-        <strong>{{ config.name}}</strong><br /><br v-if="spacer" />
-        {{ cardSize }}
-      </div>
+      <div class="infoText">{{ config.name }}</div>
+      <div class="sizeText">{{ cardSize }}</div>
     </div>
   </transition>
 </template>
 
 <script>
-import ResizeText from 'vue-resize-text'
   export default {
-    directives: {
-      ResizeText
-    },
     props: {
       config: Object,
       cardSize: String
-    },
-    computed: {
-      spacer: function() {
-        return this.config.name.length < 30 ? true : false
-      }
     }
   }
 </script>
@@ -48,8 +37,21 @@ import ResizeText from 'vue-resize-text'
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  width: calc(100% - 40px);
-  left: 20px;
+  width: 90%;
+  left: 5%;
+  max-height: 69%;
+  overflow: hidden;
+}
+.sizeText {
+  position: absolute;
+  width: 50%;
+  left: 25%;
+  bottom: 5%;
+  overflow: hidden;
+  font-size: 66%;
+}
+.sizeText span {
+  display: inline-block;
 }
  .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
