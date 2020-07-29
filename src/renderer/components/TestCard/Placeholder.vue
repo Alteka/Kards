@@ -1,8 +1,17 @@
 <template>
-  <div id="placeholder" :style="{ background : config.placeholder.bg }" :class="{ gradient : config.placeholder.gradient }">
+  <div id="placeholder" :style="{ background : config.placeholder.bg }">
+    <transition name="fade">
+      <div id="gradient" v-if="config.placeholder.gradient"></div>
+    </transition>
     <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{ color:config.placeholder.fg }">
-      <span v-if="config.placeholder.icon" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
-      <br v-if="config.placeholder.icon != ''" />{{ config.name }}
+      <transition name="fade">
+        <span v-if="config.placeholder.icon" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
+      </transition>
+      <transition name="fade">
+        <br v-if="config.placeholder.icon != ''" />
+      </transition>
+      {{ config.name }}
+      
     </div>
 
     <transition name="fade">
@@ -51,13 +60,12 @@ import ResizeText from 'vue-resize-text'
   .name span {
     font-size: 1%;
   }
-  .gradient:before {
-    content: '';
+  #gradient {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: radial-gradient(circle, rgba(0,0,0,0) 25%, rgba(0,0,0,0.3) 100%);
+    background-image: radial-gradient(circle, rgba(0,0,0,0) 25%, rgba(0,0,0,0.4) 100%);
   }
 </style>
