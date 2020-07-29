@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
-      <div class="infoText">{{ config.name }}</div>
+      <div class="infoText" :class="{ biggerText : config.name.length < 20, evenBiggerText : config.name.length < 12}">{{ config.name }}</div>
       <div class="sizeText">{{ cardSize }}</div>
     </div>
   </transition>
@@ -41,6 +41,13 @@
   left: 5%;
   max-height: 69%;
   overflow: hidden;
+  overflow-wrap: break-word;
+}
+.biggerText {
+  font-size: 150%;
+}
+.evenBiggerText {
+  font-size: 200%;
 }
 .sizeText {
   position: absolute;
