@@ -169,8 +169,13 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         vm.sync = true
       })
       ipcRenderer.on('testCardResize', function(event, w, h) {
-        vm.config.winWidth = w
-        vm.config.winHeight = h
+        if (config.windowed) {
+          vm.config.winWidth = w
+          vm.config.winHeight = h
+        } else {
+          vm.config.width = w
+          vm.config.height = h
+        }
       })
       ipcRenderer.on('testCardMoveToScreen', function(event, id) {
         vm.config.screen = id

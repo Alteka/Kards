@@ -66,9 +66,10 @@ const { screen } = require('electron').remote
         }
         
         this.viewBox = (left - 25) + " " + (top - 25) + " " + (Math.abs(right - left) + 50) + " " + (Math.abs(bottom - top) + 50)
+        this.setOutputToMatchScreen()
       },
       setOutputToMatchScreen: function() {
-        if (this.config.screen !=0 && this.config.fullsize) {
+        if (!this.config.windowed && this.config.fullsize) {
           for (const scr of this.screens) {
             if (scr.id == this.config.screen) {
               this.config.top = 0
