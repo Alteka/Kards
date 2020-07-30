@@ -156,7 +156,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
     return {
       config: require('../../main/defaultConfig.json'),
       sync: false,
-      predefineColors: ['#ffffff', '#7f7f7f', '#000000', '#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff']
+      predefineColors: ['#ffffff', '#d3d3d3', '#7f7f7f', '#3e3e3e', '#000000', '#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#b52f2f', '#D75B1F', '#D7E133', '#6ab42f', '#2fb48d', '#2fa9b4', '#2f45b4', '#ac2fb4']
     }
   },
     created: function() {
