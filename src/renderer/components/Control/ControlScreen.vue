@@ -81,7 +81,14 @@ const { screen } = require('electron').remote
             }
           }
         }
-        if (!this.screens.includes(this.config.screen)) {
+        let exists = false
+        for (const scr of this.screens) {
+          if (scr.id == this.config.screen) {
+            exists = true
+          }
+        }
+        if (!exists) {
+          console.log('Update screen as selected screen doesnt exist...')
           this.config.screen = this.primaryScreen
         }
       }
