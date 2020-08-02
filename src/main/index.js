@@ -7,7 +7,13 @@ const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
 const log = require('electron-log');
 
-const store = new Store();
+const store = new Store({
+  migrations: {
+    '<=0.8.0': store => {
+      store.delete('KardsConfig')
+      log.info('Resetting to default settings due to upgrade')
+    }
+  }});
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -69,7 +75,7 @@ function createWindow () {
 
 app.on('ready', function() {
   log.info('Launching Kards')
-  config = store.get('config', getDefaultConfig())
+  config = store.get('KardsConfig', getDefaultConfig())
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config: ', config)
@@ -93,7 +99,7 @@ ipcMain.on('config', (event, arg) => {
     }
   }
   touchBar.setConfig(config)
-  store.set('config', config)
+  store.set('KardsConfig', config)
 })
 
 ipcMain.on('getConfigTestCard', (event, arg) => {
