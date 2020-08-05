@@ -109,13 +109,14 @@ let loadingInstance
         playing: false,
         name: "",
         voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav' + '?bust=' + Math.round((Math.random()*100000)),
+        voiceTimer: null,
         audioDevices: []
       }
     },
     mounted: function() {
       this.updateDevices()
       setInterval(this.updateDevices, 5000)
-      setTimeout(this.updateName, 2000)
+      setTimeout(this.doNameUpdate, 2000)
 
       ipcRenderer.on('exportCardCompleted', function(event, msg) {
         if (msg) {
@@ -136,7 +137,7 @@ let loadingInstance
 
             if (val.name != this.name) {
               this.name = val.name
-              this.updateName()
+              this.doNameUpdate()
             }
 
             if (val.audio.enabled && !this.playing) {
@@ -223,6 +224,10 @@ let loadingInstance
         x.onended = function() {
           setTimeout(vm.playNext(), 500)
         }
+      },
+      doNameUpdate: function() {
+        clearTimeout(this.voiceTimer)
+        this.voiceTimer = setTimeout(this.updateName, 1000)
       },
       updateName: function() {
         let dest = remote.app.getPath('userData') + '/voice.wav'
