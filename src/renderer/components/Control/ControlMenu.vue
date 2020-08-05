@@ -119,7 +119,7 @@ let loadingInstance
 
       ipcRenderer.on('exportCardCompleted', function(event, msg) {
         if (msg) {
-          Notification.warning({title: 'Oops', message: msg})
+          Notification.warning({title: 'Oops', message: msg, showClose: false, duration: 2500, onClick: function() { this.close() }})
         } 
         loadingInstance.close()
       })

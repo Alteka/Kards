@@ -4,7 +4,7 @@
       <defs>
         <radialGradient id="selected">
           <stop offset="0%" stop-color="#6ab42f"/>
-          <stop offset="100%" stop-color="#3c7013"/>
+          <stop offset="100%" stop-color="#588033"/>
         </radialGradient>
         <radialGradient id="gradient">
           <stop offset="0%" stop-color="#666"/>
