@@ -158,7 +158,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       vm.updateCardSize()
       setTimeout(vm.updateCardSize, 1000)
       ipcRenderer.send('getConfigTestCard')
-      this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
+      this.$message({customClass: "modal",showClose: false, duration: 3000, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {
         vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
       })

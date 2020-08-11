@@ -1,8 +1,8 @@
 <template>
 <el-row class="menu">
 
-  <el-col :span="8" style="margin-top: 3px; font-size: 18px;" :class="{ enabledText: config.visible }">
-    <strong>Enable</strong> <el-switch v-model="config.visible"></el-switch>
+  <el-col id="enableLabel" :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
+    <span class="pointer" @click="config.visible = !config.visible"><i class="fas fa-power-off pointer" :class="{ green: config.visible, red:!config.visible }"></i> Enable </span><el-switch v-model="config.visible"></el-switch>
   </el-col>
 
   <el-col :span="8">
@@ -14,11 +14,11 @@
     <el-popover v-model="confirmResetVisible" ref="confirmReset" placement="top-end" :offset="-12">
       <el-row>Reset all settings to default?</el-row>
       <el-row style="text-align: right; margin-top: 10px;">
-        <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false">Reset</el-button>
+        <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false"><i class="fas fa-undo"></i> Reset</el-button>
       </el-row>
     </el-popover>
-    <el-button type="primary" size="mini" round v-popover:confirmReset>Reset</el-button>
-    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')">Help</el-button>
+    <el-button type="primary" size="mini" round v-popover:confirmReset><i class="fas fa-undo"></i> Reset</el-button>
+    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')"><i class="fas fa-question"></i> Help</el-button>
   </el-col>
 
 
@@ -265,9 +265,16 @@ let loadingInstance
   .enabledText {
     color: #6AB42F !important;
   }
+  .pointer:hover {
+    cursor:pointer;
+  }
   .el-alert {
     width: 95%;
     margin-left: 2.5%;
     margin-bottom: 10px;
+  }
+  .red {
+    color: #d11;
+    margin-right: 5px;
   }
 </style>

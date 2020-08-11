@@ -31,7 +31,8 @@
     "showLogo": false,
     "bg": "#666",
     "fg": "#6AB42F",
-    "textColour": "#ffffff"
+    "textColour": "#ffffff",
+    "gradient": true
 },
 "ramp": {
     "direction": "Horizontal",

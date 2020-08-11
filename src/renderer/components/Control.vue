@@ -49,12 +49,12 @@
     </el-form-item>
   </el-col>
   <el-col :span="8">
-    <el-form-item label="Show Info">
+    <el-form-item label="Show Info"><i class="fas fa-info-circle green"></i>
       <el-switch v-model="config.showInfo"></el-switch>
     </el-form-item>
   </el-col>
 <el-col :span="8">
-    <el-form-item label="Motion">
+    <el-form-item label="Motion"><i class="fas fa-external-link-square-alt fa-rotate-90 green" style="position: relative; top: 1px; margin-right: 5px;"></i>
       <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync'"></el-switch>
     </el-form-item>
   </el-col>
@@ -62,7 +62,7 @@
 
 <el-row v-if="config.screen!=0">
   <el-col :span="8">
-    <el-form-item label="Windowed">
+    <el-form-item label="Windowed"><i class="fas fa-window-maximize green"></i>
       <el-switch v-model="config.windowed"></el-switch>
     </el-form-item>
   </el-col>
@@ -77,12 +77,12 @@
     </el-form-item>
   </el-col>
   <el-col :span="8" v-if="!config.windowed">
-    <el-form-item label="Fill Output">
+    <el-form-item label="Fill Output"><i class="fas fa-expand-arrows-alt green"></i>
       <el-switch v-model="config.fullsize"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
-    <el-form-item v-if="!config.fullsize" label="Show Bounds">
+    <el-form-item v-if="!config.fullsize" label="Show Bounds"><i class="fas fa-border-style green"></i>
       <el-switch v-model="config.bounds"></el-switch>
     </el-form-item>
   </el-col>
@@ -240,7 +240,10 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
   margin-bottom: 0px;
   font-family: Sansation;
 }
-
+.green {
+  color: #6ab42f;
+  margin-right: 5px;
+}
 .darkMode {
   background: #222;
 }
