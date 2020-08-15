@@ -2,7 +2,9 @@
 <el-row class="menu">
 
   <el-col id="enableLabel" :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
-    <span class="pointer" @click="config.visible = !config.visible"><i class="fas fa-power-off pointer" :class="{ green: config.visible, red:!config.visible }"></i> Enable </span><el-switch v-model="config.visible"></el-switch>
+    <span class="pointer" @click="config.visible = !config.visible">
+      <i class="fas fa-power-off pointer" :class="{ green: config.visible, red:!config.visible }"></i> Enable </span>
+      <el-switch style="margin-left: 4px;" v-model="config.visible"></el-switch>
   </el-col>
 
   <el-col :span="8">
