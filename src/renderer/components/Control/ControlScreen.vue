@@ -4,9 +4,15 @@
       <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
         <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" fill="#555" style="stroke-width:25;stroke:#3d3d3d;" />
         <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" fill="#6ab42f" style="stroke-width:25;stroke:#3d3d3d;" v-if="config.screen == scr.id" />
-        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.25" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
-        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.45" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/3" class="fa">{{ scr.icon }}</text>
-        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.36" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa" v-if="config.screen == scr.id && config.visible">{{ "\uf00c" }}</text>
+        
+        <text v-if="!scr.portrait" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.25" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
+        <text v-if="scr.portrait" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.55" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.width/4" text-anchor="middle" fill="white">{{ scr.bounds.width }}</text>
+        <text v-if="scr.portrait" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.31" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.width/4" text-anchor="middle" fill="white">x</text>
+        <text v-if="scr.portrait" :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.1" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.width/4" text-anchor="middle" fill="white">{{ scr.bounds.height }}</text>
+
+        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.45 - (scr.bounds.height*0.05 * scr.portrait)" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/3" class="fa">{{ scr.icon }}</text>
+        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.35 - (scr.bounds.height*0.05 * scr.portrait)" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa" v-if="config.screen == scr.id && config.visible && scr.primary">{{ "\uf00c" }}</text>
+        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.36 - (scr.bounds.height*0.05 * scr.portrait)" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa" v-if="config.screen == scr.id && config.visible && !scr.primary">{{ "\uf00c" }}</text>
       </g>
     </svg>
   </div>
@@ -58,12 +64,15 @@ const { screen } = require('electron').remote
           if ((scr.bounds.y + scr.bounds.height) > bottom) {
             bottom = scr.bounds.y + scr.bounds.height
           }
+          scr.portrait = (scr.bounds.width < scr.bounds.height) ? true : false;
           scr.description = scr.size.width + ' x ' + scr.size.height
 
           if (scr.internal || scr.id == this.primaryScreen) {
             scr.icon = "\uf109"
+            scr.primary = true
           } else {
             scr.icon = "\uf108"
+            scr.primary = false
           }
         }
         
