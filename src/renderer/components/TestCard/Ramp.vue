@@ -1,16 +1,18 @@
 <template>
   <div id="ramp">
-      <info-circle :config="config" :cardSize="cardSize" />
-      <div id="ramp1" :style="computedRamp1">
+    <info-circle :config="config" :cardSize="cardSize" />
+    <div id="ramp1" :style="computedRamp1">
       <div v-if="showSteps" class="steps" :style="computedSteps1">
         <swatch v-for="step in steps" :key="step" colour="white" :ire="step" :showText="config.ramp.overlay"></swatch>
       </div>
     </div>
-    <div id="ramp2" v-if="config.ramp.double" :style="computedRamp2">
-      <div v-if="showSteps" class="steps" :style="computedSteps2">
-        <swatch v-for="step in steps" :key="step" colour="white" :ire="step" :showText="config.ramp.overlay"></swatch>
+    <transition name="fade">
+      <div id="ramp2" v-if="config.ramp.double" :style="computedRamp2">
+        <div v-if="showSteps" class="steps" :style="computedSteps2">
+          <swatch v-for="step in steps" :key="step" colour="white" :ire="step" :showText="config.ramp.overlay"></swatch>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 

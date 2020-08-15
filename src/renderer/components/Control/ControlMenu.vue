@@ -1,8 +1,8 @@
 <template>
 <el-row class="menu">
 
-  <el-col :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
-    Enable <el-switch v-model="config.visible"></el-switch>
+  <el-col id="enableLabel" :span="8" style="margin-top: 3px;" :class="{ enabledText: config.visible }">
+    <span class="pointer" @click="config.visible = !config.visible"><i class="fas fa-power-off pointer" :class="{ green: config.visible, red:!config.visible }"></i> Enable </span><el-switch v-model="config.visible"></el-switch>
   </el-col>
 
   <el-col :span="8">
@@ -14,11 +14,11 @@
     <el-popover v-model="confirmResetVisible" ref="confirmReset" placement="top-end" :offset="-12">
       <el-row>Reset all settings to default?</el-row>
       <el-row style="text-align: right; margin-top: 10px;">
-        <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false">Reset</el-button>
+        <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false"><i class="fas fa-undo"></i> Reset</el-button>
       </el-row>
     </el-popover>
-    <el-button type="primary" size="mini" round v-popover:confirmReset>Reset</el-button>
-    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')">Help</el-button>
+    <el-button type="primary" size="mini" round v-popover:confirmReset><i class="fas fa-undo"></i> Reset</el-button>
+    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')"><i class="fas fa-question"></i> Help</el-button>
   </el-col>
 
 
@@ -60,26 +60,29 @@
  <el-drawer :with-header="false" :visible.sync="drawerImage" direction="btt" size="100px">
    <el-row class="drawerContent">
      <el-col :span="10">
-       <el-radio-group v-model="imageSource" size="medium" :disabled="!config.visible || config.cardType=='audioSync'">
+       <el-radio-group v-model="config.export.imageSource" size="medium" :disabled="config.cardType=='audioSync'">
          <el-radio-button label="card">Test Card</el-radio-button>
-         <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
+         <el-tooltip :disabled="!config.windowed" effect="dark" content="Disable windowed output and then disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+          <el-tooltip :disabled="!config.fullsize" effect="dark" content="Disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+            <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
+          </el-tooltip>
+         </el-tooltip>
        </el-radio-group>
      </el-col>
      <el-col :span="11">
-       <el-radio-group v-model="imageDest" size="medium" :disabled="!config.visible || config.cardType=='audioSync'">
+       <el-radio-group v-model="config.export.target" size="medium" :disabled="config.cardType=='audioSync'">
          <el-radio-button label="file">Save to File</el-radio-button>
          <el-radio-button label="wallpaper">Set Wallpaper</el-radio-button>
        </el-radio-group>
      </el-col>
      <el-col :span="3">
-       <el-button size="medium" :disabled="!config.visible || config.cardType=='audioSync'" v-on:click="exportCard">OK</el-button>
+       <el-button size="medium" :disabled="config.cardType=='audioSync'" v-on:click="exportCard">OK</el-button>
      </el-col>
    </el-row>
    <el-row>
      <el-alert v-if="config.cardType == 'audioSync'" title = "Choose a different card - Even we can't save AV Sync to a  still image..." type="error" center show-icon effect="dark" :closable="false"></el-alert>
-     <el-alert v-if="!config.visible" title="Enable output first" type="success" center show-icon effect="dark" close-text="Enable" @close="enabler"></el-alert>
-     <el-alert v-if="config.fullsize && config.screen != 0" title="Disable 'Fill Output' to save test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
-     <el-alert v-if="config.screen == 0" title="Use a fullscreen output and disable 'Fill Output' to save test card within larger canvas" type="success" center show-icon effect="light" :closable="false"></el-alert>
+     
+     
   </el-row>
 </el-drawer>
 
@@ -90,6 +93,9 @@
 const log = require('electron-log')
 const say = require('say')
 const { ipcRenderer, remote } = require('electron')
+import { Loading, Notification } from 'element-ui'
+let loadingInstance
+
   export default {
     props: {
       config: Object
@@ -101,32 +107,38 @@ const { ipcRenderer, remote } = require('electron')
         drawerImage: false,
         curAudio: null,
         playing: false,
-        imageSource: "card",
-        imageDest: "file",
         name: "",
         voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav' + '?bust=' + Math.round((Math.random()*100000)),
+        voiceTimer: null,
         audioDevices: []
       }
     },
     mounted: function() {
       this.updateDevices()
       setInterval(this.updateDevices, 5000)
-      setTimeout(this.updateName, 2000)
+      setTimeout(this.doNameUpdate, 2000)
+
+      ipcRenderer.on('exportCardCompleted', function(event, msg) {
+        if (msg) {
+          Notification.warning({title: 'Oops', message: msg, showClose: false, duration: 2500, onClick: function() { this.close() }})
+        } 
+        loadingInstance.close()
+      })
     },
     watch: {
       config: {
         handler: function (val, oldVal) { 
-          document.getElementById('stereo').setSinkId(val.audio.deviceId)
-          document.getElementById('phase').setSinkId(val.audio.deviceId)
-          document.getElementById('pink').setSinkId(val.audio.deviceId)
-          document.getElementById('white').setSinkId(val.audio.deviceId)
-          document.getElementById('tone').setSinkId(val.audio.deviceId)
-          document.getElementById('voice').setSinkId(val.audio.deviceId)
+            document.getElementById('stereo').setSinkId(val.audio.deviceId)
+            document.getElementById('phase').setSinkId(val.audio.deviceId)
+            document.getElementById('pink').setSinkId(val.audio.deviceId)
+            document.getElementById('white').setSinkId(val.audio.deviceId)
+            document.getElementById('tone').setSinkId(val.audio.deviceId)
+            document.getElementById('voice').setSinkId(val.audio.deviceId)
 
-          if (val.name != this.name) {
-            this.name = val.name
-            this.updateName()
-          }
+            if (val.name != this.name) {
+              this.name = val.name
+              this.doNameUpdate()
+            }
 
             if (val.audio.enabled && !this.playing) {
               log.info('Starting audio output')
@@ -143,6 +155,10 @@ const { ipcRenderer, remote } = require('electron')
             if (val.fullsize == 1) {
               this.imageSource = "card"
             }
+
+            if (val.fullsize || val.windowed ) {
+              this.config.export.imageSource = "card"
+            }
          },
         deep: true
       },
@@ -157,23 +173,9 @@ const { ipcRenderer, remote } = require('electron')
         ipcRenderer.send(val)
       },
       exportCard: function() {
-        if (this.imageSource=="card") {
-          if(this.imageDest=="file") {
-            ipcRenderer.send('exportCard', 'testCardToPNG')
-          }
-          else if (this.imageDest=="wallpaper") {
-            ipcRenderer.send('exportCard', "testCardToWallpaper")
-          }
-        }
-        else if (this.imageSource=="canvas") {
-          if(this.imageDest=="file") {
-            ipcRenderer.send('exportCard', "canvasToPNG")
-          }
-          else if (this.imageDest=="wallpaper") {
-            ipcRenderer.send('exportCard', "canvasToWallpaper")
-          }
-        }
-        this.drawerImage = false
+        ipcRenderer.send('exportCard')
+        loadingInstance = Loading.service({ fullscreen: true, text:"Capturing Test Card", background: 'rgba(0, 0, 0, 0.85)'})
+        this.drawerImage = false        
       },
       openUrl: function(link) {
         log.info('Opening external url: ' + link)
@@ -223,6 +225,10 @@ const { ipcRenderer, remote } = require('electron')
           setTimeout(vm.playNext(), 500)
         }
       },
+      doNameUpdate: function() {
+        clearTimeout(this.voiceTimer)
+        this.voiceTimer = setTimeout(this.updateName, 1000)
+      },
       updateName: function() {
         let dest = remote.app.getPath('userData') + '/voice.wav'
         let name = this.config.name
@@ -239,9 +245,6 @@ const { ipcRenderer, remote } = require('electron')
             voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
           }
         })
-      },
-      enabler: function() {
-        this.config.visible = true
       }
     }
   }
@@ -262,9 +265,16 @@ const { ipcRenderer, remote } = require('electron')
   .enabledText {
     color: #6AB42F !important;
   }
+  .pointer:hover {
+    cursor:pointer;
+  }
   .el-alert {
     width: 95%;
     margin-left: 2.5%;
     margin-bottom: 10px;
+  }
+  .red {
+    color: #d11;
+    margin-right: 5px;
   }
 </style>

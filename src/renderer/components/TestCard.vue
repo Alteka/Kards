@@ -4,14 +4,16 @@
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync'}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
-        <Alteka v-if="config.cardType == 'alteka'" :config="config" :cardSize="cardSize"></Alteka>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize"></Ramp>
-        <AudioSync v-if="config.cardType=='audioSync'" :config="config" :cardSize="cardSize"></AudioSync>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
+        <transition name="fade">
+          <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
+          <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
+          <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
+          <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize"></Bars>
+          <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize"></Ramp>
+          <AudioSync v-if="config.cardType=='audioSync'" :config="config" :cardSize="cardSize"></AudioSync>
+          <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
+          <Alteka v-if="config.cardType == 'alteka'" :config="config" :cardSize="cardSize"></Alteka>
+        </transition>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
@@ -112,42 +114,37 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
         ipcRenderer.send('closeTestCard')
       },
       updateCardSize: function() {
-        if (this.config.screen == 0) {
+        if (this.config.windowed) {
           this.cardSize = this.config.winWidth + ' x ' + this.config.winHeight
-        } else if (this.config.fullsize) {
-          this.cardSize = visualViewport.width + ' x ' + visualViewport.height
         } else {
           this.cardSize = this.config.width + ' x ' + this.config.height
         }
       },
-      testCardToPNG: function() {
-        log.info('Attempt to capture test card as PNG')
-        let size = document.getElementById('cardForPNG').getBoundingClientRect()
-        domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
-          .then(function (dataUrl) {
-          ipcRenderer.send('saveAsPNG', dataUrl)
-        })
-      },
-      boundsToPNG: function() {
-        log.info('Attempt to capture output window as PNG')
-        domtoimage.toPng(document.getElementById('bounds'))
-          .then(function (dataUrl) {
-          ipcRenderer.send('saveAsPNG', dataUrl)
-        })
-      },
-      testCardToWallpaper: function() {
-        log.info('Attempt to capture test card and set as Wallpaper')
-        let size = document.getElementById('cardForPNG').getBoundingClientRect()
-        domtoimage.toPng(document.getElementById('cardForPNG'), {width: size.width, height: size.height})
-          .then(function (dataUrl) {
-          ipcRenderer.send('setAsWallpaper', dataUrl)
-        })
-      },
-      boundsToWallpaper: function() {
-        log.info('Attempt to capture output window and set as Wallpaper')
-        domtoimage.toPng(document.getElementById('bounds'))
-          .then(function (dataUrl) {
-          ipcRenderer.send('setAsWallpaper', dataUrl)
+      exportTestCard: function(settings) {
+        var wasAnimated = this.config.animated
+        var vm = this
+        this.config.animated = false // stop animations in order to capture image
+
+        log.info('Attempt to capture ' + settings.imageSource + ' as ' + settings.target)
+        
+        let opts = {}
+        let element = 'bounds'
+
+        if (settings.imageSource == 'card') {
+          let size = document.getElementById('cardForPNG').getBoundingClientRect()
+          opts.width = size.width
+          opts.height = size.height
+          element = 'cardForPNG'
+        }
+        
+        domtoimage.toPng(document.getElementById(element), opts).then(function (dataUrl) {
+          if (settings.target == 'file') {
+            ipcRenderer.send('saveAsPNG', dataUrl)
+          } else {
+            ipcRenderer.send('setAsWallpaper', dataUrl)
+          }
+          console.log('Resetting animated to ', wasAnimated)
+          vm.config.animated = wasAnimated
         })
       }
     },
@@ -161,26 +158,13 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       vm.updateCardSize()
       setTimeout(vm.updateCardSize, 1000)
       ipcRenderer.send('getConfigTestCard')
-      this.$message({customClass: "modal",showClose: true, message: 'Press escape to close test card'});
+      this.$message({customClass: "modal",showClose: false, duration: 3000, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {
         vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
       })
-      ipcRenderer.on('exportCard', function(event, args) {
-        console.log('exportCard', args)
-        switch (args) {
-          case 'testCardToPNG':
-            vm.testCardToPNG()
-          break;
-          case 'outputToPNG':
-            vm.boundsToPNG()
-          break
-          case 'testCardToWallpaper':
-            vm.testCardToWallpaper()
-          break
-          case 'outputToWallpaper':
-            vm.boundsToWallpaper()
-          break
-        }
+      ipcRenderer.on('exportCard', function(event) {
+        console.log('exportCard', vm.config.export)
+        vm.exportTestCard(vm.config.export)
       })
 
       window.addEventListener('contextmenu', (e) => {

@@ -31,7 +31,8 @@
     "showLogo": false,
     "bg": "#666",
     "fg": "#6AB42F",
-    "textColour": "#ffffff"
+    "textColour": "#ffffff",
+    "gradient": true
 },
 "ramp": {
     "direction": "Horizontal",
@@ -39,6 +40,10 @@
     "stepped": false,
     "double": false,
     "overlay": false
+},
+"export": {
+    "imageSource": "card",
+    "target": "file"
 },
 "name": "PPT Main",
 "width": 1920,

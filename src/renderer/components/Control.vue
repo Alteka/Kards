@@ -13,7 +13,7 @@
   <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px;">
     
     <el-tab-pane label="Alteka" name="alteka">
-      <control-alteka :alteka="config.alteka"></control-alteka>
+      <control-alteka :alteka="config.alteka" :colors="predefineColors"></control-alteka>
     </el-tab-pane>
 
     <el-tab-pane label="Bars" name="bars">
@@ -21,7 +21,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="Grid" name="grid">
-      <control-grid :grid="config.grid"></control-grid>
+      <control-grid :grid="config.grid" :colors="predefineColors"></control-grid>
     </el-tab-pane>
 
     <el-tab-pane label="Ramp" name="ramp">
@@ -29,7 +29,7 @@
     </el-tab-pane>
    
     <el-tab-pane label="Name" name="placeholder">
-      <control-placeholder :placeholder="config.placeholder"></control-placeholder>
+      <control-placeholder :placeholder="config.placeholder" :colors="predefineColors"></control-placeholder>
     </el-tab-pane>
 
     <el-tab-pane label="AV Sync" name="audioSync">
@@ -45,16 +45,16 @@
 <el-row>
   <el-col :span="8">
     <el-form-item label="Name" label-width="70px">
-      <el-input v-model="config.name"></el-input>
+      <el-input v-model="config.name" placeholder=""></el-input>
     </el-form-item>
   </el-col>
   <el-col :span="8">
-    <el-form-item label="Show Info">
+    <el-form-item label="Show Info"><i class="fas fa-info-circle green"></i>
       <el-switch v-model="config.showInfo"></el-switch>
     </el-form-item>
   </el-col>
 <el-col :span="8">
-    <el-form-item label="Motion">
+    <el-form-item label="Motion"><i class="fas fa-external-link-square-alt fa-rotate-90 green" style="position: relative; top: 1px; margin-right: 5px;"></i>
       <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync'"></el-switch>
     </el-form-item>
   </el-col>
@@ -62,7 +62,7 @@
 
 <el-row v-if="config.screen!=0">
   <el-col :span="8">
-    <el-form-item label="Windowed">
+    <el-form-item label="Windowed"><i class="fas fa-window-maximize green"></i>
       <el-switch v-model="config.windowed"></el-switch>
     </el-form-item>
   </el-col>
@@ -77,12 +77,12 @@
     </el-form-item>
   </el-col>
   <el-col :span="8" v-if="!config.windowed">
-    <el-form-item label="Fill Output">
+    <el-form-item label="Fill Output"><i class="fas fa-expand-arrows-alt green"></i>
       <el-switch v-model="config.fullsize"></el-switch>
     </el-form-item>
   </el-col>
   <el-col :span="8">
-    <el-form-item v-if="!config.fullsize" label="Show Bounds">
+    <el-form-item v-if="!config.fullsize" label="Show Bounds"><i class="fas fa-border-style green"></i>
       <el-switch v-model="config.bounds"></el-switch>
     </el-form-item>
   </el-col>
@@ -146,13 +146,17 @@ import ControlMenu from './Control/ControlMenu.vue'
 
 import ControlScreen from './Control/ControlScreen.vue'
 
+var Mousetrap = require('mousetrap')
+Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
+
   export default {
     name: 'control',
     components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu },
     data: function () {
     return {
       config: require('../../main/defaultConfig.json'),
-      sync: false
+      sync: false,
+      predefineColors: ['#ffffff', '#d3d3d3', '#7f7f7f', '#3e3e3e', '#000000', '#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#b52f2f', '#D75B1F', '#D7E133', '#6ab42f', '#2fb48d', '#2fa9b4', '#2f45b4', '#ac2fb4']
     }
   },
     created: function() {
@@ -165,8 +169,13 @@ import ControlScreen from './Control/ControlScreen.vue'
         vm.sync = true
       })
       ipcRenderer.on('testCardResize', function(event, w, h) {
-        vm.config.winWidth = w
-        vm.config.winHeight = h
+        if (config.windowed) {
+          vm.config.winWidth = w
+          vm.config.winHeight = h
+        } else {
+          vm.config.width = w
+          vm.config.height = h
+        }
       })
       ipcRenderer.on('testCardMoveToScreen', function(event, id) {
         vm.config.screen = id
@@ -175,10 +184,23 @@ import ControlScreen from './Control/ControlScreen.vue'
     },
 
     mounted: function(){
+      let vm = this
       this.$nextTick(function () {
         let h = document.getElementById('wrapper').clientHeight
         let w = document.getElementById('wrapper').clientWidth
         ipcRenderer.send('controlResize', w, h)
+      })
+      Mousetrap.bind(['command+f', 'ctrl+f'], function() {
+        vm.config.visible = !vm.config.visible
+        return false;
+      })
+      Mousetrap.bind(['command+i', 'ctrl+i'], function() {
+        vm.config.showInfo = !vm.config.showInfo
+        return false;
+      })
+      Mousetrap.bind(['command+m', 'ctrl+m'], function() {
+        vm.config.animated = !vm.config.animated
+        return false;
       })
     },
 
@@ -208,7 +230,6 @@ import ControlScreen from './Control/ControlScreen.vue'
  body {
   font-family: Sansation, Helvetica, sans-serif;
   overflow: hidden !important;
-   -webkit-user-select: none;
 }
 @font-face {
   font-family: Sansation;
@@ -219,7 +240,10 @@ import ControlScreen from './Control/ControlScreen.vue'
   margin-bottom: 0px;
   font-family: Sansation;
 }
-
+.green {
+  color: #6ab42f;
+  margin-right: 5px;
+}
 .darkMode {
   background: #222;
 }

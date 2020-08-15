@@ -60,10 +60,12 @@
           <clipPath id="clipSmallCircle">
             <circle cx="0" cy="0" r="25" />
           </clipPath>
-          <g v-if="config.animated" id="spinny-radar" >
-              <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
-              <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' />
-          </g>
+          <transition name="fade">
+            <g v-if="config.animated" id="spinny-radar" >
+                <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
+                <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' />
+            </g>
+          </transition>
           <linearGradient id="vAlphaB" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" style="stop-color:rgb(0 0 0);stop-opacity:0" />
             <stop offset="100%" style="stop-color:rgb(0 0 0);stop-opacity:1" />
@@ -126,7 +128,9 @@
     </div>
 
     <div id="centerbox">
-      <img v-if="config.alteka.logoUrl != ''" id="customLogo" :src="config.alteka.logoUrl" />      
+      <transition name="fade">
+        <img v-if="config.alteka.logoUrl != ''" id="customLogo" :src="config.alteka.logoUrl" />      
+      </transition>
 
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
         <defs>
@@ -156,23 +160,29 @@
         </defs>
 
         <g id="clip-me" clip-path="url('#clipCircle')">
-          <image v-if="!config.alteka.showLogo || config.alteka.logoUrl == ''" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
+          <transition name="fade">
+            <image v-if="!config.alteka.showLogo || config.alteka.logoUrl == ''" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
+          </transition>
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
-          <g v-if="config.showInfo">
+          <transition name="fade">
+            <g v-if="config.showInfo">
             <g v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" :fill="config.alteka.bg" fill-opacity="75%">
               <rect x="-45" y="10" width="90" height="5" />
               <rect x="-45" y="-15" width="90" height="7" />
             </g>
-            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="6px" :style="{fill: text}">{{config.name}}</text>
-            <text x="-40" y="14" w="50" text-anchor="start" font-size="4px" :style="{fill: text}">Alteka Kards {{require('./../../../../package.json').version}}</text>
-            <text x="40" y="14" w="50" text-anchor="end" font-size="4px" :style="{fill: text}">{{cardSize}}</text>
+            <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">ALTEKA Kards {{require('./../../../../package.json').version}}</text>
+            <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{cardSize}}</text>
           </g>
+          </transition>
+          <transition name="fade">
           <g v-if="config.animated" id="spinny-box">
             <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite" />
             <path d='M0,0 L45,0 A45,45 0 0,1 44.83,3.92z' fill="url('#vAlpha')" />
           </g>
+          </transition>
           <circle cx="0" cy="0" r="45" stroke="white" stroke-width="1" fill="none" />
         </g>
       </svg>
@@ -194,6 +204,24 @@ export default {
     config: Object,
     cardSize: String
   },
+  watch: {
+      config: {
+        handler: function (val, oldVal) { 
+          if (val.alteka != oldVal.alteka) {
+            let vm = this
+            setTimeout(function(){
+              let size = {
+                width: document.getElementById("alteka").getBoundingClientRect().width,
+                height: document.getElementById("alteka").getBoundingClientRect().height
+              }
+              vm.handleResize(size)
+            }, 250)
+            
+          }
+         },
+        deep: true
+      },
+    },
   computed: {
     text: function() {
       if (this.config.alteka.showLogo && this.config.alteka.logoUrl != '') {

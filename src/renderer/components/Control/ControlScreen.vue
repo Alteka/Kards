@@ -2,10 +2,11 @@
   <div> 
     <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 125px;">
       <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
-        <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:25;stroke:#3d3d3d;fill:#666;" />
-        <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" style="stroke-width:25;stroke:#3d3d3d;fill:#6ab42f;" v-if="config.screen == scr.id" />
+        <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" fill="#555" style="stroke-width:25;stroke:#3d3d3d;" />
+        <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" fill="#6ab42f" style="stroke-width:25;stroke:#3d3d3d;" v-if="config.screen == scr.id" />
         <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.25" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
         <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.45" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/3" class="fa">{{ scr.icon }}</text>
+        <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height*0.36" :width="scr.bounds.width" :height="scr.bounds.height" text-anchor="middle" fill="white" :font-size="scr.bounds.height/6" class="fa" v-if="config.screen == scr.id && config.visible">{{ "\uf00c" }}</text>
       </g>
     </svg>
   </div>
@@ -21,6 +22,7 @@ const { screen } = require('electron').remote
       return {
         screens: screen.getAllDisplays(),
         primaryScreen: screen.getPrimaryDisplay().id,
+        check: "\uf00c",
         viewBox: '0 0 0 0'
       }
     },
@@ -66,9 +68,10 @@ const { screen } = require('electron').remote
         }
         
         this.viewBox = (left - 25) + " " + (top - 25) + " " + (Math.abs(right - left) + 50) + " " + (Math.abs(bottom - top) + 50)
+        this.setOutputToMatchScreen()
       },
       setOutputToMatchScreen: function() {
-        if (this.config.screen !=0 && this.config.fullsize) {
+        if (!this.config.windowed && this.config.fullsize) {
           for (const scr of this.screens) {
             if (scr.id == this.config.screen) {
               this.config.top = 0
@@ -79,6 +82,16 @@ const { screen } = require('electron').remote
               this.config.maxHeight = scr.size.height
             }
           }
+        }
+        let exists = false
+        for (const scr of this.screens) {
+          if (scr.id == this.config.screen) {
+            exists = true
+          }
+        }
+        if (!exists) {
+          console.log('Update screen as selected screen doesnt exist...')
+          this.config.screen = this.primaryScreen
         }
       }
     },

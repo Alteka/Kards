@@ -4,12 +4,12 @@
    <el-row>
         <el-col :span="8">
           <el-form-item label="Background">
-            <el-color-picker v-model="placeholder.bg"></el-color-picker>
+            <el-color-picker v-model="placeholder.bg" :predefine="colors"></el-color-picker>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Foreground">
-            <el-color-picker v-model="placeholder.fg"></el-color-picker>
+            <el-color-picker v-model="placeholder.fg" :predefine="colors"></el-color-picker>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -31,7 +31,8 @@
 <script>
   export default {
     props: {
-      placeholder: Object
+      placeholder: Object,
+      colors: Array
     },
     data: function() {
       return {

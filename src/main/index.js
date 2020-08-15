@@ -7,7 +7,13 @@ const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
 const log = require('electron-log');
 
-const store = new Store();
+const store = new Store({
+  migrations: {
+    '<=0.8.0': store => {
+      store.delete('KardsConfig')
+      log.info('Resetting to default settings due to upgrade')
+    }
+  }});
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -69,7 +75,7 @@ function createWindow () {
 
 app.on('ready', function() {
   log.info('Launching Kards')
-  config = store.get('config', getDefaultConfig())
+  config = store.get('KardsConfig', getDefaultConfig())
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config: ', config)
@@ -97,7 +103,7 @@ ipcMain.on('config', (event, arg) => {
     }
   }
   touchBar.setConfig(config)
-  store.set('config', config)
+  store.set('KardsConfig', config)
 })
 
 ipcMain.on('getConfigTestCard', (event, arg) => {
@@ -116,8 +122,25 @@ ipcMain.on('controlResize', (event, w, h) => {
   controlWindow.setContentSize(620, h)
 })
 
-ipcMain.on('exportCard', (event, type) => {
-  testCardWindow.webContents.send('exportCard', type)
+
+ipcMain.on('exportCard', (event) => {
+  if (testCardWindow != null) {
+    testCardWindow.webContents.send('exportCard')
+  } else {
+    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
+    if (!config.windowed) {
+      for (const disp of screen.getAllDisplays()) {
+        if (disp.id == config.screen) {
+          c.width = disp.bounds.width
+          c.height = disp.bounds.height
+        }
+      }
+    }
+    showTestCardWindow(c) 
+    log.info('Creating dummy test card window to capture image')
+    // once shown it will make the image, and once that's made the window will be closed. 
+  }
+  
 })
 
 
@@ -130,30 +153,43 @@ ipcMain.on('saveAsPNG', (event, arg) => {
         if (err) {
           dialog.showErrorBox('Error Saving File', JSON.stringify(err))
           log.error('Couldnt save file: ', err)
+          controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
           log.info('PNG saved to: ', path)
+          controlWindow.webContents.send('exportCardCompleted')
         }
       })
     } else {
       log.info('Save dialog closed')
+      controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
     }
   })
+  if (!config.visible) {
+    log.info('Closing dummy test card window')
+    testCardWindow.close()
+  }
 })
 
 ipcMain.on('setAsWallpaper', (event, arg) => {
-  let dest = app.getPath('userData') + '/wallpaper.png'
+  let dest = app.getPath('userData') + '/wallpaper' + Math.round((Math.random()*100000)) + '.png'
   var base64Data = arg.replace(/^data:image\/png;base64,/, "")
   fs.writeFile(dest, base64Data, 'base64', err => {
     if (err) {
       dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
       log.error('Couldnt save wallpaper file ', err)
+      controlWindow.webContents.send('exportCardCompleted', 'Could not write temporary file')
       return
     }
     (async () => {
       await wallpaper.set(dest);
       log.info('Setting png as wallpaper')
+      controlWindow.webContents.send('exportCardCompleted')
       })();
     })
+    if (!config.visible) {
+      log.info('Closing dummy test card window')
+      testCardWindow.close()
+    }
   })
   
 ipcMain.on('resetDefault', (event, arg) => {
@@ -229,22 +265,32 @@ function manageTestCardWindow() {
     testCardWindow.close()
   } else if (testCardWindow != null && config.visible && config.screen != testCardWindowScreen) {
     // a different screen as been selected..
-    for (const disp of displays) {
-      if (disp.id == config.screen) {
-        if (config.windowed) {
-          testCardWindow.setBounds({
-            x: disp.bounds.x + (disp.bounds.width - config.winWidth)/2,
-            y: disp.bounds.y + (disp.bounds.height - config.winHeight)/2,
+    if (config.windowed) {
+      for (const disp of displays) {
+        if (disp.id == config.screen) {
+          if (config.winWidth > disp.bounds.width) {
+            config.winWidth = disp.bounds.width
+            controlWindow.webContents.send('config', config)
+          }
+          if (config.winHeight > disp.bounds.height) {
+            config.winHeight = disp.bounds.height
+            controlWindow.webContents.send('config', config)
+          }
+          let newBounds = {
+            x: Math.round(disp.bounds.x + (disp.bounds.width - config.winWidth)/2),
+            y: Math.round(disp.bounds.y + (disp.bounds.height - config.winHeight)/2),
             width: config.winWidth,
             height: config.winHeight
-          })
+          }
+          console.log('Moving window to: ', newBounds)
+          testCardWindow.setBounds(newBounds)
           testCardWindowScreen = disp.id
-        } else {
-          testCardWindow.close()
-          setTimeout(manageTestCardWindow, 500)
-        }  
+        }
       }
-    }
+    } else {
+      testCardWindow.close()
+      setTimeout(manageTestCardWindow, 500)
+    }  
   } else if (testCardWindow != null) {
     if (testCardWindow.isFullScreen() || testCardWindow.isSimpleFullScreen()) {
       if (config.windowed) {
@@ -272,7 +318,12 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.loadURL(testCardUrl)
 
   testCardWindow.once('ready-to-show', () => {
-    testCardWindow.show()
+    if (config.visible) {
+      testCardWindow.show()
+    } else {
+      console.log('A dummy test card is ready to turn into an image')
+      testCardWindow.webContents.send('exportCard')
+    }
   })
 
   testCardWindow.on('resize', function() {
