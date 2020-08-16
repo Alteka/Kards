@@ -1,4 +1,4 @@
-const { app, BrowserWindow, TouchBar, nativeImage } = require('electron')
+const { app, BrowserWindow, TouchBar, nativeImage, ipcMain, ipcRenderer } = require('electron')
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer, TouchBarPopover } = TouchBar
 const path = require('path')
 
@@ -43,10 +43,19 @@ const enableButton = new TouchBarButton({
     }
   })
 
-  
+  const windowedButton = new TouchBarButton({
+    label: 'Windowed',
+    icon: disabled,
+    iconPosition: 'left',
+    click: () => {
+        config.windowed = !config.windowed
+        window.webContents.send('config', config)
+    }
+  })
+
   const touchBar = new TouchBar({
     items: [
-      enableButton, showInfoButton, motionButton
+      enableButton, showInfoButton, motionButton, windowedButton
     ]
   })
 
@@ -56,7 +65,7 @@ const enableButton = new TouchBarButton({
     enableButton.icon = config.visible ? enabled : disabled
     motionButton.icon = config.animated ? enabled : disabled
     showInfoButton.icon = config.showInfo ? enabled : disabled
-
+    windowedButton.icon = config.windowed ? enabled : disabled
 
   }
 
