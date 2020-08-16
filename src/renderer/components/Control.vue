@@ -202,6 +202,14 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         vm.config.animated = !vm.config.animated
         return false;
       })
+      Mousetrap.bind(['command+w', 'ctrl+w'], function() {
+        vm.config.windowed = !vm.config.windowed
+        return false;
+      })
+      Mousetrap.bind(['command+s', 'ctrl+s'], function() {
+        ipcRenderer.send('exportCard')
+        return false;
+      })
     },
 
 

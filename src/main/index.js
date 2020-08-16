@@ -123,6 +123,14 @@ ipcMain.on('controlResize', (event, w, h) => {
 })
 
 
+ipcMain.on('testCardKeyPress', (event, msg) => {
+  console.log('testCardKeyPress', msg)
+  config[msg] = !config[msg]
+  controlWindow.webContents.send('config', config)
+  testCardWindow.webContents.send('config', config)
+})
+
+
 ipcMain.on('exportCard', (event) => {
   if (testCardWindow != null) {
     testCardWindow.webContents.send('exportCard')

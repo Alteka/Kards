@@ -68,7 +68,23 @@ import Placeholder from './TestCard/Placeholder'
 import domtoimage from 'dom-to-image'
 
 var Mousetrap = require('mousetrap')
-Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
+Mousetrap.bind(['command+f', 'ctrl+f', 'esc'], function() { ipcRenderer.send('closeTestCard') }, 'keyup')
+Mousetrap.bind(['command+i', 'ctrl+i'], function() {
+  ipcRenderer.send('testCardKeyPress', 'showInfo')
+  return false;
+})
+Mousetrap.bind(['command+m', 'ctrl+m'], function() {
+  ipcRenderer.send('testCardKeyPress', 'animated')
+  return false;
+})
+Mousetrap.bind(['command+w', 'ctrl+w'], function() {
+  ipcRenderer.send('testCardKeyPress', 'windowed')
+  return false;
+})
+Mousetrap.bind(['command+s', 'ctrl+s'], function() {
+  ipcRenderer.send('exportCard')
+  return false;
+})
 
 const log = require('electron-log')
 
