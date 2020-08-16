@@ -64,8 +64,8 @@
      <el-col :span="10">
        <el-radio-group v-model="config.export.imageSource" size="medium" :disabled="config.cardType=='audioSync'">
          <el-radio-button label="card">Test Card</el-radio-button>
-         <el-tooltip :disabled="!config.windowed" effect="dark" content="Disable windowed output and then disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
-          <el-tooltip :disabled="!config.fullsize" effect="dark" content="Disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+         <el-tooltip :disabled="!config.windowed || config.cardType=='audioSync'" effect="dark" content="Disable windowed output and then disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+          <el-tooltip :disabled="!config.fullsize || config.cardType=='audioSync'" effect="dark" content="Disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
             <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
           </el-tooltip>
          </el-tooltip>
