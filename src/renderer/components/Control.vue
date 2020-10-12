@@ -232,7 +232,7 @@ import { Notification } from 'element-ui';
             type: 'info',
             duration: 0,
             dangerouslyUseHTMLString: true,
-            message: '<a href=\'' + link + '\'>Download v' + response.data.tag_name + '</a>'
+            message: 'v' + response.data.tag_name + ': <a href=\'' + link + '\'>Download</a>'
           });
 
           }
