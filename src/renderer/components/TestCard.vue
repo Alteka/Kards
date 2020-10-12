@@ -4,7 +4,6 @@
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync'}">
-        <transition name="fade">
           <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
           <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
           <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
@@ -13,7 +12,6 @@
           <AudioSync v-if="config.cardType=='audioSync'" :config="config" :cardSize="cardSize"></AudioSync>
           <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
           <Alteka v-if="config.cardType == 'alteka'" :config="config" :cardSize="cardSize"></Alteka>
-        </transition>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
