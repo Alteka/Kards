@@ -230,8 +230,9 @@ import { Notification } from 'element-ui';
             vm.$notify({
             title: 'An Update Is Available',
             type: 'info',
+            duration: 0,
             dangerouslyUseHTMLString: true,
-            message: '<a href=\'' + link + '\'>Download</a>'
+            message: '<a href=\'' + link + '\'>Download v' + response.data.tag_name + '</a>'
           });
 
           }
@@ -239,7 +240,7 @@ import { Notification } from 'element-ui';
         .catch(function (error) {
           console.log(error);
         })
-      }, 1000)
+      }, 3000)
     },
 
 
