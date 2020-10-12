@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "axios": "^0.20.0",
     "dom-to-image": "^2.6.0",
     "electron-log": "^4.2.2",
     "electron-store": "^5.2.0",

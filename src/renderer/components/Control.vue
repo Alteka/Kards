@@ -149,6 +149,9 @@ import ControlScreen from './Control/ControlScreen.vue'
 var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
+const axios = require('axios')
+import { Notification } from 'element-ui';
+
   export default {
     name: 'control',
     components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu },
@@ -202,6 +205,41 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         vm.config.animated = !vm.config.animated
         return false;
       })
+
+      setTimeout(function() {
+        let current = require('./../../../package.json').version
+
+
+      // Make a request for a user with a given ID
+      axios.get('https://api.github.com/repos/alteka/kards/releases/latest')
+        .then(function (response) {
+          // handle success
+          if (response.data.tag_name != current) {
+
+            let link = ''
+            for (const asset in response.data.assets) {
+              // console.log(process.platform == 'darwin')
+              if (process.platform == 'darwin' && response.data.assets[asset].name.includes('.pkg')) {
+                link = response.data.assets[asset].browser_download_url
+              }
+              if (process.platform != 'darwin' && response.data.assets[asset].name.includes('.exe')) {
+                link = response.data.assets[asset].browser_download_url
+              }
+            }
+
+            vm.$notify({
+            title: 'An Update Is Available',
+            type: 'info',
+            dangerouslyUseHTMLString: true,
+            message: '<a href=\'' + link + '\'>Download</a>'
+          });
+
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+      }, 1000)
     },
 
 

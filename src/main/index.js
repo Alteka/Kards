@@ -5,7 +5,7 @@ const fs = require('fs')
 const Store = require('electron-store')
 const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
-const log = require('electron-log');
+const log = require('electron-log')
 
 const store = new Store({
   migrations: {
