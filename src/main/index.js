@@ -118,15 +118,20 @@ ipcMain.on('controlResize', (event, w, h) => {
   controlWindow.setContentSize(620, h)
 })
 
-
+let headlessExportMode = false
 ipcMain.on('exportCard', (event) => {
   if (testCardWindow != null) {
     testCardWindow.webContents.send('exportCard')
   } else {
+    headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
     if (!config.windowed) {
+      c.fullscreen = true
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
+          console.log(disp.bounds)
+          c.x = disp.bounds.x
+          c.y = disp.bounds.y
           c.width = disp.bounds.width
           c.height = disp.bounds.height
         }
@@ -141,6 +146,7 @@ ipcMain.on('exportCard', (event) => {
 
 
 ipcMain.on('saveAsPNG', (event, arg) => {
+  headlessExportMode = false
   dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: 'TestKard.png', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
     if (!result.canceled) {
       let path = result.filePath
@@ -167,6 +173,7 @@ ipcMain.on('saveAsPNG', (event, arg) => {
 })
 
 ipcMain.on('setAsWallpaper', (event, arg) => {
+  headlessExportMode = false
   let dest = app.getPath('userData') + '/wallpaper' + Math.round((Math.random()*100000)) + '.png'
   var base64Data = arg.replace(/^data:image\/png;base64,/, "")
   fs.writeFile(dest, base64Data, 'base64', err => {
@@ -256,7 +263,7 @@ function manageTestCardWindow() {
       }
     }
     showTestCardWindow(windowConfig)
-  } else if (testCardWindow != null && !config.visible) {
+  } else if (testCardWindow != null && !config.visible && !headlessExportMode) {
     log.info('Closing test card')
     testCardWindow.close()
   } else if (testCardWindow != null && config.visible && config.screen != testCardWindowScreen) {
@@ -311,14 +318,18 @@ function showTestCardWindow(windowConfig) {
     testCardWindow = null 
   })
 
+  if(config.windowed){
+    console.log("I am here, forcing width and height")
+    testCardWindow.setBounds({
+      width: config.winWidth, height: config.winHeight
+    })
+  }
+
   testCardWindow.loadURL(testCardUrl)
 
   testCardWindow.once('ready-to-show', () => {
     if (config.visible) {
       testCardWindow.show()
-    } else {
-      console.log('A dummy test card is ready to turn into an image')
-      testCardWindow.webContents.send('exportCard')
     }
   })
 

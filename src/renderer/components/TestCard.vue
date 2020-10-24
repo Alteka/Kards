@@ -152,6 +152,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       ipcRenderer.on('config', function(event, args) {
         vm.config = args
         vm.updateCardSize()
+        if(!vm.config.visible) vm.exportTestCard(args.export)
       })
       vm.updateCardSize()
       setTimeout(vm.updateCardSize, 1000)
@@ -169,7 +170,6 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
         e.preventDefault()
         menu.popup({ window: remote.getCurrentWindow() })
       }, false)
-
     }
   }
 </script>
@@ -289,7 +289,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
     background-color: rgb(16,16,16);
   }
   .superblack {
-    background-color: rgb(0,0,0)
+    background-color: rgba(0,0,0,1)
   }
   .grey40 {
     background-color: rgb(104,104,104);
