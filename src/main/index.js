@@ -125,7 +125,6 @@ ipcMain.on('exportCard', (event) => {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
     if (!config.windowed) {
-      c.fullscreen = true
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
           console.log(disp.bounds)
@@ -135,7 +134,7 @@ ipcMain.on('exportCard', (event) => {
           c.height = disp.bounds.height
         }
       }
-    }
+    } 
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
     // once shown it will make the image, and once that's made the window will be closed. 
@@ -350,7 +349,7 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.loadURL(testCardUrl)
 
   testCardWindow.once('ready-to-show', () => {
-    if (config.visible) {
+    if (config.visible && !headlessExportMode) {
       testCardWindow.show()
     }
   })
