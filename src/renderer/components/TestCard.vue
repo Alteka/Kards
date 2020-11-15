@@ -237,7 +237,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
   overflow: hidden;
 }
 .animated {
-  animation: diagonal 10s infinite;
+  animation: diagonal 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonal {
@@ -246,7 +246,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 
 .animatedAbove {
-  animation: diagonalAbove 10s infinite;
+  animation: diagonalAbove 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonalAbove {
@@ -255,7 +255,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 
 .animatedLeft {
-  animation: diagonalLeft 10s infinite;
+  animation: diagonalLeft 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonalLeft {
@@ -264,7 +264,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 
 .animatedAboveLeft {
-  animation: diagonalAboveLeft 10s infinite;
+  animation: diagonalAboveLeft 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonalAboveLeft {
