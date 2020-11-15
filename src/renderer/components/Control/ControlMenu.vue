@@ -232,7 +232,8 @@ let loadingInstance
       updateName: function() {
         let dest = remote.app.getPath('userData') + '/voice.wav'
         let name = this.config.name
-        say.export("This is - " + name, null, null, dest, (err) => {
+        let prependText = this.config.audio.prependText
+        say.export(prependText + name, null, null, dest, (err) => {
           if (err) {
             return console.error(err)
           }

@@ -56,7 +56,8 @@
 "audio": {
     "deviceId": "default",
     "enabled": false,
-    "options": ["voice", "tone"]
+    "options": ["voice", "tone"],
+    "prependText": "This is "
 },
 "winWidth": 1280,
 "winHeight": 720,
