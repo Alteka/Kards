@@ -25,15 +25,21 @@
     <video id="vt" :src="videoSource" loop autoplay />
 
     <div id="topText" class="textRow">
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: left">Audio Sync</span>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo">{{ cardSize }}</span>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: right">{{ config.audioSync.rate }} FPS</span>
+      <transition name="fade">
+        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo" style="text-align: left">{{ time }}</span>
+      </transition>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}">{{ config.audioSync.rate }} FPS</span>
+      <transition name="fade">
+        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: right" v-if="config.showInfo">{{ cardSize }}</span>
+      </transition>
     </div>
 
-    <div id="bottomText" class="textRow" v-if="config.showInfo">
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ config.name }}</span>
-    </div>
+  <transition name="fade">
+      <div id="bottomText" class="textRow" v-if="config.showInfo">
+        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
+        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ config.name }}</span>
+      </div>
+  </transition>
 
   </div>
 </template>
@@ -44,7 +50,8 @@ export default {
   directives: { ResizeText },
   props: {
     config: Object,
-    cardSize: String
+    cardSize: String,
+    time: String
   },
   data: function() {
     return {

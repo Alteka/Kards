@@ -175,6 +175,7 @@
             <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
             <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">ALTEKA Kards {{require('./../../../../package.json').version}}</text>
             <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{cardSize}}</text>
+            <text x="0" y="14" w="50" text-anchor="middle" font-size="3px" :style="{fill: text}">{{time}}</text>
           </g>
           </transition>
           <transition name="fade">
@@ -202,7 +203,8 @@ export default {
   },
   props: {
     config: Object,
-    cardSize: String
+    cardSize: String,
+    time: String
   },
   watch: {
       config: {

@@ -41,7 +41,7 @@
       </div>
     </div>
     </transition>
-    <info-circle :config="config" :cardSize="cardSize" />
+    <info-circle :config="config" :cardSize="cardSize" :time="time"/>
   </div>
 </template>
 
@@ -51,7 +51,8 @@ import InfoCircle from './InfoCircle'
     components: { InfoCircle },
     props: {
       config: Object,
-      cardSize: String
+      cardSize: String,
+      time: String
     },
     computed: {
       quadrantStyle: function() {
