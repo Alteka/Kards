@@ -291,7 +291,7 @@ function closeTestCard() {
   testCardWindow.close()
   testCardWindowScreen = null
 
-  // TODO - May need to kill off any timers here that might still be running?
+  clearTimeout(testCardWindowResizeTimer)
 }
 
 function reopenTestCard() {
