@@ -17,8 +17,18 @@
         <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false"><i class="fas fa-undo"></i> Reset</el-button>
       </el-row>
     </el-popover>
-    <el-button type="primary" size="mini" round v-popover:confirmReset><i class="fas fa-undo"></i> Reset</el-button>
-    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')"><i class="fas fa-question"></i> Help</el-button>
+
+    <el-dropdown size="mini" @command="handleDropdown">
+      <el-button size="mini" type="primary">
+        More<i class="el-icon-arrow-up el-icon--right"></i>
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-popover:confirmReset ><i class="fas fa-undo"></i> Reset</el-dropdown-item>
+        <el-dropdown-item divided command="openHelp"><i class="fas fa-question"></i> Help</el-dropdown-item>
+        <el-dropdown-item divided command="exportSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>
+        <el-dropdown-item command="importSettings"><i class="fas fa-file-import"></i> Import Settings</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </el-col>
 
 
@@ -122,6 +132,11 @@ let loadingInstance
         } 
         loadingInstance.close()
       })
+
+      ipcRenderer.on('importSettings', function(event, msg) {
+        Notification.info({title: 'Success', message: 'Settings Imported', showClose: false, duration: 2500, onClick: function() { this.close() }})
+      })
+      
     },
     watch: {
       config: {
@@ -175,9 +190,20 @@ let loadingInstance
         loadingInstance = Loading.service({ fullscreen: true, text:"Capturing Test Card", background: 'rgba(0, 0, 0, 0.85)'})
         this.drawerImage = false        
       },
-      openUrl: function(link) {
-        log.info('Opening external url: ' + link)
-        require("electron").shell.openExternal(link)
+      handleDropdown: function(command) {
+        switch (command) {
+          case 'openHelp':
+            ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')    
+            break;
+
+          case 'importSettings':
+            ipcRenderer.send('importSettings')
+            break;
+            
+          case 'exportSettings':
+            ipcRenderer.send('exportSettings')
+            break;
+        }
       },
       stopAudio: function() {
         log.info('Stopping audio output')

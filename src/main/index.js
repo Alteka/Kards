@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, webContents, nativeTheme, dialog, screen, TouchBar, Menu, MenuItem } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, nativeTheme, dialog, screen, TouchBar, Menu, MenuItem, shell } from 'electron'
 import { create } from 'domain';
 const wallpaper = require('wallpaper');
 const fs = require('fs')
@@ -248,6 +248,11 @@ function getDefaultConfig() {
   return defaultConfig
 }
 
+ipcMain.on('openUrl', (event, arg) => {
+  shell.openExternal(arg)
+  console.log('open url', arg)
+})
+
 
 
 
@@ -476,6 +481,48 @@ ipcMain.on('getScreens', (event, arg) => {
   updateScreens()
 })
 
+
+
+ipcMain.on('exportSettings', (event, arg) => {
+  dialog.showSaveDialog(controlWindow, {title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
+    if (!result.canceled) {
+      let path = result.filePath
+      
+      let data = JSON.stringify(config, null, 2);
+
+      fs.writeFile(path, data, function(err) {
+        if (err) {
+          dialog.showErrorBox('Error Saving File', JSON.stringify(err))
+          log.error('Couldnt save file: ', err)
+        } else {
+          log.info('JSON saved to: ', path)
+          Nucleus.track("Settings Exported")
+        }
+      })
+    } else {
+      log.info('Save dialog closed')
+    }
+  })
+})
+
+ipcMain.on('importSettings', (event, arg) => {
+  let result = dialog.showOpenDialogSync({ 
+    title: "Import Settings",
+    properties: ['openFile'],
+    filters: [{name: 'JSON', extensions: ['json', 'JSON']}],
+  })
+  if (result != null) {
+    fs.readFile(result[0], (err, data) => {
+      if (err) throw err;
+      config = JSON.parse(data);
+    })
+    controlWindow.webContents.send('config', config)
+    controlWindow.webContents.send('importSettings')
+    Nucleus.track("Settings Imported")
+  } else {
+    log.info('No file selected')
+  }
+})
 
 let prevConfig = null
 function updateAnalytics() {
