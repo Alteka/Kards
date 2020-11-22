@@ -7,6 +7,11 @@ const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
 const log = require('electron-log')
 
+let env = require('./env.json')
+
+const Nucleus = require('nucleus-nodejs')
+Nucleus.init(env.nucleus)
+
 const store = new Store({
   migrations: {
     '<=0.8.0': store => {
@@ -55,6 +60,8 @@ function createWindow () {
     Menu.setApplicationMenu(null)
   }
 
+  Nucleus.appStarted()
+  
   controlWindow.loadURL(winURL)
 
   controlWindow.once('ready-to-show', () => {
@@ -89,6 +96,7 @@ app.on('activate', () => {
 ipcMain.on('config', (event, arg) => {
   config = arg
   manageTestCardWindow()
+  updateAnalytics()
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
     if (config.windowed) {
@@ -121,6 +129,15 @@ let headlessExportMode = false
 ipcMain.on('exportCard', (event) => {
   if (testCardWindow != null) {
     testCardWindow.webContents.send('exportCard')
+    Nucleus.track("Exported Card", { 
+      type: config.export.target,
+      mode: config.export.imageSource,
+      width: testCardWindow.getBounds().width,
+      height: testCardWindow.getBounds().height,
+      windowed: config.windowed,
+      cardType: config.cardType,
+      headless: false
+    })
   } else {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
@@ -137,6 +154,15 @@ ipcMain.on('exportCard', (event) => {
     } 
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
+    Nucleus.track("Exported Card", { 
+      type: config.export.target,
+      mode: config.export.imageSource,
+      width: c.width,
+      height: c.height,
+      windowed: config.windowed,
+      cardType: config.cardType,
+      headless: true
+    })
     // once shown it will make the image, and once that's made the window will be closed. 
   }
   
@@ -195,6 +221,7 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
   
 ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())
+  Nucleus.track("Reset Defaults")
   log.info('Resetting to default')
 })
 
@@ -283,6 +310,7 @@ function setupNewTestCardWindow() {
 
   // All setup is finished, so lets show the window.
   showTestCardWindow(windowConfig)
+  Nucleus.track("Output", { windowed: config.windowed, width: windowConfig.width, height: windowConfig.height  })
 }
 
 function closeTestCard() {
@@ -407,3 +435,19 @@ ipcMain.on('selectImage', (event, arg) => {
     // need to think about NOT clearing out an old photo;.
   }
 })
+
+let prevConfig = null
+function updateAnalytics() {
+
+  if (prevConfig !== null &&  config !== null) {
+    if (config.cardType != prevConfig.cardType) {
+      Nucleus.track("Card Type", { cardType: config.cardType })
+    }
+
+    if (config.audio.enabled && config.audio.enabled != prevConfig.audio.enabled) {
+      Nucleus.track("Audio Output Enabled", { 'Selected Options': config.audio.options })
+    }
+  }
+
+  prevConfig = config
+}
