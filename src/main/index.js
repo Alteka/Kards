@@ -85,7 +85,7 @@ app.on('ready', function() {
   config = store.get('KardsConfig', getDefaultConfig())
   config.visible = false
   config.audio.enabled = false
-  log.info('Loaded Config: ', config)
+  log.info('Loaded Config')
   updateScreens()
   createWindow()
 
