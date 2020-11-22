@@ -90,13 +90,13 @@ app.on('ready', function() {
   createWindow()
 
   screen.on('display-added', function() {
-    setTimeout(updateScreens(), 500)
+    setTimeout(updateScreens, 500)
   })
   screen.on('display-removed', function() {
-    setTimeout(updateScreens(), 500)
+    setTimeout(updateScreens, 500)
   })
   screen.on('display-metrics-changed', function() {
-    setTimeout(updateScreens(), 500)
+    setTimeout(updateScreens, 500)
   })
 })
 
