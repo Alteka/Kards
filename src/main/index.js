@@ -60,6 +60,9 @@ function createWindow () {
     Menu.setApplicationMenu(null)
   }
 
+  if (env.nucleus == '') {
+    dialog.showErrorBox('ERROR', 'You need to set nucleus environment variable')
+  }
   Nucleus.appStarted()
   
   controlWindow.loadURL(winURL)
