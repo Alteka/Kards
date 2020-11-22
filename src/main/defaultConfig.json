@@ -27,7 +27,7 @@
     "rate": 60
 },
 "alteka": {
-    "logoUrl": "",
+    "logo": "",
     "showLogo": false,
     "bg": "#666",
     "fg": "#6AB42F",
@@ -57,7 +57,8 @@
     "deviceId": "default",
     "enabled": false,
     "options": ["voice", "tone"],
-    "prependText": "This is "
+    "prependText": "This is ",
+    "voiceData": ""
 },
 "winWidth": 1280,
 "winHeight": 720,

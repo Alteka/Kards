@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar, Men
 import { create } from 'domain';
 const wallpaper = require('wallpaper');
 const fs = require('fs')
+const say = require('say')
 const Store = require('electron-store')
 const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
@@ -50,7 +51,8 @@ function createWindow () {
     width: 620,
     webPreferences: {
       webSecurity: false,
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true
      }
   })
 
@@ -143,7 +145,7 @@ ipcMain.on('exportCard', (event) => {
     })
   } else {
     headlessExportMode = true
-    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
+    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true, enableRemoteModule: true }}
     if (!config.windowed) {
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
@@ -267,7 +269,7 @@ function setupNewTestCardWindow() {
   let windowConfig = { show: false, frame: false,
     width: config.winWidth,
     height: config.winHeight,
-    webPreferences: { webSecurity: false, nodeIntegration: true } 
+    webPreferences: { webSecurity: false, nodeIntegration: true, enableRemoteModule: true } 
   }  
     
   if (!config.windowed) { // Setting up for full screen test card
@@ -422,21 +424,25 @@ ipcMain.on('selectImage', (event, arg) => {
     filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif']}],
   })
   if (result != null) {
-    let dest = app.getPath('userData') + '/logo.png'
-
-    fs.copyFile(result[0], dest, (err) => {
-      if (err) {
-        dialog.showErrorBox('Error Copying File', JSON.stringify(err))
-        return
-      }
-      log.info('Selected image: ' + result[0] + ' was copied to ' + dest);
-      let logoUrl = 'file://' + dest + '?bust=' + Math.round((Math.random()*100000))
-      controlWindow.webContents.send('logoUrl', logoUrl)
-    });
+    let data = fs.readFileSync(result[0], { encoding: 'base64' })
+    let mime = require('mime').getType(result[0])
+    config.alteka.logo = 'data:' + mime + ';base64,' + data
+    controlWindow.webContents.send('config', config)
   } else {
     log.info('No file selected')
-    // need to think about NOT clearing out an old photo;.
   }
+})
+
+ipcMain.on('createVoice', (event, arg) => {
+  let dest = app.getPath('userData') + '/voice.wav'  
+  say.export(config.audio.prependText + config.name, null, null, dest, (err) => {
+    if (err) {
+      return console.error(err)
+    }
+    console.log('Updated name (' + config.name + ') has been saved to ', dest)
+    config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    controlWindow.webContents.send('config', config)
+  })
 })
 
 let prevConfig = null

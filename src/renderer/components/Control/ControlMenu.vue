@@ -53,7 +53,7 @@
   <audio src="~@/assets/audio/pink.wav" id="pink" />
   <audio src="~@/assets/audio/white.wav" id="white" />
   <audio src="~@/assets/audio/tone.wav" id="tone" />
-  <audio :src="voiceSrc" id="voice" />
+  <audio :src="config.audio.voiceData" id="voice" />
 
 
 
@@ -91,7 +91,6 @@
 
 <script>
 const log = require('electron-log')
-const say = require('say')
 const { ipcRenderer, remote } = require('electron')
 import { Loading, Notification } from 'element-ui'
 let loadingInstance
@@ -108,7 +107,6 @@ let loadingInstance
         curAudio: null,
         playing: false,
         name: "",
-        voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav' + '?bust=' + Math.round((Math.random()*100000)),
         voiceTimer: null,
         audioDevices: []
       }
@@ -183,7 +181,6 @@ let loadingInstance
       },
       stopAudio: function() {
         log.info('Stopping audio output')
-        window.speechSynthesis.cancel()
         this.stopFile('tone')
         this.stopFile('white')
         this.stopFile('pink')
@@ -230,22 +227,7 @@ let loadingInstance
         this.voiceTimer = setTimeout(this.updateName, 1000)
       },
       updateName: function() {
-        let dest = remote.app.getPath('userData') + '/voice.wav'
-        let name = this.config.name
-        let prependText = this.config.audio.prependText
-        say.export(prependText + name, null, null, dest, (err) => {
-          if (err) {
-            return console.error(err)
-          }
-          console.log('Updated name (' + name + ') has been saved to ', dest)
-          let voice = document.getElementById('voice')
-          if (this.curAudio == 'voice') {
-            voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
-            voice.play()
-          } else {
-            voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
-          }
-        })
+        ipcRenderer.send('createVoice')
       }
     }
   }
