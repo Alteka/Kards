@@ -195,12 +195,6 @@
 import Swatch from "./Swatch"
 export default {
   components: { Swatch },
-  data() {
-    return {
-      electron: process.versions.electron,
-      name: this.$route.name
-    };
-  },
   props: {
     config: Object,
     cardSize: String,
