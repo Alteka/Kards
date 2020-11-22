@@ -13,7 +13,7 @@
   <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px;">
     
     <el-tab-pane label="Alteka" name="alteka">
-      <control-alteka :alteka="config.alteka" :colors="predefineColors"></control-alteka>
+      <control-alteka :alteka="config.alteka" :colors="config.predefineColors"></control-alteka>
     </el-tab-pane>
 
     <el-tab-pane label="Bars" name="bars">
@@ -21,7 +21,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="Grid" name="grid">
-      <control-grid :grid="config.grid" :colors="predefineColors"></control-grid>
+      <control-grid :grid="config.grid" :colors="config.predefineColors"></control-grid>
     </el-tab-pane>
 
     <el-tab-pane label="Ramp" name="ramp">
@@ -29,7 +29,7 @@
     </el-tab-pane>
    
     <el-tab-pane label="Name" name="placeholder">
-      <control-placeholder :placeholder="config.placeholder" :colors="predefineColors"></control-placeholder>
+      <control-placeholder :placeholder="config.placeholder" :colors="config.predefineColors"></control-placeholder>
     </el-tab-pane>
 
     <el-tab-pane label="AV Sync" name="audioSync">
@@ -158,8 +158,7 @@ import { Notification } from 'element-ui';
     data: function () {
     return {
       config: require('../../main/defaultConfig.json'),
-      sync: false,
-      predefineColors: ['#ffffff', '#d3d3d3', '#7f7f7f', '#3e3e3e', '#000000', '#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#BF3030', '#BF9B30', '#78BF30', '#30BF54', '#30BFBF', '#3054BF', '#7830BF', '#BF309B']
+      sync: false
     }
   },
     created: function() {
