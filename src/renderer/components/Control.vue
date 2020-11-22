@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper" style="position: relative;" :class="{ darkMode : require('electron').remote.nativeTheme.shouldUseDarkColors }">
+  <div id="wrapper" style="position: relative;" :class="{ darkMode : darkMode }">
 
    
 <el-form ref="form" :model="config" label-width="120px" size="small">
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-const { ipcRenderer, screen } = require('electron')
+const { ipcRenderer } = require('electron')
 import ControlBars from './Control/ControlBars.vue'
 import ControlGrid from './Control/ControlGrid.vue'
 import ControlRamp from './Control/ControlRamp.vue'
@@ -158,7 +158,8 @@ import { Notification } from 'element-ui';
     data: function () {
     return {
       config: require('../../main/defaultConfig.json'),
-      sync: false
+      sync: false,
+      darkMode: false
     }
   },
     created: function() {
@@ -169,6 +170,9 @@ import { Notification } from 'element-ui';
       ipcRenderer.on('config', function(event, val) {
         vm.config = val
         vm.sync = true
+      })
+      ipcRenderer.on('darkMode', function(event, val) {
+        vm.darkMode = val
       })
       ipcRenderer.on('testCardResize', function(event, w, h) {
         if (config.windowed) {

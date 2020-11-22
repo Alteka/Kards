@@ -13,15 +13,15 @@
 </template>
 
 <script>
-const { screen } = require('electron').remote
+const { ipcRenderer } = require('electron')
   export default {
     props: {
       config: Object
     },
     data: function() {
       return {
-        screens: screen.getAllDisplays(),
-        primaryScreen: screen.getPrimaryDisplay().id,
+        screens: [],
+        primaryScreen: null,
         check: "\uf00c",
         viewBox: '0 0 0 0'
       }
@@ -36,8 +36,6 @@ const { screen } = require('electron').remote
     },
     methods: {
       updateScreens: function() {
-        this.screens = screen.getAllDisplays()
-
         let left = 0
         let right = 0
         let top = 0
@@ -97,17 +95,13 @@ const { screen } = require('electron').remote
     },
     mounted: function() {
       let vm = this
-      screen.on('display-added', function() {
-        setTimeout(vm.updateScreens(), 500)
+      ipcRenderer.on('screens', function(event, all, primary) {
+        vm.screens = all
+        vm.primaryScreen = primary
+
+        vm.updateScreens()
       })
-      screen.on('display-removed', function() {
-        setTimeout(vm.updateScreens(), 500)
-      })
-      screen.on('display-metrics-changed', function() {
-        setTimeout(vm.updateScreens(), 500)
-      })
-      this.setOutputToMatchScreen()
-      this.updateScreens()
+      ipcRenderer.send('getScreens')
     }
   }
 </script>

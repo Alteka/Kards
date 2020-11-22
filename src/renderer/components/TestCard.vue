@@ -70,18 +70,6 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
 const log = require('electron-log')
 
-const { remote } = require('electron')
-const { Menu, MenuItem } = remote
-
-const menu = new Menu()
-menu.append(new MenuItem({ label: 'Alteka Kards', enabled: false }))
-menu.append(new MenuItem({ type: 'separator' }))
-menu.append(new MenuItem({ label: 'Close Card', click() {
-  ipcRenderer.send('closeTestCard')
-} }))
-
-
-
   export default {
     name: 'testcard',
     components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync },
@@ -182,7 +170,6 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 
       window.addEventListener('contextmenu', (e) => {
         e.preventDefault()
-        menu.popup({ window: remote.getCurrentWindow() })
       }, false)
     }
   }

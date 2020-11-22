@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, webContents, dialog, screen, TouchBar, Menu, MenuItem } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, nativeTheme, dialog, screen, TouchBar, Menu, MenuItem } from 'electron'
 import { create } from 'domain';
 const wallpaper = require('wallpaper');
 const fs = require('fs')
@@ -50,9 +50,7 @@ function createWindow () {
     useContentSize: true,
     width: 620,
     webPreferences: {
-      webSecurity: false,
-      nodeIntegration: true,
-      enableRemoteModule: true
+      nodeIntegration: true
      }
   })
 
@@ -88,7 +86,18 @@ app.on('ready', function() {
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config: ', config)
+  updateScreens()
   createWindow()
+
+  screen.on('display-added', function() {
+    setTimeout(updateScreens(), 500)
+  })
+  screen.on('display-removed', function() {
+    setTimeout(updateScreens(), 500)
+  })
+  screen.on('display-metrics-changed', function() {
+    setTimeout(updateScreens(), 500)
+  })
 })
 
 
@@ -118,6 +127,7 @@ ipcMain.on('getConfigTestCard', (event, arg) => {
 
 ipcMain.on('getConfigControl', (event, arg) => {
   controlWindow.webContents.send('config', config)
+  controlWindow.webContents.send('darkMode', nativeTheme.shouldUseDarkColors)
 })
 
 ipcMain.on('closeTestCard', (event, arg) => {
@@ -145,7 +155,7 @@ ipcMain.on('exportCard', (event) => {
     })
   } else {
     headlessExportMode = true
-    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true, enableRemoteModule: true }}
+    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
     if (!config.windowed) {
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
@@ -269,7 +279,7 @@ function setupNewTestCardWindow() {
   let windowConfig = { show: false, frame: false,
     width: config.winWidth,
     height: config.winHeight,
-    webPreferences: { webSecurity: false, nodeIntegration: true, enableRemoteModule: true } 
+    webPreferences: { nodeIntegration: true } 
   }  
     
   if (!config.windowed) { // Setting up for full screen test card
@@ -444,6 +454,23 @@ ipcMain.on('createVoice', (event, arg) => {
     controlWindow.webContents.send('config', config)
   })
 })
+
+let screens = []
+let primaryScreen = {}
+
+function updateScreens() {
+  screens = screen.getAllDisplays()
+  primaryScreen = screen.getPrimaryDisplay().id
+
+  if (controlWindow != null) {
+    controlWindow.webContents.send('screens', screens, primaryScreen)  
+  }
+}
+
+ipcMain.on('getScreens', (event, arg) => {
+  updateScreens()
+})
+
 
 let prevConfig = null
 function updateAnalytics() {
