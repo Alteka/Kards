@@ -150,7 +150,9 @@ var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
 const axios = require('axios')
-import { Notification } from 'element-ui';
+import { Notification } from 'element-ui'
+
+var compareVersions = require('compare-versions')
 
   export default {
     name: 'control',
@@ -216,12 +218,11 @@ import { Notification } from 'element-ui';
       // Make a request for a user with a given ID
       axios.get('https://api.github.com/repos/alteka/kards/releases/latest')
         .then(function (response) {
-          // handle success
-          if (response.data.tag_name != current) {
+          let status = compareVersions(response.data.tag_name, current, '>')
+          if (status == 1) { 
 
             let link = ''
             for (const asset in response.data.assets) {
-              // console.log(process.platform == 'darwin')
               if (process.platform == 'darwin' && response.data.assets[asset].name.includes('.pkg')) {
                 link = response.data.assets[asset].browser_download_url
               }
@@ -237,7 +238,14 @@ import { Notification } from 'element-ui';
             dangerouslyUseHTMLString: true,
             message: 'v' + response.data.tag_name + ': <a href=\'' + link + '\'>Download</a>'
           });
-
+          } else if (status == 0) {
+            // running current/latest version.
+          } else if (status == -1) {
+            vm.$notify({
+            title: 'Developer?',
+            duration: 3000,
+            message: 'You are running a version newer (' + current + ') than is available on GitHub (' + response.data.tag_name + ')'
+          });
           }
         })
         .catch(function (error) {
