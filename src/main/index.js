@@ -238,6 +238,7 @@ ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())
   Nucleus.track("Reset Defaults")
   log.info('Resetting to default')
+  createVoice()
 })
 
 function getDefaultConfig() {
@@ -443,7 +444,11 @@ ipcMain.on('selectImage', (event, arg) => {
   }
 })
 
+setTimeout(createVoice, 5000)
 ipcMain.on('createVoice', (event, arg) => {
+  createVoice()
+})
+function createVoice() {
   let dest = app.getPath('userData') + '/voice.wav'  
   say.export(config.audio.prependText + config.name, null, null, dest, (err) => {
     if (err) {
@@ -453,7 +458,7 @@ ipcMain.on('createVoice', (event, arg) => {
     config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
     controlWindow.webContents.send('config', config)
   })
-})
+}
 
 let screens = []
 let primaryScreen = {}
