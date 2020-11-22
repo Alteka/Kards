@@ -22,7 +22,13 @@
       <div class="arrowLeft"></div>
     </div>
 
-    <video id="vt" :src="videoSource" loop autoplay />
+    <video id="vt24" v-if="config.audioSync.rate == 24" src="~@/assets/audiosync/24.webm" loop autoplay class="vt" />
+    <video id="vt25" v-if="config.audioSync.rate == 25" src="~@/assets/audiosync/25.webm" loop autoplay class="vt" />
+    <video id="vt29-97" v-if="config.audioSync.rate == 29.97" src="~@/assets/audiosync/29.97.webm" loop autoplay class="vt" />
+    <video id="vt30" v-if="config.audioSync.rate == 30" src="~@/assets/audiosync/30.webm" loop autoplay class="vt" />
+    <video id="vt50" v-if="config.audioSync.rate == 50" src="~@/assets/audiosync/50.webm" loop autoplay class="vt" />
+    <video id="vt59-94" v-if="config.audioSync.rate == 59.94" src="~@/assets/audiosync/59.94.webm" loop autoplay class="vt" />
+    <video id="vt60" v-if="config.audioSync.rate == 60" src="~@/assets/audiosync/60.webm" loop autoplay class="vt" />
 
     <div id="topText" class="textRow">
       <transition name="fade">
@@ -55,7 +61,8 @@ export default {
   },
   data: function() {
     return {
-      description: "Default Interface"
+      description: "Default Interface",
+      rates: ['24', '25', '29-97', '30', '50', '59-94', '60' ]
     }
   },
   watch: {
@@ -68,8 +75,13 @@ export default {
     },
     methods: {
       updateDeviceName: function(val) {
-        let vt = document.getElementById('vt')
-        vt.setSinkId(val.audioSync.deviceId)
+        for (const rate in this.rates) {
+          let element = document.getElementById('vt' + rate)
+          if (element !== null) {
+            element.setSinkId(val.audioSync.deviceId)
+          }
+        }
+        
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           devices = devices.filter(device => device.kind === 'audiooutput')
           for (const dev of devices) {
@@ -80,13 +92,8 @@ export default {
         })
       }
     },
-    computed: {
-      videoSource: function() {
-        return 'file://' + __static + '/audiosync/' + this.config.audioSync.rate + '.webm'
-      }
-    },
     mounted: function() {
-      document.getElementById('vt').setSinkId(this.config.audioSync.deviceId)
+      document.getElementById('vt24').setSinkId(this.config.audioSync.deviceId)
       this.updateDeviceName(this.config)
     }
 }
@@ -121,7 +128,7 @@ export default {
   bottom: 25px;
 }
 
-#vt {
+.vt {
   position: absolute;
   width: calc(100% - 100px);
   height: calc(100% - 100px);
