@@ -59,11 +59,6 @@ function createWindow () {
   } else {
     Menu.setApplicationMenu(null)
   }
-
-  if (env.nucleus == '') {
-    dialog.showErrorBox('ERROR', 'You need to set nucleus environment variable')
-  }
-  Nucleus.appStarted()
   
   controlWindow.loadURL(winURL)
 
@@ -86,6 +81,12 @@ app.on('ready', function() {
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config')
+
+  if (env.nucleus == '') {
+    dialog.showErrorBox('ERROR', 'You need to set nucleus environment variable')
+  }
+  Nucleus.appStarted()
+
   updateScreens()
   createWindow()
 
@@ -147,8 +148,7 @@ ipcMain.on('exportCard', (event) => {
     Nucleus.track("Exported Card", { 
       type: config.export.target,
       mode: config.export.imageSource,
-      width: testCardWindow.getBounds().width,
-      height: testCardWindow.getBounds().height,
+      size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height,
       windowed: config.windowed,
       cardType: config.cardType,
       headless: false
@@ -172,8 +172,7 @@ ipcMain.on('exportCard', (event) => {
     Nucleus.track("Exported Card", { 
       type: config.export.target,
       mode: config.export.imageSource,
-      width: c.width,
-      height: c.height,
+      size: c.width + 'x' + c.height,
       windowed: config.windowed,
       cardType: config.cardType,
       headless: true
@@ -331,7 +330,7 @@ function setupNewTestCardWindow() {
 
   // All setup is finished, so lets show the window.
   showTestCardWindow(windowConfig)
-  Nucleus.track("Output", { windowed: config.windowed, width: windowConfig.width, height: windowConfig.height  })
+  Nucleus.track("Start Output", { windowed: config.windowed, size: windowConfig.width + 'x' + windowConfig.height  })
 }
 
 function closeTestCard() {
@@ -528,10 +527,6 @@ let prevConfig = null
 function updateAnalytics() {
 
   if (prevConfig !== null &&  config !== null) {
-    if (config.cardType != prevConfig.cardType) {
-      Nucleus.track("Card Type", { cardType: config.cardType })
-    }
-
     if (config.audio.enabled && config.audio.enabled != prevConfig.audio.enabled) {
       Nucleus.track("Audio Output Enabled", { 'Selected Options': config.audio.options })
     }
