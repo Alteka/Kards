@@ -486,8 +486,10 @@ ipcMain.on('exportSettings', (event, arg) => {
   dialog.showSaveDialog(controlWindow, {title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
     if (!result.canceled) {
       let path = result.filePath
-      
-      let data = JSON.stringify(config, null, 2);
+      let cfg = config
+      cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt      
+
+      let data = JSON.stringify(cfg, null, 2);
 
       fs.writeFile(path, data, function(err) {
         if (err) {
@@ -515,6 +517,7 @@ ipcMain.on('importSettings', (event, arg) => {
       if (err) throw err;
       config = JSON.parse(data);
     })
+    createVoice() // recreate voice data after importing settings.
     controlWindow.webContents.send('config', config)
     controlWindow.webContents.send('importSettings')
     Nucleus.track("Settings Imported")
