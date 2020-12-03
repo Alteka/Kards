@@ -83,7 +83,7 @@ app.on('ready', function() {
   log.info('Loaded Config')
 
   if (env.nucleus == '') {
-    dialog.showErrorBox('ERROR', 'You need to set nucleus environment variable')
+    dialog.showErrorBox('Warning', 'You need to set nucleus environment variable')
   }
   Nucleus.appStarted()
 
@@ -160,7 +160,7 @@ ipcMain.on('exportCard', (event) => {
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
           console.log(disp.bounds)
-          c.x = disp.bounds.x
+          c.x = disp.bounds.x.
           c.y = disp.bounds.y
           c.width = disp.bounds.width
           c.height = disp.bounds.height
@@ -425,9 +425,12 @@ function showTestCardWindow(windowConfig) {
 
 function handleTestCardResize() {
   let bounds = testCardWindow.getBounds()
-  config.winWidth = bounds.width
-  config.winHeight = bounds.height
-  controlWindow.webContents.send('config', config)
+  let t = 2
+  if (config.winWidth < (bounds.width-t) || config.winWidth > (bounds.width+t) || config.winHeight < (bounds.height-t) || config.winHeight > (bounds.height+t) || process.platform == 'darwin') {
+    config.winWidth = bounds.width
+    config.winHeight = bounds.height
+    controlWindow.webContents.send('config', config)
+  }
 }
 let testCardWindowResizeTimer
 
