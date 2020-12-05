@@ -145,38 +145,33 @@ let headlessExportMode = false
 ipcMain.on('exportCard', (event) => {
   if (testCardWindow != null) {
     testCardWindow.webContents.send('exportCard')
-    Nucleus.track("Exported Card", { 
-      type: config.export.target,
-      mode: config.export.imageSource,
-      size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height,
-      windowed: config.windowed,
-      cardType: config.cardType,
-      headless: false
-    })
+    Nucleus.track("Exported Card", {  type: config.export.target, mode: config.export.imageSource, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, windowed: config.windowed, cardType: config.cardType, headless: false })
   } else {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
+
+    // Ensure window is sized correctly - even if larger than screen size
+    if (process.platform != 'darwin' && config.windowed) {
+      c.minWidth = config.winWidth
+      c.minHeight = config.winHeight
+    }
+
     if (!config.windowed) {
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
-          console.log(disp.bounds)
-          c.x = disp.bounds.x.
-          c.y = disp.bounds.y
           c.width = disp.bounds.width
           c.height = disp.bounds.height
+          if (process.platform != 'darwin') {
+            c.minWidth = disp.bounds.width
+            c.minHeight = disp.bounds.height
+          }
         }
       }
+     
     } 
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
-    Nucleus.track("Exported Card", { 
-      type: config.export.target,
-      mode: config.export.imageSource,
-      size: c.width + 'x' + c.height,
-      windowed: config.windowed,
-      cardType: config.cardType,
-      headless: true
-    })
+    Nucleus.track("Exported Card", { type: config.export.target, mode: config.export.imageSource, size: c.width + 'x' + c.height, windowed: config.windowed, cardType: config.cardType, headless: true })
     // once shown it will make the image, and once that's made the window will be closed. 
   }
   
@@ -388,9 +383,10 @@ function showTestCardWindow(windowConfig) {
     testCardWindow = null 
   })
 
-  if(config.windowed){
+  if(config.windowed || headlessExportMode){
+    console.log('Extra setbounds thing!')
     testCardWindow.setBounds({
-      width: config.winWidth, height: config.winHeight
+      width: windowConfig.width, height: windowConfig.height
     })
   }
 
