@@ -140,6 +140,11 @@ ipcMain.on('controlResize', (event, w, h) => {
   controlWindow.setContentSize(620, h)
 })
 
+ipcMain.on('openLogs', (event, w, h) => {
+  const path = log.transports.file.findLogPath()
+  shell.showItemInFolder(path)
+})
+
 
 let headlessExportMode = false
 

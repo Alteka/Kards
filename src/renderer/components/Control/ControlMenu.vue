@@ -25,6 +25,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item v-popover:confirmReset ><i class="fas fa-undo"></i> Reset</el-dropdown-item>
         <el-dropdown-item divided command="openHelp"><i class="fas fa-question"></i> Help</el-dropdown-item>
+        <el-dropdown-item divided command="openLogs"><i class="fas fa-clipboard-list"></i> Logs</el-dropdown-item>
         <el-dropdown-item divided command="exportSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>
         <el-dropdown-item command="importSettings"><i class="fas fa-file-import"></i> Import Settings</el-dropdown-item>
       </el-dropdown-menu>
@@ -202,6 +203,10 @@ let loadingInstance
             
           case 'exportSettings':
             ipcRenderer.send('exportSettings')
+            break;
+
+          case 'openLogs':
+            ipcRenderer.send('openLogs')
             break;
         }
       },
