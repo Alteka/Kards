@@ -7,6 +7,7 @@ const Store = require('electron-store')
 const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
 const log = require('electron-log')
+var sizeOf = require('image-size')
 
 let env = require('./env.json')
 
@@ -190,7 +191,8 @@ ipcMain.on('saveAsPNG', (event, arg) => {
           log.error('Couldnt save file: ', err)
           controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
-          log.info('PNG saved to: ', path)
+          let dims = sizeOf(path)
+          log.info('PNG saved to: ', path, ' - With dimensions: ', dims.width, 'x', dims.height)
           controlWindow.webContents.send('exportCardCompleted')
         }
       })
@@ -217,8 +219,9 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
       return
     }
     (async () => {
-      await wallpaper.set(dest);
-      log.info('Setting png as wallpaper')
+      await wallpaper.set(dest)
+      let dims = sizeOf(dest)
+      log.info('Setting png as wallpaper with dims: ' + dims.width + 'x' + dims.height)
       controlWindow.webContents.send('exportCardCompleted')
       })();
     })
@@ -384,7 +387,6 @@ function showTestCardWindow(windowConfig) {
   })
 
   if(config.windowed || headlessExportMode){
-    console.log('Extra setbounds thing!')
     testCardWindow.setBounds({
       width: windowConfig.width, height: windowConfig.height
     })
