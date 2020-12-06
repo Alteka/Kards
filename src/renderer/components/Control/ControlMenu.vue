@@ -18,7 +18,7 @@
       </el-row>
     </el-popover>
 
-    <el-dropdown size="mini" @command="handleDropdown">
+    <el-dropdown size="mini" trigger="click" @command="handleDropdown">
       <el-button size="mini" type="primary">
         More<i class="el-icon-arrow-up el-icon--right"></i>
       </el-button>
