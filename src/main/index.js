@@ -369,8 +369,7 @@ ipcMain.on('moveWindowTo', (event, arg) => {
   for (const disp of screen.getAllDisplays()) {
     if (disp.id == arg) {
         testCardWindowScreen = disp.id
-        testCardWindow.setPosition(disp.bounds.x, disp.bounds.y)
-        testCardWindow.center()
+        testCardWindow.setPosition(disp.bounds.x + (disp.bounds.width - config.winWidth)/2, disp.bounds.y + (disp.bounds.height - config.winHeight)/2)
     }
   }
 })
