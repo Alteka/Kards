@@ -252,7 +252,7 @@ function getDefaultConfig() {
 
 ipcMain.on('openUrl', (event, arg) => {
   shell.openExternal(arg)
-  console.log('open url', arg)
+  log.info('open url', arg)
 })
 
 
@@ -353,31 +353,27 @@ function reopenTestCard() {
 
 function moveTestCardToNewScreen() {
   if (config.windowed) {
+    let doSetBounds = false
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-        if (config.winWidth > disp.bounds.width) {
-          config.winWidth = disp.bounds.width
-          controlWindow.webContents.send('config', config)
-        }
-        if (config.winHeight > disp.bounds.height) {
-          config.winHeight = disp.bounds.height
-          controlWindow.webContents.send('config', config)
-        }
-        let newBounds = {
-          x: Math.round(disp.bounds.x + (disp.bounds.width - config.winWidth)/2),
-          y: Math.round(disp.bounds.y + (disp.bounds.height - config.winHeight)/2),
-          width: config.winWidth,
-          height: config.winHeight
-        }
-        console.log('Moving window to: ', newBounds)
-        testCardWindow.setBounds(newBounds)
-        testCardWindowScreen = disp.id
+          testCardWindowScreen = disp.id
       }
     }
   } else {
     reopenTestCard()
   }  
 }
+
+ipcMain.on('moveWindowTo', (event, arg) => {
+  log.info('Move active window to screen: ', arg)
+  for (const disp of screen.getAllDisplays()) {
+    if (disp.id == arg) {
+        testCardWindowScreen = disp.id
+        testCardWindow.setPosition(disp.bounds.x, disp.bounds.y)
+        testCardWindow.center()
+    }
+  }
+})
 
 
 function showTestCardWindow(windowConfig) {
@@ -464,7 +460,7 @@ function createVoice() {
     if (err) {
       return console.error(err)
     }
-    console.log('Updated name (' + config.name + ') has been saved to ', dest)
+    log.info('Updated name (' + config.name + ') has been saved to ', dest)
     config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
     controlWindow.webContents.send('config', config)
   })

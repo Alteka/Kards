@@ -1,7 +1,7 @@
 <template>
   <div> 
     <svg :view-box.camel="viewBox" style="width: 90%; margin-left: 5%; margin-top: 10px; height: 125px;">
-      <g v-for="scr in screens" :key="scr.id" v-on:click="config.screen = scr.id">
+      <g v-for="scr in screens" :key="scr.id" v-on:click="selectScreen(scr.id)">
         <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" fill="#555" style="stroke-width:25;stroke:#3d3d3d;" />
         <rect :x="scr.bounds.x" :y="scr.bounds.y" :width="scr.bounds.width" :height="scr.bounds.height" fill="#6ab42f" style="stroke-width:25;stroke:#3d3d3d;" v-if="config.screen == scr.id" />
         <text :x="scr.bounds.x + scr.bounds.width/2" :y="scr.bounds.y + scr.bounds.height/1.25" :width="scr.bounds.width" :height="scr.bounds.height" font-family="Verdana" :font-size="scr.bounds.height/5" text-anchor="middle" fill="white">{{ scr.description }}</text>
@@ -67,6 +67,12 @@ const { ipcRenderer } = require('electron')
         
         this.viewBox = (left - 25) + " " + (top - 25) + " " + (Math.abs(right - left) + 50) + " " + (Math.abs(bottom - top) + 50)
         this.setOutputToMatchScreen()
+      },
+      selectScreen: function(id) {
+        this.config.screen = id
+        if (this.config.windowed && this.config.visible) {
+          ipcRenderer.send('moveWindowTo', id)
+        }
       },
       setOutputToMatchScreen: function() {
         if (!this.config.windowed && this.config.fullsize) {
