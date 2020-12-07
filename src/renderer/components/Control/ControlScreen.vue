@@ -82,8 +82,6 @@ const { ipcRenderer } = require('electron')
               this.config.left = 0
               this.config.width = scr.size.width
               this.config.height = scr.size.height
-              this.config.maxWidth = scr.size.width
-              this.config.maxHeight = scr.size.height
             }
           }
         }

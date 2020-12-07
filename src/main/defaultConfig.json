@@ -62,7 +62,5 @@
 },
 "winWidth": 1280,
 "winHeight": 720,
-"maxWidth": 800,
-"maxHeight": 600,
 "predefineColors": ["#ffffff", "#d3d3d3", "#7f7f7f", "#3e3e3e", "#000000", "#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#ff00ff", "#BF3030", "#BF9B30", "#78BF30", "#30BF54", "#30BFBF", "#3054BF", "#7830BF", "#BF309B"]
 }
