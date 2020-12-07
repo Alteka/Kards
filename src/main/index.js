@@ -159,9 +159,7 @@ ipcMain.on('exportCard', (event) => {
     if (config.windowed) {
       c.minWidth = config.winWidth
       c.minHeight = config.winHeight
-    }
-
-    if (!config.windowed) {
+    } else {
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
           c.width = disp.bounds.width
@@ -170,7 +168,6 @@ ipcMain.on('exportCard', (event) => {
           c.minHeight = disp.bounds.height
         }
       }
-     
     } 
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
