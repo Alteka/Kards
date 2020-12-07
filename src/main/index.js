@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, webContents, nativeTheme, dialog, screen, TouchBar, Menu, MenuItem, shell } from 'electron'
-import { create } from 'domain';
-const wallpaper = require('wallpaper');
+import { create } from 'domain'
+const wallpaper = require('wallpaper')
 const fs = require('fs')
 const say = require('say')
 const Store = require('electron-store')
@@ -8,7 +8,6 @@ const touchBar = require('./touchBar.js')
 const menu = require('./menu.js').menu
 const log = require('electron-log')
 var sizeOf = require('image-size')
-
 let env = require('./env.json')
 
 const Nucleus = require('nucleus-nodejs')
@@ -29,7 +28,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 process.on('uncaughtException', function (error) {
   if (process.env.NODE_ENV === 'development') {
-    dialog.showErrorBox('Unexpected Error', 'Because.. You know - normally we expect them. \r\n\r\n' + error + '\r\n\r\n' + JSON.stringify(error))
+    dialog.showErrorBox('Unexpected Error', error + '\r\n\r\n' + JSON.stringify(error))
   }
   log.warn('Error: ', error)
 })
@@ -43,17 +42,7 @@ function createWindow () {
   log.info('Showing control window')
   const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`
 
-  controlWindow = new BrowserWindow({
-    show: false,
-    height: 450,
-    resizable: false,
-    maximizable: false,
-    useContentSize: true,
-    width: 620,
-    webPreferences: {
-      nodeIntegration: true
-     }
-  })
+  controlWindow = new BrowserWindow({ show: false, height: 450, resizable: false, maximizable: false, useContentSize: true, width: 620, webPreferences: { nodeIntegration: true } })
 
   if (process.platform == 'darwin') {
     Menu.setApplicationMenu(menu)
@@ -102,13 +91,16 @@ app.on('ready', function() {
   })
 })
 
-
 app.on('activate', () => {
   if (controlWindow === null) {
     createWindow()
   }
 })
 
+
+//========================//
+//       IPC Handlers     //
+//========================//
 ipcMain.on('config', (event, arg) => {
   config = arg
   manageTestCardWindow()
@@ -145,7 +137,15 @@ ipcMain.on('openLogs', (event, w, h) => {
   shell.showItemInFolder(path)
 })
 
+ipcMain.on('openUrl', (event, arg) => {
+  shell.openExternal(arg)
+  log.info('open url', arg)
+})
 
+
+//========================//
+//   Export PNG Images    //
+//========================//
 let headlessExportMode = false
 
 ipcMain.on('exportCard', (event) => {
@@ -156,7 +156,6 @@ ipcMain.on('exportCard', (event) => {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
 
-    // Ensure window is sized correctly - even if larger than screen size
     if (process.platform != 'darwin' && config.windowed) {
       c.minWidth = config.winWidth
       c.minHeight = config.winHeight
@@ -178,26 +177,35 @@ ipcMain.on('exportCard', (event) => {
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
     Nucleus.track("Exported Card", { type: config.export.target, mode: config.export.imageSource, size: c.width + 'x' + c.height, windowed: config.windowed, cardType: config.cardType, headless: true })
-    // once shown it will make the image, and once that's made the window will be closed. 
   }
   
 })
 
+ipcMain.on('selectImage', (event, arg) => {
+  let result = dialog.showOpenDialogSync({ title: "Select Image", properties: ['openFile'], filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif']}] })
+  if (result != null) {
+    let data = fs.readFileSync(result[0], { encoding: 'base64' })
+    let mime = require('mime').getType(result[0])
+    config.alteka.logo = 'data:' + mime + ';base64,' + data
+    controlWindow.webContents.send('config', config)
+  } else {
+    log.info('No file selected')
+  }
+})
 
 ipcMain.on('saveAsPNG', (event, arg) => {
   headlessExportMode = false
   dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: 'TestKard.png', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
     if (!result.canceled) {
-      let path = result.filePath
       var base64Data = arg.replace(/^data:image\/png;base64,/, "")
-      fs.writeFile(path, base64Data, 'base64', function(err) {
+      fs.writeFile(result.filePath, base64Data, 'base64', function(err) {
         if (err) {
           dialog.showErrorBox('Error Saving File', JSON.stringify(err))
           log.error('Couldnt save file: ', err)
           controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
-          let dims = sizeOf(path)
-          log.info('PNG saved to: ', path, ' - With dimensions: ', dims.width, 'x', dims.height)
+          let dims = sizeOf(result.filePath)
+          log.info('PNG saved to: ', result.filePath, ' - With dimensions: ', dims.width, 'x', dims.height)
           controlWindow.webContents.send('exportCardCompleted')
         }
       })
@@ -236,6 +244,11 @@ ipcMain.on('setAsWallpaper', (event, arg) => {
     }
   })
   
+
+
+//====================//
+//   Default Config   //
+//====================//
 ipcMain.on('resetDefault', (event, arg) => {
   controlWindow.webContents.send('config', getDefaultConfig())
   Nucleus.track("Reset Defaults")
@@ -250,14 +263,10 @@ function getDefaultConfig() {
   return defaultConfig
 }
 
-ipcMain.on('openUrl', (event, arg) => {
-  shell.openExternal(arg)
-  log.info('open url', arg)
-})
 
-
-
-
+//==========================//
+//   Test Card Management   //
+//==========================//
 function manageTestCardWindow() {
   if (testCardWindow == null && config.visible) { 
     // Test card doesn't exist, but now needs to
@@ -284,19 +293,12 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  let windowConfig = { show: false, frame: false,
-    width: config.winWidth,
-    height: config.winHeight,
-    webPreferences: { nodeIntegration: true } 
-  }  
-    
+  let windowConfig = { show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true } }  
+  
   if (!config.windowed) { // Setting up for full screen test card
     windowConfig.fullscreen = true
-    
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-
-          // Check and manage for seperate spaces configurations
           if (process.platform == 'darwin') {
           let catalina = (process.getSystemVersion().split('.')[1] >= 15) ? true : false
 
@@ -313,34 +315,28 @@ function setupNewTestCardWindow() {
         } else {
           log.info('Using windows full screen system. Easy.')
         }
-
         windowConfig.x = disp.bounds.x
         windowConfig.y = disp.bounds.y
         windowConfig.width = disp.bounds.width
         windowConfig.height = disp.bounds.height
       }
     }
-  } else { // need to set it up for windowed mode
-    for (const disp of screen.getAllDisplays()) { // find display so window launches on selected screen.
+  } else {
+    for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
         windowConfig.x = disp.bounds.x + (disp.bounds.width - config.winWidth)/2
         windowConfig.y = disp.bounds.y + (disp.bounds.height - config.winHeight)/2
-
-        // TODO - Check that the window isn't too big for the screen selected.
       }
     }
   }
-
-  // All setup is finished, so lets show the window.
   showTestCardWindow(windowConfig)
-  Nucleus.track("Start Output", { windowed: config.windowed, size: windowConfig.width + 'x' + windowConfig.height  })
+  Nucleus.track("Start Output", { windowed: config.windowed, size: windowConfig.width + 'x' + windowConfig.height })
 }
 
 function closeTestCard() {
   log.info('Closing test card')
   testCardWindow.close()
   testCardWindowScreen = null
-
   clearTimeout(testCardWindowResizeTimer)
 }
 
@@ -376,7 +372,6 @@ ipcMain.on('moveWindowTo', (event, arg) => {
   }
 })
 
-
 function showTestCardWindow(windowConfig) {
   log.info('Showing test card with config: ', windowConfig)  
 
@@ -389,9 +384,7 @@ function showTestCardWindow(windowConfig) {
   })
 
   if(config.windowed || headlessExportMode){
-    testCardWindow.setBounds({
-      width: windowConfig.width, height: windowConfig.height
-    })
+    testCardWindow.setBounds({ width: windowConfig.width, height: windowConfig.height })
   }
 
   testCardWindow.loadURL(testCardUrl)
@@ -419,7 +412,6 @@ function showTestCardWindow(windowConfig) {
         }
       }
     }
-
   })
 }
 
@@ -435,22 +427,9 @@ function handleTestCardResize() {
 let testCardWindowResizeTimer
 
 
-ipcMain.on('selectImage', (event, arg) => {
-  let result = dialog.showOpenDialogSync({ 
-    title: "Select Image",
-    properties: ['openFile'],
-    filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif']}],
-  })
-  if (result != null) {
-    let data = fs.readFileSync(result[0], { encoding: 'base64' })
-    let mime = require('mime').getType(result[0])
-    config.alteka.logo = 'data:' + mime + ';base64,' + data
-    controlWindow.webContents.send('config', config)
-  } else {
-    log.info('No file selected')
-  }
-})
-
+//========================//
+//    Voice Generation    //
+//========================//
 setTimeout(createVoice, 5000)
 ipcMain.on('createVoice', (event, arg) => {
   createVoice()
@@ -467,6 +446,9 @@ function createVoice() {
   })
 }
 
+//========================//
+//   Screen Management    //
+//========================//
 let screens = []
 let primaryScreen = {}
 
@@ -478,13 +460,14 @@ function updateScreens() {
     controlWindow.webContents.send('screens', screens, primaryScreen)  
   }
 }
-
 ipcMain.on('getScreens', (event, arg) => {
   updateScreens()
 })
 
 
-
+//============================//
+//   Import/Export Settings   //
+//============================//
 ipcMain.on('exportSettings', (event, arg) => {
   dialog.showSaveDialog(controlWindow, {title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
     if (!result.canceled) {
@@ -492,7 +475,7 @@ ipcMain.on('exportSettings', (event, arg) => {
       let cfg = config
       cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt      
 
-      let data = JSON.stringify(cfg, null, 2);
+      let data = JSON.stringify(cfg, null, 2)
 
       fs.writeFile(path, data, function(err) {
         if (err) {
@@ -510,11 +493,7 @@ ipcMain.on('exportSettings', (event, arg) => {
 })
 
 ipcMain.on('importSettings', (event, arg) => {
-  let result = dialog.showOpenDialogSync({ 
-    title: "Import Settings",
-    properties: ['openFile'],
-    filters: [{name: 'JSON', extensions: ['json', 'JSON']}],
-  })
+  let result = dialog.showOpenDialogSync({ title: "Import Settings", properties: ['openFile'], filters: [{name: 'JSON', extensions: ['json', 'JSON']}]})
   if (result != null) {
     fs.readFile(result[0], (err, data) => {
       if (err) throw err;
@@ -529,14 +508,16 @@ ipcMain.on('importSettings', (event, arg) => {
   }
 })
 
+
+//========================//
+//   Analytics checking   //
+//========================//
 let prevConfig = null
 function updateAnalytics() {
-
   if (prevConfig !== null &&  config !== null) {
     if (config.audio.enabled && config.audio.enabled != prevConfig.audio.enabled) {
       Nucleus.track("Audio Output Enabled", { 'Selected Options': config.audio.options })
     }
   }
-
   prevConfig = config
 }
