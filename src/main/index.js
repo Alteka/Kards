@@ -156,7 +156,7 @@ ipcMain.on('exportCard', (event) => {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
 
-    if (process.platform != 'darwin' && config.windowed) {
+    if (config.windowed) {
       c.minWidth = config.winWidth
       c.minHeight = config.winHeight
     }
@@ -166,10 +166,8 @@ ipcMain.on('exportCard', (event) => {
         if (disp.id == config.screen) {
           c.width = disp.bounds.width
           c.height = disp.bounds.height
-          if (process.platform != 'darwin') {
-            c.minWidth = disp.bounds.width
-            c.minHeight = disp.bounds.height
-          }
+          c.minWidth = disp.bounds.width
+          c.minHeight = disp.bounds.height
         }
       }
      
