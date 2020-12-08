@@ -77,7 +77,7 @@ const log = require('electron-log')
       return {
         config: {
         },
-        boundsInfo: visualViewport.width + ' x ' + visualViewport.height,
+        boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
         cardSize: '',
         time: '00:00'
       }
@@ -161,7 +161,7 @@ const log = require('electron-log')
       ipcRenderer.send('getConfigTestCard')
       this.$message({customClass: "modal",showClose: false, duration: 3000, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {
-        vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
+        vm.boundsInfo = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
       })
       ipcRenderer.on('exportCard', function(event) {
         console.log('exportCard', vm.config.export)
