@@ -15,7 +15,7 @@ Nucleus.init(env.nucleus)
 
 const store = new Store({
   migrations: {
-    '<=0.8.0': store => {
+    '<=1.0.0': store => {
       store.delete('KardsConfig')
       log.info('Resetting to default settings due to upgrade')
     }
