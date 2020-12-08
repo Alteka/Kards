@@ -492,12 +492,21 @@ ipcMain.on('importSettings', (event, arg) => {
   if (result != null) {
     fs.readFile(result[0], (err, data) => {
       if (err) throw err;
-      config = JSON.parse(data);
+      let d = JSON.parse(data)
+      let count = 0
+
+      for (let key in config) {
+        if (d[key] != undefined && key != 'visible') {
+          config[key] = d[key]
+          count++
+        }
+      }
+
+      createVoice() // recreate voice data after importing settings.
+      controlWindow.webContents.send('config', config)
+      controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
+      Nucleus.track("Settings Imported")
     })
-    createVoice() // recreate voice data after importing settings.
-    controlWindow.webContents.send('config', config)
-    controlWindow.webContents.send('importSettings')
-    Nucleus.track("Settings Imported")
   } else {
     log.info('No file selected')
   }

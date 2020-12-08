@@ -135,7 +135,7 @@ let loadingInstance
       })
 
       ipcRenderer.on('importSettings', function(event, msg) {
-        Notification.info({title: 'Success', message: 'Settings Imported', showClose: false, duration: 2500, onClick: function() { this.close() }})
+        Notification.info({title: 'Import Settings', message: msg, showClose: false, duration: 2500, onClick: function() { this.close() }})
       })
       
     },
