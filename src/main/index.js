@@ -496,7 +496,7 @@ ipcMain.on('importSettings', (event, arg) => {
       let count = 0
 
       for (let key in config) {
-        if (d[key] != undefined && key != 'visible') {
+        if (d[key] != undefined && key != 'visible' && typeof d[key] === typeof config[key]) {
           config[key] = d[key]
           count++
         }
