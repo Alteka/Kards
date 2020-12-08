@@ -68,11 +68,11 @@ const { ipcRenderer } = require('electron')
         this.viewBox = (left - 25) + " " + (top - 25) + " " + (Math.abs(right - left) + 50) + " " + (Math.abs(bottom - top) + 50)
         this.setOutputToMatchScreen()
       },
-      selectScreen: function(id) {
-        this.config.screen = id
-        if (this.config.windowed && this.config.visible) {
+      selectScreen: function(id) { 
+        if (this.config.windowed && this.config.visible && this.config.screen != id) {
           ipcRenderer.send('moveWindowTo', id)
         }
+        this.config.screen = id
       },
       setOutputToMatchScreen: function() {
         if (!this.config.windowed && this.config.fullsize) {
