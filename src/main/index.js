@@ -468,7 +468,9 @@ ipcMain.on('exportSettings', (event, arg) => {
     if (!result.canceled) {
       let path = result.filePath
       let cfg = config
-      cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt      
+      cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt    
+      cfg.createdBy = 'Kards'
+      cfg.exportedVersion = require('../../package.json').version
 
       let data = JSON.stringify(cfg, null, 2)
 
@@ -495,17 +497,24 @@ ipcMain.on('importSettings', (event, arg) => {
       let d = JSON.parse(data)
       let count = 0
 
-      for (let key in config) {
-        if (d[key] != undefined && key != 'visible' && typeof d[key] === typeof config[key]) {
-          config[key] = d[key]
-          count++
+      if (d.createdBy == 'Kards') {
+        if (d.exportedVersion == require('../../package.json').version) {
+          for (let key in config) {
+            if (d[key] != undefined && key != 'visible' && key != 'exportedVersion' && key != 'createdBy' && typeof d[key] === typeof config[key]) {
+              config[key] = d[key]
+              count++
+            }
+          }
+          createVoice() // recreate voice data after importing settings.
+          controlWindow.webContents.send('config', config)
+          controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
+          Nucleus.track("Settings Imported")
+        } else {
+          controlWindow.webContents.send('importSettings', 'Skipping - The file is from a different version of Kards')  
         }
+      } else {
+        controlWindow.webContents.send('importSettings', 'Failed - That file was not made by Kards')
       }
-
-      createVoice() // recreate voice data after importing settings.
-      controlWindow.webContents.send('config', config)
-      controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
-      Nucleus.track("Settings Imported")
     })
   } else {
     log.info('No file selected')
