@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper" style="position: relative;" :class="{ darkMode : require('electron').remote.nativeTheme.shouldUseDarkColors }">
+  <div id="wrapper" style="position: relative;" :class="{ darkMode : darkMode }">
 
    
 <el-form ref="form" :model="config" label-width="120px" size="small">
@@ -13,7 +13,7 @@
   <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px;">
     
     <el-tab-pane label="Alteka" name="alteka">
-      <control-alteka :alteka="config.alteka" :colors="predefineColors"></control-alteka>
+      <control-alteka :alteka="config.alteka" :colors="config.predefineColors"></control-alteka>
     </el-tab-pane>
 
     <el-tab-pane label="Bars" name="bars">
@@ -21,7 +21,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="Grid" name="grid">
-      <control-grid :grid="config.grid" :colors="predefineColors"></control-grid>
+      <control-grid :grid="config.grid" :colors="config.predefineColors"></control-grid>
     </el-tab-pane>
 
     <el-tab-pane label="Ramp" name="ramp">
@@ -29,7 +29,7 @@
     </el-tab-pane>
    
     <el-tab-pane label="Name" name="placeholder">
-      <control-placeholder :placeholder="config.placeholder" :colors="predefineColors"></control-placeholder>
+      <control-placeholder :placeholder="config.placeholder" :colors="config.predefineColors"></control-placeholder>
     </el-tab-pane>
 
     <el-tab-pane label="AV Sync" name="audioSync">
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-const { ipcRenderer, screen } = require('electron')
+const { ipcRenderer } = require('electron')
 import ControlBars from './Control/ControlBars.vue'
 import ControlGrid from './Control/ControlGrid.vue'
 import ControlRamp from './Control/ControlRamp.vue'
@@ -149,6 +149,11 @@ import ControlScreen from './Control/ControlScreen.vue'
 var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
 
+const axios = require('axios')
+import { Notification } from 'element-ui'
+
+var compareVersions = require('compare-versions')
+
   export default {
     name: 'control',
     components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu },
@@ -156,7 +161,7 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
     return {
       config: require('../../main/defaultConfig.json'),
       sync: false,
-      predefineColors: ['#ffffff', '#d3d3d3', '#7f7f7f', '#3e3e3e', '#000000', '#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#b52f2f', '#D75B1F', '#D7E133', '#6ab42f', '#2fb48d', '#2fa9b4', '#2f45b4', '#ac2fb4']
+      darkMode: false
     }
   },
     created: function() {
@@ -167,6 +172,9 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
       ipcRenderer.on('config', function(event, val) {
         vm.config = val
         vm.sync = true
+      })
+      ipcRenderer.on('darkMode', function(event, val) {
+        vm.darkMode = val
       })
       ipcRenderer.on('testCardResize', function(event, w, h) {
         if (config.windowed) {
@@ -202,14 +210,48 @@ Mousetrap.bind('esc', function() { ipcRenderer.send('closeTestCard') }, 'keyup')
         vm.config.animated = !vm.config.animated
         return false;
       })
-      Mousetrap.bind(['command+w', 'ctrl+w'], function() {
-        vm.config.windowed = !vm.config.windowed
-        return false;
-      })
-      Mousetrap.bind(['command+s', 'ctrl+s'], function() {
-        ipcRenderer.send('exportCard')
-        return false;
-      })
+
+      setTimeout(function() {
+        let current = require('./../../../package.json').version
+
+
+      // Make a request for a user with a given ID
+      axios.get('https://api.github.com/repos/alteka/kards/releases/latest')
+        .then(function (response) {
+          let status = compareVersions(response.data.tag_name, current, '>')
+          if (status == 1) { 
+
+            let link = ''
+            for (const asset in response.data.assets) {
+              if (process.platform == 'darwin' && response.data.assets[asset].name.includes('.pkg')) {
+                link = response.data.assets[asset].browser_download_url
+              }
+              if (process.platform != 'darwin' && response.data.assets[asset].name.includes('.exe')) {
+                link = response.data.assets[asset].browser_download_url
+              }
+            }
+
+            vm.$notify({
+            title: 'An Update Is Available',
+            type: 'info',
+            duration: 0,
+            dangerouslyUseHTMLString: true,
+            message: 'v' + response.data.tag_name + ': <a href=\'' + link + '\'>Download</a>'
+          });
+          } else if (status == 0) {
+            // running current/latest version.
+          } else if (status == -1) {
+            vm.$notify({
+            title: 'Developer?',
+            duration: 3000,
+            message: 'You are running a version newer (' + current + ') than is available on GitHub (' + response.data.tag_name + ')'
+          });
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+      }, 3000)
     },
 
 

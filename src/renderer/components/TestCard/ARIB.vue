@@ -1,7 +1,7 @@
 <template>
   <div id="arib">
 
-    <info-circle :config="config" :cardSize="cardSize" />
+    <info-circle :config="config" :cardSize="cardSize" :time="time" />
   
     <div class="row grey40">
       <div class="endbit"><swatch colour="white" ire="40" :showText="config.bars.overlay"></swatch></div>
@@ -94,7 +94,8 @@ import InfoCircle from './InfoCircle'
     components: { Swatch, InfoCircle },
     props: {
       config: Object,
-      cardSize: String
+      cardSize: String,
+      time: String
     }
   }
 </script>

@@ -4,43 +4,41 @@
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync'}">
-        <transition name="fade">
-          <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
-          <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
-          <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
-          <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize"></Bars>
-          <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize"></Ramp>
-          <AudioSync v-if="config.cardType=='audioSync'" :config="config" :cardSize="cardSize"></AudioSync>
-          <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
-          <Alteka v-if="config.cardType == 'alteka'" :config="config" :cardSize="cardSize"></Alteka>
-        </transition>
+          <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
+          <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
+          <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
+          <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
+          <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
+          <AudioSync v-if="config.cardType=='audioSync'" :config="config" :cardSize="cardSize" :time="time"></AudioSync>
+          <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
+          <Alteka v-if="config.cardType == 'alteka'" :config="config" :cardSize="cardSize" :time="time"></Alteka>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
+        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
+        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAboveLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize"></Placeholder>
+        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
       </div>
 
     </div>
@@ -88,18 +86,6 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
 const log = require('electron-log')
 
-const { remote } = require('electron')
-const { Menu, MenuItem } = remote
-
-const menu = new Menu()
-menu.append(new MenuItem({ label: 'Alteka Kards', enabled: false }))
-menu.append(new MenuItem({ type: 'separator' }))
-menu.append(new MenuItem({ label: 'Close Card', click() {
-  ipcRenderer.send('closeTestCard')
-} }))
-
-
-
   export default {
     name: 'testcard',
     components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync },
@@ -107,8 +93,9 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       return {
         config: {
         },
-        boundsInfo: visualViewport.width + ' x ' + visualViewport.height,
-        cardSize: ''
+        boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
+        cardSize: '',
+        time: '00:00'
       }
     },
     computed: {
@@ -126,6 +113,17 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       }
     },
     methods: {
+      updateTime: function() {
+        var cd = new Date()
+        this.time = this.zeroPadding(cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2) + ':' + this.zeroPadding(cd.getSeconds(), 2)
+      },
+      zeroPadding: function(num, digit) {
+          var zero = '';
+          for(var i = 0; i < digit; i++) {
+              zero += '0';
+          }
+          return (zero + num).slice(-digit);
+      },
       closeTestCard: function () {
         ipcRenderer.send('closeTestCard')
       },
@@ -170,13 +168,16 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
       ipcRenderer.on('config', function(event, args) {
         vm.config = args
         vm.updateCardSize()
+        if(!vm.config.visible) vm.exportTestCard(args.export)
       })
       vm.updateCardSize()
       setTimeout(vm.updateCardSize, 1000)
+      vm.updateTime()
+      setInterval(vm.updateTime, 1000)
       ipcRenderer.send('getConfigTestCard')
       this.$message({customClass: "modal",showClose: false, duration: 3000, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {
-        vm.boundsInfo = visualViewport.width + ' x ' + visualViewport.height
+        vm.boundsInfo = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
       })
       ipcRenderer.on('exportCard', function(event) {
         console.log('exportCard', vm.config.export)
@@ -185,12 +186,10 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 
       window.addEventListener('contextmenu', (e) => {
         e.preventDefault()
-        menu.popup({ window: remote.getCurrentWindow() })
       }, false)
-
     }
   }
-</script>
+  </script>
 
 <style>
 @font-face {
@@ -255,7 +254,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
   overflow: hidden;
 }
 .animated {
-  animation: diagonal 10s infinite;
+  animation: diagonal 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonal {
@@ -264,7 +263,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 
 .animatedAbove {
-  animation: diagonalAbove 10s infinite;
+  animation: diagonalAbove 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonalAbove {
@@ -273,7 +272,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 
 .animatedLeft {
-  animation: diagonalLeft 10s infinite;
+  animation: diagonalLeft 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonalLeft {
@@ -282,7 +281,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
 }
 
 .animatedAboveLeft {
-  animation: diagonalAboveLeft 10s infinite;
+  animation: diagonalAboveLeft 30s infinite;
   animation-timing-function: linear;
 }
 @keyframes diagonalAboveLeft {
@@ -307,7 +306,7 @@ menu.append(new MenuItem({ label: 'Close Card', click() {
     background-color: rgb(16,16,16);
   }
   .superblack {
-    background-color: rgb(0,0,0)
+    background-color: rgba(0,0,0,1)
   }
   .grey40 {
     background-color: rgb(104,104,104);

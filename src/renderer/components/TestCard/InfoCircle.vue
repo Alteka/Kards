@@ -3,6 +3,7 @@
     <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
       <div class="infoText" :class="{ biggerText : config.name.length < 20, evenBiggerText : config.name.length < 12}">{{ config.name }}</div>
       <div class="sizeText">{{ cardSize }}</div>
+      <div class="clock">{{ time }}</div>
     </div>
   </transition>
 </template>
@@ -11,7 +12,8 @@
   export default {
     props: {
       config: Object,
-      cardSize: String
+      cardSize: String,
+      time: String
     }
   }
 </script>
@@ -53,13 +55,25 @@
   position: absolute;
   width: 50%;
   left: 25%;
-  bottom: 5%;
+  top: 5%;
   overflow: hidden;
   font-size: 66%;
 }
 .sizeText span {
   display: inline-block;
 }
+.clock {
+  position: absolute;
+  width: 50%;
+  left: 25%;
+  bottom: 5%;
+  overflow: hidden;
+  font-size: 66%;
+}
+.clock span {
+  display: inline-block;
+}
+
  .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }

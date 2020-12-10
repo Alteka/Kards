@@ -19,8 +19,19 @@
         <el-button type="primary" size="mini" round v-on:click="ipcSend('resetDefault'); confirmResetVisible = false"><i class="fas fa-undo"></i> Reset</el-button>
       </el-row>
     </el-popover>
-    <el-button type="primary" size="mini" round v-popover:confirmReset><i class="fas fa-undo"></i> Reset</el-button>
-    <el-button type="primary" size="mini" round v-on:click="openUrl('https://alteka.solutions/kards/help')"><i class="fas fa-question"></i> Help</el-button>
+
+    <el-dropdown size="mini" trigger="click" @command="handleDropdown">
+      <el-button size="mini" type="primary">
+        More<i class="el-icon-arrow-up el-icon--right"></i>
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-popover:confirmReset ><i class="fas fa-undo"></i> Reset</el-dropdown-item>
+        <el-dropdown-item divided command="openHelp"><i class="fas fa-question"></i> Help</el-dropdown-item>
+        <el-dropdown-item divided command="openLogs"><i class="fas fa-clipboard-list"></i> Logs</el-dropdown-item>
+        <el-dropdown-item divided command="exportSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>
+        <el-dropdown-item command="importSettings"><i class="fas fa-file-import"></i> Import Settings</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </el-col>
 
 
@@ -55,7 +66,7 @@
   <audio src="~@/assets/audio/pink.wav" id="pink" />
   <audio src="~@/assets/audio/white.wav" id="white" />
   <audio src="~@/assets/audio/tone.wav" id="tone" />
-  <audio :src="voiceSrc" id="voice" />
+  <audio :src="config.audio.voiceData" id="voice" />
 
 
 
@@ -93,7 +104,6 @@
 
 <script>
 const log = require('electron-log')
-const say = require('say')
 const { ipcRenderer, remote } = require('electron')
 import { Loading, Notification } from 'element-ui'
 let loadingInstance
@@ -110,7 +120,6 @@ let loadingInstance
         curAudio: null,
         playing: false,
         name: "",
-        voiceSrc: 'file://' + remote.app.getPath('userData') + '/voice.wav' + '?bust=' + Math.round((Math.random()*100000)),
         voiceTimer: null,
         audioDevices: []
       }
@@ -126,6 +135,11 @@ let loadingInstance
         } 
         loadingInstance.close()
       })
+
+      ipcRenderer.on('importSettings', function(event, msg) {
+        Notification.info({title: 'Import Settings', message: msg, showClose: false, duration: 2500, onClick: function() { this.close() }})
+      })
+      
     },
     watch: {
       config: {
@@ -179,13 +193,27 @@ let loadingInstance
         loadingInstance = Loading.service({ fullscreen: true, text:"Capturing Test Card", background: 'rgba(0, 0, 0, 0.85)'})
         this.drawerImage = false        
       },
-      openUrl: function(link) {
-        log.info('Opening external url: ' + link)
-        require("electron").shell.openExternal(link)
+      handleDropdown: function(command) {
+        switch (command) {
+          case 'openHelp':
+            ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')    
+            break;
+
+          case 'importSettings':
+            ipcRenderer.send('importSettings')
+            break;
+            
+          case 'exportSettings':
+            ipcRenderer.send('exportSettings')
+            break;
+
+          case 'openLogs':
+            ipcRenderer.send('openLogs')
+            break;
+        }
       },
       stopAudio: function() {
         log.info('Stopping audio output')
-        window.speechSynthesis.cancel()
         this.stopFile('tone')
         this.stopFile('white')
         this.stopFile('pink')
@@ -232,21 +260,7 @@ let loadingInstance
         this.voiceTimer = setTimeout(this.updateName, 1000)
       },
       updateName: function() {
-        let dest = remote.app.getPath('userData') + '/voice.wav'
-        let name = this.config.name
-        say.export("This is - " + name, null, null, dest, (err) => {
-          if (err) {
-            return console.error(err)
-          }
-          console.log('Updated name (' + name + ') has been saved to ', dest)
-          let voice = document.getElementById('voice')
-          if (this.curAudio == 'voice') {
-            voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
-            voice.play()
-          } else {
-            voice.src = this.voiceSrc + '?bust=' + Math.round((Math.random()*100000))  
-          }
-        })
+        ipcRenderer.send('createVoice')
       }
     }
   }

@@ -15,8 +15,13 @@
     </div>
 
     <transition name="fade">
-      <div v-if="config.showInfo" id="infoText" :style="{color:config.placeholder.fg}">
+      <div v-resize-text="{ratio:4}" v-if="config.showInfo" id="infoText" :style="{color:config.placeholder.fg}">
         {{ cardSize }}
+      </div>
+    </transition>
+    <transition name="fade">
+      <div v-resize-text="{ratio:4}" v-if="config.showInfo" id="time" :style="{color:config.placeholder.fg}">
+        {{ time }}
       </div>
     </transition>
   </div>
@@ -30,7 +35,8 @@ import ResizeText from 'vue-resize-text'
     },
     props: {
       config: Object,
-      cardSize: String
+      cardSize: String,
+      time: String
     }
   }
 </script>
@@ -40,12 +46,17 @@ import ResizeText from 'vue-resize-text'
     background: #d33;
     height: 100%;
     width: 100%;
+    font-size: 26px;
   }
   #infoText {
     position: absolute;
     width: 100%;
-    height: 30px;
-    font-size: 26px;
+    top: 10px;
+    text-align: center;
+  }
+  #time {
+    position: absolute;
+    width: 100%;
     bottom: 10px;
     text-align: center;
   }

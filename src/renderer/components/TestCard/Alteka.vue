@@ -129,7 +129,7 @@
 
     <div id="centerbox">
       <transition name="fade">
-        <img v-if="config.alteka.logoUrl != ''" id="customLogo" :src="config.alteka.logoUrl" />      
+        <img v-if="config.alteka.logo != ''" id="customLogo" :src="config.alteka.logo" />      
       </transition>
 
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
@@ -161,20 +161,21 @@
 
         <g id="clip-me" clip-path="url('#clipCircle')">
           <transition name="fade">
-            <image v-if="!config.alteka.showLogo || config.alteka.logoUrl == ''" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
+            <image v-if="!config.alteka.showLogo || config.alteka.logo == ''" href="~@/assets/alteka_kards.svg" x="-45" y="-15" width="90" height="30" />
           </transition>
           <rect x="-45" y="-45" width="90" height="30" fill="url('#hLuma')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#parade')" />
           <rect x="-45" y="15" width="90" height="30" fill="url('#vLuma')" style="mix-blend-mode: multiply" />
           <transition name="fade">
             <g v-if="config.showInfo">
-            <g v-if="config.alteka.showLogo && !config.alteka.logoUrl == ''" :fill="config.alteka.bg" fill-opacity="75%">
+            <g v-if="config.alteka.showLogo && !config.alteka.logo == ''" :fill="config.alteka.bg" fill-opacity="75%">
               <rect x="-45" y="10" width="90" height="5" />
               <rect x="-45" y="-15" width="90" height="7" />
             </g>
             <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
             <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">ALTEKA Kards {{require('./../../../../package.json').version}}</text>
             <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{cardSize}}</text>
+            <text x="0" y="14" w="50" text-anchor="middle" font-size="3px" :style="{fill: text}">{{time}}</text>
           </g>
           </transition>
           <transition name="fade">
@@ -194,15 +195,10 @@
 import Swatch from "./Swatch"
 export default {
   components: { Swatch },
-  data() {
-    return {
-      electron: process.versions.electron,
-      name: this.$route.name
-    };
-  },
   props: {
     config: Object,
-    cardSize: String
+    cardSize: String,
+    time: String
   },
   watch: {
       config: {
@@ -224,7 +220,7 @@ export default {
     },
   computed: {
     text: function() {
-      if (this.config.alteka.showLogo && this.config.alteka.logoUrl != '') {
+      if (this.config.alteka.showLogo && this.config.alteka.logo != '') {
         return this.config.alteka.textColour
       } else {
         return "#fff"

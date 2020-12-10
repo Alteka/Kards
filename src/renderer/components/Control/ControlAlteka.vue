@@ -39,7 +39,7 @@
         </el-button-group>
       </el-col>
       <el-col  v-if="alteka.showLogo" :span="7">
-        <el-image v-if="alteka.logoUrl != ''" style="width: 135px; height: 45px" :src="alteka.logoUrl" fit="cover"></el-image>
+        <el-image v-if="alteka.logo != ''" style="width: 135px; height: 45px" :src="alteka.logo" fit="cover"></el-image>
       </el-col>
     </el-row>
   </div>
@@ -57,14 +57,8 @@ const { ipcRenderer } = require('electron')
         ipcRenderer.send('selectImage')
       },
       clearImage: function() {
-        this.alteka.logoUrl = ""
+        this.alteka.logo = ""
       }
-    },
-    mounted: function() {
-      let vm = this
-      ipcRenderer.on('logoUrl', function(event, val) {
-        vm.alteka.logoUrl = val
-      })
     }
   }
 </script>
