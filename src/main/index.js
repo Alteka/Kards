@@ -11,7 +11,7 @@ var sizeOf = require('image-size')
 let env = require('./env.json')
 
 const Nucleus = require('nucleus-nodejs')
-Nucleus.init(env.nucleus)
+Nucleus.init(env.nucleus, { disableInDev: false })
 
 const store = new Store({
   migrations: {
@@ -75,7 +75,16 @@ app.on('ready', function() {
   if (env.nucleus == '') {
     dialog.showErrorBox('Warning', 'You need to set nucleus environment variable')
   }
+
   Nucleus.appStarted()
+  if (!store.has('KardsInstallID')) {
+    let newId = UUID()
+    log.info('First Runtime and created Install ID: ' + newId)
+    store.set('KardsInstallID', newId)
+  } else {
+    Nucleus.setUserId(store.get('KardsInstallID'))
+    log.info('Install ID: ' + store.get('KardsInstallID'))
+  }
 
   updateScreens()
   createWindow()
@@ -159,7 +168,7 @@ ipcMain.on('testCardKeyPress', (event, msg) => {
 ipcMain.on('exportCard', (event) => {
   if (testCardWindow != null) {
     testCardWindow.webContents.send('exportCard')
-    Nucleus.track("Exported Card", {  type: config.export.target, mode: config.export.imageSource, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, windowed: config.windowed, cardType: config.cardType, headless: false })
+    Nucleus.track("Exported Card", {  type: config.export.target, imageSource: config.export.imageSource, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, windowed: config.windowed, cardType: config.cardType, headless: false })
   } else {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: { nodeIntegration: true }}
@@ -179,7 +188,7 @@ ipcMain.on('exportCard', (event) => {
     } 
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
-    Nucleus.track("Exported Card", { type: config.export.target, mode: config.export.imageSource, size: c.width + 'x' + c.height, windowed: config.windowed, cardType: config.cardType, headless: true })
+    Nucleus.track("Exported Card", { type: config.export.target, imageSource: config.export.imageSource, size: c.width + 'x' + c.height, windowed: config.windowed, cardType: config.cardType, headless: true })
   }
   
 })
@@ -333,7 +342,6 @@ function setupNewTestCardWindow() {
     }
   }
   showTestCardWindow(windowConfig)
-  Nucleus.track("Start Output", { windowed: config.windowed, size: windowConfig.width + 'x' + windowConfig.height })
 }
 
 function closeTestCard() {
@@ -516,7 +524,7 @@ ipcMain.on('importSettings', (event, arg) => {
           createVoice() // recreate voice data after importing settings.
           controlWindow.webContents.send('config', config)
           controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
-          Nucleus.track("Settings Imported")
+          Nucleus.track("Settings Imported", { count: count })
         } else {
           controlWindow.webContents.send('importSettings', 'Skipping - The file is from a different version of Kards')  
         }
@@ -534,11 +542,46 @@ ipcMain.on('importSettings', (event, arg) => {
 //   Analytics checking   //
 //========================//
 let prevConfig = null
+let debounceConfig = null
+let analyticsDebounce = null
+let onlyTriggerOnce = false
+
+// Called every time config is updated (by the UI?)
 function updateAnalytics() {
-  if (prevConfig !== null &&  config !== null) {
-    if (config.audio.enabled && config.audio.enabled != prevConfig.audio.enabled) {
-      Nucleus.track("Audio Output Enabled", { 'Selected Options': config.audio.options })
+  if (prevConfig !== null && config !== null) {
+
+    if (!config.visible && prevConfig.visible) {
+      // Card turned off
+      onlyTriggerOnce = false
     }
+
+    clearTimeout(analyticsDebounce) // config changed so kill timer
+    debounceConfig = config
+    analyticsDebounce = setTimeout(function() {
+      if (debounceConfig == config && config.visible && !onlyTriggerOnce) {
+        onlyTriggerOnce = true
+        let cardSize = testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height
+        Nucleus.track("Card Enabled", { cardType: config.cardType, windowed: config.windowed, size: cardSize, motion: config.animated, showInfo: config.showInfo })
+      }
+
+      if (debounceConfig == config && config.audio.enabled) {
+        Nucleus.track("Audio Output Enabled", { 
+          'Voice': config.audio.options.includes('voice'),
+          'Tone': config.audio.options.includes('tone'),
+          'Pink Noise': config.audio.options.includes('pink'),
+          'White Noise': config.audio.options.includes('white'),
+          'Stereo': config.audio.options.includes('stereo'),
+          'Phase': config.audio.options.includes('phase')
+        })
+      }
+    }, 30000)
+    
   }
   prevConfig = config
+}
+function UUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  })
 }
