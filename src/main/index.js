@@ -11,7 +11,7 @@ var sizeOf = require('image-size')
 let env = require('./env.json')
 
 const Nucleus = require('nucleus-nodejs')
-Nucleus.init(env.nucleus, { disableInDev: false })
+
 
 const store = new Store({
   migrations: {
@@ -75,8 +75,6 @@ app.on('ready', function() {
   if (env.nucleus == '') {
     dialog.showErrorBox('Warning', 'You need to set nucleus environment variable')
   }
-
-  Nucleus.appStarted()
   if (!store.has('KardsInstallID')) {
     let newId = UUID()
     log.info('First Runtime and created Install ID: ' + newId)
@@ -85,6 +83,8 @@ app.on('ready', function() {
     Nucleus.setUserId(store.get('KardsInstallID'))
     log.info('Install ID: ' + store.get('KardsInstallID'))
   }
+  Nucleus.init(env.nucleus, { disableInDev: false })
+  Nucleus.appStarted()
 
   updateScreens()
   createWindow()
