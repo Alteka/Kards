@@ -79,10 +79,9 @@ app.on('ready', function() {
     let newId = UUID()
     log.info('First Runtime and created Install ID: ' + newId)
     store.set('KardsInstallID', newId)
-  } else {
-    Nucleus.setUserId(store.get('KardsInstallID'))
-    log.info('Install ID: ' + store.get('KardsInstallID'))
   }
+  Nucleus.setUserId(store.get('KardsInstallID'))
+  log.info('Install ID: ' + store.get('KardsInstallID'))
   Nucleus.init(env.nucleus, { disableInDev: false })
   Nucleus.appStarted()
 
