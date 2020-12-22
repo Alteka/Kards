@@ -544,41 +544,41 @@ ipcMain.on('importSettings', (event, arg) => {
 let prevConfig = null
 let debounceConfig = null
 let analyticsDebounce = null
-let onlyTriggerOnce = false
+
+let triggerCardEnabled = true
+let triggerAudioEnabled = true
 
 // Called every time config is updated (by the UI?)
 function updateAnalytics() {
   if (prevConfig !== null && config !== null) {
 
     if (!config.visible && prevConfig.visible) {
-      // Card turned off
-      onlyTriggerOnce = false
+      triggerCardEnabled = true
+    }
+
+    if (!config.audio.enabled && prevConfig.audio.enabled) {
+      triggerAudioEnabled = true
     }
 
     clearTimeout(analyticsDebounce) // config changed so kill timer
     debounceConfig = config
+
     analyticsDebounce = setTimeout(function() {
-      if (debounceConfig == config && config.visible && !onlyTriggerOnce) {
-        onlyTriggerOnce = true
-        let cardSize = testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height
-        Nucleus.track("Card Enabled", { cardType: config.cardType, windowed: config.windowed, size: cardSize, motion: config.animated, showInfo: config.showInfo })
+      if (debounceConfig == config && config.visible && triggerCardEnabled) {
+        triggerCardEnabled = false
+        Nucleus.track("Card Enabled", { cardType: config.cardType, windowed: config.windowed, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, motion: config.animated, showInfo: config.showInfo })
       }
 
-      if (debounceConfig == config && config.audio.enabled) {
-        Nucleus.track("Audio Output Enabled", { 
-          'Voice': config.audio.options.includes('voice'),
-          'Tone': config.audio.options.includes('tone'),
-          'Pink Noise': config.audio.options.includes('pink'),
-          'White Noise': config.audio.options.includes('white'),
-          'Stereo': config.audio.options.includes('stereo'),
-          'Phase': config.audio.options.includes('phase')
-        })
+      if (debounceConfig.audio == config.audio && config.audio.enabled && triggerAudioEnabled) {
+        triggerAudioEnabled = false
+        Nucleus.track("Audio Output Enabled", { 'Voice': config.audio.options.includes('voice'), 'Tone': config.audio.options.includes('tone'), 'Pink Noise': config.audio.options.includes('pink'), 'White Noise': config.audio.options.includes('white'), 'Stereo': config.audio.options.includes('stereo'), 'Phase': config.audio.options.includes('phase') })
       }
     }, 30000)
     
   }
   prevConfig = config
 }
+
 function UUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
