@@ -35,16 +35,24 @@
   </el-col>
 
 
-  <el-drawer :with-header="false" :visible.sync="drawerAudio" direction="btt" size="100px">
+  <el-drawer :with-header="false" :visible.sync="drawerAudio" direction="btt" size="150px">
     <el-row class="drawerContent">
       <el-checkbox-group v-model="config.audio.options" size="medium">
         <el-checkbox-button label="voice">Voice</el-checkbox-button>
+        <el-checkbox-button label="text">Text</el-checkbox-button>
         <el-checkbox-button label="tone">Tone</el-checkbox-button>
-        <el-checkbox-button label="pink">Pink Noise</el-checkbox-button>
-        <el-checkbox-button label="white">White Noise</el-checkbox-button>
+        <el-checkbox-button label="pink">Pink</el-checkbox-button>
+        <el-checkbox-button label="white">White</el-checkbox-button>
         <el-checkbox-button label="stereo">Stereo</el-checkbox-button>
         <el-checkbox-button label="phase">Phase</el-checkbox-button>
       </el-checkbox-group>
+    </el-row>
+    <el-row v-if="config.audio.options.includes('text')">
+      <el-col :span="23">
+        <el-form-item label="Text" label-width="70px">
+          <el-input v-model="config.audio.text" placeholder="Free text to be converted to audio"></el-input>
+        </el-form-item>
+      </el-col>
     </el-row>
     <el-row >
       <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="4" :class="{ enabledText: config.audio.enabled }">
@@ -67,6 +75,7 @@
   <audio src="~@/assets/audio/white.wav" id="white" />
   <audio src="~@/assets/audio/tone.wav" id="tone" />
   <audio :src="config.audio.voiceData" id="voice" />
+  <audio :src="config.audio.textData" id="text" />
 
 
 
@@ -121,6 +130,8 @@ let loadingInstance
         playing: false,
         name: "",
         voiceTimer: null,
+        text: "",
+        textTimer: null,
         audioDevices: []
       }
     },
@@ -150,10 +161,16 @@ let loadingInstance
             document.getElementById('white').setSinkId(val.audio.deviceId)
             document.getElementById('tone').setSinkId(val.audio.deviceId)
             document.getElementById('voice').setSinkId(val.audio.deviceId)
+            document.getElementById('text').setSinkId(val.audio.deviceId)
 
             if (val.name != this.name) {
               this.name = val.name
               this.doNameUpdate()
+            }
+
+            if (val.audio.text != this.text) {
+              this.text = val.audio.text
+              this.doTextUpdate()
             }
 
             if (val.audio.enabled && !this.playing) {
@@ -261,6 +278,13 @@ let loadingInstance
       },
       updateName: function() {
         ipcRenderer.send('createVoice')
+      },
+      doTextUpdate: function() {
+        clearTimeout(this.textTimer)
+        this.textTimer = setTimeout(this.updateText, 1000)
+      },
+      updateText: function() {
+        ipcRenderer.send('updateAudioText')
       }
     }
   }

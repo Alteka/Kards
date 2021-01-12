@@ -58,7 +58,9 @@
     "enabled": false,
     "options": ["voice", "tone"],
     "prependText": "This is ",
-    "voiceData": ""
+    "voiceData": "",
+    "text": "",
+    "textData": ""
 },
 "winWidth": 1280,
 "winHeight": 720,

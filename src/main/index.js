@@ -18,6 +18,11 @@ const store = new Store({
     '<=1.0.0': store => {
       store.delete('KardsConfig')
       log.info('Resetting to default settings due to upgrade')
+    },
+    '<=1.1.0': store => {
+      store.set('KardsConfig.audio.text', '')
+      store.set('KardsConfig.audio.textData', '')
+      log.info('Resetting to default settings due to upgrade')
     }
   }});
 
@@ -441,8 +446,12 @@ let testCardWindowResizeTimer
 //    Voice Generation    //
 //========================//
 setTimeout(createVoice, 5000)
+setTimeout(createTextAudio, 5000)
 ipcMain.on('createVoice', (event, arg) => {
   createVoice()
+})
+ipcMain.on('updateAudioText', (event, arg) => {
+  createTextAudio()
 })
 function createVoice() {
   let dest = app.getPath('userData') + '/voice.wav'  
@@ -452,6 +461,17 @@ function createVoice() {
     }
     log.info('Updated name (' + config.name + ') has been saved to ', dest)
     config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    controlWindow.webContents.send('config', config)
+  })
+}
+function createTextAudio() {
+  let dest = app.getPath('userData') + '/text.wav'  
+  say.export(config.audio.text, null, null, dest, (err) => {
+    if (err) {
+      return console.error(err)
+    }
+    log.info('Updated audio text (' + config.audio.text + ') has been saved to ', dest)
+    config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
     controlWindow.webContents.send('config', config)
   })
 }
@@ -484,6 +504,7 @@ ipcMain.on('exportSettings', (event, arg) => {
       let path = result.filePath
       let cfg = config
       cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt    
+      cfg.audio.textData = '' // clear this out as it can be easily rebuilt    
       cfg.createdBy = 'Kards'
       cfg.exportedVersion = require('../../package.json').version
 
@@ -521,6 +542,7 @@ ipcMain.on('importSettings', (event, arg) => {
             }
           }
           createVoice() // recreate voice data after importing settings.
+          createTextAudio() 
           controlWindow.webContents.send('config', config)
           controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
           Nucleus.track("Settings Imported", { count: count })
@@ -570,7 +592,7 @@ function updateAnalytics() {
 
       if (debounceConfig.audio == config.audio && config.audio.enabled && triggerAudioEnabled) {
         triggerAudioEnabled = false
-        Nucleus.track("Audio Output Enabled", { 'Voice': config.audio.options.includes('voice'), 'Tone': config.audio.options.includes('tone'), 'Pink Noise': config.audio.options.includes('pink'), 'White Noise': config.audio.options.includes('white'), 'Stereo': config.audio.options.includes('stereo'), 'Phase': config.audio.options.includes('phase') })
+        Nucleus.track("Audio Output Enabled", { 'Voice': config.audio.options.includes('voice'), 'Tone': config.audio.options.includes('tone'), 'Text': config.audio.options.includes('text'), 'Pink Noise': config.audio.options.includes('pink'), 'White Noise': config.audio.options.includes('white'), 'Stereo': config.audio.options.includes('stereo'), 'Phase': config.audio.options.includes('phase') })
       }
     }, 30000)
     
