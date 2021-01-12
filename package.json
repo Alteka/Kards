@@ -39,7 +39,8 @@
     "nsis": {
       "oneClick": false,
       "createDesktopShortcut": false,
-      "menuCategory": true
+      "menuCategory": true,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "dependencies": {
