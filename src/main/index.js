@@ -9,6 +9,7 @@ const menu = require('./menu.js').menu
 const log = require('electron-log')
 var sizeOf = require('image-size')
 let env = require('./env.json')
+const { networkInterfaces, hostname } = require('os')
 
 const Nucleus = require('nucleus-nodejs')
 
@@ -153,6 +154,22 @@ ipcMain.on('openLogs', (event, w, h) => {
 ipcMain.on('openUrl', (event, arg) => {
   shell.openExternal(arg)
   log.info('open url', arg)
+})
+
+
+ipcMain.on('networkInfo', (event) => {
+  const nets = networkInterfaces();
+  const results = [hostname().split('.')[0]]
+
+  for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+          if (net.family === 'IPv4' && !net.internal) {
+              results.push(name + ': ' + net.address)
+          }
+      }
+  }
+  
+  testCardWindow.webContents.send('networkInfo', results)
 })
 
 

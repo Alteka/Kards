@@ -32,17 +32,18 @@
 
     <div id="topText" class="textRow">
       <transition name="fade">
-        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo" style="text-align: left">{{ time }}</span>
+        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo" style="text-align: left">{{ info.time }}</span>
       </transition>
       <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}">{{ config.audioSync.rate }} FPS</span>
       <transition name="fade">
-        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: right" v-if="config.showInfo">{{ cardSize }}</span>
+        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: right" v-if="config.showInfo">{{ info.network[info.networkIndex] }}</span>
       </transition>
     </div>
 
   <transition name="fade">
       <div id="bottomText" class="textRow" v-if="config.showInfo">
         <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
+        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: center">{{ info.cardSize }}</span>
         <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ config.name }}</span>
       </div>
   </transition>
@@ -56,8 +57,7 @@ export default {
   directives: { ResizeText },
   props: {
     config: Object,
-    cardSize: String,
-    time: String
+    info: Object
   },
   data: function() {
     return {
@@ -131,7 +131,7 @@ export default {
 .vt {
   position: absolute;
   width: calc(100% - 100px);
-  height: calc(100% - 100px);
+  height: calc(100% - 120px);
   top: 50px;
   left: 50px;
   right: 50px;

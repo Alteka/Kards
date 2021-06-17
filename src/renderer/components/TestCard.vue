@@ -4,41 +4,41 @@
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync'}">
-          <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
-          <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
-          <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
-          <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
-          <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
-          <AudioSync v-if="config.cardType=='audioSync'" :config="config" :cardSize="cardSize" :time="time"></AudioSync>
-          <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
-          <Alteka v-if="config.cardType == 'alteka'" :config="config" :cardSize="cardSize" :time="time"></Alteka>
+          <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
+          <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
+          <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
+          <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+          <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
+          <AudioSync v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSync>
+          <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
+          <Alteka v-if="config.cardType == 'alteka'" :config="config" :info="info"></Alteka>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
+        <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
+        <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAboveLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :cardSize="cardSize" :time="time"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :cardSize="cardSize" :time="time"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :cardSize="cardSize" :time="time"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :cardSize="cardSize" :time="time"></Bars>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :cardSize="cardSize" :time="time"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :cardSize="cardSize" :time="time"></Placeholder>
+        <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
+        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
+        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
+        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+        <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
+        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
 
     </div>
@@ -94,8 +94,12 @@ const log = require('electron-log')
         config: {
         },
         boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
-        cardSize: '',
-        time: '00:00'
+        info: {
+          cardSize: '',
+          time: '00:00',
+          network: ['127.0.0.1'],
+          networkIndex: 0
+        }
       }
     },
     computed: {
@@ -115,7 +119,7 @@ const log = require('electron-log')
     methods: {
       updateTime: function() {
         var cd = new Date()
-        this.time = this.zeroPadding(cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2) + ':' + this.zeroPadding(cd.getSeconds(), 2)
+        this.info.time = this.zeroPadding(cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2) + ':' + this.zeroPadding(cd.getSeconds(), 2)
       },
       zeroPadding: function(num, digit) {
           var zero = '';
@@ -129,9 +133,9 @@ const log = require('electron-log')
       },
       updateCardSize: function() {
         if (this.config.windowed) {
-          this.cardSize = this.config.winWidth + ' x ' + this.config.winHeight
+          this.info.cardSize = this.config.winWidth + ' x ' + this.config.winHeight
         } else {
-          this.cardSize = this.config.width + ' x ' + this.config.height
+          this.info.cardSize = this.config.width + ' x ' + this.config.height
         }
       },
       exportTestCard: function(settings) {
@@ -160,6 +164,9 @@ const log = require('electron-log')
           console.log('Resetting animated to ', wasAnimated)
           vm.config.animated = wasAnimated
         })
+      },
+      updateNetworkInfo: function() {
+        ipcRenderer.send('networkInfo')
       }
     },
     mounted: function() {
@@ -174,6 +181,20 @@ const log = require('electron-log')
       setTimeout(vm.updateCardSize, 1000)
       vm.updateTime()
       setInterval(vm.updateTime, 1000)
+
+      vm.updateNetworkInfo()
+      setInterval(vm.updateNetworkInfo, 10000)
+      ipcRenderer.on('networkInfo', function(event, networkInfo) {
+        vm.info.network = networkInfo
+      })
+      setInterval(function() {
+      vm.info.networkIndex++
+      if (vm.info.networkIndex >= vm.info.network.length) {
+        vm.info.networkIndex = 0
+      }
+    }, 5000)
+     
+
       ipcRenderer.send('getConfigTestCard')
       this.$message({customClass: "modal",showClose: false, duration: 3000, message: 'Press escape to close test card'});
       window.addEventListener('resize', function() {

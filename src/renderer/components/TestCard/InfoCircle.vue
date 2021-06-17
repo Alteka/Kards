@@ -2,8 +2,8 @@
   <transition name="fade">
     <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
       <div class="infoText" :class="{ biggerText : config.name.length < 20, evenBiggerText : config.name.length < 12}">{{ config.name }}</div>
-      <div class="sizeText">{{ cardSize }}</div>
-      <div class="clock">{{ time }}</div>
+      <div class="sizeText">{{ info.cardSize }}</div>
+      <div class="clock">{{ info.time }}</div>
     </div>
   </transition>
 </template>
@@ -12,8 +12,7 @@
   export default {
     props: {
       config: Object,
-      cardSize: String,
-      time: String
+      info: Object
     }
   }
 </script>

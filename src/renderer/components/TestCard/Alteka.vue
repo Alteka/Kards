@@ -173,9 +173,9 @@
               <rect x="-45" y="-15" width="90" height="7" />
             </g>
             <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
-            <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">ALTEKA Kards {{require('./../../../../package.json').version}}</text>
-            <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{cardSize}}</text>
-            <text x="0" y="14" w="50" text-anchor="middle" font-size="3px" :style="{fill: text}">{{time}}</text>
+            <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">{{ info.network[info.networkIndex] }}</text>
+            <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{info.cardSize}}</text>
+            <text x="0" y="14" w="50" text-anchor="middle" font-size="3px" :style="{fill: text}">{{info.time}}</text>
           </g>
           </transition>
           <transition name="fade">
@@ -197,8 +197,7 @@ export default {
   components: { Swatch },
   props: {
     config: Object,
-    cardSize: String,
-    time: String
+    info: Object
   },
   watch: {
       config: {
