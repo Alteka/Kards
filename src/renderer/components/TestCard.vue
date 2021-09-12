@@ -12,6 +12,7 @@
           <AudioSync v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSync>
           <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
           <Alteka v-if="config.cardType == 'alteka'" :config="config" :info="info"></Alteka>
+          <led-wall v-if="config.cardType == 'led'" :config="config" :info="info"></led-wall>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
@@ -60,6 +61,7 @@ import Alteka from './TestCard/Alteka'
 import SMPTE from './TestCard/SMPTE'
 import ARIB from './TestCard/ARIB'
 import Bars from './TestCard/Bars'
+import LedWall from './TestCard/LedWall'
 import AudioSync from './TestCard/AudioSync'
 import Placeholder from './TestCard/Placeholder'
 
@@ -88,7 +90,7 @@ const log = require('electron-log')
 
   export default {
     name: 'testcard',
-    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync },
+    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall },
     data: function() { 
       return {
         config: {

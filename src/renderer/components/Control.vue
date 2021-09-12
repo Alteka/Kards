@@ -24,6 +24,10 @@
       <control-grid :grid="config.grid" :colors="config.predefineColors"></control-grid>
     </el-tab-pane>
 
+    <el-tab-pane label="LED" name="led">
+      <control-led :led="config.led" :colors="config.predefineColors"></control-led>
+    </el-tab-pane>
+
     <el-tab-pane label="Ramp" name="ramp">
       <control-ramp :ramp="config.ramp"></control-ramp>
     </el-tab-pane>
@@ -138,6 +142,7 @@
 const { ipcRenderer } = require('electron')
 import ControlBars from './Control/ControlBars.vue'
 import ControlGrid from './Control/ControlGrid.vue'
+import ControlLed from './Control/ControlLed.vue'
 import ControlRamp from './Control/ControlRamp.vue'
 import ControlPlaceholder from './Control/ControlPlaceholder.vue'
 import ControlAlteka from './Control/ControlAlteka.vue'
@@ -156,7 +161,7 @@ var compareVersions = require('compare-versions')
 
   export default {
     name: 'control',
-    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu },
+    components: { ControlBars, ControlGrid, ControlRamp, ControlPlaceholder, ControlAlteka, ControlAudioSync, ControlScreen, ControlMenu, ControlLed },
     data: function () {
     return {
       config: require('../../main/defaultConfig.json'),
