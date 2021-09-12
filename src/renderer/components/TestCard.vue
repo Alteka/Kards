@@ -3,7 +3,7 @@
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
-      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync'}">
+      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led'}">
           <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
           <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
           <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
@@ -15,7 +15,7 @@
           <led-wall v-if="config.cardType == 'led'" :config="config" :info="info"></led-wall>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAbove: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'"  class="testcard" :class="{animatedAbove: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
@@ -24,7 +24,7 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'" class="testcard" :class="{animatedLeft: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
@@ -33,7 +33,7 @@
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync'" class="testcard" :class="{animatedAboveLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'" class="testcard" :class="{animatedAboveLeft: config.animated}">
         <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
