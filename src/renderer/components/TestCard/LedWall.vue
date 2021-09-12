@@ -2,7 +2,7 @@
   <div id="led">
 
     <div v-for="row in config.led.rows" :key="row" class="row" :style="{width: config.led.columns*config.led.width + 'px'}">
-      <led-panel v-for="column in config.led.columns" :key="column" :led="config.led" :row="row" :column="column"></led-panel>
+      <led-panel v-for="column in config.led.columns" :key="column" :config="config" :row="row" :column="column"></led-panel>
     </div>
     
     <info-circle :config="config" :info="info"/>

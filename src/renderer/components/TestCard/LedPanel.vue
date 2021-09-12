@@ -1,5 +1,5 @@
 <template>
-  <div class="ledpanel" :style="{width: led.width + 'px', height: led.height + 'px', backgroundColor: bgCol}">
+  <div class="ledpanel" :style="{width: config.led.width + 'px', height: config.led.height + 'px', backgroundColor: bgCol}" :class="animClass">
     <i class="fas fa-arrow-down"></i> {{row}}<br />
     <i class="fas fa-arrow-right"></i> {{column}}
   </div>
@@ -8,7 +8,7 @@
 <script>
   export default {
     props: {
-      led: Object,
+      config: Object,
       row: Number,
       column: Number
     },
@@ -34,6 +34,15 @@
             } else {
                 return 'red'
             }
+        },
+        animClass: function() {
+            if (this.odd && this.config.animated) {
+                return 'animatedOdd'
+            } else if (this.config.animated) {
+                return 'animatedEven'
+            } else {
+                return 'notAnimated'
+            }
         }
     }
   }
@@ -47,4 +56,20 @@
        float: left;
        padding: 5px;
    }
+   .animatedEven {
+    background: linear-gradient(90deg, rgba(255,0,0,1) 25%, rgba(0,255,0,1) 25%, rgba(0,255,0,1) 50%, rgba(0,255,0,1) 50%, rgba(0,0,255,1) 50%, rgba(0,0,255,1) 75%, rgba(255,0,0,1) 75%);
+    background-size: 400%;
+    animation: Animation 10s linear infinite;
+}
+.animatedOdd {
+    background: linear-gradient(90deg, rgba(0,255,0,1) 25%, rgba(0,0,255,1) 25%, rgba(0,0,255,1) 50%, rgba(0,0,255,1) 50%, rgba(255,0,0,1) 50%, rgba(255,0,0,1) 75%, rgba(0,255,0,1) 75%);
+    background-size: 400%;
+    animation: Animation 10s linear infinite;
+}
+
+@keyframes Animation { 
+    0%{background-position:0% }
+    100%{background-position:100%}
+}
+
 </style>
