@@ -1,5 +1,5 @@
 <template>
-  <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack">
+  <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack" v-on:dblclick="toggleWindowed">
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
@@ -119,6 +119,9 @@ const log = require('electron-log')
       }
     },
     methods: {
+      toggleWindowed: function() {
+        ipcRenderer.send('testCardKeyPress', 'windowed')
+      },
       updateTime: function() {
         var cd = new Date()
         this.info.time = this.zeroPadding(cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2) + ':' + this.zeroPadding(cd.getSeconds(), 2)
