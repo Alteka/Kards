@@ -3981,6 +3981,11 @@ dom-serializer@^1.0.1:
     domhandler "^4.2.0"
     entities "^2.0.0"
 
+dom-to-image@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/dom-to-image/-/dom-to-image-2.6.0.tgz#8a503608088c87b1c22f9034ae032e1898955867"
+  integrity sha1-ilA2CAiMh7HCL5A0rgMuGJiVWGc=
+
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
@@ -10151,6 +10156,14 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue3-resize-text@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/vue3-resize-text/-/vue3-resize-text-0.1.0.tgz#6c4bd6cac6aacc419af077e98fe5a64cb0ca61f8"
+  integrity sha512-UCC7U3JooWEJ29ZSIXldoDNAqv3x4Dql8t9tjpA8bbPU41TJKrWpUD6uY9R515JCV6Pb1jOn9Xh3D5YWn7z9jw==
+  dependencies:
+    core-js "^3.6.5"
+    vue "^3.0.0"
 
 vue3-resize@^0.2.0:
   version "0.2.0"

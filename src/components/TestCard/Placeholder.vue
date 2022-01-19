@@ -29,10 +29,10 @@
 </template>
 
 <script>
-import ResizeText from 'vue-resize-text'
+import VueResizeText from 'vue3-resize-text'
   export default {
     directives: {
-      ResizeText
+      ResizeText: VueResizeText.ResizeText
     },
     props: {
       config: Object,

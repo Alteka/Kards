@@ -52,9 +52,11 @@
 </template>
 
 <script>
-import ResizeText from 'vue-resize-text'
+import VueResizeText from 'vue3-resize-text'
 export default {
-  directives: { ResizeText },
+  directives: { 
+    ResizeText: VueResizeText.ResizeText
+   },
   props: {
     config: Object,
     info: Object
@@ -67,7 +69,7 @@ export default {
   },
   watch: {
       config: {
-        handler: function (val, oldVal) { 
+        handler: function (val) { 
           this.updateDeviceName(val)
          },
         deep: true
@@ -93,7 +95,6 @@ export default {
       }
     },
     mounted: function() {
-      document.getElementById('vt24').setSinkId(this.config.audioSync.deviceId)
       this.updateDeviceName(this.config)
     }
 }

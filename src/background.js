@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Analytics from 'analytics'
 import googleAnalytics from '@analytics/google-analytics'
 const log = require('electron-log')
+const { networkInterfaces, hostname } = require('os')
 const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
@@ -306,7 +307,7 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  let windowConfig = {show: false, frame: false, width: config.winWidth, height: config.winHeight}  
+  let windowConfig = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: {preload: path.join(__dirname, 'preload.js')}}  
   
   if (!config.windowed) { // Setting up for full screen test card
     windowConfig.fullscreen = true
@@ -386,7 +387,6 @@ ipcMain.on('moveWindowTo', (_, arg) => {
 function showTestCardWindow(windowConfig) {
   log.info('Showing test card with config: ', windowConfig)  
 
-  const testCardUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:9080/#/testcard' : `file://${__dirname}/index.html#testcard`
   testCardWindow = new BrowserWindow(windowConfig)
   testCardWindowScreen = config.screen
 
@@ -398,7 +398,13 @@ function showTestCardWindow(windowConfig) {
     testCardWindow.setBounds({ width: windowConfig.width, height: windowConfig.height })
   }
 
-  testCardWindow.loadURL(testCardUrl)
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    testCardWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/testcard')
+    if (!process.env.IS_TEST) testCardWindow.webContents.openDevTools()
+  } else {
+    createProtocol('app')
+    testCardWindow.loadURL('app://./index.html')
+  }
 
   testCardWindow.once('ready-to-show', () => {
     if (config.visible && !headlessExportMode) {
