@@ -165,9 +165,11 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await controlWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) controlWindow.webContents.openDevTools()
+    // log.debug("THIS MEANS THE OTHER THING TO THE OTHER LINE: ", process.env.WEBPACK_DEV_SERVER_URL)
   } else {
     createProtocol('app')
     controlWindow.loadURL('app://./index.html')
+    // log.debug("THIS IS A MESSAGE FOR DREW!")
   }
 }
 ipcMain.on('controlResize', (_, data) => {

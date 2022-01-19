@@ -1,14 +1,8 @@
 {
   "name": "kards",
   "version": "1.2.0",
-  "author": "Alteka Solutions <info@alteka.solutions>",
   "description": "A cross-platform test card generator for AV professionals",
-  "license": "GPL-3.0-only",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Alteka/Kards"
-  },
-  "main": "background.js",
+  "author": "Alteka Solutions <info@alteka.solutions>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -18,6 +12,7 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
     "@analytics/google-analytics": "^0.5.3",
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -32,11 +27,13 @@
     "say": "^0.16.0",
     "uuid": "^8.3.2",
     "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0",
     "vue3-resize": "^0.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
@@ -67,5 +64,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alteka/Kards"
+  }
 }
