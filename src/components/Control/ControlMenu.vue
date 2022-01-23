@@ -13,7 +13,7 @@
   </el-col>
 
   <el-col :span="8" style="text-align: right">
-    <el-dropdown size="mini" :hide-on-click="false">
+    <el-dropdown size="mini" :hide-on-click="false" @visible-change="handleMoreMenuChange">
       <el-button size="mini" type="primary">
         More<i class="el-icon-arrow-up el-icon--right"></i>
       </el-button>
@@ -33,7 +33,7 @@
 
   <el-drawer :with-header="false" v-model="drawerAudio" direction="btt" size="150px">
     <el-row class="drawerContent">
-      <el-checkbox-group v-model="config.audio.options" size="medium">
+      <el-checkbox-group v-model="config.audio.options" size="medium" style="margin: auto;">
         <el-checkbox-button label="voice">Voice</el-checkbox-button>
         <el-checkbox-button label="text">Text</el-checkbox-button>
         <el-checkbox-button label="tone">Tone</el-checkbox-button>
@@ -43,14 +43,14 @@
         <el-checkbox-button label="phase">Phase</el-checkbox-button>
       </el-checkbox-group>
     </el-row>
-    <el-row v-if="config.audio.options.includes('text')">
-      <el-col :span="23">
-        <el-form-item label="Text" label-width="70px">
-          <el-input v-model="config.audio.text" placeholder="Free text to be converted to audio"></el-input>
+    <el-row v-if="config.audio.options.includes('text')" style="height: 45px;">
+      <el-col :span="22">
+        <el-form-item label="Text" label-width="90px">
+          <el-input v-model="config.audio.text"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
-    <el-row >
+    <el-row style="border: 0;">
       <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="4" :class="{ enabledText: config.audio.enabled }">
         Enable <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
       </el-col>
@@ -80,11 +80,9 @@
      <el-col :span="10">
        <el-radio-group v-model="config.export.imageSource" size="medium" :disabled="config.cardType=='audioSync'">
          <el-radio-button label="card">Test Card</el-radio-button>
-         <el-tooltip :disabled="!config.windowed || config.cardType=='audioSync'" effect="dark" content="Disable windowed output and then disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
-          <el-tooltip :disabled="!config.fullsize || config.cardType=='audioSync'" effect="dark" content="Disable 'Fill Output' to save test card within larger canvas" placement="bottom" :open-delay="500">
+          <el-tooltip :disabled="!config.fullsize" content="Disable 'Fill Output' and 'Windowed' to save test card within larger canvas" placement="bottom" :open-delay="500">
             <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
           </el-tooltip>
-         </el-tooltip>
        </el-radio-group>
      </el-col>
      <el-col :span="11">
@@ -98,9 +96,7 @@
      </el-col>
    </el-row>
    <el-row>
-     <el-alert v-if="config.cardType == 'audioSync'" title = "Choose a different card - Even we can't save AV Sync to a  still image..." type="error" center show-icon effect="dark" :closable="false"></el-alert>
-     
-     
+     <el-alert v-if="config.cardType == 'audioSync'" title = "Choose a different card - Even we can't save AV Sync to a  still image..." type="warning" center show-icon effect="dark" :closable="false"></el-alert>
   </el-row>
 </el-drawer>
 
@@ -205,6 +201,11 @@ let loadingInstance
       },
     },
     methods: {
+      handleMoreMenuChange: function(visible) {
+        if (!visible) {
+          this.confirmResetVisible = false
+        }
+      },
       updateDevices: function() {
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           this.audioDevices = devices.filter(device => device.kind === 'audiooutput').filter(device => device.deviceId != 'communications')

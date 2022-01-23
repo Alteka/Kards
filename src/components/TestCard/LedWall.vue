@@ -3,13 +3,12 @@
 
     <div v-for="row in config.led.rows" :key="row" class="row" :style="{width: config.led.columns*config.led.width + 'px'}">
       <led-panel v-for="column in config.led.columns" :key="column" :config="config" :row="row" :column="column"></led-panel>
-
-      <div v-if="row == Math.ceil(config.led.rows/2)" class="infoLine">
-      {{config.name}} - {{ config.led.rows*config.led.width }} x {{ config.led.columns*config.led.height}} on {{info.cardSize}}
-      </div>
-
     </div>
     
+    <div v-if="config.showInfo" class="infoLine" :style="infoStyle">
+      {{config.name}} - {{ config.led.rows*config.led.width }} x {{ config.led.columns*config.led.height}} on {{info.cardSize}}
+    </div>
+
   </div>
 </template>
 
@@ -23,6 +22,12 @@ import LedPanel from './LedPanel.vue'
       info: Object
     },
     computed: {
+      infoStyle: function() {
+        return {
+          left: Math.min(visualViewport.width, this.config.led.columns*this.config.led.width)/2 + 'px',
+          top: Math.min(visualViewport.height, this.config.led.rows*this.config.led.height)/2 + 'px'
+        }
+      },
       quadrantStyle: function() {
         return {
           outline: '1px solid red',
@@ -42,13 +47,14 @@ import LedPanel from './LedPanel.vue'
     clear: both;
   }
   .infoLine {
-    position: relative;
-    height: 32px;
-    top: -25px;
+    position: absolute;
+    padding: 5px;
+    transform:translate(-50%, -50%);
     font-size: 21px;
-    width: 100%;
+    margin: auto;
     text-align: center;
-    color: #000;
+    color: #fff;
+    background: rgba(1,1,1,0.5);
     /* text-shadow: 0px 0px 5px #000; */
   }
 </style>

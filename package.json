@@ -24,6 +24,7 @@
     "electron-log": "^4.4.4",
     "electron-store": "^8.0.1",
     "element-plus": "^1.0.2-beta.28",
+    "image-size": "^1.0.1",
     "mousetrap": "^1.6.5",
     "say": "^0.16.0",
     "uuid": "^8.3.2",

@@ -12,9 +12,12 @@ const { networkInterfaces, hostname } = require('os')
 const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
+const menu = require('./menu.js').menu
+
+// Project specific includes
 const fs = require('fs')
 const say = require('say')
-const menu = require('./menu.js').menu
+var sizeOf = require('image-size')
 
 const store = new Store({
   migrations: {
@@ -472,7 +475,7 @@ ipcMain.on('exportCard', () => {
     // Nucleus.track("Exported Card", {  type: config.export.target, imageSource: config.export.imageSource, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, windowed: config.windowed, cardType: config.cardType, headless: false })
   } else {
     headlessExportMode = true
-    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight}
+    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: {preload: path.join(__dirname, 'preload.js')}}
 
     if (config.windowed) {
       c.minWidth = config.winWidth
