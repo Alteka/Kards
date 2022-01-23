@@ -69,7 +69,9 @@
     "prependText": "This is ",
     "voiceData": "",
     "text": "Custom text can be read out too!",
-    "textData": ""
+    "textData": "",
+    "fileData": "",
+    "fileName": "No File Selected"
 },
 "winWidth": 1280,
 "winHeight": 720,

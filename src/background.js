@@ -577,11 +577,14 @@ ipcMain.on('setAsWallpaper', (_, arg) => {
 //========================//
 setTimeout(createVoice, 5000)
 setTimeout(createTextAudio, 5000)
-ipcMain.on('createVoice', (event, arg) => {
+ipcMain.on('createVoice', () => {
   createVoice()
 })
-ipcMain.on('updateAudioText', (event, arg) => {
+ipcMain.on('updateAudioText', () => {
   createTextAudio()
+})
+ipcMain.on('loadAudioFile', () => {
+  loadAudioFile()
 })
 function createVoice() {
   let dest = app.getPath('userData') + '/voice.wav'  
@@ -603,6 +606,18 @@ function createTextAudio() {
     log.info('Updated audio text (' + config.audio.text + ') has been saved to ', dest)
     config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
     controlWindow.webContents.send('config', config)
+  })
+}
+function loadAudioFile() {
+  dialog.showOpenDialog(controlWindow, {title: 'Open Audio File', filters: [{name: "Audio", extensions: ['wav', 'mp3', 'ogg', 'aac']}]}).then(result => {
+    if (!result.canceled) {
+      let path = result.filePaths[0]
+      config.audio.fileData = 'data:audio/' + path.split('.').pop() + ';base64,' + fs.readFileSync(path, {encoding: 'base64'})
+      config.audio.fileName = 'Opened ' + path
+      controlWindow.webContents.send('config', config)
+    } else {
+      log.info('Save dialog closed')
+    }
   })
 }
 

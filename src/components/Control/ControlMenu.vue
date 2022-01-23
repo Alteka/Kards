@@ -41,8 +41,12 @@
         <el-checkbox-button label="white">White</el-checkbox-button>
         <el-checkbox-button label="stereo">Stereo</el-checkbox-button>
         <el-checkbox-button label="phase">Phase</el-checkbox-button>
+        <el-tooltip :content="config.audio.fileName" placement="top">
+          <el-checkbox-button label="file">File</el-checkbox-button>
+        </el-tooltip>
       </el-checkbox-group>
     </el-row>
+
     <el-row v-if="config.audio.options.includes('text')" style="height: 45px;">
       <el-col :span="22">
         <el-form-item label="Text" label-width="90px">
@@ -50,16 +54,20 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <el-row style="border: 0;">
-      <el-col style="margin-left: 38px; margin-top: 7px; color: #606266;" :span="4" :class="{ enabledText: config.audio.enabled }">
+
+    <el-row style="padding-left: 10px;">
+      <el-col style="margin-top: 7px; color: #606266;" :span="4" :class="{ enabledText: config.audio.enabled }">
         Enable <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
       </el-col>
-      <el-col :span="18">
-        <el-form-item label="Audio Device">
-        <el-select v-model="config.audio.deviceId" placeholder="Select" style="width: 321px;">
-            <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
-        </el-select>
-      </el-form-item>
+      <el-col :span="15">
+        <el-form-item label="Device" label-width="70px">
+          <el-select v-model="config.audio.deviceId" placeholder="Select" style="width: 300px;">
+              <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="5">
+        <el-button type="primary" size="small" round @click="loadAudioFile"><i class="far fa-file-audio"></i> Select File</el-button>
       </el-col>
     </el-row>
 
@@ -72,6 +80,7 @@
   <audio src="~@/assets/audio/tone.wav" id="tone" />
   <audio :src="config.audio.voiceData" id="voice" />
   <audio :src="config.audio.textData" id="text" />
+  <audio :src="config.audio.fileData" id="file" />
 
 
 
@@ -104,10 +113,6 @@
 </template>
 
 <script>
-// const log = require('electron-log')
-// const { window.ipcRenderer, remote } = require('electron')
-// import { Loading, Notification } from 'element-ui'
-
 import { ElLoading } from 'element-plus'
 let loadingInstance
 
@@ -166,6 +171,7 @@ let loadingInstance
             document.getElementById('tone').setSinkId(val.audio.deviceId)
             document.getElementById('voice').setSinkId(val.audio.deviceId)
             document.getElementById('text').setSinkId(val.audio.deviceId)
+            document.getElementById('file').setSinkId(val.audio.deviceId)
 
             if (val.name != this.name) {
               this.name = val.name
@@ -206,6 +212,9 @@ let loadingInstance
           this.confirmResetVisible = false
         }
       },
+      loadAudioFile: function() {
+        window.ipcRenderer.send("loadAudioFile")
+      },
       updateDevices: function() {
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           this.audioDevices = devices.filter(device => device.kind === 'audiooutput').filter(device => device.deviceId != 'communications')
@@ -243,6 +252,8 @@ let loadingInstance
         this.stopFile('pink')
         this.stopFile('phase')
         this.stopFile('stereo')
+        this.stopFile('file')
+        this.stopFile('text')
         this.playing = false
       },
       stopFile: function(file) {
