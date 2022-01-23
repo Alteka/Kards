@@ -21,7 +21,7 @@
     </transition>
     <transition name="fade">
       <div v-resize-text="{ratio:4}" v-if="config.showInfo" id="time" :style="{color:config.placeholder.fg}">
-        <div style="width: 45%; text-align: left; display: inline-block">{{ info.time }}</div>
+        <div v-if="config.showClock" style="width: 45%; text-align: left; display: inline-block">{{ info.time }}</div>
         <div style="width: 45%; text-align: right; display: inline-block">{{ info.network[info.networkIndex] }}</div>
       </div>
     </transition>

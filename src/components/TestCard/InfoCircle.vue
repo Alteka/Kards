@@ -3,7 +3,7 @@
     <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
       <div class="infoText" :class="{ biggerText : config.name.length < 20, evenBiggerText : config.name.length < 12}">{{ config.name }}</div>
       <div class="sizeText">{{ info.cardSize }}</div>
-      <div class="clock">{{ info.time }}</div>
+      <div v-if="config.showClock" class="clock">{{ info.time }}</div>
     </div>
   </transition>
 </template>

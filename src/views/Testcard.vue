@@ -144,8 +144,10 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
       },
       exportTestCard: function(settings) {
         var wasAnimated = this.config.animated
+        var wasShowingClock = this.config.showClock
         var vm = this
         this.config.animated = false // stop animations in order to capture image
+        this.config.showClock = false // hide the clock
 
         console.log('Attempt to capture ' + settings.imageSource + ' as ' + settings.target)
         
@@ -167,6 +169,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
           }
           console.log('Resetting animated to ', wasAnimated)
           vm.config.animated = wasAnimated
+          vm.config.showClock = wasShowingClock
         })
       },
       updateNetworkInfo: function() {

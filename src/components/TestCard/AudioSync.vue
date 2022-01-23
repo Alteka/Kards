@@ -34,7 +34,7 @@
 
     <div id="topText" class="textRow">
       <transition name="fade">
-        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo" style="text-align: left">{{ info.time }}</span>
+        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo && config.showClock" style="text-align: left">{{ info.time }}</span>
       </transition>
       <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}">{{ config.audioSync.rate }} FPS</span>
       <transition name="fade">
