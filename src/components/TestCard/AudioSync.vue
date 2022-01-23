@@ -29,6 +29,8 @@
     <video id="vt50" v-if="config.audioSync.rate == 50" src="~@/assets/audiosync/50.webm" loop autoplay class="vt" />
     <video id="vt59-94" v-if="config.audioSync.rate == 59.94" src="~@/assets/audiosync/59.94.webm" loop autoplay class="vt" />
     <video id="vt60" v-if="config.audioSync.rate == 60" src="~@/assets/audiosync/60.webm" loop autoplay class="vt" />
+    <video id="vt100" v-if="config.audioSync.rate == 100" src="~@/assets/audiosync/100.webm" loop autoplay class="vt" />
+    <video id="vt120" v-if="config.audioSync.rate == 120" src="~@/assets/audiosync/120.webm" loop autoplay class="vt" />
 
     <div id="topText" class="textRow">
       <transition name="fade">
@@ -43,7 +45,7 @@
   <transition name="fade">
       <div id="bottomText" class="textRow" v-if="config.showInfo">
         <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
-        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: center">{{ info.cardSize }}</span>
+        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: center">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
         <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ config.name }}</span>
       </div>
   </transition>

@@ -192,7 +192,7 @@
             </g>
             <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
             <text x="-40" y="14" w="50" text-anchor="start" font-size="3px" :style="{fill: text}">{{ info.network[info.networkIndex] }}</text>
-            <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{info.cardSize}}</text>
+            <text x="40" y="14" w="50" text-anchor="end" font-size="3px" :style="{fill: text}">{{info.cardSize}} - {{info.displayFrequency}}Hz</text>
             <text x="0" y="14" w="50" text-anchor="middle" font-size="3px" :style="{fill: text}">{{info.time}}</text>
           </g>
           </transition>

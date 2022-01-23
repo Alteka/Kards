@@ -8,10 +8,12 @@
     </el-form-item>
   </el-row>
   <el-row>
-    <el-form-item label="Video Rate (FPS)">
+    <el-form-item label="Rate FPS" label-width="75px">
       <el-radio-group v-model="audioSync.rate" size="small">
-          <el-radio-button v-for="item in rates" :key="item" :label="item">{{item}}</el-radio-button>
+          <el-radio-button v-for="item in rates" :key="item" :label="item"><i v-if="item == displayFrequency" class="fas fa-star"></i> {{item}}</el-radio-button>
       </el-radio-group>
+      <span v-if="audioSync.rate != displayFrequency" class="audioSyncWarning"><i class="fas fa-exclamation-circle"></i> Video rate does not match screen</span>
+      <span v-if="audioSync.rate > 60" class="audioSyncWarning" style="float: right;"><i class="fas fa-exclamation-circle"></i> May require high performace computer</span>
     </el-form-item>
   </el-row>
 </div>
@@ -21,7 +23,8 @@
 
   export default {
     props: {
-      modelValue: Object
+      modelValue: Object,
+      displayFrequency: Number
     },
     computed: {
       audioSync: {
@@ -36,7 +39,7 @@
     data: function() {
       return {
         audioDevices: [],
-        rates: [24, 25, 29.97, 30, 50, 59.94, 60]
+        rates: [24, 25, 29.97, 30, 50, 59.94, 60, 100, 120]
       }
     },
     methods: {
@@ -54,5 +57,10 @@
 </script>
 
 <style scoped>
-  
+  .audioSyncWarning {
+    position: relative;
+    color: #e6a23c;
+    font-size: 80%;
+    top: -5px;
+  }
 </style>

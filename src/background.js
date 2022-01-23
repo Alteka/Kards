@@ -194,8 +194,15 @@ function updateScreens() {
   if (controlWindow != null) {
     controlWindow.webContents.send('screens', {all: screens, primary: primaryScreen})  
   }
+  if (testCardWindow != null) {
+    for (const scr in screens) {
+      if (screens[scr].id == config.screen) {
+        testCardWindow.webContents.send('displayFrequency', screens[scr].displayFrequency)   
+      }
+    }
+  }
 }
-ipcMain.on('getScreens', (event, arg) => {
+ipcMain.on('getScreens', () => {
   updateScreens()
 })
 app.on('ready', function() {

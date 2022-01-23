@@ -34,7 +34,7 @@
           </el-tab-pane>
 
           <el-tab-pane label="AV Sync" name="audioSync">
-            <control-audio-sync v-model="config.audioSync"></control-audio-sync>
+            <control-audio-sync v-model="config.audioSync" :displayFrequency="displayFrequency"></control-audio-sync>
           </el-tab-pane>
 
         </el-tabs>
@@ -157,7 +157,8 @@ export default {
     return {
       config: require('../defaultConfig.json'),
       sync: false,
-      darkMode: false
+      darkMode: false,
+      displayFrequency: 0
     }
   },
   created: function() {
@@ -172,15 +173,15 @@ export default {
     window.ipcRenderer.receive('darkMode', function(val) {
       vm.darkMode = val
     })
-    // window.ipcRenderer.receive('testCardResize', function(val) {
-    //   if (this.config.windowed) {
-    //     vm.config.winWidth = val.width
-    //     vm.config.winHeight = val.height
-    //   } else {
-    //     vm.config.width = val.width
-    //     vm.config.height = val.height
-    //   }
-    // })
+    window.ipcRenderer.receive('screens', function(data) {
+      for (const scr of data.all) {
+        if (vm.config.screen == scr.id) {
+          vm.displayFrequency = scr.displayFrequency
+        }
+      }
+
+    })
+    window.ipcRenderer.send('getScreens')
     window.ipcRenderer.receive('testCardMoveToScreen', function(id) {
       vm.config.screen = id
     })

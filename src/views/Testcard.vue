@@ -96,6 +96,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
         boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
         info: {
           cardSize: '',
+          displayFrequency: 0,
           time: '00:00',
           network: ['127.0.0.1'],
           networkIndex: 0
@@ -179,7 +180,13 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
         vm.config = args
         vm.updateCardSize()
         if(!vm.config.visible) vm.exportTestCard(args.export)
-      })
+      })  
+
+      window.ipcRenderer.receive('displayFrequency', function(args) {
+        vm.info.displayFrequency = args
+      })  
+      window.ipcRenderer.send('getScreens')  
+
       vm.updateCardSize()
       setTimeout(vm.updateCardSize, 1000)
       vm.updateTime()
