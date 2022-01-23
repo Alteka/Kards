@@ -4,9 +4,8 @@
       <div id="gradient" v-if="config.placeholder.gradient"></div>
     </transition>
     <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{ color:config.placeholder.fg }">
-      <transition name="fade">
-        <span v-if="config.placeholder.icon" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
-      </transition>
+        <span v-if="config.placeholder.icon != 'custom'" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
+        <span v-if="config.placeholder.icon == 'custom'" style="font-size: 200%;" class="fas" :class="config.placeholder.custom"></span>
       <transition name="fade">
         <br v-if="config.placeholder.icon != ''" />
       </transition>

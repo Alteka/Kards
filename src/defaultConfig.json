@@ -9,7 +9,8 @@
     "bg": "#6ab42f",
     "fg": "#fff",
     "gradient": true,
-    "icon": "el-icon-picture-outline"
+    "icon": "fa-desktop",
+    "custom": "fa-headset"
 },
 "bars": {
     "type": "simple",
