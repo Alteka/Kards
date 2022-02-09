@@ -321,24 +321,34 @@ function setupNewTestCardWindow() {
   
   if (!config.windowed) { // Setting up for full screen test card
     windowConfig.fullscreen = true
+
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
           if (process.platform == 'darwin') {
-          let catalina = (process.getSystemVersion().split('.')[1] >= 15) ? true : false
 
-          if (disp.bounds.height != disp.workArea.height && catalina) {
-            log.info('Running in seperate spaces mode - this is Catalina or newer')
-            windowConfig.simpleFullscreen = false 
-          } else if (!catalina) {
-            log.info('Using legacy full screen mode as this is not Catalina (or newer)')
-            windowConfig.simpleFullscreen = true 
+            // figure out if it's newer macos...
+            let version = process.getSystemVersion().split('.')
+            let catalina = false
+            if (version[0] > 10) {
+              catalina = true
+            }
+            if (version[0] == 10 && version[1] >= 15) {
+              catalina = true
+            }
+
+            if (disp.bounds.height != disp.workArea.height && catalina) {
+              log.info('Running in seperate spaces mode - this is Catalina or newer')
+              windowConfig.simpleFullscreen = false 
+            } else if (!catalina) {
+              log.info('Using legacy full screen mode as this is not Catalina (or newer)')
+              windowConfig.simpleFullscreen = true 
+            } else {
+              log.info('Using legacy full screen mode')
+              windowConfig.simpleFullscreen = true 
+            }
           } else {
-            log.info('Using legacy full screen mode')
-            windowConfig.simpleFullscreen = true 
+            log.info('Using windows full screen system. Easy.')
           }
-        } else {
-          log.info('Using windows full screen system. Easy.')
-        }
         windowConfig.x = disp.bounds.x
         windowConfig.y = disp.bounds.y
         windowConfig.width = disp.bounds.width
