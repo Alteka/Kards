@@ -69,12 +69,12 @@ import Deghost from '../components/TestCard/Deghost.vue'
 import domtoimage from 'dom-to-image'
 
 var Mousetrap = require('mousetrap')
-Mousetrap.bind(['command+f', 'ctrl+f', 'esc'], function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
-Mousetrap.bind(['command+i', 'ctrl+i'], function() {
+Mousetrap.bind(['command+f', 'ctrl+f', 'esc', 'f'], function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
+Mousetrap.bind(['command+i', 'ctrl+i', 'i'], function() {
   window.ipcRenderer.send('testCardKeyPress', 'showInfo')
   return false;
 })
-Mousetrap.bind(['command+m', 'ctrl+m'], function() {
+Mousetrap.bind(['command+m', 'ctrl+m', 'm'], function() {
   window.ipcRenderer.send('testCardKeyPress', 'animated')
   return false;
 })
