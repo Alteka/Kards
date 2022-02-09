@@ -20,14 +20,16 @@
       </el-row>
 
       <el-row style="position: relative; top: -10px; left: 10px;">
+        <el-form-item label="Icon" label-width="60px">
             <el-radio-group v-model="placeholder.icon" size="mini">
               <el-radio-button label="">Blank</el-radio-button>
               <el-radio-button v-for="icon in icons" :key="icon" :label="icon"><i class="fas" :class="icon"></i></el-radio-button>
               <el-radio-button label="custom">Other</el-radio-button>
             </el-radio-group>
+          </el-form-item>
       </el-row>
 
-      <el-row v-if="placeholder.icon == 'custom'" style="position: relative; top: -12px;">
+      <el-row v-if="placeholder.icon == 'custom'" style="position: relative; top: -32px; right: -58px;">
             <el-form-item label="Font Awesome Icon" label-width="400px" size="small">
             <el-input v-model="placeholder.custom" size="small" :input-style="smallInput"></el-input>
           </el-form-item>

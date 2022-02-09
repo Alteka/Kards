@@ -1,14 +1,14 @@
 <template>
 <div>
   <el-row>
-    <el-form-item label="Audio Device">
+    <el-form-item label="Audio Device" label-width="140px">
       <el-select v-model="audioSync.deviceId" placeholder="Select" style="width: 353px;">
           <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
       </el-select>
     </el-form-item>
   </el-row>
   <el-row>
-    <el-form-item label="Rate FPS" label-width="75px">
+    <el-form-item label="Rate FPS" label-width="140px">
       <el-radio-group v-model="audioSync.rate" size="small">
           <el-radio-button v-for="item in rates" :key="item" :label="item"><i v-if="item == displayFrequency" class="fas fa-star"></i> {{item}}</el-radio-button>
       </el-radio-group>

@@ -6,7 +6,7 @@
       <control-screen v-model="config"></control-screen>
       <el-divider content-position="center">Select Card Type</el-divider>
 
-      <el-row style="margin-left: 16px; margin-right: 16px;">
+      <el-row style="margin-left: 8px; margin-right: 8px;">
         <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px; width: 100%;">
           
           <el-tab-pane label="Alteka" name="alteka">
@@ -33,8 +33,12 @@
             <control-placeholder v-model="config.placeholder" :colors="config.predefineColors"></control-placeholder>
           </el-tab-pane>
 
-          <el-tab-pane label="AV Sync" name="audioSync">
+          <el-tab-pane label="Sync" name="audioSync">
             <control-audio-sync v-model="config.audioSync" :displayFrequency="displayFrequency"></control-audio-sync>
+          </el-tab-pane>
+
+          <el-tab-pane label="DeGhost" name="deghost">
+            <control-deghost v-model="config.deghost"></control-deghost>
           </el-tab-pane>
 
         </el-tabs>
@@ -55,7 +59,7 @@
         </el-col>
       <el-col :span="8">
           <el-form-item label="Motion"><i class="fas fa-external-link-square-alt fa-rotate-90 green" style="position: relative; top: 1px; margin-right: 5px;"></i>
-            <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync'"></el-switch>
+            <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
@@ -139,6 +143,7 @@ import ControlAlteka from '../components/Control/ControlAlteka.vue'
 import ControlAudioSync from '../components/Control/ControlAudioSync.vue'
 import ControlMenu from '../components/Control/ControlMenu.vue'
 import ControlScreen from '../components/Control/ControlScreen.vue'
+import ControlDeghost from '../components/Control/ControlDeghost.vue'
 
 var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
@@ -146,7 +151,7 @@ Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, '
 export default {
   name: 'Control',
   components: {
-    ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed
+    ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost
   },
   methods: {
     handleResize: function({ width, height }) {

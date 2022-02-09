@@ -177,7 +177,7 @@ async function createWindow() {
   }
 }
 ipcMain.on('controlResize', (_, data) => {
-  controlWindow.setContentSize(620, data.height)
+  controlWindow.setContentSize(675, data.height)
 })
 
 

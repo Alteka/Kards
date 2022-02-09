@@ -3,7 +3,7 @@
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
-      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led'}">
+      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost'}">
           <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
           <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
           <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
@@ -13,6 +13,7 @@
           <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
           <Alteka v-if="config.cardType == 'alteka'" :config="config" :info="info"></Alteka>
           <led-wall v-if="config.cardType == 'led'" :config="config" :info="info"></led-wall>
+          <deghost v-if="config.cardType == 'deghost'" :config="config" :info="info"></deghost>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'"  class="testcard" :class="{animatedAbove: config.animated}">
@@ -63,6 +64,7 @@ import Bars from '../components/TestCard/Bars.vue'
 import LedWall from '../components/TestCard/LedWall.vue'
 import AudioSync from '../components/TestCard/AudioSync.vue'
 import Placeholder from '../components/TestCard/Placeholder.vue'
+import Deghost from '../components/TestCard/Deghost.vue'
 
 import domtoimage from 'dom-to-image'
 
@@ -88,7 +90,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
   export default {
     name: 'testcard',
-    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall },
+    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall, Deghost },
     data: function() { 
       return {
         config: {

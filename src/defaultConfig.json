@@ -50,6 +50,9 @@
     "double": false,
     "overlay": false
 },
+"deghost": {
+    "density": 150
+},
 "export": {
     "imageSource": "card",
     "target": "file"
