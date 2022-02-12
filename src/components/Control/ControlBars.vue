@@ -7,6 +7,7 @@
           <el-radio-button label="simple">Simple</el-radio-button>
           <el-radio-button label="smpte">SMPTE</el-radio-button>
           <el-radio-button label="arib">ARIB</el-radio-button>
+          <el-radio-button label="hdr">HDR</el-radio-button>
         </el-radio-group>
       </el-form-item>
       </el-col>

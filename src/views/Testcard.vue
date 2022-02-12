@@ -8,6 +8,7 @@
           <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
           <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
           <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+          <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
           <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
           <AudioSync v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSync>
           <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
@@ -21,6 +22,7 @@
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
         <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+        <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
         <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
@@ -30,6 +32,7 @@
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
         <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+        <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
         <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
@@ -39,6 +42,7 @@
         <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
         <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
         <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
+        <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
         <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
         <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
       </div>
@@ -65,6 +69,7 @@ import LedWall from '../components/TestCard/LedWall.vue'
 import AudioSync from '../components/TestCard/AudioSync.vue'
 import Placeholder from '../components/TestCard/Placeholder.vue'
 import Deghost from '../components/TestCard/Deghost.vue'
+import HDR from '../components/TestCard/HDR.vue'
 
 import domtoimage from 'dom-to-image'
 
@@ -90,7 +95,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
   export default {
     name: 'testcard',
-    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall, Deghost },
+    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall, Deghost, HDR },
     data: function() { 
       return {
         config: {
