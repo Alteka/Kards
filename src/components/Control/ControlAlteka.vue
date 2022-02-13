@@ -8,12 +8,12 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="Foreground" label-width="100">
-          <el-color-picker v-model="alteka.fg" ></el-color-picker>
+          <el-color-picker v-model="alteka.fg" :predefine="colors"></el-color-picker>
         </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="Center Text" label-width="100">
-          <el-color-picker v-model="alteka.textColour" :disabled="!alteka.showLogo" ></el-color-picker>
+          <el-color-picker v-model="alteka.textColour" :disabled="!alteka.showLogo" :predefine="colors"></el-color-picker>
         </el-form-item>
       </el-col>
       <el-col :span="6">

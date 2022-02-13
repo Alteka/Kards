@@ -1,10 +1,24 @@
 {
-"visible": false,
-"cardType": "alteka",
-"fullsize": true,
-"showInfo": true,
-"showClock": true,
-"windowed": false,
+    "animated": false,
+    "cardType": "alteka",
+    "showInfo": true,
+    "name": "PPT Main",
+    "visible": false,
+    "windowed": false,
+    "fullsize": true,
+    "showClock": true,
+    "screen": 0,
+"notFilledCard": {
+    "width": 1920,
+    "height": 1080,
+    "top": 0,
+    "left": 0,
+    "bounds": false
+},
+"window": {
+    "width": 1280,
+    "height": 720
+},
 "placeholder": {
     "bg": "#6ab42f",
     "fg": "#fff",
@@ -28,8 +42,7 @@
     "width": 128,
     "height": 128,
     "rows": 4,
-    "columns": 6,
-    "circles": false
+    "columns": 6
 },
 "audioSync": {
     "deviceId": "default",
@@ -51,20 +64,13 @@
     "overlay": false
 },
 "deghost": {
-    "density": 150
+    "density": 150,
+    "speed": 5
 },
 "export": {
     "imageSource": "card",
     "target": "file"
 },
-"name": "PPT Main",
-"width": 1920,
-"height": 1080,
-"top": 0,
-"left": 0,
-"screen": 0,
-"bounds": false,
-"animated": false,
 "audio": {
     "deviceId": "default",
     "enabled": false,
@@ -76,7 +82,5 @@
     "fileData": "",
     "fileName": "No File Selected"
 },
-"winWidth": 1280,
-"winHeight": 720,
 "predefineColors": ["#ffffff", "#d3d3d3", "#7f7f7f", "#3e3e3e", "#000000", "#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#ff00ff", "#BF3030", "#BF9B30", "#78BF30", "#30BF54", "#30BFBF", "#3054BF", "#7830BF", "#BF309B"]
 }

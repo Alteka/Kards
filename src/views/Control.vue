@@ -72,12 +72,12 @@
         </el-col>
         <el-col :span="8" v-if="config.windowed">
           <el-form-item label="Width" label-width="50px">
-            <el-input-number v-model="config.winWidth" controls-position="right" :step="5" :min="48"></el-input-number>
+            <el-input-number v-model="config.window.width" controls-position="right" :step="5" :min="48"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="8" v-if="config.windowed">
           <el-form-item label="Height" label-width="50px">
-            <el-input-number v-model="config.winHeight" controls-position="right" :step="5" :min="39"></el-input-number>
+            <el-input-number v-model="config.window.height" controls-position="right" :step="5" :min="39"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="8" v-if="!config.windowed">
@@ -87,7 +87,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item v-if="!config.fullsize" label="Show Bounds"><i class="fas fa-border-style green"></i>
-            <el-switch v-model="config.bounds"></el-switch>
+            <el-switch v-model="config.notFilledCard.bounds"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
@@ -100,12 +100,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="Width" label-width="80px">
-            <el-input-number v-model="config.width" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number v-model="config.notFilledCard.width" controls-position="right" :step="5" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Height" label-width="80px">
-            <el-input-number v-model="config.height" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number v-model="config.notFilledCard.height" controls-position="right" :step="5" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -118,12 +118,12 @@
       </el-col>
       <el-col :span="8">
           <el-form-item label="Left" label-width="80px">
-            <el-input-number v-model="config.left" controls-position="right" :step="5"></el-input-number>
+            <el-input-number v-model="config.notFilledCard.left" controls-position="right" :step="5"></el-input-number>
           </el-form-item>
       </el-col>
         <el-col :span="8">
         <el-form-item label="Top" label-width="80px">
-          <el-input-number v-model="config.top" controls-position="right" :step="5"></el-input-number>
+          <el-input-number v-model="config.notFilledCard.top" controls-position="right" :step="5"></el-input-number>
         </el-form-item>
         </el-col>
       </el-row>

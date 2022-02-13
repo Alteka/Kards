@@ -101,7 +101,7 @@ ipcMain.on('config', (_, arg) => {
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
     if (config.windowed) {
-      testCardWindow.setContentSize(parseInt(config.winWidth), parseInt(config.winHeight))
+      testCardWindow.setContentSize(parseInt(config.window.width), parseInt(config.window.height))
     }
   }
   // touchBar.setConfig(config)
@@ -319,7 +319,7 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  let windowConfig = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: {preload: path.join(__dirname, 'preload.js')}}  
+  let windowConfig = {show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, 'preload.js')}}  
   
   if (!config.windowed) { // Setting up for full screen test card
     windowConfig.fullscreen = true
@@ -360,8 +360,8 @@ function setupNewTestCardWindow() {
   } else {
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-        windowConfig.x = disp.bounds.x + (disp.bounds.width - config.winWidth)/2
-        windowConfig.y = disp.bounds.y + (disp.bounds.height - config.winHeight)/2
+        windowConfig.x = disp.bounds.x + (disp.bounds.width - config.window.width)/2
+        windowConfig.y = disp.bounds.y + (disp.bounds.height - config.window.height)/2
       }
     }
   }
@@ -399,8 +399,8 @@ ipcMain.on('moveWindowTo', (_, arg) => {
   for (const disp of screen.getAllDisplays()) {
     if (disp.id == arg) {
         testCardWindowScreen = disp.id
-        let x = disp.bounds.x + (disp.bounds.width - config.winWidth)/2
-        let y = disp.bounds.y + (disp.bounds.height - config.winHeight)/2
+        let x = disp.bounds.x + (disp.bounds.width - config.window.width)/2
+        let y = disp.bounds.y + (disp.bounds.height - config.window.height)/2
         testCardWindow.setPosition(Math.round(x), Math.round(y))
     }
   }
@@ -457,9 +457,9 @@ function showTestCardWindow(windowConfig) {
 function handleTestCardResize() {
   let bounds = testCardWindow.getBounds()
   let t = 2
-  if (config.winWidth < (bounds.width-t) || config.winWidth > (bounds.width+t) || config.winHeight < (bounds.height-t) || config.winHeight > (bounds.height+t) || process.platform == 'darwin') {
-    config.winWidth = bounds.width
-    config.winHeight = bounds.height
+  if (config.window.width < (bounds.width-t) || config.window.width > (bounds.width+t) || config.window.height < (bounds.height-t) || config.window.height > (bounds.height+t) || process.platform == 'darwin') {
+    config.window.width = bounds.width
+    config.window.height = bounds.height
     controlWindow.webContents.send('config', config)
   }
 }
@@ -476,6 +476,22 @@ osc.setup()
 osc.on('updateConfig', (c) => {
   controlWindow.webContents.send('config', c)
 })
+osc.on('audioFile', (filePath) => {
+  log.debug('Audio File!', filePath)
+  if (fs.lstatSync(filePath).isFile()) {
+    config.audio.fileData = 'data:audio/' + filePath.split('.').pop() + ';base64,' + fs.readFileSync(filePath, {encoding: 'base64'})
+    config.audio.fileName = 'Opened ' + filePath
+    controlWindow.webContents.send('config', config)
+  } else {
+    log.warning("Selected audio file does not exist")
+  }
+})
+// osc.on('exportImageToWallpaper', () => {
+//   log.debug('exportImageToWallpaper')
+// })
+// osc.on('exportImageToFile', (filePath) => {
+//   log.debug('exportImageToFile', filePath)
+// })
 
 
 
@@ -497,11 +513,11 @@ ipcMain.on('exportCard', () => {
     // Nucleus.track("Exported Card", {  type: config.export.target, imageSource: config.export.imageSource, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, windowed: config.windowed, cardType: config.cardType, headless: false })
   } else {
     headlessExportMode = true
-    let c = {show: false, frame: false, width: config.winWidth, height: config.winHeight, webPreferences: {preload: path.join(__dirname, 'preload.js')}}
+    let c = {show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, 'preload.js')}}
 
     if (config.windowed) {
-      c.minWidth = config.winWidth
-      c.minHeight = config.winHeight
+      c.minWidth = config.window.width
+      c.minHeight = config.window.height
     } else {
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {

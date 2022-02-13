@@ -1,5 +1,5 @@
 <template>
-  <div id="bounds" :class="{ showBounds: config.bounds && !config.fullscreen}" class="superblack" v-on:dblclick="toggleWindowed">
+  <div id="bounds" :class="{ showBounds: config.notFilledCard.bounds && !config.fullscreen}" class="superblack" v-on:dblclick="toggleWindowed">
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
@@ -50,7 +50,7 @@
     </div>
 
     <transition name="fade">
-      <div v-if="config.bounds" class="infoBounds">
+      <div v-if="config.notFilledCard.bounds" class="infoBounds">
         <strong>{{ config.name}}</strong> <br />
         {{ boundsInfo }}
       </div>
@@ -99,6 +99,9 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
     data: function() { 
       return {
         config: {
+          notFilledCard: {
+            bounds: false
+          }
         },
         boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
         info: {
@@ -116,10 +119,10 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
           return {}
         } else {
           return {
-            height: this.config.height + 'px',
-            width: this.config.width + 'px',
-            top: this.config.top + 'px',
-            left: this.config.left + 'px',
+            height: this.config.notFilledCard.height + 'px',
+            width: this.config.notFilledCard.width + 'px',
+            top: this.config.notFilledCard.top + 'px',
+            left: this.config.notFilledCard.left + 'px',
           }
         }
       }
@@ -144,9 +147,9 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
       },
       updateCardSize: function() {
         if (this.config.windowed) {
-          this.info.cardSize = this.config.winWidth + ' x ' + this.config.winHeight
+          this.info.cardSize = this.config.window.width + ' x ' + this.config.window.height
         } else {
-          this.info.cardSize = this.config.width + ' x ' + this.config.height
+          this.info.cardSize = this.config.notFilledCard.width + ' x ' + this.config.notFilledCard.height
         }
       },
       exportTestCard: function(settings) {
