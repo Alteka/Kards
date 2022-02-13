@@ -18,7 +18,7 @@ const menu = require('./menu.js').menu
 const fs = require('fs')
 const say = require('say')
 var sizeOf = require('image-size')
-import { Server } from 'node-osc';
+var oscServer = require('./osc')
 
 const store = new Store({
   migrations: {
@@ -105,6 +105,7 @@ ipcMain.on('config', (_, arg) => {
     }
   }
   // touchBar.setConfig(config)
+  osc.updateConfig(config)
   store.set('KardsConfig', config)
 })
 ipcMain.on('getConfigTestCard', () => {
@@ -467,11 +468,14 @@ let testCardWindowResizeTimer
 
 
 
-
-
-
-
-
+//========================//
+//    Setup OSC Server    //
+//========================//
+let osc = new oscServer()
+osc.setup()
+osc.on('updateConfig', (c) => {
+  controlWindow.webContents.send('config', c)
+})
 
 
 
@@ -696,35 +700,6 @@ ipcMain.on('importSettings', (event, arg) => {
   }
 })
 
-
-var oscServer = new Server(25518, '0.0.0.0', () => {
-  console.log('OSC Server is listening on port 25518')
-})
-
-oscServer.on('message', function (msg) {
-  let cmd = msg[0]
-  let data = msg[1]
-
-  switch(cmd) {
-    case '/animated', '/motion':
-      config.animated = Boolean(data)
-      break;
-
-    case '/showInfo':
-      config.showInfo = Boolean(data)
-      break;
-
-    case '/name':
-      config.name = String(data)
-      break;
-
-    case '/cardType':
-      config.cardType = String(data)
-      break;
-  }
-
-  controlWindow.webContents.send('config', config)
-})
 
 
 //========================//
