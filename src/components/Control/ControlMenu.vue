@@ -56,19 +56,19 @@
       </el-col>
     </el-row>
 
-    <el-row style="padding-left: 10px;">
+    <el-row style="padding-left: 10px; margin-left: 20px; margin-right: 20px;">
       <el-col style="margin-top: 7px; color: #606266;" :span="4" :class="{ enabledText: config.audio.enabled }">
         Enable <el-switch :disabled="config.audio.options.length == 0" v-model="config.audio.enabled"></el-switch>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="16">
         <el-form-item label="Device" label-width="70px">
-          <el-select v-model="config.audio.deviceId" placeholder="Select" style="width: 300px;">
+          <el-select v-model="config.audio.deviceId" placeholder="Select" style="width: 310px;">
               <el-option v-for="item in audioDevices" :key="item.deviceId" :label="item.label" :value="item.deviceId"></el-option>
           </el-select>
         </el-form-item>
       </el-col>
-      <el-col :span="5">
-        <el-button type="primary" size="small" round @click="loadAudioFile"><i class="far fa-file-audio"></i> Select File</el-button>
+      <el-col :span="4">
+        <el-button type="primary" size="small" @click="loadAudioFile"><i class="far fa-file-audio"></i> Select File</el-button>
       </el-col>
     </el-row>
 

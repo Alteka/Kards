@@ -48,7 +48,7 @@
 
       <el-row>
         <el-col :span="8">
-          <el-form-item label="Name" label-width="70px">
+          <el-form-item label="Name" label-width="66px">
             <el-input v-model="config.name" placeholder=""></el-input>
           </el-form-item>
         </el-col>
@@ -93,7 +93,8 @@
       </el-row>
 
       <el-row v-if="!config.fullsize && config.screen!=0">
-        <el-col :span="6">
+        <el-col :span="2"></el-col>
+        <el-col :span="4">
           <el-form-item label="Card Size"> 
           </el-form-item>
         </el-col>
@@ -110,7 +111,8 @@
       </el-row>
    
     <el-row v-if="!config.fullsize && config.screen!=0"> 
-      <el-col :span="6">
+      <el-col :span="2"></el-col>
+      <el-col :span="4">
         <el-form-item label="Card Position"> 
         </el-form-item>
       </el-col>
