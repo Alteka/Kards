@@ -19,6 +19,7 @@ const fs = require('fs')
 const say = require('say')
 var sizeOf = require('image-size')
 var oscServer = require('./osc')
+var restServer = require('./rest')
 
 const store = new Store({
   migrations: {
@@ -106,6 +107,7 @@ ipcMain.on('config', (_, arg) => {
   }
   // touchBar.setConfig(config)
   osc.updateConfig(config)
+  rest.updateConfig(config)
   store.set('KardsConfig', config)
 })
 ipcMain.on('getConfigTestCard', () => {
@@ -494,6 +496,11 @@ osc.on('audioFile', (filePath) => {
 // })
 
 
+let rest = new restServer()
+rest.setup()
+rest.on('updateConfig', (c) => {
+  controlWindow.webContents.send('config', c)
+})
 
 //========================//
 //   Export PNG Images    //

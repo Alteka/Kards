@@ -245,13 +245,13 @@ class oscServer extends EventEmitter {
                 break;
 
             // export image settings
-            // case '/exportImage/source':
-            //     this.config.export.imageSource = String(data)
-            //     break;
+            case '/exportImage/source':
+                this.config.export.imageSource = String(data)
+                break;
             
-            // case '/exportImage/target':
-            //     this.config.export.target = String(data)
-            //     break;
+            case '/exportImage/target':
+                this.config.export.target = String(data)
+                break;
             
             // case '/exportImage/toFile':
             //     this.emit('exportImageToFile', data)
