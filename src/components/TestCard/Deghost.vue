@@ -47,7 +47,7 @@ export default {
             }
           },
           size: {
-            value: 10,
+            value: 8,
             random: false,
             anim: {
               enable: false,
@@ -149,16 +149,43 @@ export default {
 
 @keyframes backgroundColorPalette {
 	0% {
-		background: #f00;
+		background: hsl(0deg, 100%, 50%);
 	}
-	33% {
-		background: #0f0;
+	8.333% {
+		background: hsl(30deg, 100%, 50%);
 	}
-  66% {
-		background: #00f;
+  16.667% {
+		background: hsl(60deg, 100%, 50%);
 	}
-	100% {
-		background: #f00;
+	25% {
+		background: hsl(90deg, 100%, 50%);
+	}
+  33.333% {
+		background: hsl(120deg, 100%, 50%);
+	}
+  41.667% {
+		background: hsl(150deg, 100%, 50%);
+	}
+  50% {
+		background: hsl(180deg, 100%, 50%);
+	}
+  58.333% {
+		background: hsl(210deg, 100%, 50%);
+	}
+  66.667% {
+		background: hsl(240deg, 100%, 50%);
+	}
+  75% {
+		background: hsl(270deg, 100%, 50%);
+	}
+  83.333% {
+		background: hsl(300deg, 100%, 50%);
+	}
+  91.667% {
+		background: hsl(330deg, 100%, 50%);
+	}
+  100% {
+		background: hsl(360deg, 100%, 50%);
 	}
 }
 

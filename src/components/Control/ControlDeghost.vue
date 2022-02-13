@@ -3,14 +3,14 @@
   <el-row>
     <el-col :span="24">
       <el-form-item label="Density">
-        <el-slider v-model="deghost.density" :min="10" :max="200"></el-slider>
+        <el-slider v-model="deghost.density" :min="10" :max="200" show-input></el-slider>
       </el-form-item>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="24">
       <el-form-item label="Speed">
-        <el-slider v-model="deghost.speed" :min="1" :max="11"></el-slider>
+        <el-slider v-model="deghost.speed" :min="1" :max="11" show-input></el-slider>
       </el-form-item>
     </el-col>
   </el-row>

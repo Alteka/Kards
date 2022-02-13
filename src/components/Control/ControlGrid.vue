@@ -18,12 +18,13 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item label="Show Circles">
             <el-switch v-model="grid.circles"></el-switch>
           </el-form-item>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="3"></el-col>
+        <el-col :span="12">
           <el-form-item label-width="auto" label="Grid Spacing (pixels)">
             <el-input-number v-model="grid.size" :step="5" :min="1" size="mini" controls-position="right"></el-input-number>
           </el-form-item>
