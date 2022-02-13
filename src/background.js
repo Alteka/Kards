@@ -508,7 +508,6 @@ rest.on('updateConfig', (c) => {
 let headlessExportMode = false
 
 ipcMain.on('testCardKeyPress', (_, msg) => {
-  console.log('testCardKeyPress', msg)
   config[msg] = !config[msg]
   controlWindow.webContents.send('config', config)
   testCardWindow.webContents.send('config', config)
