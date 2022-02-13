@@ -279,6 +279,9 @@ body {
   color: #ddd;
   border: 1px solid #666;
 }
+.darkMode .el-radio-button__inner:hover {
+  border-color: #6ab42f;
+}
 .darkMode .el-radio-button:first-child .el-radio-button__inner {
   border-left: 1px solid #666;
 }
@@ -308,4 +311,30 @@ body {
 .darkMode .el-checkbox-button__inner {
   background: none;
 }
+
+.el-dialog {
+  border: 1.5px solid #6ab42f;
+}
+.darkMode .el-dialog {
+  background: #333;
+}
+.darkMode .el-dialog__title {
+  color: #ddd;
+}
+.darkMode .el-dialog__body {
+  color: #ddd;
+}
+.darkMode .el-button:hover {
+  border-color: #6ab42f;
+}
+.el-dialog__body {
+  padding: 10px;
+}
+  .darkMode .el-input-group__append {
+    background: #3d3d3d;
+    border: 1px solid #666;
+  }
+  .darkMode .el-input-group__append:hover {
+    color: #6ab42f;
+  }
 </style>
