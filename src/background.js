@@ -18,6 +18,7 @@ const menu = require('./menu.js').menu
 const fs = require('fs')
 const say = require('say')
 var sizeOf = require('image-size')
+const wallpaper = require('wallpaper')
 var oscServer = require('./osc')
 var restServer = require('./rest')
 
@@ -290,7 +291,9 @@ ipcMain.on('networkInfo', (event) => {
           }
       }
   }
-  testCardWindow.webContents.send('networkInfo', results)
+  if (testCardWindow !== null) {
+    testCardWindow.webContents.send('networkInfo', results)
+  }
 })
 
 
