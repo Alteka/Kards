@@ -12,7 +12,7 @@
       <el-radio-group v-model="audioSync.rate" size="small">
           <el-radio-button v-for="item in rates" :key="item" :label="item"><i v-if="item == displayFrequency" class="fas fa-star"></i> {{item}}</el-radio-button>
       </el-radio-group>
-      <span v-if="audioSync.rate != displayFrequency" class="audioSyncWarning"><i class="fas fa-exclamation-circle"></i> Video rate does not match screen</span>
+      <span v-if="audioSync.rate != displayFrequency" class="audioSyncWarning"><br /><i class="fas fa-exclamation-circle"></i> Video rate does not match screen</span>
       <span v-if="audioSync.rate > 60" class="audioSyncWarning" style="float: right;"><i class="fas fa-exclamation-circle"></i> May require high performace computer</span>
     </el-form-item>
   </el-row>
