@@ -276,6 +276,12 @@ body {
 .darkMode .el-color-picker__trigger {
   border: 1px solid #666;
 }
+ .el-radio-button__inner {
+  color: #777;
+}
+.el-checkbox-button__inner {
+  color: #777;
+}
 .darkMode .el-radio-button__inner {
   background: #3d3d3d;
   color: #ddd;
