@@ -108,13 +108,15 @@ import Swatch from './Swatch'
   }
 
   .infoBox {
+    background-color: #000;
+    color: #6ab42f;
     width: 30%;
     display: flex;
     padding: 10px;
     flex-direction: column;
     justify-content: space-around;
     text-align: center;
-    font-size: 2vh;
+    font-size: 3vh;
   }
  
  
