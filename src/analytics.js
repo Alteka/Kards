@@ -105,7 +105,7 @@ class altekaAnalytics extends EventEmitter {
         if (this.config.audio.enabled) {
             this._triggerAudioEnabled = false
             this._analytics.track('AudioEnabled')
-            log.info('Analytics :: AudioEnabled :: Audio has been outputting for more than 30 seconds')
+            log.info('Analytics :: AudioEnabled :: Audio has been outputting for over 30 seconds')
         }
     }
 }

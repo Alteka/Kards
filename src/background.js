@@ -120,8 +120,7 @@ ipcMain.on('getConfigControl', () => {
 
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
-  analytics.track("ResetDefaults")
-  log.info('Resetting to default')
+  analytics.track("ResetDefaults", 'Resetting app config to defaults')
   createVoice()
 })
 
@@ -493,7 +492,6 @@ ipcMain.on('testCardKeyPress', (_, msg) => {
 ipcMain.on('exportCard', () => {
   if (testCardWindow != null) {
     testCardWindow.webContents.send('exportCard')
-    // Nucleus.track("Exported Card", {  type: config.export.target, imageSource: config.export.imageSource, size: testCardWindow.getBounds().width + 'x' + testCardWindow.getBounds().height, windowed: config.windowed, cardType: config.cardType, headless: false })
   } else {
     headlessExportMode = true
     let c = {show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, 'preload.js')}}
@@ -513,7 +511,6 @@ ipcMain.on('exportCard', () => {
     } 
     showTestCardWindow(c) 
     log.info('Creating dummy test card window to capture image')
-    // Nucleus.track("Exported Card", { type: config.export.target, imageSource: config.export.imageSource, size: c.width + 'x' + c.height, windowed: config.windowed, cardType: config.cardType, headless: true })
   }
 })
 
@@ -541,7 +538,7 @@ ipcMain.on('saveAsPNG', (_, arg) => {
           controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
           let dims = sizeOf(result.filePath)
-          log.info('PNG saved to: ', result.filePath, ' - With dimensions: ', dims.width, 'x', dims.height)
+          analytics.track('ImageSavedToPNG', 'PNG saved to: ', result.filePath, ' - With dimensions: ', dims.width, 'x', dims.height)
           controlWindow.webContents.send('exportCardCompleted')
         }
       })
@@ -570,7 +567,7 @@ ipcMain.on('setAsWallpaper', (_, arg) => {
     (async () => {
       await wallpaper.set(dest)
       let dims = sizeOf(dest)
-      log.info('Setting png as wallpaper with dims: ' + dims.width + 'x' + dims.height)
+      analytics.track('ImageSavedToWallpaper', 'Setting PNG as wallpaper with dims: ' + dims.width + 'x' + dims.height)
       controlWindow.webContents.send('exportCardCompleted')
       })();
     })
@@ -656,8 +653,7 @@ ipcMain.on('exportSettings', () => {
           dialog.showErrorBox('Error Saving File', JSON.stringify(err))
           log.error('Couldnt save file: ', err)
         } else {
-          log.info('JSON saved to: ', path)
-          Nucleus.track("Settings Exported")
+          analytics.track('SettingsExported', 'JSON saved to: ' + path)
         }
       })
     } else {
@@ -686,7 +682,7 @@ ipcMain.on('importSettings', () => {
           createTextAudio() 
           controlWindow.webContents.send('config', config)
           controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
-          Nucleus.track("Settings Imported", { count: count })
+          analytics.track('SettingsImported', 'Imported ' + count + ' settings from json file.')
         } else {
           controlWindow.webContents.send('importSettings', 'Skipping - The file is from a different version of Kards')  
         }
@@ -707,12 +703,15 @@ ipcMain.on('importSettings', () => {
 setTimeout(function() {
   axios.get('https://api.github.com/repos/alteka/kards/releases/latest')
     .then(function (response) {
-      let status = compareVersions(response.data.tag_name, require('./../package.json').version, '>')
+      let online = response.data.tag_name
+      let now = require('./../package.json').version
+      let status = compareVersions(online, now, '>')
       if (status == 1) { 
+        log.info('Update :: A newer version (v' + online + ') is available. v' + now + ' currently installed.')
         dialog.showMessageBox(controlWindow, {
           type: 'question',
           title: 'An Update Is Available',
-          message: 'Would you like to download version: ' + response.data.tag_name,
+          message: 'Would you like to download version: ' + online,
           buttons: ['Cancel', 'Yes']
         }).then(function (response) {
           if (response.response == 1) {
@@ -721,12 +720,12 @@ setTimeout(function() {
           }
         });
       } else if (status == 0) {
-        log.info('Running latest version')
+        log.info('Update :: Running latest version - v' + online)
       } else if (status == -1) {
-        log.info('Running version newer than release')
+        log.info('Update :: Running a newer version (v' + now + ') than is online: v' + online)
       }
     })
     .catch(function (error) {
-      console.log(error);
+      log.error(error);
     })
   }, 10000)
