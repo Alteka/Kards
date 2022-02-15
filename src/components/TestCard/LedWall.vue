@@ -20,9 +20,14 @@ import LedPanel from './LedPanel.vue'
     },
     computed: {
       infoStyle: function() {
+        let top = (Math.min(visualViewport.height, this.config.led.rows*this.config.led.height)/2)
+        if (visualViewport.height > this.config.led.rows*this.config.led.height) {
+          top -= (24 * (1-this.config.led.rows%2))
+        }
+        console.log(top)
         return {
           left: Math.min(visualViewport.width, this.config.led.columns*this.config.led.width)/2 + 'px',
-          top: Math.min(visualViewport.height, this.config.led.rows*this.config.led.height)/2 + 'px'
+          top: top + 'px'
         }
       },
       quadrantStyle: function() {

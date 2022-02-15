@@ -1,7 +1,7 @@
 <template>
   <div class="ledpanel" :style="{width: config.led.width + 'px', height: config.led.height + 'px', backgroundColor: bgCol}" :class="animClass">
-    <i class="fas fa-arrow-down"></i> {{row}}<br />
-    <i class="fas fa-arrow-right"></i> {{column}}
+    <span v-if="config.led.height > 42 && config.led.width > 42"><i class="fas fa-arrow-down"></i> {{row}}<br />
+    <i class="fas fa-arrow-right"></i> {{column}}</span>
   </div>
 </template>
 
