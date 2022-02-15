@@ -73,11 +73,11 @@
 
     </el-drawer>
 
-    <audio src="~@/assets/audio/stereo.wav" id="stereo" />
-    <audio src="~@/assets/audio/phase.wav" id="phase" />
-    <audio src="~@/assets/audio/pink.wav" id="pink" />
-    <audio src="~@/assets/audio/white.wav" id="white" />
-    <audio src="~@/assets/audio/tone.wav" id="tone" />
+    <audio id="stereo" />
+    <audio id="phase" />
+    <audio id="pink" />
+    <audio id="white" />
+    <audio id="tone" />
     <audio :src="config.audio.voiceData" id="voice" />
     <audio :src="config.audio.textData" id="text" />
     <audio :src="config.audio.fileData" id="file" />
@@ -151,6 +151,12 @@ let loadingInstance
       this.updateDevices()
       setInterval(this.updateDevices, 5000)
       setTimeout(this.doNameUpdate, 2000)
+
+      document.getElementById('stereo').src = require("@/assets/audio/stereo.wav")
+      document.getElementById('pink').src = require("@/assets/audio/pink.wav")
+      document.getElementById('phase').src = require("@/assets/audio/phase.wav")
+      document.getElementById('tone').src = require("@/assets/audio/tone.wav")
+      document.getElementById('white').src = require("@/assets/audio/white.wav")
 
       window.ipcRenderer.receive('exportCardCompleted', function(msg) {
         if (msg) {
