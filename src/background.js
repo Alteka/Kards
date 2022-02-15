@@ -165,6 +165,10 @@ async function createWindow() {
     controlWindow.show()
   })
 
+  controlWindow.on('closed', () => {
+    app.quit()
+  })
+
   if (process.platform == 'darwin') {
     Menu.setApplicationMenu(menu)
   } else {
@@ -430,7 +434,7 @@ function showTestCardWindow(windowConfig) {
     if (!process.env.IS_TEST) testCardWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
-    testCardWindow.loadURL('app://./index.html')
+    testCardWindow.loadURL('app://./index.html#testcard')
   }
 
   testCardWindow.once('ready-to-show', () => {
