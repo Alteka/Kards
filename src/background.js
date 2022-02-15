@@ -4,9 +4,6 @@ import { app, protocol, BrowserWindow, Menu, ipcMain, dialog, shell, screen, nat
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import compareVersions from 'compare-versions'
-import { v4 as uuidv4 } from 'uuid'
-import Analytics from 'analytics'
-import googleAnalytics from '@analytics/google-analytics'
 const log = require('electron-log')
 const { networkInterfaces, hostname } = require('os')
 const axios = require('axios')
@@ -19,6 +16,7 @@ const fs = require('fs')
 const say = require('say')
 var sizeOf = require('image-size')
 const wallpaper = require('wallpaper')
+import altekaAnalytics from './analytics'
 var oscServer = require('./osc')
 var restServer = require('./rest')
 
@@ -99,7 +97,6 @@ app.on('ready', function() {
 ipcMain.on('config', (_, arg) => {
   config = arg
   manageTestCardWindow()
-  // updateAnalytics()
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
     if (config.windowed) {
@@ -107,6 +104,7 @@ ipcMain.on('config', (_, arg) => {
     }
   }
   // touchBar.setConfig(config)
+  analytics.updateConfig(config)
   osc.updateConfig(config)
   rest.updateConfig(config)
   store.set('KardsConfig', config)
@@ -122,7 +120,7 @@ ipcMain.on('getConfigControl', () => {
 
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
-  analytics.track("Reset Defaults")
+  analytics.track("ResetDefaults")
   log.info('Resetting to default')
   createVoice()
 })
@@ -178,11 +176,9 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await controlWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) controlWindow.webContents.openDevTools()
-    // log.debug("THIS MEANS THE OTHER THING TO THE OTHER LINE: ", process.env.WEBPACK_DEV_SERVER_URL)
   } else {
     createProtocol('app')
     controlWindow.loadURL('app://./index.html')
-    // log.debug("THIS IS A MESSAGE FOR DREW!")
   }
 }
 ipcMain.on('controlResize', (_, data) => {
@@ -233,36 +229,9 @@ app.on('ready', function() {
 //=====================//
 //       Analytics     //
 //=====================//
-const analytics = Analytics({
-  app: 'Kards',
-  version: 100,
-  plugins: [
-    googleAnalytics({
-      trackingId: 'UA-183734846-4',
-      tasks: {
-        // Set checkProtocolTask for electron apps & chrome extensions
-        checkProtocolTask: null,
-      }
-    })
-  ]
-})
+let analytics = new altekaAnalytics()
 app.on('ready', async () => {
-  if (!store.has('KardsInstallID-1.2')) {
-    let newId = uuidv4()
-    log.info('First Runtime and created Install ID: ' + newId)
-    store.set('KardsInstallID-1.2', newId)
-  } else {
-    log.info('Install ID: ' + store.get('KardsInstallID-1.2'))
-  }
-
-  analytics.identify(store.get('KardsInstallID-1.2'), {
-    firstName: 'Version',
-    lastName: require('./../package.json').version
-  }, () => {
-    console.log('do this after identify')
-  })
-
-  analytics.track('AppLaunched')
+  analytics.setup()
 })
 
 
@@ -276,7 +245,7 @@ ipcMain.on('closeTestCard', (_, arg) => {
 ipcMain.on('openLogs', () => {
   const path = log.transports.file.findLogPath()
   shell.showItemInFolder(path)
-  analytics.track('Open Logs')
+  analytics.track('OpenLogs', 'Opening log folder')
 })
 
 ipcMain.on('openUrl', (_, arg) => {
@@ -446,6 +415,7 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.on('resize', function() {
     clearTimeout(testCardWindowResizeTimer)
     testCardWindowResizeTimer = setTimeout(handleTestCardResize, 500)
+    analytics.setSize(testCardWindow.getBounds().width,testCardWindow.getBounds().height)
   })
 
   testCardWindow.on('move', function() {
@@ -669,7 +639,7 @@ function loadAudioFile() {
 //============================//
 //   Import/Export Settings   //
 //============================//
-ipcMain.on('exportSettings', (event, arg) => {
+ipcMain.on('exportSettings', () => {
   dialog.showSaveDialog(controlWindow, {title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
     if (!result.canceled) {
       let path = result.filePath
@@ -696,7 +666,7 @@ ipcMain.on('exportSettings', (event, arg) => {
   })
 })
 
-ipcMain.on('importSettings', (event, arg) => {
+ipcMain.on('importSettings', () => {
   let result = dialog.showOpenDialogSync({ title: "Import Settings", properties: ['openFile'], filters: [{name: 'JSON', extensions: ['json', 'JSON']}]})
   if (result != null) {
     fs.readFile(result[0], (err, data) => {
@@ -747,7 +717,7 @@ setTimeout(function() {
         }).then(function (response) {
           if (response.response == 1) {
             shell.openExternal('https://alteka.solutions/kards')
-            analytics.track("Open Update Link")
+            analytics.track('OpenUpdateLink', "Open Update Link")
           }
         });
       } else if (status == 0) {
