@@ -23,8 +23,8 @@
           <el-dropdown-item v-if="confirmResetVisible" @click="reset()" style="color: red"><i class="fas fa-undo"></i> Are You Sure?</el-dropdown-item>
           <el-dropdown-item divided @click="openHelp"><i class="fas fa-question"></i> Help</el-dropdown-item>
           <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list"></i> Logs</el-dropdown-item>
-          <el-dropdown-item divided @click="importSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>
-          <el-dropdown-item @click="window.ipcRenderer.send('importSettings')"><i class="fas fa-file-import"></i> Import Settings</el-dropdown-item>
+          <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>
+          <el-dropdown-item @click="importSettings"><i class="fas fa-file-import"></i> Import Settings</el-dropdown-item>
           <el-dropdown-item @click="showShareDialog = true"><i class="fas fa-share"></i> Share Card</el-dropdown-item>
         </el-dropdown-menu>
         </template>
@@ -113,6 +113,7 @@
 
 <script>
 import { ElLoading } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import ControlShare from './ControlShare.vue'
 
 let loadingInstance
@@ -160,13 +161,13 @@ let loadingInstance
 
       window.ipcRenderer.receive('exportCardCompleted', function(msg) {
         if (msg) {
-          Notification.warning({title: 'Oops', message: msg, showClose: false, duration: 2500, onClick: function() { this.close() }})
+          ElNotification({ title: 'Oops', message: msg, duration: 2500, showClose: false, onClick: function() { this.close() } })
         } 
         loadingInstance.close()
       })
 
       window.ipcRenderer.receive('importSettings', function(msg) {
-        Notification.info({title: 'Import Settings', message: msg, showClose: false, duration: 2500, onClick: function() { this.close() }})
+        ElNotification({ title: 'Import Settings', message: msg, duration: 2500, showClose: false, onClick: function() { this.close() } })
       })
       
     },
