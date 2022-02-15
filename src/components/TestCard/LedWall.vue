@@ -20,14 +20,23 @@ import LedPanel from './LedPanel.vue'
     },
     computed: {
       infoStyle: function() {
-        let top = (Math.min(visualViewport.height, this.config.led.rows*this.config.led.height)/2)
-        if (visualViewport.height > this.config.led.rows*this.config.led.height) {
-          top -= (24 * (1-this.config.led.rows%2))
+        let offset = 21
+        if (this.config.led.height < 78) {
+          offset = 16
+        } 
+        if (this.config.led.height < 62) {
+          offset = 12
         }
-        console.log(top)
+
+        let top = (Math.min(visualViewport.height, this.config.led.rows*this.config.led.height)/2)
+        if (visualViewport.height > this.config.led.rows*this.config.led.height && this.config.led.height > 42) {
+          top -= (offset * (1-this.config.led.rows%2))
+        }
+        
         return {
           left: Math.min(visualViewport.width, this.config.led.columns*this.config.led.width)/2 + 'px',
-          top: top + 'px'
+          top: top + 'px',
+          fontSize: offset + 'px'
         }
       },
       quadrantStyle: function() {
@@ -47,7 +56,7 @@ import LedPanel from './LedPanel.vue'
   }
   .infoLine {
     position: absolute;
-    padding: 5px;
+    padding: 3px;
     transform:translate(-50%, -50%);
     font-size: 21px;
     margin: auto;
