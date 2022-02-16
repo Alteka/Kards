@@ -82,7 +82,7 @@
         </el-col>
         <el-col :span="8" v-if="!config.windowed">
           <el-form-item label="Fill Output"><i class="fas fa-expand-arrows-alt green"></i>
-            <el-switch v-model="config.fullsize"></el-switch>
+            <el-switch v-model="config.fullsize" :disabled="this.config.cardType == 'led'"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -95,17 +95,19 @@
       <el-row v-if="!config.fullsize && config.screen!=0">
         <el-col :span="2"></el-col>
         <el-col :span="4">
-          <el-form-item label="Card Size"> 
-          </el-form-item>
+          <el-form-item v-if="config.cardType == 'led'" label="Set by LED"></el-form-item>
+          <el-form-item v-else label="Card Size"></el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Width" label-width="80px">
-            <el-input-number v-model="config.notFilledCard.width" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number v-if="config.cardType == 'led'" v-model="this.ledWidth" :disabled="true" controls-position="right"></el-input-number>
+            <el-input-number v-else v-model="config.notFilledCard.width" controls-position="right" :step="5" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Height" label-width="80px">
-            <el-input-number v-model="config.notFilledCard.height" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number v-if="config.cardType == 'led'" v-model="this.ledHeight" :disabled="true" controls-position="right"></el-input-number>
+            <el-input-number v-else v-model="config.notFilledCard.height" controls-position="right" :step="5" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -165,7 +167,8 @@ export default {
       config: require('../defaultConfig.json'),
       sync: false,
       darkMode: false,
-      displayFrequency: 0
+      displayFrequency: 0,
+      prevFullsize: true
     }
   },
   created: function() {
@@ -229,9 +232,20 @@ export default {
         if (val.windowed) {
           this.config.fullsize = true
         }
-        },
+        if (val.cardType == 'led' && !val.windowed) {
+          this.config.fullsize = false
+        }
+      },
       deep: true
     },
+  },
+  computed: {
+    ledWidth: function() {
+      return this.config.led.width * this.config.led.columns
+    },
+    ledHeight: function() {
+      return this.config.led.height * this.config.led.rows
+    }
   }
 }
 </script>

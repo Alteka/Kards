@@ -1,5 +1,5 @@
 <template>
-  <div id="bounds" :class="{ showBounds: config.notFilledCard.bounds && !config.fullscreen}" class="superblack" v-on:dblclick="toggleWindowed">
+  <div id="bounds" :class="{ showBounds: config.notFilledCard.bounds && !config.windowed}" class="superblack" v-on:dblclick="toggleWindowed">
     <div class="drag-region"></div>
     <div id="cards" :style="computedStyle">
 
@@ -50,7 +50,7 @@
     </div>
 
     <transition name="fade">
-      <div v-if="config.notFilledCard.bounds" class="infoBounds">
+      <div v-if="config.notFilledCard.bounds && !config.windowed" class="infoBounds">
         <strong>{{ config.name}}</strong> <br />
         {{ boundsInfo }}
       </div>
@@ -148,8 +148,10 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
       updateCardSize: function() {
         if (this.config.windowed) {
           this.info.cardSize = this.config.window.width + ' x ' + this.config.window.height
-        } else {
+        } else if (!this.config.fullsize) {
           this.info.cardSize = this.config.notFilledCard.width + ' x ' + this.config.notFilledCard.height
+        } else {
+          this.info.cardSize = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
         }
       },
       exportTestCard: function(settings) {

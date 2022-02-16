@@ -4,7 +4,7 @@
       <led-panel v-for="column in config.led.columns" :key="column" :config="config" :row="row" :column="column"></led-panel>
     </div>
     <div v-if="config.showInfo" class="infoLine" :style="infoStyle">
-      {{config.name}} - {{ config.led.rows*config.led.width }} x {{ config.led.columns*config.led.height}} on {{info.cardSize}}
+      {{config.name}} - {{ config.led.rows*config.led.width }} x {{ config.led.columns*config.led.height}}
     </div>
   </div>
 </template>
