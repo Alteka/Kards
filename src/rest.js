@@ -9,7 +9,7 @@ class restServer extends EventEmitter {
         super()
 
         this.config = {}
-        this.port = 8123
+        this.port = 8321
 
         this._app = null 
 

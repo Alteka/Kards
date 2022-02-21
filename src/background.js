@@ -9,6 +9,7 @@ const { networkInterfaces, hostname } = require('os')
 const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
+var bonjour = require('bonjour')()
 const menu = require('./menu.js').menu
 
 // Project specific includes
@@ -48,6 +49,9 @@ process.on('uncaughtException', function (error) {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    bonjour.unpublishAll()
+    bonjour.destroy()
+    log.info('All Windows closed - Quitting App')
     app.quit()
   }
 })
@@ -71,11 +75,17 @@ if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', (data) => {
       if (data === 'graceful-exit') {
+        bonjour.unpublishAll()
+        bonjour.destroy()
+        log.info('OS called for graceful exit - Quitting App')
         app.quit()
       }
     })
   } else {
     process.on('SIGTERM', () => {
+      bonjour.unpublishAll()
+      bonjour.destroy()
+      log.info('OS call SIGTERM - Quitting App')
       app.quit()
     })
   }
@@ -163,6 +173,9 @@ async function createWindow() {
   })
 
   controlWindow.on('closed', () => {
+    bonjour.unpublishAll()
+    bonjour.destroy()
+    log.info('Control Window closed - Quitting App')
     app.quit()
   })
 
