@@ -2,13 +2,14 @@ const express = require('express')
 var bodyParser = require('body-parser')
 const log = require('electron-log')
 const EventEmitter = require('events')
+var bonjour = require('bonjour')()
 
 class restServer extends EventEmitter {
     constructor() {
         super()
 
         this.config = {}
-        this.port = 8182
+        this.port = 8123
 
         this._app = null 
 
@@ -20,6 +21,28 @@ class restServer extends EventEmitter {
 
         this._app.listen(this.port, () => {
             log.info('REST HTTP Server running and listening on port ' + this.port)
+
+            bonjour.publish({ 
+                name: 'Kards',
+                type: 'alteka_http',
+                port: this.port,
+                txt: {
+                    version: require('../package.json').version,
+                    website: 'http://www.alteka.solutions/',
+                    description: require('../package.json').description
+                }
+            })
+
+            bonjour.publish({ 
+                name: 'Kards',
+                type: 'http',
+                port: this.port,
+                txt: {
+                    version: require('../package.json').version,
+                    website: 'http://www.alteka.solutions/',
+                    description: require('../package.json').description
+                }
+            })
         })
 
         this._app.get('/*', this._handleGet.bind(this))

@@ -1,6 +1,7 @@
 const Server = require('node-osc').Server
 const log = require('electron-log')
 const EventEmitter = require('events')
+var bonjour = require('bonjour')()
 
 class oscServer extends EventEmitter {
     constructor() {
@@ -15,6 +16,18 @@ class oscServer extends EventEmitter {
     setup() {
         this._server = new Server(this.port, '0.0.0.0', () => {
             log.info("OSC Server has started on port " + this.port)
+
+            bonjour.publish({ 
+                name: 'Kards',
+                type: 'alteka_osc',
+                port: this.port,
+                txt: {
+                    version: require('../package.json').version,
+                    website: 'http://www.alteka.solutions/',
+                    description: require('../package.json').description
+                }
+            })
+
         })
         this._server.on('message', (msg) => {
             let cmd = msg[0]
