@@ -17,14 +17,16 @@ class oscServer extends EventEmitter {
         this._server = new Server(this.port, '0.0.0.0', () => {
             log.info("OSC Server has started on port " + this.port)
 
+            var p = require('../package.json')
+
             bonjour.publish({ 
                 name: 'Kards',
                 type: 'alteka_osc',
                 port: this.port,
                 txt: {
-                    version: require('../package.json').version,
-                    website: 'http://www.alteka.solutions/',
-                    description: require('../package.json').description
+                    version: p.version,
+                    website: p.homepage,
+                    description: p.description
                 }
             })
 
