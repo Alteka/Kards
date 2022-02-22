@@ -624,27 +624,35 @@ ipcMain.on('updateAudioText', () => {
 ipcMain.on('loadAudioFile', () => {
   loadAudioFile()
 })
+let audioGeneratedVoice = ''
 function createVoice() {
-  let dest = app.getPath('userData') + '/voice.wav'  
-  say.export(config.audio.prependText + config.name, null, null, dest, (err) => {
-    if (err) {
-      return console.error(err)
-    }
-    log.info('Updated name (' + config.name + ') has been saved to ', dest)
-    config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
-    controlWindow.webContents.send('config', config)
-  })
+  if (audioGeneratedVoice != config.audio.prependText + config.name) {
+    let dest = app.getPath('userData') + '/voice.wav'  
+    audioGeneratedVoice = config.audio.prependText + config.name
+    say.export(audioGeneratedVoice, null, null, dest, (err) => {
+      if (err) {
+        return console.error(err)
+      }
+      log.info('Audio :: Updated name (' + config.name + ') has been saved to ', dest)
+      config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+      controlWindow.webContents.send('config', config)
+    })
+  }
 }
+let audioGeneratedText = ''
 function createTextAudio() {
-  let dest = app.getPath('userData') + '/text.wav'  
-  say.export(config.audio.text, null, null, dest, (err) => {
-    if (err) {
-      return console.error(err)
-    }
-    log.info('Updated audio text (' + config.audio.text + ') has been saved to ', dest)
-    config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
-    controlWindow.webContents.send('config', config)
-  })
+  if (config.audio.text != audioGeneratedText) {
+    let dest = app.getPath('userData') + '/text.wav'  
+    audioGeneratedText = config.audio.text
+    say.export(config.audio.text, null, null, dest, (err) => {
+      if (err) {
+        return console.error(err)
+      }
+      log.info('Audio :: Updated audio text (' + config.audio.text + ') has been saved to ', dest)
+      config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+      controlWindow.webContents.send('config', config)
+    })
+  }
 }
 function loadAudioFile() {
   dialog.showOpenDialog(controlWindow, {title: 'Open Audio File', filters: [{name: "Audio", extensions: ['wav', 'mp3', 'ogg', 'aac']}]}).then(result => {
@@ -653,8 +661,9 @@ function loadAudioFile() {
       config.audio.fileData = 'data:audio/' + path.split('.').pop() + ';base64,' + fs.readFileSync(path, {encoding: 'base64'})
       config.audio.fileName = 'Opened ' + path
       controlWindow.webContents.send('config', config)
+      log.info('Audio :: Audio file imported - ' + path)
     } else {
-      log.info('Save dialog closed')
+      log.info('Audio :: Save dialog closed')
     }
   })
 }
