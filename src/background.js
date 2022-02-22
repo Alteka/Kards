@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import compareVersions from 'compare-versions'
@@ -158,6 +158,12 @@ var controlMenu = new altekaMenu()
 controlMenu.on('menuClick', (c) => {
   controlWindow.webContents.send('config', c)
 })
+controlMenu.on('loadAudioFile', () => {
+  loadAudioFile()
+})
+controlMenu.on('openLogs', () => {
+  openLogs()
+})
 
 async function createWindow() {
   log.info('Showing control window')
@@ -211,6 +217,7 @@ function updateScreens() {
 
   if (controlWindow != null) {
     controlWindow.webContents.send('screens', {all: screens, primary: primaryScreen})  
+    controlMenu.updateScreens(screens)
   }
   if (testCardWindow != null) {
     for (const scr in screens) {
@@ -256,10 +263,14 @@ ipcMain.on('closeTestCard', (_, arg) => {
 })
 
 ipcMain.on('openLogs', () => {
+  openLogs()
+})
+
+function openLogs() {
   const path = log.transports.file.findLogPath()
   shell.showItemInFolder(path)
   analytics.track('OpenLogs', 'Opening log folder')
-})
+}
 
 ipcMain.on('openUrl', (_, arg) => {
   shell.openExternal(arg)
@@ -500,7 +511,9 @@ let headlessExportMode = false
 ipcMain.on('testCardKeyPress', (_, msg) => {
   config[msg] = !config[msg]
   controlWindow.webContents.send('config', config)
-  testCardWindow.webContents.send('config', config)
+  if (testCardWindow != null) {
+    testCardWindow.webContents.send('config', config)
+  }
 })
 
 ipcMain.on('exportCard', () => {
@@ -651,7 +664,23 @@ function loadAudioFile() {
 //   Import/Export Settings   //
 //============================//
 ipcMain.on('exportSettings', () => {
-  dialog.showSaveDialog(controlWindow, {title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
+  exportSettings()
+})
+
+ipcMain.on('importSettings', () => {
+  importSettings()
+})
+
+controlMenu.on('importSettings', () => {
+  importSettings()
+})
+
+controlMenu.on('exportSettings', () => {
+  exportSettings()
+})
+
+function exportSettings() {
+  dialog.showSaveDialog({title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
     if (!result.canceled) {
       let path = result.filePath
       let cfg = config
@@ -674,9 +703,9 @@ ipcMain.on('exportSettings', () => {
       log.info('Save dialog closed')
     }
   })
-})
+}
 
-ipcMain.on('importSettings', () => {
+function importSettings() {
   let result = dialog.showOpenDialogSync({ title: "Import Settings", properties: ['openFile'], filters: [{name: 'JSON', extensions: ['json', 'JSON']}]})
   if (result != null) {
     fs.readFile(result[0], (err, data) => {
@@ -707,9 +736,7 @@ ipcMain.on('importSettings', () => {
   } else {
     log.info('No file selected')
   }
-})
-
-
+}
 
 //========================//
 //     Update Checker     //
