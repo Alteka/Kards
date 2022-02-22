@@ -10,7 +10,6 @@ const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
 var bonjour = require('bonjour')()
-const menu = require('./menu.js').menu
 
 // Project specific includes
 const fs = require('fs')
@@ -18,6 +17,7 @@ const say = require('say')
 var sizeOf = require('image-size')
 const wallpaper = require('wallpaper')
 import altekaAnalytics from './analytics'
+import altekaMenu from './menu'
 var oscServer = require('./osc')
 var restServer = require('./rest')
 
@@ -103,6 +103,7 @@ app.on('ready', function() {
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config')
+  controlMenu.setup(config)
 })
 ipcMain.on('config', (_, arg) => {
   config = arg
@@ -114,6 +115,7 @@ ipcMain.on('config', (_, arg) => {
     }
   }
   // touchBar.setConfig(config)
+  controlMenu.updateConfig(config)
   analytics.updateConfig(config)
   osc.updateConfig(config)
   rest.updateConfig(config)
@@ -151,6 +153,11 @@ function getDefaultConfig() {
 let controlWindow
 let testCardWindow
 let testCardWindowScreen
+var controlMenu = new altekaMenu()
+
+controlMenu.on('menuClick', (c) => {
+  controlWindow.webContents.send('config', c)
+})
 
 async function createWindow() {
   log.info('Showing control window')
@@ -178,12 +185,6 @@ async function createWindow() {
     log.info('Control Window closed - Quitting App')
     app.quit()
   })
-
-  if (process.platform == 'darwin') {
-    Menu.setApplicationMenu(menu)
-  } else {
-    Menu.setApplicationMenu(null)
-  }
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await controlWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
