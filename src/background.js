@@ -215,6 +215,16 @@ function updateScreens() {
   screens = screen.getAllDisplays()
   primaryScreen = screen.getPrimaryDisplay().id
 
+  // workaround for Electron's displayFrequency being rounded.
+  for (const s in screens) {
+    if (screens[s].displayFrequency == 59) {
+      screens[s].displayFrequency = 59.94
+    }
+    if (screens[s].displayFrequency == 29) {
+      screens[s].displayFrequency = 29.97
+    }
+  }
+
   if (controlWindow != null) {
     controlWindow.webContents.send('screens', {all: screens, primary: primaryScreen})  
     controlMenu.updateScreens(screens)
