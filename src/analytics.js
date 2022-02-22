@@ -11,6 +11,7 @@ class altekaAnalytics extends EventEmitter {
 
         this.trackingId = 'UA-183734846-4'
         this.appName = 'Kards'
+        this.storeName = 'KardsInstallID-' + require('../package.json').version
 
         this.config = null
         this.prevConfig = null
@@ -41,16 +42,16 @@ class altekaAnalytics extends EventEmitter {
             ]
         })
 
-        if (!this._store.has('KardsInstallID-1.3')) {
+        if (!this._store.has(this.storeName)) {
             this._installId = uuidv4()
             log.info('Analytics :: First Runtime and created Install ID: ' + this._installId)
-            this._store.set('KardsInstallID-1.3', this._installId)
+            this._store.set(this.storeName, this._installId)
         } else {
-            this._installId = this._store.get('KardsInstallID-1.3')
+            this._installId = this._store.get(this.storeName)
             log.info('Analytics :: Install ID: ' + this._installId)
         }
 
-        this._analytics.identify(this._store.get('KardsInstallID-1.3'), {
+        this._analytics.identify(this._store.get(this.storeName), {
             firstName: 'Version',
             lastName: require('./../package.json').version
         }, () => {
