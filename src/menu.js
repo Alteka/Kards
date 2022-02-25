@@ -20,10 +20,9 @@ class altekaMenu extends EventEmitter {
     
     if (process.platform == 'darwin') {
       this.active = true
+      this.buildMenu()
+      this.setMenu()
     }
-
-    this.buildMenu()
-    this.setMenu()
 
     ipcMain.on('audioDevices', (_, arg) => {
       // console.log('audioDevices', arg)

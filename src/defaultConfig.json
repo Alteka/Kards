@@ -1,13 +1,13 @@
 {
-    "animated": false,
-    "cardType": "alteka",
-    "showInfo": true,
-    "name": "PPT Main",
     "visible": false,
+    "name": "PPT Main",
+    "cardType": "alteka",
+    "animated": false,
+    "showInfo": true,
     "windowed": false,
     "fullsize": true,
-    "showClock": true,
     "screen": 0,
+    "showClock": true,
 "notFilledCard": {
     "width": 1920,
     "height": 1080,
