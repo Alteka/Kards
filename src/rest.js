@@ -79,7 +79,6 @@ class restServer extends EventEmitter {
     }
 
     _handlePut(req, res) {
-        log.debug(req.body)
         if (Object.keys(req.body).length > 0) {
             const returnedTarget = Object.assign(this.config, req.body)
             this.emit('updateConfig', returnedTarget)

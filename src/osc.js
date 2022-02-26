@@ -246,10 +246,6 @@ class oscServer extends EventEmitter {
                 this.config.ramp.double = Boolean(data)
                 break;
 
-            case '/ramp/overlay':
-                this.config.ramp.overlay = Boolean(data)
-                break;
-
             // deghost
             case '/deghost/density':
                 this.config.deghost.density = Number(data)
