@@ -60,8 +60,7 @@
     "direction": "Horizontal",
     "reverse": false,
     "stepped": false,
-    "double": false,
-    "overlay": false
+    "double": false
 },
 "deghost": {
     "density": 150,
