@@ -47,6 +47,7 @@
         navigator.mediaDevices.enumerateDevices().then((devices) => {
           this.audioDevices = devices.filter(device => device.kind === 'audiooutput').filter(device => device.deviceId != 'communications')
         })  
+        window.ipcRenderer.send('audioDevices', JSON.parse(JSON.stringify(this.audioDevices)))
       }
     },
     mounted: function() {

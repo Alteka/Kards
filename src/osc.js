@@ -264,13 +264,6 @@ class oscServer extends EventEmitter {
                 this.config.export.target = String(data)
                 break;
             
-            // case '/exportImage/toFile':
-            //     this.emit('exportImageToFile', data)
-            //     break;
-
-            // case '/exportImage/toWallpaper':
-            //     this.emit('exportImageToWallpaper')
-            //     break;
 
             // audio settings 
             case '/audio/device':

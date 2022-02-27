@@ -231,6 +231,7 @@ function updateScreens() {
   if (controlWindow != null) {
     controlWindow.webContents.send('screens', {all: screens, primary: primaryScreen})  
     controlMenu.updateScreens(screens)
+    rest.updateScreens(screens)
   }
   if (testCardWindow != null) {
     for (const scr in screens) {
@@ -510,12 +511,6 @@ osc.on('audioFile', (filePath) => {
     log.warning("Selected audio file does not exist")
   }
 })
-// osc.on('exportImageToWallpaper', () => {
-//   log.debug('exportImageToWallpaper')
-// })
-// osc.on('exportImageToFile', (filePath) => {
-//   log.debug('exportImageToFile', filePath)
-// })
 
 
 let rest = new restServer()
