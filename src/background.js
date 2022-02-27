@@ -18,8 +18,8 @@ var sizeOf = require('image-size')
 const wallpaper = require('wallpaper')
 import altekaAnalytics from './analytics'
 import altekaMenu from './menu'
-var oscServer = require('./osc')
-var restServer = require('./rest')
+import oscServer from './osc'
+import restServer from './rest'
 
 const store = new Store({
   migrations: {

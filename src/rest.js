@@ -93,4 +93,4 @@ class restServer extends EventEmitter {
     }
 }
 
-module.exports = restServer
+export default restServer
