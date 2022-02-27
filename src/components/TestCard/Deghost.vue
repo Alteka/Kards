@@ -1,5 +1,5 @@
 <template>
-  <div id="Deghost">
+  <div id="Deghost" :style="deghostStyle">
     <info-circle :config="config" :info="info" class="info" />
     <div id="particles-js"></div>
   </div>
@@ -88,6 +88,11 @@ export default {
         },
         retina_detect: true
       }
+    },
+    deghostStyle: function() {
+      return {
+        animationDuration: Math.abs(15 - this.config.deghost.speed) + 's'
+      }
     }
   },
   mounted: function() {
@@ -98,7 +103,8 @@ export default {
         handler: function (val, oldVal) { 
           if (val.deghost != oldVal.deghost) {
             
-            window.particlesJS('particles-js', this.particlesConfig);
+            // window.particlesJS.apply('particles-js', this.particlesConfig);
+            location.reload()
             
           }
          },

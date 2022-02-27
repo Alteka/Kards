@@ -63,8 +63,8 @@
     "double": false
 },
 "deghost": {
-    "density": 150,
-    "speed": 5
+    "density": 75,
+    "speed": 3
 },
 "export": {
     "imageSource": "card",
