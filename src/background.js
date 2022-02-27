@@ -793,3 +793,15 @@ setTimeout(function() {
       log.error(error);
     })
   }, 10000)
+
+//========================//
+//         Rollbar        //
+//========================//
+var Rollbar = require("rollbar")
+if (!isDevelopment) {
+  var rollbar = new Rollbar({
+    accessToken: 'e6f21f0291334229a79f4f2c9be7c4aa',
+    captureUncaught: true,
+    captureUnhandledRejections: true
+  })
+}
