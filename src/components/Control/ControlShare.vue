@@ -73,14 +73,8 @@
         delete c.fullsize
         delete c.audioSync.device
         delete c.export
-        delete c.width
-        delete c.height
-        delete c.top
-        delete c.left
-        delete c.screen
-        delete c.bounds
-        delete c.winWidth
-        delete c.winHeight
+        delete c.notFilledCard
+        delete c.window
         delete c.audio
         delete c.alteka.logo
 
@@ -96,15 +90,9 @@
         delete c.windowed
         delete c.fullsize
         delete c.audioSync.device
-        delete c.export
-        delete c.width
-        delete c.height
-        delete c.top
-        delete c.left
-        delete c.screen
-        delete c.bounds
-        delete c.winWidth
-        delete c.winHeight
+        delete c.export 
+        delete c.notFilledCard
+        delete c.window
         delete c.audio
         delete c.alteka.logo
 

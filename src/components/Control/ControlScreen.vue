@@ -97,10 +97,10 @@
         if (!this.config.windowed && this.config.fullsize) {
           for (const scr of this.screens) {
             if (scr.id == this.config.screen) {
-              this.config.top = 0
-              this.config.left = 0
-              this.config.width = scr.size.width
-              this.config.height = scr.size.height
+              this.config.notFilledCard.top = 0
+              this.config.notFilledCard.left = 0
+              this.config.notFilledCard.width = scr.size.width
+              this.config.notFilledCard.height = scr.size.height
             }
           }
         }
