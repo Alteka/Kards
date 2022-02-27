@@ -48,7 +48,6 @@
 <script>
 import InfoCircle from './InfoCircle'
   export default {
-    name: "InfoCircle",
     components: { InfoCircle },
     props: {
       config: Object,

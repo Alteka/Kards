@@ -154,7 +154,7 @@ var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
 
 export default {
-  name: 'KardsControl',
+  name: 'Control',
   components: {
     ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost
   },

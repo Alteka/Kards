@@ -94,7 +94,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
 
   export default {
-    name: 'AltekaKardsTestCard',
+    name: 'testcard',
     components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall, Deghost, HDR },
     data: function() { 
       return {

@@ -18,7 +18,6 @@
 import Swatch from './Swatch'
 import InfoCircle from './InfoCircle'
   export default {
-    name: "BarsCard",
     components: { Swatch, InfoCircle },
     props: {
       config: Object,
