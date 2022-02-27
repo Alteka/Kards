@@ -21,10 +21,6 @@
             <control-grid v-model="config.grid" :colors="config.predefineColors"></control-grid>
           </el-tab-pane>
 
-          <el-tab-pane label="LED" name="led">
-            <control-led v-model="config.led" :colors="config.predefineColors"></control-led>
-          </el-tab-pane>
-
           <el-tab-pane label="Ramp" name="ramp">
             <control-ramp v-model="config.ramp"></control-ramp>
           </el-tab-pane>
@@ -39,6 +35,10 @@
 
           <el-tab-pane label="DeGhost" name="deghost">
             <control-deghost v-model="config.deghost"></control-deghost>
+          </el-tab-pane>
+
+          <el-tab-pane label="LED" name="led">
+            <control-led v-model="config.led" :colors="config.predefineColors"></control-led>
           </el-tab-pane>
 
         </el-tabs>
@@ -95,8 +95,9 @@
       <el-row v-if="!config.fullsize && config.screen!=0">
         <el-col :span="2"></el-col>
         <el-col :span="4">
-          <el-form-item v-if="config.cardType == 'led'" label="Set by LED"></el-form-item>
-          <el-form-item v-else label="Card Size"></el-form-item>
+          <el-form-item label="Card Size">
+            <div v-if="config.cardType == 'led'" style="position: relative; min-width: 200px; left: -75px; top: 20px; color: #e6a23c; font-size: 90%;" >Set by LED</div>
+          </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="Width" label-width="80px">
@@ -234,6 +235,10 @@ export default {
         }
         if (val.cardType == 'led' && !val.windowed) {
           this.config.fullsize = false
+        }
+        if (val.cardType == 'led') {
+          this.config.notFilledCard.width = val.led.width * val.led.columns
+          this.config.notFilledCard.height = val.led.height * val.led.rows
         }
       },
       deep: true
