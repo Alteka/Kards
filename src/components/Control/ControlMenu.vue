@@ -85,7 +85,7 @@
     <el-drawer :with-header="false" v-model="drawerImage" direction="btt" size="100px">
       <el-row class="drawerContent">
         <el-col :span="10">
-          <el-radio-group v-model="config.export.imageSource" size="medium" :disabled="config.cardType=='audioSync'">
+          <el-radio-group v-model="config.export.imageSource" size="medium" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'">
             <el-radio-button label="card">Test Card</el-radio-button>
               <el-tooltip :disabled="!config.fullsize" content="Disable 'Fill Output' and 'Windowed' to save test card within larger canvas" placement="bottom" :open-delay="500">
                 <el-radio-button label="canvas" :disabled="config.fullsize">Whole Canvas</el-radio-button>
@@ -93,17 +93,18 @@
           </el-radio-group>
         </el-col>
         <el-col :span="11">
-          <el-radio-group v-model="config.export.target" size="medium" :disabled="config.cardType=='audioSync'">
+          <el-radio-group v-model="config.export.target" size="medium" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'">
             <el-radio-button label="file">Save to File</el-radio-button>
             <el-radio-button label="wallpaper">Set Wallpaper</el-radio-button>
           </el-radio-group>
         </el-col>
         <el-col :span="3">
-          <el-button size="medium" :disabled="config.cardType=='audioSync'" v-on:click="exportCard">OK</el-button>
+          <el-button size="medium" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'" v-on:click="exportCard">OK</el-button>
         </el-col>
       </el-row>
       <el-row>
-        <el-alert v-if="config.cardType == 'audioSync'" title = "Choose a different card - Even we can't save AV Sync to a  still image..." type="warning" center show-icon effect="dark" :closable="false"></el-alert>
+        <el-alert v-if="config.cardType == 'audioSync'" title = "Choose a different card - We can't save AV Sync to a still image..." type="warning" center show-icon effect="dark" :closable="false"></el-alert>
+        <el-alert v-if="config.cardType == 'deghost'" title = "Choose a different card - An image of deghost makes no sense" type="warning" center show-icon effect="dark" :closable="false"></el-alert>
       </el-row>
     </el-drawer>
 
