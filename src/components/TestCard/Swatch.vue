@@ -10,6 +10,7 @@
 
 <script>
   export default {
+    name: "AltekaSwatch",
     props: {
       colour: String,
       ire: String,

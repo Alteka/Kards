@@ -212,6 +212,7 @@
 <script>
 import Swatch from "./Swatch"
 export default {
+  name: "AltekaCard",
   components: { Swatch },
   props: {
     config: Object,
