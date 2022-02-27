@@ -133,6 +133,7 @@ ipcMain.on('getConfigControl', () => {
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
   analytics.track("ResetDefaults", 'Resetting app config to defaults')
+  createTextAudio()
   createVoice()
 })
 
