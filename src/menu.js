@@ -89,18 +89,17 @@ class altekaMenu extends EventEmitter {
           { type: 'separator' },
           { label: 'Fill Output', accelerator: 'CommandOrControl+g', enabled: !this.config.windowed, type: 'checkbox', checked: this.config.fullsize, click: () => { this.config.fullsize = !this.config.fullsize; this.click()} },   
           { label: 'Show Bounds', accelerator: 'CommandOrControl+b', enabled: !this.config.windowed && !this.config.fullsize, type: 'checkbox', checked: this.config.notFilledCard.bounds, click: () => { this.config.notFilledCard.bounds = !this.config.notFilledCard.bounds; this.click()} },   
-          // { label: 'Device', submenu: audioDeviceMenu },
           { type: 'separator' },
           { label: 'Select Screen', submenu: screensMenu },
           { label: 'Card Type', submenu: [
             { label: 'Alteka', accelerator: '1', type: 'radio', checked: this.config.cardType == 'alteka', click: () => { this.config.cardType = 'alteka'; this.click()} },   
             { label: 'Bars', accelerator: '2', type: 'radio', checked: this.config.cardType == 'bars', click: () => { this.config.cardType = 'bars'; this.click()} },   
             { label: 'Grid', accelerator: '3', type: 'radio', checked: this.config.cardType == 'grid', click: () => { this.config.cardType = 'grid'; this.click()} },   
-            { label: 'LED', accelerator: '4', type: 'radio', checked: this.config.cardType == 'led', click: () => { this.config.cardType = 'led'; this.click()} },   
-            { label: 'Ramp', accelerator: '5', type: 'radio', checked: this.config.cardType == 'ramp', click: () => { this.config.cardType = 'ramp'; this.click()} },   
-            { label: 'Name', accelerator: '6', type: 'radio', checked: this.config.cardType == 'placeholder', click: () => { this.config.cardType = 'placeholder'; this.click()} },   
-            { label: 'Sync', accelerator: '7', type: 'radio', checked: this.config.cardType == 'audioSync', click: () => { this.config.cardType = 'audioSync'; this.click()} },   
-            { label: 'DeGhost', accelerator: '8', type: 'radio', checked: this.config.cardType == 'deghost', click: () => { this.config.cardType = 'deghost'; this.click()} }
+            { label: 'Ramp', accelerator: '4', type: 'radio', checked: this.config.cardType == 'ramp', click: () => { this.config.cardType = 'ramp'; this.click()} },   
+            { label: 'Name', accelerator: '5', type: 'radio', checked: this.config.cardType == 'placeholder', click: () => { this.config.cardType = 'placeholder'; this.click()} },   
+            { label: 'Sync', accelerator: '6', type: 'radio', checked: this.config.cardType == 'audioSync', click: () => { this.config.cardType = 'audioSync'; this.click()} },   
+            { label: 'DeGhost', accelerator: '7', type: 'radio', checked: this.config.cardType == 'deghost', click: () => { this.config.cardType = 'deghost'; this.click()} },
+            { label: 'LED', accelerator: '8', type: 'radio', checked: this.config.cardType == 'led', click: () => { this.config.cardType = 'led'; this.click()} }  
           ]}
         ]
       }))
