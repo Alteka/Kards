@@ -133,8 +133,7 @@ ipcMain.on('getConfigControl', () => {
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
   analytics.track("ResetDefaults", 'Resetting app config to defaults')
-  createTextAudio()
-  createVoice()
+  resetAudio()
 })
 
 function getDefaultConfig() {
@@ -627,8 +626,8 @@ ipcMain.on('setAsWallpaper', (_, arg) => {
 //========================//
 //    Voice Generation    //
 //========================//
-setTimeout(createVoice, 5000)
-setTimeout(createTextAudio, 5000)
+setTimeout(createVoice, 10000)
+setTimeout(createTextAudio, 10000)
 ipcMain.on('createVoice', () => {
   createVoice()
 })
@@ -638,35 +637,33 @@ ipcMain.on('updateAudioText', () => {
 ipcMain.on('loadAudioFile', () => {
   loadAudioFile()
 })
-let audioGeneratedVoice = ''
-function createVoice() {
-  if (audioGeneratedVoice != config.audio.prependText + config.name) {
-    let dest = app.getPath('userData') + '/voice.wav'  
-    audioGeneratedVoice = config.audio.prependText + config.name
-    say.export(audioGeneratedVoice, null, null, dest, (err) => {
-      if (err) {
-        return console.error(err)
-      }
-      log.info('Audio :: Updated name (' + config.name + ') has been saved to ', dest)
-      config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
-      controlWindow.webContents.send('config', config)
-    })
-  }
+function resetAudio() {
+  setTimeout(createVoice, 5000)
+  setTimeout(createTextAudio, 5000)
 }
-let audioGeneratedText = ''
+
+function createVoice() {
+  let dest = app.getPath('userData') + '/voice.wav'  
+  say.export(audioGeneratedVoice, null, null, dest, (err) => {
+    if (err) {
+      return console.error(err)
+    }
+    log.info('Audio :: Updated name (' + config.name + ') has been saved to ', dest)
+    config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    controlWindow.webContents.send('config', config)
+  })
+}
+
 function createTextAudio() {
-  if (config.audio.text != audioGeneratedText) {
-    let dest = app.getPath('userData') + '/text.wav'  
-    audioGeneratedText = config.audio.text
-    say.export(config.audio.text, null, null, dest, (err) => {
-      if (err) {
-        return console.error(err)
-      }
-      log.info('Audio :: Updated audio text (' + config.audio.text + ') has been saved to ', dest)
-      config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
-      controlWindow.webContents.send('config', config)
-    })
-  }
+  let dest = app.getPath('userData') + '/text.wav'  
+  say.export(config.audio.text, null, null, dest, (err) => {
+    if (err) {
+      return console.error(err)
+    }
+    log.info('Audio :: Updated audio text (' + config.audio.text + ') has been saved to ', dest)
+    config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    controlWindow.webContents.send('config', config)
+  })
 }
 function loadAudioFile() {
   dialog.showOpenDialog(controlWindow, {title: 'Open Audio File', filters: [{name: "Audio", extensions: ['wav', 'mp3', 'ogg', 'aac']}]}).then(result => {
