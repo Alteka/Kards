@@ -644,7 +644,7 @@ function resetAudio() {
 
 function createVoice() {
   let dest = app.getPath('userData') + '/voice.wav'  
-  say.export(audioGeneratedVoice, null, null, dest, (err) => {
+  say.export(config.audio.prependText + config.name, null, null, dest, (err) => {
     if (err) {
       return console.error(err)
     }
