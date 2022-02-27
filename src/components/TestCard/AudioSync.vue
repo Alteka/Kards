@@ -80,7 +80,7 @@ export default {
     methods: {
       updateDeviceName: function(val) {
         for (const rate in this.rates) {
-          let element = document.getElementById('vt' + rate)
+          let element = document.getElementById('vt' + this.rates[rate])
           if (element !== null) {
             element.setSinkId(val.audioSync.deviceId)
           }
