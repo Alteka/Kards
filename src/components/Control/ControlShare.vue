@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="showShareDialog" title="Share Kards Online Link" width="85%">
-    <el-form style="text-align: center;" label-width="125px">
+    <el-form v-if="supportedCards.includes(config.cardType)" style="text-align: center;" label-width="125px">
       <el-row>
         <el-col :span="24" style="margin-bottom: 16px;">
           Hide controls on load
@@ -36,6 +36,8 @@
       </el-row>
     </el-form>
 
+    <el-alert v-else show-icon center :closable="false" title="The selected card is not yet supported by Kards Online" type="warning" effect="dark"> </el-alert>
+
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="showShareDialog = false">Close</el-button>
@@ -52,7 +54,8 @@
     },
     data: function() {
       return {
-        hideControls: true
+        hideControls: true,
+        supportedCards: ['alteka', 'bars', 'grid', 'ramp', 'placeholder', 'audioSync']
       }
     },
     computed: {
@@ -77,6 +80,7 @@
         delete c.window
         delete c.audio
         delete c.alteka.logo
+        delete c.alteka.showLogo
 
         delete c['']
         c.controlVisible = !this.hideControls
@@ -95,6 +99,7 @@
         delete c.window
         delete c.audio
         delete c.alteka.logo
+        delete c.alteka.showLogo
 
         delete c['']
 
