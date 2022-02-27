@@ -313,6 +313,7 @@ ipcMain.on('networkInfo', (event) => {
 //==========================//
 //   Test Card Management   //
 //==========================//
+// called when config is updated
 function manageTestCardWindow() {
   if (testCardWindow == null && config.visible) { // Test card doesn't exist, but now needs to
     setupNewTestCardWindow()
@@ -329,6 +330,13 @@ function manageTestCardWindow() {
       if (!config.windowed) { // A windowed test card now needs to be full screen. 
         reopenTestCard()
       }
+    }
+  }
+  if (testCardWindow !== null && config.visible) {
+    if (config.cardType == 'led' && config.windowed) {
+      testCardWindow.resizable = false
+    } else {
+      testCardWindow.resizable = true
     }
   }
 }

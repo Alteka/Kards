@@ -236,6 +236,10 @@ export default {
         if (val.cardType == 'led' && !val.windowed) {
           this.config.fullsize = false
         }
+        if (val.cardType == 'led' && val.windowed) {
+          this.config.window.width = val.led.width * val.led.columns
+          this.config.window.height = val.led.height * val.led.rows
+        }
         if (val.cardType == 'led') {
           this.config.notFilledCard.width = val.led.width * val.led.columns
           this.config.notFilledCard.height = val.led.height * val.led.rows
