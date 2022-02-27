@@ -188,9 +188,6 @@ async function createWindow() {
   controlWindow.on('closed', () => {
     bonjour.unpublishAll()
     bonjour.destroy()
-    if (testCardWindow !== null) {
-      testCardWindow.close()
-    }
     log.info('Control Window closed - Quitting App')
     app.quit()
   })
