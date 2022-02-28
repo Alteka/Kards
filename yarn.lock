@@ -2428,11 +2428,6 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-binpack@~0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/binpack/-/binpack-0.1.0.tgz#bd3d0974c3f2a0446e17df4f60b55a72a205a97e"
-  integrity sha1-vT0JdMPyoERuF99PYLVacqIFqX4=
-
 bluebird-lst@^1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/bluebird-lst/-/bluebird-lst-1.0.9.tgz#a64a0e4365658b9ab5fe875eb9dfb694189bb41c"
@@ -6242,6 +6237,11 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
+isomorphic-ws@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/isomorphic-ws/-/isomorphic-ws-4.0.1.tgz#55fd4cd6c5e6491e76dc125938dd863f5cd4f2dc"
+  integrity sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==
+
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
@@ -7121,13 +7121,6 @@ node-libs-browser@^2.2.1:
     util "^0.11.0"
     vm-browserify "^1.0.1"
 
-node-osc@^6.1.13:
-  version "6.1.13"
-  resolved "https://registry.yarnpkg.com/node-osc/-/node-osc-6.1.13.tgz#3e41d9ea9509d644715740720c26461b62f46992"
-  integrity sha512-UdNidvTUdkqaklcdicqCLf8gWzTZK+AiAOl218y05PSsbBPrOdc9u7ZFsQjW+d27E98aAOMcJzwb+ZFxe46Mbw==
-  dependencies:
-    osc-min "^1.1.1"
-
 node-releases@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.1.tgz#3d1d395f204f1f2f29a54358b9fb678765ad2fc5"
@@ -7418,12 +7411,13 @@ os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-osc-min@^1.1.1:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/osc-min/-/osc-min-1.1.2.tgz#3dcaff10f804c39b7080cf4c10fd7a4103cd9037"
-  integrity sha512-8DbiO8ME85R75stgNVCZtHxB9MNBBNcyy+isNBXrsFeinXGjwNAauvKVmGlfRas5VJWC/mhzIx7spR2gFvWxvg==
+osc-js@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/osc-js/-/osc-js-2.3.0.tgz#e07c9c639b9995a7f45a7bec7be6ff80a0c84ef0"
+  integrity sha512-P2Oy9tf8Z9lQw8JZeR62HNqbKdxj7Kqbsag+ImiJvyxPDReGMVt5LtZbMh/7Ve/wbYEGODkQdFAaLHFVkIlHPw==
   dependencies:
-    binpack "~0"
+    isomorphic-ws "4.0.1"
+    ws "8.5.0"
 
 p-cancelable@^1.0.0:
   version "1.1.0"
@@ -10570,6 +10564,11 @@ write@1.0.3:
   integrity sha512-/lg70HAjtkUgWPVZhZcm+T4hkL8Zbtp1nFNOn3lRrxnlv50SRBv7cR7RqR+GMsd3hUXy9hWBo4CHTbFTcOYwig==
   dependencies:
     mkdirp "^0.5.1"
+
+ws@8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.5.0.tgz#bfb4be96600757fe5382de12c670dab984a1ed4f"
+  integrity sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==
 
 ws@^6.0.0, ws@^6.2.1:
   version "6.2.2"

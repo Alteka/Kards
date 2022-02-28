@@ -229,6 +229,7 @@ function updateScreens() {
     controlWindow.webContents.send('screens', {all: screens, primary: primaryScreen})  
     controlMenu.updateScreens(screens)
     rest.updateScreens(screens)
+    osc.updateScreens(screens)
   }
   if (testCardWindow != null) {
     for (const scr in screens) {
