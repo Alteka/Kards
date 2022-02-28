@@ -22,6 +22,9 @@ class altekaMenu extends EventEmitter {
       this.active = true
       this.buildMenu()
       this.setMenu()
+    } else {
+      console.log("Hiding Menu in windows")
+      Menu.setApplicationMenu(null)
     }
 
     ipcMain.on('audioDevices', (_, arg) => {
