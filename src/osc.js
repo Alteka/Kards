@@ -14,7 +14,7 @@ class oscServer extends EventEmitter {
     }
 
     setup() {
-        this._server = new Server(this.port, '0.0.0.0', () => {
+        this._server = new Server(this.port, '127.0.0.1', () => {
             log.info("OSC Server has started on port " + this.port)
 
             var p = require('../package.json')
