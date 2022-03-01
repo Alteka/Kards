@@ -5,6 +5,7 @@ module.exports = {
         builderOptions: { 
           "productName": "Kards",
           "appId": "solutions.alteka.kards",
+          "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
           "mac": {
             "icon": "public/icon.png",
             "target": "pkg"
