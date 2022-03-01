@@ -12,6 +12,7 @@ const path = require('path')
 var bonjour = require('bonjour')()
 
 // Project specific includes
+const touchBar = require('./touchBar.js')
 const fs = require('fs')
 const say = require('say')
 var sizeOf = require('image-size')
@@ -120,6 +121,7 @@ ipcMain.on('config', (_, arg) => {
   osc.updateConfig(config)
   rest.updateConfig(config)
   store.set('KardsConfig', config)
+  touchBar.setConfig(config)
 })
 ipcMain.on('getConfigTestCard', () => {
   testCardWindow.webContents.send('config', config)
@@ -199,6 +201,9 @@ async function createWindow() {
     createProtocol('app')
     controlWindow.loadURL('app://./index.html')
   }
+
+  controlWindow.setTouchBar(touchBar.touchBar)
+  touchBar.setWindow(controlWindow)
 }
 ipcMain.on('controlResize', (_, data) => {
   controlWindow.setContentSize(675, data.height)
