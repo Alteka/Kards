@@ -31,6 +31,24 @@ const store = new Store({
   }
 })
 
+//========================//
+//         Rollbar        //
+//========================//
+var Rollbar = require("rollbar")
+if (!isDevelopment) {
+  var rollbar = new Rollbar({
+    accessToken: 'e6f21f0291334229a79f4f2c9be7c4aa',
+    captureUncaught: true,
+    captureUnhandledRejections: true
+  })
+}
+
+//=====================//
+//       Analytics     //
+//=====================//
+let analytics = new altekaAnalytics()
+analytics.setup()
+
 
 //======================================//
 //      BOILER PLATE ELECTRON STUFF     //
@@ -263,13 +281,9 @@ app.on('ready', function() {
 
 
 
-//=====================//
-//       Analytics     //
-//=====================//
-let analytics = new altekaAnalytics()
-app.on('ready', async () => {
-  analytics.setup()
-})
+
+// app.on('ready', async () => {
+// })
 
 
 //========================//
@@ -796,15 +810,3 @@ setTimeout(function() {
       log.error(error);
     })
   }, 10000)
-
-//========================//
-//         Rollbar        //
-//========================//
-var Rollbar = require("rollbar")
-if (!isDevelopment) {
-  var rollbar = new Rollbar({
-    accessToken: 'e6f21f0291334229a79f4f2c9be7c4aa',
-    captureUncaught: true,
-    captureUnhandledRejections: true
-  })
-}
