@@ -22,6 +22,8 @@ import altekaMenu from './menu'
 import oscServer from './osc'
 import restServer from './rest'
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
 const store = new Store({
   migrations: {
     '<1.2.0': store => {
@@ -53,8 +55,6 @@ analytics.setup()
 //======================================//
 //      BOILER PLATE ELECTRON STUFF     //
 //======================================//
-const isDevelopment = process.env.NODE_ENV !== 'production'
-
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
