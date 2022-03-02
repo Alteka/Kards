@@ -84,7 +84,7 @@ app.on('ready', async () => {
     try {
       await installExtension(VUEJS3_DEVTOOLS)
     } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
+      log.error('Vue Devtools failed to install:', e.toString())
     }
   }
   createWindow()
@@ -133,7 +133,6 @@ ipcMain.on('config', (_, arg) => {
       testCardWindow.setContentSize(parseInt(config.window.width), parseInt(config.window.height))
     }
   }
-  // touchBar.setConfig(config)
   controlMenu.updateConfig(config)
   analytics.updateConfig(config)
   osc.updateConfig(config)
@@ -666,7 +665,7 @@ function createVoice() {
   let dest = app.getPath('userData') + '/voice.wav'  
   say.export(config.audio.prependText + config.name, null, null, dest, (err) => {
     if (err) {
-      return console.error(err)
+      return log.error(err)
     }
     log.info('Audio :: Updated name (' + config.name + ') has been saved to ', dest)
     config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
@@ -678,7 +677,7 @@ function createTextAudio() {
   let dest = app.getPath('userData') + '/text.wav'  
   say.export(config.audio.text, null, null, dest, (err) => {
     if (err) {
-      return console.error(err)
+      return log.error(err)
     }
     log.info('Audio :: Updated audio text (' + config.audio.text + ') has been saved to ', dest)
     config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
