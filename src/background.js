@@ -56,7 +56,7 @@ analytics.setup()
 //      BOILER PLATE ELECTRON STUFF     //
 //======================================//
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  { scheme: 'app', privileges: { secure: true, standard: true, stream: true } }
 ])
 
 process.on('uncaughtException', function (error) {
