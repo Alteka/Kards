@@ -4,7 +4,7 @@
       <led-panel v-for="column in config.led.columns" :key="column" :config="config" :row="row" :column="column"></led-panel>
     </div>
     <div v-if="config.showInfo" class="infoLine" :style="infoStyle">
-      {{config.name}} - {{ config.led.rows*config.led.width }} x {{ config.led.columns*config.led.height}}
+      {{config.name}} - {{ config.led.columns*config.led.width }} x {{ config.led.rows*config.led.height}}
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ import LedPanel from './LedPanel.vue'
         }
 
         let top = (Math.min(visualViewport.height, this.config.led.rows*this.config.led.height)/2)
-        if (visualViewport.height > this.config.led.rows*this.config.led.height && this.config.led.height > 42) {
+        if (visualViewport.height >= this.config.led.rows*this.config.led.height && this.config.led.height > 42) {
           top -= (offset * (1-this.config.led.rows%2))
         }
         

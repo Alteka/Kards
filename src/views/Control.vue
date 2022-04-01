@@ -70,14 +70,21 @@
             <el-switch v-model="config.windowed"></el-switch>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="config.windowed">
+        <el-col :span="8" v-if="config.windowed && config.cardType !== 'led'">
           <el-form-item label="Width" label-width="50px">
             <el-input-number v-model="config.window.width" controls-position="right" :step="5" :min="48"></el-input-number>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="config.windowed">
+        <el-col :span="8" v-if="config.windowed && config.cardType !== 'led'">
           <el-form-item label="Height" label-width="50px">
             <el-input-number v-model="config.window.height" controls-position="right" :step="5" :min="39"></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="16" v-if="config.windowed && config.cardType == 'led'">
+          <el-form-item label="Card Size Set by LED: " label-width="225px">
+            <span style="color: #e6a23c;">
+            {{ config.led.columns * config.led.width }} x {{ config.led.rows * config.led.height }} pixels
+            </span>
           </el-form-item>
         </el-col>
         <el-col :span="8" v-if="!config.windowed">
@@ -376,4 +383,7 @@ body {
   .darkMode .el-input-group__append:hover {
     color: #6ab42f;
   }
+.darkMode .el-input.is-disabled .el-input__inner {
+  background: #444;
+}
 </style>
