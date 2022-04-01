@@ -222,14 +222,15 @@ export default {
       vm.config.animated = !vm.config.animated
       return false;
     })
-    Mousetrap.bind(['1'], function() { vm.config.cardType = 'alteka'; return false; })
-    Mousetrap.bind(['2'], function() { vm.config.cardType = 'bars'; return false; })
-    Mousetrap.bind(['3'], function() { vm.config.cardType = 'grid'; return false; })
-    Mousetrap.bind(['4'], function() { vm.config.cardType = 'ramp'; return false; })
-    Mousetrap.bind(['5'], function() { vm.config.cardType = 'placeholder'; return false; })
-    Mousetrap.bind(['6'], function() { vm.config.cardType = 'audioSync'; return false; })
-    Mousetrap.bind(['7'], function() { vm.config.cardType = 'deghost'; return false; })
-    Mousetrap.bind(['8'], function() { vm.config.cardType = 'led'; return false; })
+    // bindings for windows...
+    Mousetrap.bind(['ctrl+1'], function() { vm.config.cardType = 'alteka'; return false; })
+    Mousetrap.bind(['ctrl+2'], function() { vm.config.cardType = 'bars'; return false; })
+    Mousetrap.bind(['ctrl+3'], function() { vm.config.cardType = 'grid'; return false; })
+    Mousetrap.bind(['ctrl+4'], function() { vm.config.cardType = 'ramp'; return false; })
+    Mousetrap.bind(['ctrl+5'], function() { vm.config.cardType = 'placeholder'; return false; })
+    Mousetrap.bind(['ctrl+6'], function() { vm.config.cardType = 'audioSync'; return false; })
+    Mousetrap.bind(['ctrl+7'], function() { vm.config.cardType = 'deghost'; return false; })
+    Mousetrap.bind(['ctrl+8'], function() { vm.config.cardType = 'led'; return false; })
   },
   watch: {
     config: {
