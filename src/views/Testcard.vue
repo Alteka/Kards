@@ -160,6 +160,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
         var vm = this
         this.config.animated = false // stop animations in order to capture image
         this.config.showClock = false // hide the clock
+        this.info.networkIndex = 0 // show hostname during screenshot
 
         console.log('Attempt to capture ' + settings.imageSource + ' as ' + settings.target)
         
