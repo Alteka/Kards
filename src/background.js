@@ -466,8 +466,6 @@ function showTestCardWindow(windowConfig) {
   } else {
     createProtocol('app')
     testCardWindow.loadURL('app://./index.html#testcard')
-
-    testCardWindow.webContents.openDevTools()
   }
 
   testCardWindow.once('ready-to-show', () => {
