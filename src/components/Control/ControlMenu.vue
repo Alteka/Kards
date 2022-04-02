@@ -19,8 +19,9 @@
         </el-button>
         <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo"></i> Reset</el-dropdown-item>
-          <el-dropdown-item v-if="confirmResetVisible" @click="reset()" style="color: red"><i class="fas fa-undo"></i> Are You Sure?</el-dropdown-item>
+          <el-dropdown-item ><i class="fas fa-info"> </i>Kards {{ require('../../../package.json').version }}</el-dropdown-item>
+          <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo"></i> Reset</el-dropdown-item>
+          <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo"></i> Are You Sure?</el-dropdown-item>
           <el-dropdown-item divided @click="openHelp"><i class="fas fa-question"></i> Help</el-dropdown-item>
           <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list"></i> Logs</el-dropdown-item>
           <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>

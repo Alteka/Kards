@@ -309,7 +309,7 @@ ipcMain.on('openUrl', (_, arg) => {
 
 ipcMain.on('networkInfo', (event) => {
   const nets = networkInterfaces();
-  const results = [hostname().split('.')[0]]
+  const results = ['Kards v' + require('./../package.json').version, hostname().split('.')[0]]
 
   for (const name of Object.keys(nets)) {
       for (const net of nets[name]) {
