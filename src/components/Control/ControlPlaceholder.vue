@@ -56,7 +56,16 @@
     },
     data: function() {
       return {
-        icons: ['fa-desktop','fa-phone','fa-chart-line','fa-image', 'fa-cloud', 'fa-camera', 'fa-comment-dots', 'fa-microphone', 'fa-clock'],
+        icons: [
+          'fa-desktop',
+          'fa-phone',
+          'fa-chart-line',
+          'fa-image',
+          'fa-file-powerpoint',
+          'fa-camera',
+          'fa-film',
+          'fa-microphone',
+          'fa-clock'],
         smallInput: {
           height: '24px',
           fontSize: '80%'
