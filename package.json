@@ -18,7 +18,7 @@
   "main": "background.js",
   "dependencies": {
     "@analytics/google-analytics": "^0.5.3",
-    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "analytics": "^0.7.21",
     "axios": "^0.24.0",
     "body-parser": "^1.19.1",
