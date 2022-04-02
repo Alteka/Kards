@@ -290,6 +290,9 @@ export default {
         if (ratio > 2 && height > 300) { pillarHeight += 100 }
         if (ratio > 3 && width > 800) { pillarWidth += 50 }
 
+        pillarWidth -= 1;
+        pillarHeight -= 1;
+
         pillarLeft.style.width = pillarWidth + "px"
         pillarRight.style.width = pillarWidth + "px"
         pillarLeft.style.height = pillarHeight + "px"
@@ -298,8 +301,8 @@ export default {
         pillarRight.style.flexDirection = "column"
         pillarLeft.style.bottom = '50%'
         pillarLeft.style.transform = 'none'
-        pillarLeft.style.transform = 'translateY(+50%)'
-        pillarRight.style.top = '50%'
+        pillarLeft.style.transform = 'translateY(calc(+50% + 1px))'
+        pillarRight.style.top = 'calc(50% + 1px)'
         pillarRight.style.transform = 'translateY(-50%)'
         
         let gap = 0
@@ -310,11 +313,14 @@ export default {
         if (ratio > 3) { gap = 150 }
 
         let left = (Math.ceil(circleWidth / 2 / 50) * 50 + width / 2) + gap
-        pillarRight.style.left = left + "px"
+        pillarRight.style.left = left + 1 + "px"
         pillarLeft.style.left = width - left - pillarWidth + "px"
       } else {
         let pillarWidth = Math.floor((width / 100) * 0.6) * 100
         let pillarHeight = (Math.floor((height / 50) * 0.1)) * 50
+
+        pillarHeight -= 1;
+        pillarWidth -= 1;
 
         pillarLeft.style.width = pillarWidth + "px"
         pillarRight.style.width = pillarWidth + "px"
@@ -324,8 +330,8 @@ export default {
         pillarLeft.style.flexDirection = "row"
         pillarRight.style.flexDirection = "row"
 
-        pillarLeft.style.left = '50%'
-        pillarRight.style.left = '50%'
+        pillarLeft.style.left = 'calc(50% + 1px)'
+        pillarRight.style.left = 'calc(50% + 1px)'
         pillarLeft.style.transform = 'translateX(-50%)'
         pillarRight.style.transform = 'translateX(-50%)'
 
@@ -336,7 +342,7 @@ export default {
 
         let leftBottom = (height/2) + (Math.ceil(circleWidth / 2 / 50) * 50) + gap
         pillarLeft.style.bottom = leftBottom + 'px'
-        pillarRight.style.top = leftBottom + 'px'
+        pillarRight.style.top = leftBottom + 1 + 'px'
       }
     }
   },
