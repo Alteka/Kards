@@ -59,6 +59,12 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true, stream: true } }
 ])
 
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+  dialog.showErrorBox("Error", "Another instance of Kards is already running")
+  app.quit()
+}
+
 process.on('uncaughtException', function (error) {
   if (isDevelopment) {
     dialog.showErrorBox('Unexpected Error', error + '\r\n\r\n' + JSON.stringify(error))
