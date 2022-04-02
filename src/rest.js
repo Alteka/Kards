@@ -14,6 +14,7 @@ class restServer extends EventEmitter {
         this.port = 8321
 
         this._app = null 
+        this._server = null
 
         this.screens = []
         this.audioDevices = []
@@ -24,7 +25,7 @@ class restServer extends EventEmitter {
     setup() {
         this._app = express()
 
-        this._app.listen(this.port, () => {
+        this._server = this._app.listen(this.port, () => {
             log.info('REST HTTP Server running and listening on port ' + this.port)
 
             var p = require('../package.json')
@@ -60,6 +61,13 @@ class restServer extends EventEmitter {
         this._app.get('/audioDevices', this._handleAudioDevices.bind(this))
         this._app.get('/*', this._handleGet.bind(this))
         this._app.put('/', this._jsonParser, this._handlePut.bind(this))
+    }
+
+    stop() {
+        bonjour.unpublishAll()
+        bonjour.destroy()
+        this._server.close()
+        log.info("Stopping Rest Server")
     }
 
     _handleGet(req, res) {

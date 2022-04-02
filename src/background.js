@@ -71,6 +71,7 @@ app.on('window-all-closed', () => {
     bonjour.unpublishAll()
     bonjour.destroy()
     log.info('All Windows closed - Quitting App')
+    rest.stop()
     app.quit()
   }
 })
@@ -97,6 +98,7 @@ if (isDevelopment) {
         bonjour.unpublishAll()
         bonjour.destroy()
         log.info('OS called for graceful exit - Quitting App')
+        rest.stop()
         app.quit()
       }
     })
@@ -105,6 +107,7 @@ if (isDevelopment) {
       bonjour.unpublishAll()
       bonjour.destroy()
       log.info('OS call SIGTERM - Quitting App')
+      rest.stop()
       app.quit()
     })
   }
@@ -205,9 +208,8 @@ async function createWindow() {
   })
 
   controlWindow.on('closed', () => {
-    bonjour.unpublishAll()
-    bonjour.destroy()
     log.info('Control Window closed - Quitting App')
+    rest.stop()
     app.quit()
   })
 
