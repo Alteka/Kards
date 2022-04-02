@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 const log = require('electron-log')
 const EventEmitter = require('events')
 var bonjour = require('bonjour')()
+const { hostname } = require('os')
 
 class restServer extends EventEmitter {
     constructor() {
@@ -29,7 +30,7 @@ class restServer extends EventEmitter {
             var p = require('../package.json')
 
             bonjour.publish({ 
-                name: 'Kards',
+                name: 'Kards-' + hostname().split('.')[0],
                 type: 'alteka_http',
                 port: this.port,
                 txt: {
@@ -40,7 +41,7 @@ class restServer extends EventEmitter {
             })
 
             bonjour.publish({ 
-                name: 'Kards',
+                name: 'Kards-' + hostname().split('.')[0],
                 type: 'http',
                 port: this.port,
                 txt: {

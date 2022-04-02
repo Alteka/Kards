@@ -3,6 +3,7 @@ const OSC = require('osc-js')
 const log = require('electron-log')
 const EventEmitter = require('events')
 var bonjour = require('bonjour')()
+const { hostname } = require('os')
 
 class oscServer extends EventEmitter {
     constructor() {
@@ -488,7 +489,7 @@ class oscServer extends EventEmitter {
         var p = require('../package.json')
 
         bonjour.publish({ 
-            name: 'Kards',
+            name: 'Kards-' + hostname().split('.')[0],
             type: 'alteka_osc',
             port: this.port,
             txt: {
