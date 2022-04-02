@@ -7,7 +7,7 @@
 
 <script>
 import InfoCircle from './InfoCircle'
-import 'particles.js'
+import '../../../public/particles.js'
 
 export default {
   name: "DeghostTestCard",
