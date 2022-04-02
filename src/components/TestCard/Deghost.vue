@@ -102,7 +102,7 @@ export default {
   watch: {
       config: {
         handler: function (val, oldVal) { 
-          if (val.deghost != oldVal.deghost) {
+          if (val.deghost.density !== oldVal.deghost.density || val.deghost.speed !== oldVal.deghost.speed) {
             
             // window.particlesJS.apply('particles-js', this.particlesConfig);
             location.reload()
