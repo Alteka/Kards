@@ -20,6 +20,7 @@
 import Swatch from './Swatch'
 import InfoCircle from './InfoCircle'
   export default {
+    name: "RampTestCard",
     components: { Swatch, InfoCircle },
     props: {
       config: Object,

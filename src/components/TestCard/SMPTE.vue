@@ -40,6 +40,7 @@
 import Swatch from './Swatch'
 import InfoCircle from './InfoCircle'
   export default {
+    name: "BarsSmpteTestCard",
     components: { Swatch, InfoCircle },
     props: {
       config: Object,

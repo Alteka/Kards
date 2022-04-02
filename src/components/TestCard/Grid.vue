@@ -48,6 +48,7 @@
 <script>
 import InfoCircle from './InfoCircle'
   export default {
+    name: "GridTestCard",
     components: { InfoCircle },
     props: {
       config: Object,

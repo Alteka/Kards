@@ -7,6 +7,7 @@
 
 <script>
   export default {
+      name: "LedPanel",
     props: {
       config: Object,
       row: Number,

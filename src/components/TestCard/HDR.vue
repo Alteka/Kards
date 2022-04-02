@@ -89,6 +89,7 @@
 <script>
 import Swatch from './Swatch'
   export default {
+    name: "BarsHDRTestCard",
     components: { Swatch },
     props: {
       config: Object,

@@ -30,6 +30,7 @@
 <script>
 import VueResizeText from 'vue3-resize-text'
   export default {
+    name: "PlaceholderTestCard",
     directives: {
       ResizeText: VueResizeText.ResizeText
     },

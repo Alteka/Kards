@@ -10,6 +10,7 @@ import InfoCircle from './InfoCircle'
 import 'particles.js'
 
 export default {
+  name: "DeghostTestCard",
   components: { InfoCircle },
   props: {
     config: Object,

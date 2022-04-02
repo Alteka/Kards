@@ -10,6 +10,7 @@
 
 <script>
   export default {
+    name: "InfoCircle",
     props: {
       config: Object,
       info: Object

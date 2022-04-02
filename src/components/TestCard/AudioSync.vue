@@ -56,6 +56,7 @@
 <script>
 import VueResizeText from 'vue3-resize-text'
 export default {
+  name: "AudioSyncTestCard",
   directives: { 
     ResizeText: VueResizeText.ResizeText
    },

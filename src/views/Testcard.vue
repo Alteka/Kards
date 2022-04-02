@@ -4,47 +4,47 @@
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost'}">
-          <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
-          <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
-          <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
-          <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
-          <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
-          <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
-          <AudioSync v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSync>
-          <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
-          <Alteka v-if="config.cardType == 'alteka'" :config="config" :info="info"></Alteka>
-          <led-wall v-if="config.cardType == 'led'" :config="config" :info="info"></led-wall>
-          <deghost v-if="config.cardType == 'deghost'" :config="config" :info="info"></deghost>
+          <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
+          <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
+          <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
+          <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
+          <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
+          <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+          <AudioSyncTestCard v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSyncTestCard>
+          <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
+          <AltekaTestCard v-if="config.cardType == 'alteka'" :config="config" :info="info"></AltekaTestCard>
+          <LedWallTestCard v-if="config.cardType == 'led'" :config="config" :info="info"></LedWallTestCard>
+          <DeghostTestCard v-if="config.cardType == 'deghost'" :config="config" :info="info"></DeghostTestCard>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'"  class="testcard" :class="{animatedAbove: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
-        <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
+        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
+        <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
+        <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
+        <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
+        <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'" class="testcard" :class="{animatedLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
-        <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
+        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
+        <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
+        <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
+        <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
+        <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
 
       <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'" class="testcard" :class="{animatedAboveLeft: config.animated}">
-        <Grid v-if="config.cardType == 'grid'" :config="config" :info="info"></Grid>
-        <SMPTE v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></SMPTE>
-        <ARIB v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></ARIB>
-        <Bars v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></Bars>
-        <HDR v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></HDR>
-        <Ramp v-if="config.cardType == 'ramp'" :config="config" :info="info"></Ramp>
-        <Placeholder v-if="config.cardType == 'placeholder'" :config="config" :info="info"></Placeholder>
+        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
+        <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
+        <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
+        <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
+        <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
 
     </div>
@@ -59,17 +59,17 @@
 </template>
 
 <script>
-import Grid from '../components/TestCard/Grid.vue'
-import Ramp from '../components/TestCard/Ramp.vue'
-import Alteka from '../components/TestCard/Alteka.vue'
-import SMPTE from '../components/TestCard/SMPTE.vue'
-import ARIB from '../components/TestCard/ARIB.vue'
-import Bars from '../components/TestCard/Bars.vue'
-import LedWall from '../components/TestCard/LedWall.vue'
-import AudioSync from '../components/TestCard/AudioSync.vue'
-import Placeholder from '../components/TestCard/Placeholder.vue'
-import Deghost from '../components/TestCard/Deghost.vue'
-import HDR from '../components/TestCard/HDR.vue'
+import GridTestCard from '../components/TestCard/Grid.vue'
+import RampTestCard from '../components/TestCard/Ramp.vue'
+import AltekaTestCard from '../components/TestCard/Alteka.vue'
+import BarsSmpteTestCard from '../components/TestCard/SMPTE.vue'
+import BarsAribTestCard from '../components/TestCard/ARIB.vue'
+import BarsSimpleTestCard from '../components/TestCard/Bars.vue'
+import LedWallTestCard from '../components/TestCard/LedWall.vue'
+import AudioSyncTestCard from '../components/TestCard/AudioSync.vue'
+import PlaceholderTestCard from '../components/TestCard/Placeholder.vue'
+import DeghostTestCard from '../components/TestCard/Deghost.vue'
+import BarsHDRTestCard from '../components/TestCard/HDR.vue'
 
 import domtoimage from 'dom-to-image'
 
@@ -94,8 +94,8 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
 
   export default {
-    name: 'testcard',
-    components: { Grid, Alteka, SMPTE, ARIB, Bars, Placeholder, Ramp, AudioSync, LedWall, Deghost, HDR },
+    name: 'TestCard',
+    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, BarsHDRTestCard },
     data: function() { 
       return {
         config: {

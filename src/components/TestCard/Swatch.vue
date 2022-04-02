@@ -10,6 +10,7 @@
 
 <script>
   export default {
+    name: "ColorSwatch",
     props: {
       colour: String,
       ire: String,

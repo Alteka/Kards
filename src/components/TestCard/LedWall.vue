@@ -13,6 +13,7 @@
 import LedPanel from './LedPanel.vue'
 
   export default {
+    name: "LedWallTestCard",
     components: { LedPanel },
     props: {
       config: Object,
