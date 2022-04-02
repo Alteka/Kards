@@ -28,7 +28,7 @@
     "dom-to-image": "^2.6.0",
     "electron-log": "^4.4.4",
     "electron-store": "^8.0.1",
-    "element-plus": "^1.0.2-beta.28",
+    "element-plus": "1.0.2-beta.71",
     "express": "^4.17.2",
     "image-size": "^1.0.1",
     "mime-types": "^2.1.34",

@@ -4348,7 +4348,7 @@ electron@^18.0.0:
     "@types/node" "^16.11.26"
     extract-zip "^1.0.3"
 
-element-plus@^1.0.2-beta.28:
+element-plus@1.0.2-beta.71:
   version "1.0.2-beta.71"
   resolved "https://registry.yarnpkg.com/element-plus/-/element-plus-1.0.2-beta.71.tgz#148f16d5a0a800549989f7869bbf4d656c652d36"
   integrity sha512-tlfbRORIav8gJcIpjZI5F6aJIVHIaDuGO6/vKu43lgYq4JS2JPNRTjvrSE2p4f5xLfaFNfOWjCS3sybXLfMg8g==
