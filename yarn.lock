@@ -7567,10 +7567,10 @@ os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-osc-js@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/osc-js/-/osc-js-2.3.0.tgz#e07c9c639b9995a7f45a7bec7be6ff80a0c84ef0"
-  integrity sha512-P2Oy9tf8Z9lQw8JZeR62HNqbKdxj7Kqbsag+ImiJvyxPDReGMVt5LtZbMh/7Ve/wbYEGODkQdFAaLHFVkIlHPw==
+osc-js@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/osc-js/-/osc-js-2.3.1.tgz#de86137cafdea95300d15060b759366ce1c6bedb"
+  integrity sha512-DjpfUcyTsMmD7uLdyjqsT9zwuNkUOG8yJMc56H9spTCRqTls5vLt5QnlVploVqSRwQ2stvcc+CsY18ouxab9mg==
   dependencies:
     isomorphic-ws "4.0.1"
     ws "8.5.0"
@@ -8925,10 +8925,10 @@ sass-loader@^10.0.4:
     schema-utils "^3.0.0"
     semver "^7.3.2"
 
-sass@^1.27.0:
-  version "1.49.10"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.49.10.tgz#7b83cee0f03bbba443111b3f94944fde2b0c7a6b"
-  integrity sha512-w37zfWJwKu4I78U4z63u1mmgoncq+v3iOB4yzQMPyAPVHHawaQSnu9C9ysGQnZEhW609jkcLioJcMCqm75JMdg==
+sass@^1.49.11:
+  version "1.49.11"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.49.11.tgz#1ffeb77faeed8b806a2a1e021d7c9fd3fc322cb7"
+  integrity sha512-wvS/geXgHUGs6A/4ud5BFIWKO1nKd7wYIGimDk4q4GFkJicILActpv9ueMT4eRGSsp1BdKHuw1WwAHXbhsJELQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
