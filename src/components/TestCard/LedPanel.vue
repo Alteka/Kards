@@ -1,7 +1,11 @@
 <template>
-  <div class="ledpanel" :style="{width: config.led.width + 'px', height: config.led.height + 'px', backgroundColor: bgCol}" :class="animClass">
-    <span v-if="config.led.height > 42 && config.led.width > 42"><i class="fas fa-arrow-down"></i> {{row}}<br />
-    <i class="fas fa-arrow-right"></i> {{column}}</span>
+  <div class="ledpanel" :style="{width: config.led.width + 'px', height: config.led.height + 'px', backgroundColor: bgCol, border: this.config.led.border ? '1px solid white' : 'none'}" :class="animClass">
+    <transition name="fade">
+        <span v-if="config.led.height > 42 && config.led.width > 42 && config.led.position">
+            <i class="fas fa-arrow-down"></i> {{row}}<br />
+            <i class="fas fa-arrow-right"></i> {{column}}
+        </span>
+    </transition>
   </div>
 </template>
 
@@ -51,7 +55,6 @@
 
 <style scoped>
    .ledpanel {
-       border: 1px solid white;
        box-sizing: border-box;
        background: blue;
        float: left;

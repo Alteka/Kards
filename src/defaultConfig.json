@@ -42,7 +42,9 @@
     "width": 128,
     "height": 128,
     "rows": 4,
-    "columns": 6
+    "columns": 6,
+    "border": true,
+    "position": true
 },
 "audioSync": {
     "deviceId": "default",
