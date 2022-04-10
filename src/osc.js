@@ -28,12 +28,10 @@ class oscServer extends EventEmitter {
             plugin: new OSC.DatagramPlugin({
                 type: 'udp4',         // @param {string} 'udp4' or 'udp6'
                 open: {
-                    host: 'localhost',    // @param {string} Hostname of udp server to bind to
                     port: this.port,          // @param {number} Port of udp server to bind to
                     exclusive: false      // @param {boolean} Exclusive flag
                 },
                 send: {
-                    host: 'localhost',    // @param {string} Hostname of udp client for messaging
                     port: this.portReplies           // @param {number} Port of udp client for messaging
                 }
             })
