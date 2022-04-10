@@ -1,4 +1,4 @@
-const { ipcMain } = require('electron')
+const { ipcMain, dialog } = require('electron')
 const express = require('express')
 var bodyParser = require('body-parser')
 const log = require('electron-log')
@@ -51,6 +51,9 @@ class restServer extends EventEmitter {
                     description: p.description
                 }
             })
+        }).on('error', function(err) { 
+            log.warn("Can't start up REST Server!", err)
+            dialog.showErrorBox("HTTP Server Error", "An error has occured starting the HTTP / REST API Server: " + err)
         })
 
         ipcMain.on('audioDevices', (_, msg) => {
