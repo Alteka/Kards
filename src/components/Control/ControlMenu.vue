@@ -19,14 +19,14 @@
         </el-button>
         <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item ><i class="fas fa-info"> </i>Kards {{ require('../../../package.json').version }}</el-dropdown-item>
-          <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo"></i> Reset</el-dropdown-item>
-          <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo"></i> Are You Sure?</el-dropdown-item>
-          <el-dropdown-item divided @click="openHelp"><i class="fas fa-question"></i> Help</el-dropdown-item>
-          <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list"></i> Logs</el-dropdown-item>
-          <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export"></i> Export Settings</el-dropdown-item>
-          <el-dropdown-item @click="importSettings"><i class="fas fa-file-import"></i> Import Settings</el-dropdown-item>
-          <el-dropdown-item @click="showShareDialog = true"><i class="fas fa-share"></i> Share Card</el-dropdown-item>
+          <el-dropdown-item disabled><i class="fas green">V</i>Kards v{{ require('../../../package.json').version }}</el-dropdown-item>
+          <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo green"></i> Reset</el-dropdown-item>
+          <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo green"></i> Are You Sure?</el-dropdown-item>
+          <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green"></i> Help</el-dropdown-item>
+          <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list green"></i> Logs</el-dropdown-item>
+          <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export green"></i> Export Settings</el-dropdown-item>
+          <el-dropdown-item @click="importSettings"><i class="fas fa-file-import green"></i> Import Settings</el-dropdown-item>
+          <el-dropdown-item @click="showShareDialog = true"><i class="fas fa-share green"></i> Share Card</el-dropdown-item>
         </el-dropdown-menu>
         </template>
       </el-dropdown>
