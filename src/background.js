@@ -23,15 +23,9 @@ import oscServer from './osc'
 import restServer from './rest'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const version = require('./../package.json').version
 
-const store = new Store({
-  migrations: {
-    '<1.2.0': store => {
-      store.delete('KardsConfig')
-      log.info('Resetting to default settings due to upgrade')
-    }
-  }
-})
+const store = new Store()
 
 //========================//
 //         Rollbar        //
@@ -127,7 +121,10 @@ if (isDevelopment) {
 let config
 app.on('ready', function() {
   log.info('Launching Kards')
-  config = store.get('KardsConfig', getDefaultConfig())
+  config = {
+    ...getDefaultConfig(),
+    ...store.get('KardsConfig', getDefaultConfig())
+  }
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config')
@@ -317,7 +314,7 @@ ipcMain.on('openUrl', (_, arg) => {
 
 ipcMain.on('networkInfo', (event) => {
   const nets = networkInterfaces();
-  const results = ['Kards v' + require('./../package.json').version, hostname().split('.')[0]]
+  const results = ['Kards v' + version, hostname().split('.')[0]]
 
   for (const name of Object.keys(nets)) {
       for (const net of nets[name]) {
@@ -605,7 +602,7 @@ ipcMain.on('saveAsPNG', (_, arg) => {
           controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
           let dims = sizeOf(result.filePath)
-          analytics.track('ImageSavedToPNG', 'PNG saved to: ', result.filePath, ' - With dimensions: ', dims.width, 'x', dims.height)
+          analytics.track('ImageSavedToPNG', 'PNG saved to: ' + result.filePath + ' - With dimensions: ' + dims.width + 'x' + dims.height)
           controlWindow.webContents.send('exportCardCompleted')
         }
       })
@@ -734,7 +731,7 @@ function exportSettings() {
       cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt    
       cfg.audio.textData = '' // clear this out as it can be easily rebuilt    
       cfg.createdBy = 'Kards'
-      cfg.exportedVersion = require('./../package.json').version
+      cfg.exportedVersion = version
 
       let data = JSON.stringify(cfg, null, 2)
 
@@ -761,7 +758,7 @@ function importSettings() {
       let count = 0
 
       if (d.createdBy == 'Kards') {
-        if (d.exportedVersion == require('./../package.json').version) {
+        if (d.exportedVersion == version) {
           for (let key in config) {
             if (d[key] != undefined && key != 'visible' && key != 'exportedVersion' && key != 'createdBy' && typeof d[key] === typeof config[key]) {
               config[key] = d[key]
@@ -792,10 +789,9 @@ setTimeout(function() {
   axios.get('https://api.github.com/repos/alteka/kards/releases/latest')
     .then(function (response) {
       let online = response.data.tag_name
-      let now = require('./../package.json').version
-      let status = compareVersions(online, now, '>')
+      let status = compareVersions(online, version, '>')
       if (status == 1) { 
-        log.info('Update :: A newer version (v' + online + ') is available. v' + now + ' currently installed.')
+        log.info('Update :: A newer version (v' + online + ') is available. v' + version + ' currently installed.')
         dialog.showMessageBox(controlWindow, {
           type: 'question',
           title: 'An Update Is Available',
@@ -810,7 +806,7 @@ setTimeout(function() {
       } else if (status == 0) {
         log.info('Update :: Running latest version - v' + online)
       } else if (status == -1) {
-        log.info('Update :: Running a newer version (v' + now + ') than is online: v' + online)
+        log.info('Update :: Running a newer version (v' + version + ') than is online: v' + online)
       }
     })
     .catch(function (error) {
