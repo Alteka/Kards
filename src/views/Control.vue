@@ -103,16 +103,21 @@
         <el-col :span="2"></el-col>
         <el-col :span="4">
           <el-form-item label="Card Size">
-            <div v-if="config.cardType == 'led'" style="position: relative; min-width: 200px; left: -75px; top: 20px; color: #e6a23c; font-size: 90%;" >Set by LED</div>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="16" v-if="config.cardType == 'led'">
+            <el-form-item label="Set by LED: " label-width="225px">
+              <span style="color: #e6a23c;">
+                {{ config.led.columns * config.led.width }} x {{ config.led.rows * config.led.height }} pixels
+              </span>
+            </el-form-item>
+        </el-col>
+        <el-col :span="8" v-if="config.cardType !== 'led'">
           <el-form-item label="Width" label-width="80px">
-            <el-input-number v-if="config.cardType == 'led'" v-model="this.ledWidth" :disabled="true" controls-position="right"></el-input-number>
-            <el-input-number v-else v-model="config.notFilledCard.width" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number v-model="config.notFilledCard.width" controls-position="right" :step="5" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" v-if="config.cardType !== 'led'">
           <el-form-item label="Height" label-width="80px">
             <el-input-number v-if="config.cardType == 'led'" v-model="this.ledHeight" :disabled="true" controls-position="right"></el-input-number>
             <el-input-number v-else v-model="config.notFilledCard.height" controls-position="right" :step="5" :min="1"></el-input-number>
