@@ -20,6 +20,8 @@ class oscServer extends EventEmitter {
     }
 
     setup() {
+        log.info("OSC :: Starting Server on port " + this.port)
+
         ipcMain.on('audioDevices', (_, msg) => {
             this.audioDevices = msg
         })

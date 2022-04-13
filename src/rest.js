@@ -26,7 +26,7 @@ class restServer extends EventEmitter {
         this._app = express()
 
         this._server = this._app.listen(this.port, () => {
-            log.info('REST HTTP Server running and listening on port ' + this.port)
+            log.info('REST :: HTTP Server running and listening on port ' + this.port)
 
             var p = require('../package.json')
 
@@ -53,7 +53,7 @@ class restServer extends EventEmitter {
             })
         }).on('error', function(err) { 
             log.warn("Can't start up REST Server!", err)
-            dialog.showErrorBox("HTTP Server Error", "An error has occured starting the HTTP / REST API Server: " + err)
+            dialog.showErrorBox("REST :: HTTP Server Error", "An error has occured starting the HTTP / REST API Server: " + err)
         })
 
         ipcMain.on('audioDevices', (_, msg) => {

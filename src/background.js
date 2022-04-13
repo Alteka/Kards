@@ -518,7 +518,9 @@ let testCardWindowResizeTimer
 //    Setup OSC Server    //
 //========================//
 let osc = new oscServer()
-osc.setup()
+app.on('ready', function() {
+  osc.setup()
+})
 osc.on('updateConfig', (c) => {
   controlWindow.webContents.send('config', c)
 })
@@ -535,7 +537,9 @@ osc.on('audioFile', (filePath) => {
 
 
 let rest = new restServer()
-rest.setup()
+app.on('ready', function() {
+  rest.setup()
+})
 rest.on('updateConfig', (c) => {
   controlWindow.webContents.send('config', c)
 })
