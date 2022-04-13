@@ -175,7 +175,7 @@ let loadingInstance
     },
     watch: {
       config: {
-        handler: function (val) { 
+        handler: function (val, oldVal) { 
             document.getElementById('stereo').setSinkId(val.audio.deviceId)
             document.getElementById('phase').setSinkId(val.audio.deviceId)
             document.getElementById('pink').setSinkId(val.audio.deviceId)
@@ -213,6 +213,29 @@ let loadingInstance
 
             if (val.fullsize || val.windowed ) {
               this.config.export.imageSource = "card"
+            }
+
+            let vm = this
+            if (val.audio.voiceData != oldVal.audio.voiceData && this.playing && this.curAudio == 'voice') {
+              setTimeout(function() {
+                vm.curAudio = null
+                vm.stopAudio()
+                vm.playNext()
+              }, 500)
+            }
+            if (val.audio.textData != oldVal.audio.textData && this.playing && this.curAudio == 'text') {
+              setTimeout(function() {
+                vm.curAudio = null
+                vm.stopAudio()
+                vm.playNext()
+              }, 500)
+            }
+            if (val.audio.fileData != oldVal.audio.fileData && this.playing && this.curAudio == 'file') {
+              setTimeout(function() {
+                vm.curAudio = null
+                vm.stopAudio()
+                vm.playNext()
+              }, 500)
             }
          },
         deep: true
