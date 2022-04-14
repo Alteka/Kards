@@ -20,6 +20,7 @@
         <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item @click="showAboutDialog = true"><i class="fas green">V</i>Kards v{{ require('../../../package.json').version }}</el-dropdown-item>
+           <el-dropdown-item @click="show2ndAboutDialog"><i class="fas green">V</i>About Option 2</el-dropdown-item>
           <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo green"></i> Reset</el-dropdown-item>
           <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo green"></i> Are You Sure?</el-dropdown-item>
           <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green"></i> Help</el-dropdown-item>
@@ -342,6 +343,9 @@ let loadingInstance
       },
       updateText: function() {
         window.ipcRenderer.send('updateAudioText')
+      },
+      show2ndAboutDialog: function() {
+        window.ipcRenderer.send('showOtherAboutDialog')
       }
     }
   }

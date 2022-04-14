@@ -10,6 +10,7 @@ const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
 var bonjour = require('bonjour')()
+const openAboutWindow = require('electron-about-window').default;
 
 // Project specific includes
 const touchBar = require('./touchBar.js')
@@ -293,6 +294,10 @@ app.on('ready', function() {
 //========================//
 //       IPC Handlers     //
 //========================//
+ipcMain.on('showOtherAboutDialog',() =>{
+  openAboutWindow('./assets/bug.png');
+})
+
 ipcMain.on('closeTestCard', (_, arg) => {
   controlWindow.webContents.send('closeTestCard')
 })
