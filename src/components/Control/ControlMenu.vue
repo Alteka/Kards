@@ -19,7 +19,7 @@
         </el-button>
         <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item disabled><i class="fas green">V</i>Kards v{{ require('../../../package.json').version }}</el-dropdown-item>
+          <el-dropdown-item @click="showAboutDialog = true"><i class="fas green">V</i>Kards v{{ require('../../../package.json').version }}</el-dropdown-item>
           <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo green"></i> Reset</el-dropdown-item>
           <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo green"></i> Are You Sure?</el-dropdown-item>
           <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green"></i> Help</el-dropdown-item>
@@ -110,6 +110,7 @@
     </el-drawer>
 
     <control-share v-model="showShareDialog" :config="config"></control-share>
+    <control-about v-model="showAboutDialog" :config="config"></control-about>
   </el-row>
 </template>
 
@@ -117,11 +118,12 @@
 import { ElLoading } from 'element-plus'
 import { ElNotification } from 'element-plus'
 import ControlShare from './ControlShare.vue'
+import ControlAbout from './ControlAbout.vue'
 
 let loadingInstance
 
   export default {
-    components: { ControlShare },
+    components: { ControlShare, ControlAbout },
     props: {
       modelValue: Object, // v-model object
     },
@@ -147,7 +149,8 @@ let loadingInstance
         text: "",
         textTimer: null,
         audioDevices: [],
-        showShareDialog: false
+        showShareDialog: false,
+        showAboutDialog: false
       }
     },
     mounted: function() {
