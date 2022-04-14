@@ -10,7 +10,6 @@ const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
 var bonjour = require('bonjour')()
-const openAboutWindow = require('electron-about-window').default;
 
 // Project specific includes
 const touchBar = require('./touchBar.js')
@@ -156,6 +155,18 @@ ipcMain.on('getConfigControl', () => {
   controlWindow.webContents.send('darkMode', nativeTheme.shouldUseDarkColors)
 })
 
+ipcMain.on('aboutDialogInfo', () => {
+  let about = {
+    version: version,
+    electron: process.versions.electron,
+    node: process.versions.node,
+    vue: require('vue/package.json').version
+  }
+  console.log("About:: ", about)
+  controlWindow.webContents.send('aboutDialogInfo', about)
+})
+
+
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
   analytics.track("ResetDefaults", 'Resetting app config to defaults')
@@ -294,10 +305,6 @@ app.on('ready', function() {
 //========================//
 //       IPC Handlers     //
 //========================//
-ipcMain.on('showOtherAboutDialog',() =>{
-  openAboutWindow('./assets/bug.png');
-})
-
 ipcMain.on('closeTestCard', (_, arg) => {
   controlWindow.webContents.send('closeTestCard')
 })
