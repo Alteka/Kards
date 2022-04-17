@@ -162,7 +162,6 @@ ipcMain.on('aboutDialogInfo', () => {
     node: process.versions.node,
     vue: require('vue/package.json').version
   }
-  console.log("About:: ", about)
   controlWindow.webContents.send('aboutDialogInfo', about)
 })
 

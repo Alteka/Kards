@@ -100,7 +100,7 @@
           </el-radio-group>
         </el-col>
         <el-col :span="3">
-          <el-button size="medium" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'" v-on:click="exportCard">OK</el-button>
+          <el-button size="medium" type="primary" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'" v-on:click="exportCard">OK</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -110,7 +110,7 @@
     </el-drawer>
 
     <control-share v-model="showShareDialog" :config="config"></control-share>
-    <control-about v-model="showAboutDialog"></control-about>
+    <control-about v-model="showAboutDialog" :darkMode="darkMode"></control-about>
   </el-row>
 </template>
 
@@ -126,6 +126,7 @@ let loadingInstance
     components: { ControlShare, ControlAbout },
     props: {
       modelValue: Object, // v-model object
+      darkMode: Boolean
     },
     computed: {
       config: {

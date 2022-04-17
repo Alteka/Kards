@@ -143,7 +143,7 @@
         </el-col>
       </el-row>
 
-      <control-menu v-model="config"></control-menu>
+      <control-menu v-model="config" :darkMode="darkMode"></control-menu>
 
       </el-form>
     <resize-observer @notify="handleResize" />
@@ -337,7 +337,7 @@ body {
 .darkMode .el-radio-button:first-child .el-radio-button__inner {
   border-left: 1px solid #666;
 }
-.darkMode .el-button {
+.darkMode .el-button :not(.el-button--primary, span, i) {
   background: #3d3d3d;
   color: #ddd;
   border: 1px solid #666;
@@ -375,6 +375,8 @@ body {
 }
 .darkMode .el-dialog__body {
   color: #ddd;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .darkMode .el-button:hover {
   border-color: #6ab42f;
