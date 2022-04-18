@@ -7,7 +7,7 @@
     <el-row style="padding-bottom: 20px;">
       <el-col :span="24">
         <h2>Better test cards for the AV Professional.</h2>
-        Made in the UK by the people who wanted a versatile and practical tool.<br />
+        Software made in the UK by those who use it.<br />
         <br />
         We're proud to release Kards as free and open source software.<br />
         To help us keep it this way, and to support more features and platforms, we'd<br />
