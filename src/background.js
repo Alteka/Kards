@@ -35,7 +35,10 @@ if (!isDevelopment) {
   var rollbar = new Rollbar({
     accessToken: 'e6f21f0291334229a79f4f2c9be7c4aa',
     captureUncaught: true,
-    captureUnhandledRejections: true
+    captureUnhandledRejections: true,
+    payload: {
+      version: version
+    }
   })
 }
 
@@ -199,6 +202,9 @@ controlMenu.on('loadAudioFile', () => {
 })
 controlMenu.on('openLogs', () => {
   openLogs()
+})
+controlMenu.on('aboutDialog', () => {
+  controlWindow.webContents.send('aboutDialog') 
 })
 
 async function createWindow() {
