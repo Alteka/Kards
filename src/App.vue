@@ -3,5 +3,11 @@
 </template>
 
 <style lang="scss">
-// Style applied across testcard AND control views.
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
 </style>

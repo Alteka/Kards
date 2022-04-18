@@ -1,13 +1,13 @@
 <template>
-  <el-dialog title="Alteka Kards" width="85%" center top="10vh">
+  <el-dialog width="85%" center top="10vh">
     
     <img v-if="darkMode" src="../../assets/Logo_Dark.png" alt="Logo" />
     <img v-else src="../../assets/Logo_Standard.png" alt="Logo" />
 
     <el-row style="padding-bottom: 20px;">
       <el-col :span="24">
-        Better test cards for the AV Professional.<br />
-        Made in the UK by people who actually use it.<br />
+        <h2>Better test cards for the AV Professional.</h2>
+        Made in the UK by the people who wanted a versatile and practical tool.<br />
         <br />
         We're proud to release Kards as free and open source software.<br />
         To help us keep it this way, and to support more features and platforms, we'd<br />
@@ -37,20 +37,14 @@
     </el-row>
 
     <el-row style="padding-top: 20px;">
-      <el-col :span="8" style="text-align: center;">
-        <el-button size="small" @click="openSite">
-          <i class="fa-solid fa-globe green"></i> Website
-        </el-button>
+      <el-col :span="8">
+        <el-button size="small" round @click="openSite"><i class="fa-solid fa-globe green"></i> Website</el-button>
       </el-col>
-      <el-col :span="8" style="text-align: center;">
-        <el-button size="small" @click="openHelp">
-          <i class="fa-solid fa-circle-question green"></i> Help
-        </el-button>
+      <el-col :span="8">
+        <el-button size="small" round @click="openHelp"><i class="fa-solid fa-circle-question green"></i> Help</el-button>
       </el-col>
-      <el-col :span="8" style="text-align: center;">
-        <el-button size="small" @click="openGitHub">
-          <i class="fa-brands fa-github green"></i> GitHub
-        </el-button>
+      <el-col :span="8">
+        <el-button size="small" round @click="openGitHub"><i class="fa-brands fa-github green"></i> GitHub</el-button>
       </el-col>
     </el-row>
 
@@ -103,7 +97,7 @@ img {
   width: 100%;
   object-fit: contain;
   position: relative;
-  top: -25px;
+  top: -15px;
 }
 
 .version {

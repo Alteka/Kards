@@ -342,6 +342,11 @@ body {
   color: #ddd;
   border: 1px solid #666;
 }
+.darkMode .el-button.el-button--default {
+  background: #3d3d3d;
+  color: #ddd;
+  border: 1px solid #666;
+}
 .darkMode .el-input__inner {
   background: #3d3d3d;
   color: #ddd;
@@ -375,6 +380,10 @@ body {
 }
 .darkMode .el-dialog__body {
   color: #ddd;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.el-dialog--center .el-dialog__body {
   padding-top: 5px;
   padding-bottom: 5px;
 }
