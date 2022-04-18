@@ -39,7 +39,10 @@ class altekaMenu extends EventEmitter {
     this.menu.append(new MenuItem({
       label: app.name,
       submenu: [
-          { role: 'about' },
+          { label: 'About Kards', click: () => {
+              this.emit('aboutDialog')
+            }
+          },
           { type: 'separator' },
           { role: 'services' },
           { type: 'separator' },

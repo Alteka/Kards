@@ -175,6 +175,11 @@ let loadingInstance
       window.ipcRenderer.receive('importSettings', function(msg) {
         ElNotification({ title: 'Import Settings', message: msg, duration: 2500, showClose: false, onClick: function() { this.close() } })
       })
+
+      let vm = this
+      window.ipcRenderer.receive('aboutDialog', function() {
+        vm.showAboutDialog = true
+      })
       
     },
     watch: {
