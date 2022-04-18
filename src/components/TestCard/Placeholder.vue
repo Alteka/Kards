@@ -4,11 +4,11 @@
       <div id="gradient" v-if="config.placeholder.gradient"></div>
     </transition>
     <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{ color:config.placeholder.fg }">
-        <span v-if="config.placeholder.icon != 'custom'" style="font-size: 200%;" class="fas" :class="config.placeholder.icon"></span>
-        <span v-if="config.placeholder.icon == 'custom'" style="font-size: 200%;" class="fas" :class="config.placeholder.custom"></span>
-      <transition name="fade">
-        <br v-if="config.placeholder.icon != ''" />
-      </transition>
+      <i v-if="config.placeholder.icon != 'custom'" style="font-size: 200%;" class="fa-solid" :class="config.placeholder.icon"></i>
+      <i v-else style="font-size: 200%;" class="fa-solid" :class="config.placeholder.custom"></i>
+      
+      <br v-if="config.placeholder.icon != ''" />
+      
       {{ config.name }}
       
     </div>
@@ -20,7 +20,7 @@
     </transition>
     <transition name="fade">
       <div v-resize-text="{ratio:4}" v-if="config.showInfo" id="time" :style="{color:config.placeholder.fg}">
-        <div v-if="config.showClock" style="width: 45%; text-align: left; display: inline-block">{{ info.time }}</div>
+        <div style="width: 45%; text-align: left; display: inline-block">{{ config.showClock ? info.time : "" }}</div>
         <div style="width: 45%; text-align: right; display: inline-block">{{ info.network[info.networkIndex] }}</div>
       </div>
     </transition>
@@ -64,11 +64,10 @@ import VueResizeText from 'vue3-resize-text'
     position: absolute;
     width: 100%;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
     text-align: center;
   }
-  .name span {
+  .name i {
     font-size: 1%;
   }
   #gradient {
