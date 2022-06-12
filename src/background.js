@@ -822,7 +822,7 @@ setTimeout(function() {
       let online = response.data.tag_name
       let status = compareVersions(online, version, '>')
       if (status == 1) { 
-        log.info('Update :: A newer version (v' + online + ') is available. v' + version + ' currently installed.')
+        log.info('Update :: A newer version (' + online + ') is available. ' + version + ' currently installed.')
         dialog.showMessageBox(controlWindow, {
           type: 'question',
           title: 'An Update Is Available',
@@ -835,9 +835,9 @@ setTimeout(function() {
           }
         });
       } else if (status == 0) {
-        log.info('Update :: Running latest version - v' + online)
+        log.info('Update :: Running latest version - ' + online)
       } else if (status == -1) {
-        log.info('Update :: Running a newer version (v' + version + ') than is online: v' + online)
+        log.info('Update :: Running a newer version (' + version + ') than is online: ' + online)
       }
     })
     .catch(function (error) {
