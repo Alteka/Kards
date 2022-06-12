@@ -638,7 +638,7 @@ ipcMain.on('saveAsPNG', (_, arg) => {
       controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
     }
   })
-  if (!config.visible) {
+  if (!config.visible && testCardWindow !== null) {
     log.info('Closing dummy test card window')
     testCardWindow.close()
   }
