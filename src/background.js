@@ -491,7 +491,7 @@ function showTestCardWindow(windowConfig) {
   }
 
   testCardWindow.once('ready-to-show', () => {
-    if (config.visible && !headlessExportMode) {
+    if (config.visible && !headlessExportMode && testCardWindow) {
       testCardWindow.show()
     }
   })
