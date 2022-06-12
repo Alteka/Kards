@@ -139,7 +139,9 @@ ipcMain.on('config', (_, arg) => {
   if (testCardWindow != null) { 
     testCardWindow.webContents.send('config', config)
     if (config.windowed) {
-      testCardWindow.setContentSize(parseInt(config.window.width), parseInt(config.window.height))
+      if (typeof config.window.width == Number) {
+        testCardWindow.setContentSize(parseInt(config.window.width), parseInt(config.window.height))
+      }
     }
   }
   controlMenu.updateConfig(config)
