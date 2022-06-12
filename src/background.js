@@ -619,7 +619,10 @@ ipcMain.on('selectImage', () => {
 
 ipcMain.on('saveAsPNG', (_, arg) => {
   headlessExportMode = false
-  var name = ('Kard-' + config.name).replace(/ /g,"-") + '.png'
+  let suffix = config.cardType[0].toUpperCase() + config.cardType.slice(1)
+  if (suffix == 'Placeholder') suffix = 'Name'
+  if (suffix == 'Led') suffix = 'LED'
+  var name = config.name.replace(/ /g,"-") + '-' + suffix + 'Kard.png'
   dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: name, filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
     if (!result.canceled) {
       var base64Data = arg.replace(/^data:image\/png;base64,/, "")
