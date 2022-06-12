@@ -499,7 +499,9 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.on('resize', function() {
     clearTimeout(testCardWindowResizeTimer)
     testCardWindowResizeTimer = setTimeout(handleTestCardResize, 500)
-    analytics.setSize(testCardWindow.getBounds().width,testCardWindow.getBounds().height)
+    if (testCardWindow !== null) {
+      analytics.setSize(testCardWindow.getBounds().width,testCardWindow.getBounds().height)
+    }
   })
 
   testCardWindow.on('move', function() {
