@@ -619,7 +619,8 @@ ipcMain.on('selectImage', () => {
 
 ipcMain.on('saveAsPNG', (_, arg) => {
   headlessExportMode = false
-  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: 'TestKard.png', filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
+  var name = ('Kard-' + config.name).replace(/ /g,"-") + '.png'
+  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: name, filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
     if (!result.canceled) {
       var base64Data = arg.replace(/^data:image\/png;base64,/, "")
       fs.writeFile(result.filePath, base64Data, 'base64', function(err) {
