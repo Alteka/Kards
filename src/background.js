@@ -80,7 +80,9 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  app.whenReady().then(() => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()  
+   })
 })
 
 app.on('ready', async () => {
