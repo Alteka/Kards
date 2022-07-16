@@ -3,7 +3,7 @@
     <transition name="fade">
       <div id="gradient" v-if="config.placeholder.gradient"></div>
     </transition>
-    <div v-resize-text="{ratio:1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{ color:config.placeholder.fg }">
+    <div v-resize-text="{ratio:1.1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{ color:config.placeholder.fg }">
       <i v-if="config.placeholder.icon != 'custom'" style="font-size: 200%;" class="fa-solid" :class="config.placeholder.icon"></i>
       <i v-else style="font-size: 200%;" class="fa-solid" :class="config.placeholder.custom"></i>
       
@@ -50,8 +50,10 @@ import VueResizeText from 'vue3-resize-text'
   }
   #infoText {
     position: absolute;
-    width: 100%;
+    width: min(100%, calc(200vh * 1));
+    left: 50%;
     top: 10px;
+    transform: translateX(-50%);
     text-align: center;
   }
   #time {
@@ -64,7 +66,10 @@ import VueResizeText from 'vue3-resize-text'
     position: absolute;
     width: 100%;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: min(calc(100vh * 1.5), 90%);
+    max-height: calc(100vw * 1);
     text-align: center;
   }
   .name i {
