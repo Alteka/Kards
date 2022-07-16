@@ -74,6 +74,11 @@ class altekaMenu extends EventEmitter {
           ]
       }))
 
+      this.menu.append(new MenuItem({
+        label: 'Edit',
+        role: 'editMenu'  
+        }))
+
       let screensMenu = []
       for (const s in this.screens) { 
         screensMenu.push({
