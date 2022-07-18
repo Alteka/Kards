@@ -249,13 +249,11 @@ export default {
       if (luma > 127) {
         return {
           'outline': '2px solid #000',
-          'background-size': '50px 50px',
           'background-image': `linear-gradient(to right, #444 1px, transparent 1px), linear-gradient(to bottom, #444 1px, transparent 1px)`
         }
       } else {
         return {
           'outline': '2px solid white',
-          'background-size': '50px 50px',
           'background-image': `linear-gradient(to right, #bbb 1px, transparent 1px), linear-gradient(to bottom, #bbb 1px, transparent 1px)`
         }
       }
@@ -284,62 +282,59 @@ export default {
         customLogo.style.height = (circle.getBoundingClientRect().height / 3) + 2 + 'px'
       }
 
+      // New and improved pillar size and position algorithm
+
+      let long = width // the long edge of the card
+      let short = height // the short edge of the card
+      let aspect = ratio // like ratio but doesn't care about orientation
+      if (ratio < 1) {
+        short = width
+        long = height
+        aspect = 1/ratio
+      }
+      console.log(aspect)
+
+      // core pillar size based on size and shape of card
+      let pillarShort = Math.round((long / 50) * aspect * 0.04) * 50 - 1;
+      let pillarLong = (Math.floor((short / 100) * 0.75)) * 100 - 1;
+
+      if (aspect < 1.4) pillarLong -= 100 // avoid pillars being under the circles in cards that are nearly square
+
+      if (pillarShort > 300) pillarShort = 300; // limit short edge to 300px
+
+      // gap is pixels from edge of circle to inside edge of pillar
+      let gap = 0
+      if (Math.round(pillarShort/50) > 2) gap = 50
+      if (Math.round(pillarShort/50) > 3) gap = 100
+
+      // now apply the pillar size and gap to the pillar objects
       if (ratio >= 1) {
-        let pillarWidth = Math.round((width / 50) * 0.055) * 50
-        let pillarHeight = (Math.floor((height / 100) * 0.6)) * 100
-
-        if (ratio > 2 && height > 300) { pillarHeight += 100 }
-        if (ratio > 3 && width > 800) { pillarWidth += 50 }
-
-        pillarWidth -= 1;
-        pillarHeight -= 1;
-
-        pillarLeft.style.width = pillarWidth + "px"
-        pillarRight.style.width = pillarWidth + "px"
-        pillarLeft.style.height = pillarHeight + "px"
-        pillarRight.style.height = pillarHeight + "px"
+        pillarLeft.style.width = pillarShort + "px"
+        pillarRight.style.width = pillarShort + "px"
+        pillarLeft.style.height = pillarLong + "px"
+        pillarRight.style.height = pillarLong + "px"
         pillarLeft.style.flexDirection = "column"
         pillarRight.style.flexDirection = "column"
         pillarLeft.style.bottom = '50%'
         pillarLeft.style.transform = 'none'
-        pillarLeft.style.transform = 'translateY(calc(+50% + 1px))'
-        pillarRight.style.top = 'calc(50% + 1px)'
+        pillarLeft.style.transform = 'translateY(calc(+50% + 0.5px))'
+        pillarRight.style.top = 'calc(50% + 0.5px)'
         pillarRight.style.transform = 'translateY(-50%)'
         
-        let gap = 0
-        if (ratio > 1.1 && width > 1400) { gap = 50 }
-        if (ratio > 1.5 && width > 1000) { gap = 50 }
-        if (ratio > 1.8 && width > 800) { gap = 50 }
-        if (ratio > 2.2) { gap = 100 }
-        if (ratio > 3) { gap = 150 }
-
         let left = (Math.ceil(circleWidth / 2 / 50) * 50 + width / 2) + gap
         pillarRight.style.left = left + 1 + "px"
-        pillarLeft.style.left = width - left - pillarWidth + "px"
+        pillarLeft.style.left = width - left - pillarShort + "px"
       } else {
-        let pillarWidth = Math.floor((width / 100) * 0.6) * 100
-        let pillarHeight = (Math.floor((height / 50) * 0.1)) * 50
-
-        pillarHeight -= 1;
-        pillarWidth -= 1;
-
-        pillarLeft.style.width = pillarWidth + "px"
-        pillarRight.style.width = pillarWidth + "px"
-        pillarLeft.style.height = pillarHeight + "px"
-        pillarRight.style.height = pillarHeight + "px"
-
+        pillarLeft.style.width = pillarLong + "px"
+        pillarRight.style.width = pillarLong + "px"
+        pillarLeft.style.height = pillarShort + "px"
+        pillarRight.style.height = pillarShort + "px"
         pillarLeft.style.flexDirection = "row"
         pillarRight.style.flexDirection = "row"
-
-        pillarLeft.style.left = 'calc(50% + 1px)'
-        pillarRight.style.left = 'calc(50% + 1px)'
+        pillarLeft.style.left = 'calc(50% + 0.5px)'
+        pillarRight.style.left = 'calc(50% + 0.5px)'
         pillarLeft.style.transform = 'translateX(-50%)'
         pillarRight.style.transform = 'translateX(-50%)'
-
-        let gap = 0
-        if (ratio < 0.8) { gap = 50 }
-        if (ratio < 0.6) { gap = 100 }
-        if (ratio < 0.4) { gap = 150 }
 
         let leftBottom = (height/2) + (Math.ceil(circleWidth / 2 / 50) * 50) + gap
         pillarLeft.style.bottom = leftBottom + 'px'
@@ -381,6 +376,14 @@ export default {
   background-size: 50px 50px;
   background-image: linear-gradient(to right, #666 1px, transparent 1px),
     linear-gradient(to bottom, #666 1px, transparent 1px);
+}
+@media screen and (max-height: 340px), (max-width: 340px) {
+  .gridQuadrant {
+    background-size: 25px 25px;
+  }
+  .pillar {
+    visibility: hidden;
+  }
 }
 .gridtopleft {
     background-position: bottom right;
