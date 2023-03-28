@@ -334,6 +334,17 @@ ipcMain.on('openUrl', (_, arg) => {
   log.info('open url', arg)
 })
 
+ipcMain.on('selectMaskImage', () => {
+  let result = dialog.showOpenDialogSync({ title: "Select Image", properties: ['openFile'], filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif', 'svg']}] })
+  if (result != null) {
+    let data = fs.readFileSync(result[0], { encoding: 'base64' })
+    config.mask.imageSource = 'data:' + mime.lookup(result[0]) + ';base64,' + data
+    controlWindow.webContents.send('config', config)
+  } else {
+    log.info('No file selected')
+  }
+})
+
 ipcMain.on('networkInfo', (event) => {
   const nets = networkInterfaces();
   const results = ['Kards v' + version, hostname().split('.')[0]]

@@ -19,6 +19,11 @@
     "width": 1280,
     "height": 720
 },
+"mask": {
+    "enabled": false,
+    "applyBounds": false,
+    "image": ""
+},
 "placeholder": {
     "bg": "#6ab42f",
     "fg": "#fff",

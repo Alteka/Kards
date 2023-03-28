@@ -24,6 +24,13 @@
           <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo green"></i> Are You Sure?</el-dropdown-item>
           <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green"></i> Help</el-dropdown-item>
           <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list green"></i> Logs</el-dropdown-item>
+          
+          <el-dropdown-item divided v-if="config.mask.enabled" @click="config.mask.enabled = false"><i class="fas fa-mask green"></i> Disable Mask</el-dropdown-item>
+          <el-dropdown-item divided v-if="!config.mask.enabled && config.mask.imageSource" @click="config.mask.enabled = true"><i class="fas fa-mask green"></i> Enable Mask</el-dropdown-item>
+          
+          <el-dropdown-item @click="selectMaskImage"><i class="fas fa-image green"></i> Select Mask Image</el-dropdown-item>
+          <el-dropdown-item v-if="config.mask.enabled && !config.windowed && !config.fullsize" @click="config.mask.applyBounds = !config.mask.applyBounds"><i class="fas fa-expand-arrows-alt green"></i> Toggle Mask Size</el-dropdown-item>
+          
           <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export green"></i> Export Settings</el-dropdown-item>
           <el-dropdown-item @click="importSettings"><i class="fas fa-file-import green"></i> Import Settings</el-dropdown-item>
           <el-dropdown-item @click="showShareDialog = true"><i class="fas fa-share green"></i> Share Card</el-dropdown-item>
@@ -283,6 +290,9 @@ let loadingInstance
       },
       exportSettings: function() {
         window.ipcRenderer.send('exportSettings')
+      },
+      selectMaskImage: function() {
+        window.ipcRenderer.send('selectMaskImage')
       },
       openHelp: function() {
         window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')

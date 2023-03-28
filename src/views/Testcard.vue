@@ -1,6 +1,8 @@
 <template>
   <div id="bounds" :class="{ showBounds: config.notFilledCard.bounds && !config.windowed}" class="superblack" v-on:dblclick="toggleWindowed">
     <div class="drag-region"></div>
+    <div id="overlaymask" v-if="config.mask.enabled && config.mask.applyBounds" :style="computedStyle"><img :src="config.mask.imageSource" /></div>
+    <div id="overlaymask" v-if="config.mask.enabled && !config.mask.applyBounds"><img :src="config.mask.imageSource" /></div>
     <div id="cards" :style="computedStyle">
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost'}">
@@ -106,6 +108,11 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
         config: {
           notFilledCard: {
             bounds: false
+          },
+          mask: {
+            enabled: false,
+            imageSource: '',
+            applyBounds: false
           }
         },
         boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
@@ -267,6 +274,20 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
   height: 100%;
   overflow: overlay;
   z-index: -10;
+}
+
+#overlaymask {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+#overlaymask img {
+  width: 100%;
+  height: 100%;
 }
 
 .drag-region {
