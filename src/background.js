@@ -10,6 +10,7 @@ const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
 var bonjour = require('bonjour')()
+const mime = require('mime-types')
 
 // Project specific includes
 const touchBar = require('./touchBar.js')
@@ -609,8 +610,7 @@ ipcMain.on('selectImage', () => {
   let result = dialog.showOpenDialogSync({ title: "Select Image", properties: ['openFile'], filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif']}] })
   if (result != null) {
     let data = fs.readFileSync(result[0], { encoding: 'base64' })
-    let mime = require('mime').getType(result[0])
-    config.alteka.logo = 'data:' + mime + ';base64,' + data
+    config.alteka.logo = 'data:' + mime.lookup(result[0]) + ';base64,' + data
     controlWindow.webContents.send('config', config)
   } else {
     log.info('No file selected')
