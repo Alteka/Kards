@@ -489,7 +489,7 @@ function showTestCardWindow(windowConfig) {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     testCardWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/testcard')
-    if (!process.env.IS_TEST) testCardWindow.webContents.openDevTools()
+    if (isDevelopment) testCardWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
     testCardWindow.loadURL('app://./index.html#testcard')
