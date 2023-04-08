@@ -127,16 +127,19 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
     },
     computed: {
       computedStyle: function() {
-        if (this.config.fullsize || this.config.screen == 0) {
-          return {}
+        let r = {}
+        if (!this.config.fullsize && this.config.screen != 0) {
+          r.height = this.config.notFilledCard.height + 'px' 
+          r.width = this.config.notFilledCard.width + 'px'
+          r.top = this.config.notFilledCard.top + 'px'
+          r.left = this.config.notFilledCard.left + 'px'
+        } 
+        if (this.config.raster) {
+          r.border = '1px solid white'
         } else {
-          return {
-            height: this.config.notFilledCard.height + 'px',
-            width: this.config.notFilledCard.width + 'px',
-            top: this.config.notFilledCard.top + 'px',
-            left: this.config.notFilledCard.left + 'px',
-          }
+          r.border = 'none'
         }
+        return r;
       }
     },
     methods: {
@@ -263,6 +266,8 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
   height: 100%;
   color: white;
   overflow: hidden;
+  border: 0px solid white;
+  box-sizing: border-box;
 }
 #bounds {
   font-family: Sansation, Helvetica, sans-serif;
