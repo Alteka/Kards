@@ -220,6 +220,7 @@ async function createWindow() {
     show: false,
     useContentSize: true,
     maximizable: false,
+    title: "Kards",
     resizable: false,
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -397,7 +398,7 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  let windowConfig = {show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, 'preload.js')}}  
+  let windowConfig = {title: "Kards - Output", show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, 'preload.js')}}  
   
   if (!config.windowed) { // Setting up for full screen test card
     windowConfig.fullscreen = true
