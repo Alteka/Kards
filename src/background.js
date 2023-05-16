@@ -437,6 +437,7 @@ function setupNewTestCardWindow() {
       }
     }
   } else {
+    windowConfig.roundedCorners = false
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
         windowConfig.x = disp.bounds.x + (disp.bounds.width - config.window.width)/2
