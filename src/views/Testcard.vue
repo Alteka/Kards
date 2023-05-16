@@ -134,7 +134,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
           r.top = this.config.notFilledCard.top + 'px'
           r.left = this.config.notFilledCard.left + 'px'
         } 
-        if (this.config.raster) {
+        if (this.config.raster && !this.config.windowed) {
           r.border = '1px solid white'
         } else {
           r.border = 'none'
