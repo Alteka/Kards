@@ -340,6 +340,7 @@ ipcMain.on('selectMaskImage', () => {
   if (result != null) {
     let data = fs.readFileSync(result[0], { encoding: 'base64' })
     config.mask.imageSource = 'data:' + mime.lookup(result[0]) + ';base64,' + data
+    config.mask.enabled = true // enable when image is picked.
     controlWindow.webContents.send('config', config)
   } else {
     log.info('No file selected')

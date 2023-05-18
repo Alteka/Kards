@@ -293,11 +293,20 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
   width: 100%;
   height: 100%;
   z-index: 10;
+  user-drag: none;  
+   user-select: none;
+   -webkit-user-drag: none;
+   -webkit-user-select: none;
+   mix-blend-mode: darken;
 }
 
 #overlaymask img {
   width: 100%;
   height: 100%;
+  user-drag: none;  
+   user-select: none;
+   -webkit-user-drag: none;
+   -webkit-user-select: none;
 }
 
 .drag-region {

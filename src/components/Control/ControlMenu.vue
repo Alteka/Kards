@@ -28,7 +28,7 @@
           <el-dropdown-item divided v-if="config.mask.enabled" @click="config.mask.enabled = false"><i class="fas fa-mask green"></i> Disable Mask</el-dropdown-item>
           <el-dropdown-item divided v-if="!config.mask.enabled && config.mask.imageSource" @click="config.mask.enabled = true"><i class="fas fa-mask green"></i> Enable Mask</el-dropdown-item>
           
-          <el-dropdown-item @click="selectMaskImage"><i class="fas fa-image green"></i> Select Mask Image</el-dropdown-item>
+          <el-dropdown-item :divided="!config.mask.imageSource" @click="selectMaskImage"><i class="fas fa-image green"></i> Select Mask Image</el-dropdown-item>
           <el-dropdown-item v-if="config.mask.enabled && !config.windowed && !config.fullsize" @click="config.mask.applyBounds = !config.mask.applyBounds"><i class="fas fa-expand-arrows-alt green"></i> Toggle Mask Size</el-dropdown-item>
           
           <el-dropdown-item :disabled="config.windowed" divided v-if="config.raster" @click="config.raster = false"><i class="fas fa-border-all green"></i> Disable Raster Box</el-dropdown-item>
