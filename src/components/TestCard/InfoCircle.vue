@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="config.showInfo" class="info" :class="{ fullsize : !config.fullsize }">
+    <div v-if="config.showInfo" class="info" :style="cssVars">
       <div class="infoText" :class="{ biggerText : config.name.length < 20, evenBiggerText : config.name.length < 12}">{{ config.name }}</div>
       <div class="sizeText">{{ info.cardSize }}</div>
       <div v-if="config.showClock" class="clock">{{ info.time }}</div>
@@ -14,19 +14,26 @@
     props: {
       config: Object,
       info: Object
-    }
+    },
+    computed: {
+      cssVars() {
+        return {
+          '--info-circle-size': this.info.circleSize + 'px'
+        }
+      }
+    },
   }
 </script>
 
 <style scoped>
   .info {
     position: absolute;
-    font-size: 56px;
-    width: 500px;
-    height: 500px;
+    font-size: calc(var(--info-circle-size)/8);
+    width: var(--info-circle-size);
+    height: var(--info-circle-size);
     margin: auto;
-    left: calc(50% - 250px);
-    top: calc(50% - 250px);
+    left: calc(50% - var(--info-circle-size)/2);
+    top: calc(50% - var(--info-circle-size)/2);
     text-align: center;
     text-shadow: 0px 0px 5px rgba(0, 10, 0, 1);
     background: rgba(0,0,0,0.2);
@@ -46,10 +53,10 @@
   overflow-wrap: break-word;
 }
 .biggerText {
-  font-size: 150%;
+  font-size: 140%;
 }
 .evenBiggerText {
-  font-size: 200%;
+  font-size: 180%;
 }
 .sizeText {
   position: absolute;
@@ -80,58 +87,4 @@
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
-
-@media screen and (max-height: 1600px), (max-width: 1600px) {
-  .info {
-    font-size: 48px;
-    width: 400px;
-    height: 400px;
-    left: calc(50% - 200px);
-    top: calc(50% - 200px);
-  }
-}
-@media screen and (max-height: 1300px), (max-width: 1300px) {
-  .info {
-    font-size: 36px;
-    width: 300px;
-    height: 300px;
-    left: calc(50% - 150px);
-    top: calc(50% - 150px);
-  }
-}
-@media screen and (max-height: 900px), (max-width: 900px) {
-  .info {
-    font-size: 24px;
-    width: 200px;
-    height: 200px;
-    left: calc(50% - 100px);
-    top: calc(50% - 100px);
-  }
-}
-@media screen and (max-height: 500px), (max-width: 500px) {
-  .info {
-    font-size: 18px;
-    width: 150px;
-    height: 150px;
-    left: calc(50% - 75px);
-    top: calc(50% - 75px);
-  }
-}
-@media screen and (max-height: 300px), (max-width: 300px) {
-  .info {
-    font-size: 12px;
-    width: 100px;
-    height: 100px;
-    left: calc(50% - 50px);
-    top: calc(50% - 50px);
-  }
-}
-.fullsize {
-    font-size: 24px;
-    width: 200px;
-    height: 200px;
-    left: calc(50% - 100px);
-    top: calc(50% - 100px);
-  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="alteka" :class="{gradient : config.alteka.gradient}" :style="{background : config.alteka.bg}" >
+  <div id="alteka" :class="{gradient : config.alteka.gradient}" :style="cssVars" >
     <resize-observer @notify="handleResize" />
     <div class="grid">
       <div class="gridQuadrant gridtopleft" :style="grid"></div>
@@ -216,7 +216,8 @@ export default {
   components: { Swatch },
   props: {
     config: Object,
-    info: Object
+    info: Object,
+    borderSize: Number
   },
   watch: {
       config: {
@@ -256,6 +257,12 @@ export default {
           'outline': '2px solid white',
           'background-image': `linear-gradient(to right, #bbb 1px, transparent 1px), linear-gradient(to bottom, #bbb 1px, transparent 1px)`
         }
+      }
+    },
+    cssVars: function() {
+      return {
+        'background' : this.config.alteka.bg,
+        '--border-size': this.borderSize + 'px'
       }
     }
   },
@@ -413,64 +420,36 @@ export default {
 }
 .border div {
   position: absolute;
-  background-size: 100px 100px;
+  background-size: calc(var(--border-size)*4) calc(var(--border-size)*4);
   background-position: 50%;
 }
 .borderTop {
   background: black;
   background-image: linear-gradient(270deg, transparent 50%, currentColor 50%);
-  height: 25px;
+  height: var(--border-size);
   width: 100%;
   top: 0px;
 }
 .borderBottom {
   background: black;
   background-image: linear-gradient(90deg, transparent 50%, currentColor 50%);
-  height: 25px;
+  height: var(--border-size);
   bottom: 0px;
   width: 100%;
 }
 .borderLeft {
   left: 0;
-  width: 25px;
+  width: var(--border-size);
   height: 100%;
   background: black;
   background-image: linear-gradient(0deg, transparent 50%, currentColor 50%);
 }
 .borderRight {
   right: 0;
-  width: 25px;
+  width: var(--border-size);
   height: 100%;
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
-}
-@media screen and (max-height: 700px), (max-width: 700px) {
-  .borderLeft {
-    width: 16px;
-  }
-  .borderRight {
-    width: 16px;
-  }
-  .borderTop {
-    height: 16px;
-  }
-  .borderBottom {
-    height: 16px;
-  }
-}
-@media screen and (max-height: 500px), (max-width: 500px) {
-  .borderLeft {
-    width: 10px;
-  }
-  .borderRight {
-    width: 10px;
-  }
-  .borderTop {
-    height: 10px;
-  }
-  .borderBottom {
-    height: 10px;
-  }
 }
 
 .borderAnimatedl2r {
@@ -514,69 +493,33 @@ export default {
   left: 0;
 }
 .corners div {
-  width: 50px;
-  height: 50px;
+  width: calc(var(--border-size)*2);
+  height:  calc(var(--border-size)*2);
   position: absolute;
 }
 .cornerTopLeft {
   top: 0;
   left: 0;
-  border-top: 25px solid red;
-  border-left: 25px solid red;
+  border-top:  var(--border-size) solid red;
+  border-left: var(--border-size) solid red;
 }
 .cornerTopRight {
   top: 0;
   right: 0;
-  border-top: 25px solid red;
-  border-right: 25px solid red;
+  border-top: var(--border-size) solid red;
+  border-right: var(--border-size) solid red;
 }
 .cornerBottomLeft {
   bottom: 0;
   left: 0;
-  border-bottom: 25px solid red;
-  border-left: 25px solid red;
+  border-bottom: var(--border-size) solid red;
+  border-left: var(--border-size) solid red;
 }
 .cornerBottomRight {
   bottom: 0;
   right: 0;
-  border-bottom: 25px solid red;
-  border-right: 25px solid red;
-}
-@media screen and (max-height: 700px), (max-width: 700px) {
-  .corners div {
-    height: 32px;
-    width: 32px;
-  }
-  .cornerTopLeft {
-    border-width: 16px;
-  }
-  .cornerTopRight {
-    border-width: 16px;
-  }
-  .cornerBottomLeft {
-    border-width: 16px;
-  }
-  .cornerBottomRight {
-    border-width: 16px;
-  }
-}
-@media screen and (max-height: 500px), (max-width: 500px) {
-  .corners div {
-    height: 20px;
-    width: 20px;
-  }
-  .cornerTopLeft {
-    border-width: 10px;
-  }
-  .cornerTopRight {
-    border-width: 10px;
-  }
-  .cornerBottomLeft {
-    border-width: 10px;
-  }
-  .cornerBottomRight {
-    border-width: 10px;
-  }
+  border-bottom: var(--border-size) solid red;
+  border-right: var(--border-size) solid red;
 }
 
 .arrows {
@@ -592,67 +535,30 @@ export default {
   height: 0;
 }
 .arrowTop {
-  left: calc(50% - 50px);
-  border-right: 50px solid transparent;
-  border-bottom: 50px solid #6ab42e;
-  border-left: 50px solid transparent;
+  left: calc(50% - var(--border-size)*2);
+  border-right: calc(var(--border-size)*2) solid transparent;
+  border-bottom: calc(var(--border-size)*2) solid #6ab42e;
+  border-left: calc(var(--border-size)*2) solid transparent;
 }
 .arrowBottom {
-  left: calc(50% - 50px);
+  left: calc(50% - var(--border-size)*2);
   bottom: 0;
-  border-right: 50px solid transparent;
-  border-top: 50px solid #6ab42e;
-  border-left: 50px solid transparent;
+  border-right: calc(var(--border-size)*2) solid transparent;
+  border-top: calc(var(--border-size)*2) solid #6ab42e;
+  border-left: calc(var(--border-size)*2) solid transparent;
 }
 .arrowLeft {
-  top: calc(50% - 50px);
-  border-top: 50px solid transparent;
-  border-right: 50px solid #6ab42e;
-  border-bottom: 50px solid transparent;
+  top: calc(50% - var(--border-size)*2);
+  border-top: calc(var(--border-size)*2) solid transparent;
+  border-right: calc(var(--border-size)*2) solid #6ab42e;
+  border-bottom: calc(var(--border-size)*2) solid transparent;
 }
 .arrowRight {
-  top: calc(50% - 50px);
+  top: calc(50% - var(--border-size)*2);
   right: 0;
-  border-top: 50px solid transparent;
-  border-left: 50px solid #6ab42e;
-  border-bottom: 50px solid transparent;
-}
-@media screen and (max-height: 700px), (max-width: 700px) {
-  .arrowTop {
-    border-width: 20px;
-    left: calc(50% - 20px)
-  }
-  .arrowBottom {
-    border-width: 20px;
-    left: calc(50% - 20px)
-  }
-  .arrowLeft {
-    border-width: 20px;
-    top: calc(50% - 20px)
-  }
-  .arrowRight {
-    border-width: 20px;
-    top: calc(50% - 20px)
-  }
-}
-
-@media screen and (max-height: 500px), (max-width: 500px) {
-  .arrowTop {
-    border-width: 15px;
-    left: calc(50% - 15px)
-  }
-  .arrowBottom {
-    border-width: 15px;
-    left: calc(50% - 15px)
-  }
-  .arrowLeft {
-    border-width: 15px;
-    top: calc(50% - 15px)
-  }
-  .arrowRight {
-    border-width: 15px;
-    top: calc(50% - 15px)
-  }
+  border-top: calc(var(--border-size)*2) solid transparent;
+  border-left: calc(var(--border-size)*2) solid #6ab42e;
+  border-bottom: calc(var(--border-size)*2) solid transparent;
 }
 
 .pillar {
@@ -741,59 +647,22 @@ export default {
 }
 
 .circleTopLeft {
-  top: 50px;
-  left: 50px;
+  top: calc(var(--border-size)*2);
+  left: calc(var(--border-size)*2);
 }
 .circleTopRight {
-  top: 50px;
-  right: 50px;
+  top: calc(var(--border-size)*2);
+  right: calc(var(--border-size)*2);
 }
 .circleBottomLeft {
-  bottom: 50px;
-  left: 50px;
+  bottom: calc(var(--border-size)*2);
+  left: calc(var(--border-size)*2);
 }
 .circleBottomRight {
-  bottom: 50px;
-  right: 50px;
+  bottom: calc(var(--border-size)*2);
+  right: calc(var(--border-size)*2);
 }
 
-@media screen and (max-height: 700px), (max-width: 700px) {
-  .circleTopLeft {
-    top: 32px;
-    left: 32px;
-  }
-  .circleTopRight {
-    top: 32px;
-    right: 32px;
-  }
-  .circleBottomLeft {
-    bottom: 32px;
-    left: 32px;
-  }
-  .circleBottomRight {
-    bottom: 32px;
-    right: 32px;
-  }
-}
-
-@media screen and (max-height: 500px), (max-width: 500px) {
-    .circleTopLeft {
-    top: 20px;
-    left: 20px;
-  }
-  .circleTopRight {
-    top: 20px;
-    right: 20px;
-  }
-  .circleBottomLeft {
-    bottom: 20px;
-    left: 20px;
-  }
-  .circleBottomRight {
-    bottom: 20px;
-    right: 20px;
-  }
-}
 
 #alteka {
   background: #3d3d3d;

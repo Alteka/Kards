@@ -1,5 +1,5 @@
 <template>
-  <div id="audioSync">
+  <div id="audioSync" :style="cssVars">
 
     <div class="border">
       <div class="borderTop"></div>
@@ -46,9 +46,9 @@
     </div>
 
     <div id="bottomText" class="textRow" v-if="config.showInfo">
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: center">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '32px'}" style="text-align: right">{{ info.network[info.networkIndex] }}</span>
+      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
+      <span v-resize-text="{ratio:3, maxFontSize: '32px'}" style="text-align: center"><i class="fas fa-volume-up" /> {{ description }}</span>
+      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ info.network[info.networkIndex] }}</span>
     </div>
 
   </div>
@@ -63,12 +63,20 @@ export default {
    },
   props: {
     config: Object,
-    info: Object
+    info: Object,
+    borderSize: Number
   },
   data: function() {
     return {
       description: "Default Interface",
       rates: ['24', '25', '29-97', '30', '50', '59-94', '60' ]
+    }
+  },
+  computed: {
+    cssVars() {
+      return {
+        '--border-size': this.borderSize + 'px'
+      }
     }
   },
   watch: {
@@ -148,7 +156,7 @@ export default {
 }
 
 #bottomText {
-  bottom: 25px;
+  bottom: var(--border-size);
 }
 
 .vt {
@@ -170,33 +178,33 @@ export default {
 }
 .border div {
   position: absolute;
-  background-size: 100px 100px;
+  background-size: calc(var(--border-size)*4) calc(var(--border-size)*4);
   background-position: 50%;
 }
 .borderTop {
   background: black;
   background-image: linear-gradient(270deg, transparent 50%, currentColor 50%);
-  height: 25px;
+  height: var(--border-size);
   width: 100%;
   top: 0px;
 }
 .borderBottom {
   background: black;
   background-image: linear-gradient(90deg, transparent 50%, currentColor 50%);
-  height: 25px;
+  height: var(--border-size);
   bottom: 0px;
   width: 100%;
 }
 .borderLeft {
   left: 0;
-  width: 25px;
+  width: var(--border-size);
   height: 100%;
   background: black;
   background-image: linear-gradient(0deg, transparent 50%, currentColor 50%);
 }
 .borderRight {
   right: 0;
-  width: 25px;
+  width: var(--border-size);
   height: 100%;
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
@@ -211,33 +219,33 @@ export default {
   left: 0;
 }
 .corners div {
-  width: 50px;
-  height: 50px;
+  width: calc(var(--border-size) * 2);
+  height: calc(var(--border-size) * 2);
   position: absolute;
 }
 .cornerTopLeft {
   top: 0;
   left: 0;
-  border-top: 25px solid #6ab42e;
-  border-left: 25px solid #6ab42e;
+  border-top: var(--border-size) solid #6ab42e;
+  border-left: var(--border-size) solid #6ab42e;
 }
 .cornerTopRight {
   top: 0;
   right: 0;
-  border-top: 25px solid #6ab42e;
-  border-right: 25px solid #6ab42e;
+  border-top: var(--border-size) solid #6ab42e;
+  border-right: var(--border-size) solid #6ab42e;
 }
 .cornerBottomLeft {
   bottom: 0;
   left: 0;
-  border-bottom: 25px solid #6ab42e;
-  border-left: 25px solid #6ab42e;
+  border-bottom: var(--border-size) solid #6ab42e;
+  border-left: var(--border-size) solid #6ab42e;
 }
 .cornerBottomRight {
   bottom: 0;
   right: 0;
-  border-bottom: 25px solid #6ab42e;
-  border-right: 25px solid #6ab42e;
+  border-bottom: var(--border-size) solid #6ab42e;
+  border-right: var(--border-size) solid #6ab42e;
 }
 
 
@@ -254,85 +262,30 @@ export default {
   height: 0;
 }
 .arrowTop {
-  left: calc(50% - 25px);
-  border-right: 25px solid transparent;
-  border-bottom: 25px solid #6ab42e;
-  border-left: 25px solid transparent;
+  left: calc(50% - var(--border-size));
+  border-right: var(--border-size) solid transparent;
+  border-bottom: var(--border-size) solid #6ab42e;
+  border-left: var(--border-size) solid transparent;
 }
 .arrowBottom {
-  left: calc(50% - 25px);
+  left: calc(50% - var(--border-size));
   bottom: 0;
-  border-right: 25px solid transparent;
-  border-top: 25px solid #6ab42e;
-  border-left: 25px solid transparent;
+  border-right: var(--border-size) solid transparent;
+  border-top: var(--border-size) solid #6ab42e;
+  border-left: var(--border-size) solid transparent;
 }
 .arrowLeft {
-  top: calc(50% - 25px);
-  border-top: 25px solid transparent;
-  border-right: 25px solid #6ab42e;
-  border-bottom: 25px solid transparent;
+  top: calc(50% - var(--border-size));
+  border-top: var(--border-size) solid transparent;
+  border-right: var(--border-size) solid #6ab42e;
+  border-bottom: var(--border-size) solid transparent;
 }
 .arrowRight {
-  top: calc(50% - 25px);
+  top: calc(50% - var(--border-size));
   right: 0;
-  border-top: 25px solid transparent;
-  border-left: 25px solid #6ab42e;
-  border-bottom: 25px solid transparent;
-}
-
-@media screen and (max-height: 600px), (max-width: 600px) {
-  .borderLeft {
-    width: 15px;
-  }
-  .borderRight {
-    width: 15px;
-  }
-  .borderTop {
-    height: 15px;
-  }
-  .borderBottom {
-    height: 15px;
-  }
-  #bottomText {
-    bottom: 15px;
-  }
-  #topText {
-    bottom: 15px;
-  }
-
-  .corners div {
-    height: 30px;
-    width: 30px;
-  }
-  .cornerTopLeft {
-    border-width: 15px;
-  }
-  .cornerTopRight {
-    border-width: 15px;
-  }
-  .cornerBottomLeft {
-    border-width: 15px;
-  }
-  .cornerBottomRight {
-    border-width: 15px;
-  }
-
-  .arrowTop {
-    border-width: 15px;
-    left: calc(50% - 15px)
-  }
-  .arrowBottom {
-    border-width: 15px;
-    left: calc(50% - 15px)
-  }
-  .arrowLeft {
-    border-width: 15px;
-    top: calc(50% - 15px)
-  }
-  .arrowRight {
-    border-width: 15px;
-    top: calc(50% - 15px)
-  }
+  border-top: var(--border-size) solid transparent;
+  border-left: var(--border-size) solid #6ab42e;
+  border-bottom: var(--border-size) solid transparent;
 }
 
 #audioSync {

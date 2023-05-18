@@ -14,9 +14,9 @@
           <BarsSDITestCard v-if="config.cardType == 'bars' && config.bars.type=='sdi'" :config="config" :info="info"></BarsSDITestCard>
           <BarsSingle v-if="config.cardType == 'bars' && config.bars.type=='single'" :config="config" :info="info"></BarsSingle>
           <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
-          <AudioSyncTestCard v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSyncTestCard>
+          <AudioSyncTestCard v-if="config.cardType=='audioSync'" :config="config" :info="info" :borderSize="borderSize"></AudioSyncTestCard>
           <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
-          <AltekaTestCard v-if="config.cardType == 'alteka'" :config="config" :info="info"></AltekaTestCard>
+          <AltekaTestCard v-if="config.cardType == 'alteka'" :config="config" :info="info" :borderSize="borderSize"></AltekaTestCard>
           <LedWallTestCard v-if="config.cardType == 'led'" :config="config" :info="info"></LedWallTestCard>
           <DeghostTestCard v-if="config.cardType == 'deghost'" :config="config" :info="info"></DeghostTestCard>
       </div>
@@ -121,8 +121,10 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
           }
         },
         boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
+        borderSize: 25,
         info: {
           cardSize: '',
+          circleSize: 500,
           displayFrequency: 0,
           time: '00:00',
           network: ['127.0.0.1'],
@@ -166,12 +168,53 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
         window.ipcRenderer.send('closeTestCard')
       },
       updateCardSize: function() {
+        let w = 1280
+        let h = 720
         if (this.config.windowed) {
-          this.info.cardSize = this.config.window.width + ' x ' + this.config.window.height
+          w = this.config.window.width
+          h = this.config.window.height
         } else if (!this.config.fullsize) {
-          this.info.cardSize = this.config.notFilledCard.width + ' x ' + this.config.notFilledCard.height
+          w = this.config.notFilledCard.width
+          h = this.config.notFilledCard.height
         } else {
-          this.info.cardSize = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
+          w = Math.round(visualViewport.width)
+          h = Math.round(visualViewport.height)
+        }
+        this.info.cardSize = w + ' x ' + h
+        this.updateBorderSize(w, h)
+        this.updateInfoCircleSize(w, h)
+      },
+      updateBorderSize: function(w, h) {
+        this.borderSize = 25
+          if (w < 720 || h < 720) {
+            this.borderSize = 20
+          }
+          if (w < 600 || h < 600) {
+            this.borderSize = 15
+          }
+          if (w < 400 || h < 400) {
+            this.borderSize = 10
+          }
+          if (w < 250 || h < 250) {
+            this.borderSize = 6
+          }
+      },
+      updateInfoCircleSize: function(w,h) {
+        this.info.circleSize = 500
+        if (w < 1600 || h < 1600) {
+          this.info.circleSize = 400
+        }
+        if (w < 1300 || h < 1300) {
+          this.info.circleSize = 300
+        }
+        if (w < 900 || h < 900) {
+          this.info.circleSize = 200
+        }
+        if (w < 500 || h < 500) {
+          this.info.circleSize = 150
+        }
+        if (w < 300 || h < 300) {
+          this.info.circleSize = 100
         }
       },
       exportTestCard: function(settings) {
