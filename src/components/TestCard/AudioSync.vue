@@ -32,23 +32,24 @@
     <video id="vt100" v-if="config.audioSync.rate == 100" src="~@/assets/audiosync/100.webm" loop autoplay class="vt" />
     <video id="vt120" v-if="config.audioSync.rate == 120" src="~@/assets/audiosync/120.webm" loop autoplay class="vt" />
 
-    <div id="topText" class="textRow">
-      <transition name="fade">
-        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="config.showInfo && config.showClock" style="text-align: left">{{ info.time }}</span>
-      </transition>
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}">{{ config.audioSync.rate }} FPS</span>
-      <transition name="fade">
-        <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: right" v-if="config.showInfo">{{ info.network[info.networkIndex] }}</span>
-      </transition>
+    <div id="middleClock">
+      <span  v-if="config.showClock" style="text-align: center">{{ info.time }}</span>
     </div>
 
-  <transition name="fade">
-      <div id="bottomText" class="textRow" v-if="config.showInfo">
-        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
-        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: center">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
-        <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ config.name }}</span>
-      </div>
-  </transition>
+    <div id="topText" class="textRow" v-if="config.showInfo">
+      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: left">{{ config.audioSync.rate }} FPS</span>
+      <span v-resize-text="{ratio:2, maxFontSize: '50px'}" style="text-align: right">{{ config.name }}</span>
+    </div>
+
+    <div id="topText" class="textRow" v-if="!config.showInfo">
+      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="!config.showInfo">{{ config.audioSync.rate }} FPS</span>
+    </div>
+
+    <div id="bottomText" class="textRow" v-if="config.showInfo">
+      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left"><i class="fas fa-volume-up" /> {{ description }}</span>
+      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: center">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
+      <span v-resize-text="{ratio:1.5, maxFontSize: '32px'}" style="text-align: right">{{ info.network[info.networkIndex] }}</span>
+    </div>
 
   </div>
 </template>
@@ -117,6 +118,24 @@ export default {
   height: 38px;
   overflow: hidden;
   vertical-align: bottom;
+}
+
+#middleClock {
+  position: absolute;
+  font-size: 100px;
+  display: flex;
+  text-align: center;
+  height: 80px;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  color: #6ab42f;
+}
+#middleClock span {
+  position: relative;
+  font-size: min(calc(4vh), calc(4vw));
+  width: 20%;
+  left: 40%;
 }
 
 #topText {
