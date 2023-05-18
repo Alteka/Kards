@@ -12,6 +12,7 @@
           <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
           <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
           <BarsSDITestCard v-if="config.cardType == 'bars' && config.bars.type=='sdi'" :config="config" :info="info"></BarsSDITestCard>
+          <BarsSingle v-if="config.cardType == 'bars' && config.bars.type=='single'" :config="config" :info="info"></BarsSingle>
           <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
           <AudioSyncTestCard v-if="config.cardType=='audioSync'" :config="config" :info="info"></AudioSyncTestCard>
           <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
@@ -27,6 +28,7 @@
         <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
         <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
         <BarsSDITestCard v-if="config.cardType == 'bars' && config.bars.type=='sdi'" :config="config" :info="info"></BarsSDITestCard>
+        <BarsSingle v-if="config.cardType == 'bars' && config.bars.type=='single'" :config="config" :info="info"></BarsSingle>
         <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
         <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
@@ -38,6 +40,7 @@
         <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
         <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
         <BarsSDITestCard v-if="config.cardType == 'bars' && config.bars.type=='sdi'" :config="config" :info="info"></BarsSDITestCard>
+        <BarsSingle v-if="config.cardType == 'bars' && config.bars.type=='single'" :config="config" :info="info"></BarsSingle>
         <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
         <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
@@ -49,6 +52,7 @@
         <BarsSimpleTestCard v-if="config.cardType == 'bars' && config.bars.type=='simple'" :config="config" :info="info"></BarsSimpleTestCard>
         <BarsHDRTestCard v-if="config.cardType == 'bars' && config.bars.type=='hdr'" :config="config" :info="info"></BarsHDRTestCard>
         <BarsSDITestCard v-if="config.cardType == 'bars' && config.bars.type=='sdi'" :config="config" :info="info"></BarsSDITestCard>
+        <BarsSingle v-if="config.cardType == 'bars' && config.bars.type=='single'" :config="config" :info="info"></BarsSingle>
         <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
         <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
@@ -77,6 +81,7 @@ import PlaceholderTestCard from '../components/TestCard/Placeholder.vue'
 import DeghostTestCard from '../components/TestCard/Deghost.vue'
 import BarsHDRTestCard from '../components/TestCard/HDR.vue'
 import BarsSDITestCard from '../components/TestCard/SDI.vue'
+import BarsSingle from '../components/TestCard/Single.vue'
 
 import domtoimage from 'dom-to-image'
 
@@ -102,7 +107,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
   export default {
     name: 'TestCard',
-    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, BarsHDRTestCard, BarsSDITestCard },
+    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, BarsHDRTestCard, BarsSDITestCard, BarsSingle },
     data: function() { 
       return {
         config: {

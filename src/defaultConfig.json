@@ -35,7 +35,8 @@
 "bars": {
     "type": "simple",
     "overlay": false,
-    "level": "75"
+    "level": "75",
+    "color": "white"
 },
 "grid": {
     "bg": "#000",
