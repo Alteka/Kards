@@ -3,7 +3,19 @@
       
       <el-form ref="form" :model="config" label-width="120px" size="small">
 
-      <control-screen v-model="config"></control-screen>
+        
+        <control-screen v-model="config" v-if="showPreview == 'Screen'"></control-screen>
+        <div v-else class="previewHolder">
+          <preview v-model="config" :style="previewStyle" class="preview"></preview>
+        </div>
+
+        <el-row>
+          <el-radio-group v-model="showPreview" size="mini" style="margin: auto">
+            <el-radio-button label="Screen"></el-radio-button>
+            <el-radio-button label="Preview"></el-radio-button>
+          </el-radio-group>
+        </el-row>
+        
       <el-divider content-position="center">Select Card Type</el-divider>
 
       <el-row style="margin-left: 8px; margin-right: 8px;">
@@ -161,6 +173,7 @@ import ControlAudioSync from '../components/Control/ControlAudioSync.vue'
 import ControlMenu from '../components/Control/ControlMenu.vue'
 import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
+import Preview from '../views/Preview.vue'
 
 var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
@@ -168,7 +181,7 @@ Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, '
 export default {
   name: 'ControlView',
   components: {
-    ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost
+    Preview, ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost
   },
   methods: {
     handleResize: function({ width, height }) {
@@ -180,6 +193,7 @@ export default {
       config: require('../defaultConfig.json'),
       sync: false,
       darkMode: false,
+      showPreview: "Screen",
       displayFrequency: 0,
       prevFullsize: true
     }
@@ -267,6 +281,22 @@ export default {
     },
     ledHeight: function() {
       return this.config.led.height * this.config.led.rows
+    },
+    previewStyle: function() {
+      let w = 1280;
+      let h = 720;
+      if (this.config.windowed) {
+        w = this.config.window.width;
+        h = this.config.window.height
+      } else if (!this.config.fullsize) {
+          w = this.config.notFilledCard.width
+          h = this.config.notFilledCard.height
+        } else {
+          // need to load in resolution of the selected screen....
+        }
+      return {
+        'aspect-ratio': w/h
+      }
     }
   }
 }
@@ -278,6 +308,15 @@ body {
   overflow: hidden !important;
   margin: 0;
 }
+.previewHolder {
+padding: 10px;
+height: 300px;
+}
+.preview {
+  border: 1px solid white !important;
+  max-height: 300px;
+}
+
 @font-face {
   font-family: Sansation;
   src: url("~@/assets/Sansation-Regular.ttf");
