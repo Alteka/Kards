@@ -18,7 +18,6 @@ const fs = require('fs')
 const say = require('say')
 var sizeOf = require('image-size')
 const wallpaper = require('wallpaper')
-import altekaAnalytics from './analytics'
 import altekaMenu from './menu'
 import oscServer from './osc'
 import restServer from './rest'
@@ -42,12 +41,6 @@ if (!isDevelopment) {
     }
   })
 }
-
-//=====================//
-//       Analytics     //
-//=====================//
-let analytics = new altekaAnalytics()
-analytics.setup()
 
 
 //======================================//
@@ -148,7 +141,6 @@ ipcMain.on('config', (_, arg) => {
     }
   }
   controlMenu.updateConfig(config)
-  analytics.updateConfig(config)
   osc.updateConfig(config)
   rest.updateConfig(config)
   store.set('KardsConfig', config)
@@ -176,7 +168,6 @@ ipcMain.on('aboutDialogInfo', () => {
 
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
-  analytics.track("ResetDefaults", 'Resetting app config to defaults')
   resetAudio()
 })
 
@@ -327,7 +318,6 @@ ipcMain.on('openLogs', () => {
 function openLogs() {
   const path = log.transports.file.findLogPath()
   shell.showItemInFolder(path)
-  analytics.track('OpenLogs', 'Opening log folder')
 }
 
 ipcMain.on('openUrl', (_, arg) => {
@@ -518,9 +508,6 @@ function showTestCardWindow(windowConfig) {
   testCardWindow.on('resize', function() {
     clearTimeout(testCardWindowResizeTimer)
     testCardWindowResizeTimer = setTimeout(handleTestCardResize, 500)
-    if (testCardWindow !== null) {
-      analytics.setSize(testCardWindow.getBounds().width,testCardWindow.getBounds().height)
-    }
   })
 
   testCardWindow.on('move', function() {
@@ -647,7 +634,6 @@ ipcMain.on('saveAsPNG', (_, arg) => {
           controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
           let dims = sizeOf(result.filePath)
-          analytics.track('ImageSavedToPNG', 'PNG saved to: ' + result.filePath + ' - With dimensions: ' + dims.width + 'x' + dims.height)
           controlWindow.webContents.send('exportCardCompleted')
         }
       })
@@ -675,8 +661,6 @@ ipcMain.on('setAsWallpaper', (_, arg) => {
     }
     (async () => {
       await wallpaper.set(dest)
-      let dims = sizeOf(dest)
-      analytics.track('ImageSavedToWallpaper', 'Setting PNG as wallpaper with dims: ' + dims.width + 'x' + dims.height)
       controlWindow.webContents.send('exportCardCompleted')
       })();
     })
@@ -784,8 +768,6 @@ function exportSettings() {
         if (err) {
           dialog.showErrorBox('Error Saving File', JSON.stringify(err))
           log.error('Couldnt save file: ', err)
-        } else {
-          analytics.track('SettingsExported', 'JSON saved to: ' + path)
         }
       })
     } else {
@@ -814,7 +796,6 @@ function importSettings() {
           createTextAudio() 
           controlWindow.webContents.send('config', config)
           controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
-          analytics.track('SettingsImported', 'Imported ' + count + ' settings from json file.')
         } else {
           controlWindow.webContents.send('importSettings', 'Skipping - The file is from a different version of Kards')  
         }
@@ -845,7 +826,6 @@ setTimeout(function() {
         }).then(function (response) {
           if (response.response == 1) {
             shell.openExternal('https://alteka.solutions/kards')
-            analytics.track('OpenUpdateLink', "Open Update Link")
           }
         });
       } else if (status == 0) {
