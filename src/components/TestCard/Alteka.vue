@@ -470,18 +470,18 @@ export default {
 }
 @keyframes left-to-right {
     0%       { background-position: 0%; }
-    100%     { background-position: 100px; }
+    100%     { background-position: calc(var(--border-size)*4); }
 }
 @keyframes right-to-left {
-    0%       { background-position: 100px; }
+    0%       { background-position: calc(var(--border-size)*4); }
     100%     { background-position: 0%; }
 }
 @keyframes top-to-bottom {
     0%       { background-position: 0 0%; }
-    100%     { background-position: 0 100px; }
+    100%     { background-position: 0 calc(var(--border-size)*4); }
 }
 @keyframes bottom-to-top {
-    0%       { background-position: 0 100px; }
+    0%       { background-position: 0 calc(var(--border-size)*4); }
     100%     { background-position: 0 0%; }
 }
 
