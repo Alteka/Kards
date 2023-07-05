@@ -19,27 +19,27 @@
         </el-button>
         <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="showAboutDialog = true"><i class="fas fa-info green"></i> About</el-dropdown-item>
-          <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo green"></i> Reset</el-dropdown-item>
-          <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo green"></i> Are You Sure?</el-dropdown-item>
-          <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green"></i> Help</el-dropdown-item>
-          <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list green"></i> Logs</el-dropdown-item>
+          <el-dropdown-item @click="showAboutDialog = true"><i class="fas fa-info green" style="width: 10px; text-align: center;"></i> About</el-dropdown-item>
+          <el-dropdown-item divided v-if="!confirmResetVisible" @click="confirmResetVisible = true"><i class="fas fa-undo green" style="width: 10px; text-align: center;"></i> Reset</el-dropdown-item>
+          <el-dropdown-item divided v-else @click="reset()" style="color: red"><i class="fas fa-undo green" style="width: 10px; text-align: center;"></i> Are You Sure?</el-dropdown-item>
+          <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green" style="width: 10px; text-align: center;"></i> Help</el-dropdown-item>
+          <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list green" style="width: 10px; text-align: center;"></i> Logs</el-dropdown-item>
           
-          <el-dropdown-item divided v-if="config.infoCircleAnimated" @click="config.infoCircleAnimated = false"><i class="fas fa-mask green"></i> Static Info Circle</el-dropdown-item>
-          <el-dropdown-item divided v-if="!config.infoCircleAnimated" @click="infoCircleAnimated = true"><i class="fas fa-mask green"></i> Animate Info Circle</el-dropdown-item>
+          <el-dropdown-item divided v-if="config.infoCircleAnimated" @click="config.infoCircleAnimated = false"><i class="fas fa-mask green" style="width: 10px; text-align: center;"></i> Static Info Circle</el-dropdown-item>
+          <el-dropdown-item divided v-if="!config.infoCircleAnimated" @click="infoCircleAnimated = true"><i class="fas fa-mask green" style="width: 10px; text-align: center;"></i> Animate Info Circle</el-dropdown-item>
 
-          <el-dropdown-item divided v-if="config.mask.enabled" @click="config.mask.enabled = false"><i class="fas fa-mask green"></i> Disable Mask</el-dropdown-item>
-          <el-dropdown-item divided v-if="!config.mask.enabled && config.mask.imageSource" @click="config.mask.enabled = true"><i class="fas fa-mask green"></i> Enable Mask</el-dropdown-item>
+          <el-dropdown-item divided v-if="config.mask.enabled" @click="config.mask.enabled = false"><i class="fas fa-mask green" style="width: 10px; text-align: center;"></i> Disable Mask</el-dropdown-item>
+          <el-dropdown-item divided v-if="!config.mask.enabled && config.mask.imageSource" @click="config.mask.enabled = true"><i class="fas fa-mask green" style="width: 10px; text-align: center;"></i> Enable Mask</el-dropdown-item>
           
-          <el-dropdown-item :divided="!config.mask.imageSource" @click="selectMaskImage"><i class="fas fa-image green"></i> Select Mask Image</el-dropdown-item>
-          <el-dropdown-item v-if="config.mask.enabled && !config.windowed && !config.fullsize" @click="config.mask.applyBounds = !config.mask.applyBounds"><i class="fas fa-expand-arrows-alt green"></i> Toggle Mask Size</el-dropdown-item>
+          <el-dropdown-item :divided="!config.mask.imageSource" @click="selectMaskImage"><i class="fas fa-image green" style="width: 10px; text-align: center;"></i> Select Mask Image</el-dropdown-item>
+          <el-dropdown-item v-if="config.mask.enabled && !config.windowed && !config.fullsize" @click="config.mask.applyBounds = !config.mask.applyBounds"><i class="fas fa-expand-arrows-alt green" style="width: 10px; text-align: center;"></i> Toggle Mask Size</el-dropdown-item>
           
-          <el-dropdown-item :disabled="config.windowed" divided v-if="config.raster" @click="config.raster = false"><i class="fas fa-border-all green"></i> Disable Raster Box</el-dropdown-item>
-          <el-dropdown-item :disabled="config.windowed" divided v-else @click="config.raster = true"><i class="fas fa-border-all green"></i> Enable Raster Box</el-dropdown-item>
+          <el-dropdown-item :disabled="config.windowed" divided v-if="config.raster" @click="config.raster = false"><i class="fas fa-border-all green" style="width: 10px; text-align: center;"></i> Disable Raster Box</el-dropdown-item>
+          <el-dropdown-item :disabled="config.windowed" divided v-else @click="config.raster = true"><i class="fas fa-border-all green" style="width: 10px; text-align: center;"></i> Enable Raster Box</el-dropdown-item>
 
-          <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export green"></i> Export Settings</el-dropdown-item>
-          <el-dropdown-item @click="importSettings"><i class="fas fa-file-import green"></i> Import Settings</el-dropdown-item>
-          <el-dropdown-item @click="showShareDialog = true"><i class="fas fa-share green"></i> Share Card</el-dropdown-item>
+          <el-dropdown-item divided @click="exportSettings"><i class="fas fa-file-export green" style="width: 10px; text-align: center;"></i> Export Settings</el-dropdown-item>
+          <el-dropdown-item @click="importSettings"><i class="fas fa-file-import green" style="width: 10px; text-align: center;"></i> Import Settings</el-dropdown-item>
+          <el-dropdown-item @click="showShareDialog = true"><i class="fas fa-share green" style="width: 10px; text-align: center;"></i> Share Card</el-dropdown-item>
         </el-dropdown-menu>
         </template>
       </el-dropdown>
