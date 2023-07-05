@@ -276,6 +276,7 @@ export default {
       return 0.2126 * r + 0.7152 * g + 0.0722 * b
     },
     handleResize: function({ width, height }) {
+      console.log('Handle Resize for ', width, height)
       let ratio = width/height
       
       let pillarLeft = document.getElementById("pillarLeft")
@@ -303,7 +304,8 @@ export default {
 
       // core pillar size based on size and shape of card
       let pillarShort = Math.round((long / 50) * aspect * 0.04) * 50 - 1;
-      let pillarLong = (Math.floor((short / 100) * 0.75)) * 100 - 1;
+      if (pillarShort < 50) pillarShort = 50; // minimum short edge of 50px
+      let pillarLong = (Math.floor((short / 100) * 0.66)) * 100 - 1;
 
       if (aspect < 1.4) pillarLong -= 100 // avoid pillars being under the circles in cards that are nearly square
 
@@ -311,8 +313,10 @@ export default {
 
       // gap is pixels from edge of circle to inside edge of pillar
       let gap = 0
-      if (Math.round(pillarShort/50) > 2) gap = 50
-      if (Math.round(pillarShort/50) > 3) gap = 100
+      if (Math.round(pillarShort/50) > 1) gap = 50
+      if (Math.round(pillarShort/50) > 2) gap = 100
+      if (gap == 0 && aspect > 1.8) gap = 50
+      if (gap >= 50 && circleWidth%50 < 15) gap -= 50
 
       // now apply the pillar size and gap to the pillar objects
       if (ratio >= 1) {
@@ -347,6 +351,11 @@ export default {
         pillarLeft.style.bottom = leftBottom + 'px'
         pillarRight.style.top = leftBottom + 1 + 'px'
       }
+
+      // console.log('gap', gap)
+      // console.log('pillarshort', pillarShort)
+      // console.log('pillarLong', pillarLong)
+      // console.log('circleWidth + %', circleWidth, circleWidth%50)
     }
   },
   mounted: function() {
