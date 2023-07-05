@@ -157,7 +157,8 @@ import InfoCircle from './InfoCircle'
     position: absolute;
     top: 0px;
     left: 0px;
-    height: 100%;
+    bottom: 0px;
+    height: calc(100% + 1px);
     width: 100%;
     
     background: black;

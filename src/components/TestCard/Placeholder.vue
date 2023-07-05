@@ -43,9 +43,13 @@ import VueResizeText from 'vue3-resize-text'
 
 <style scoped>
   #placeholder {
-    background: #d33;
-    height: 100%;
-    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100.2%;
+    width: 100.2%;
     font-size: 26px;
   }
   #infoText {

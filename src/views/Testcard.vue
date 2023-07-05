@@ -313,7 +313,6 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
   width: 100%;
   height: 100%;
   color: white;
-  overflow: hidden;
   border: 0px solid white;
   box-sizing: border-box;
 }
@@ -386,7 +385,8 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
   position: absolute;
   top: 0;
   left: 0;
-  overflow: hidden;
+  right: 0;
+  bottom: 0;
 }
 .animated {
   animation: diagonal 30s infinite;
