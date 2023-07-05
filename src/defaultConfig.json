@@ -9,6 +9,7 @@
     "screen": 0,
     "raster": false,
     "showClock": true,
+    "infoCircleAnimated": true,
 "notFilledCard": {
     "width": 1920,
     "height": 1080,
