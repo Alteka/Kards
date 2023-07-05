@@ -1,6 +1,6 @@
 {
   "name": "kards",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A cross-platform test card generator for AV professionals",
   "author": "Alteka Solutions <info@alteka.solutions>",
   "scripts": {
@@ -49,7 +49,7 @@
     "@vue/cli-plugin-router": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
     "@vue/compiler-sfc": "^3.0.0",
-    "electron": "19.0.8",
+    "electron": "^25.2.0 ",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
