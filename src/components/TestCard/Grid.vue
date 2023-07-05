@@ -41,7 +41,7 @@
       </div>
     </div>
     </transition>
-    <info-circle :config="config" :info="info"/>
+    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info"/>
   </div>
 </template>
 
