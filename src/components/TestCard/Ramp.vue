@@ -158,9 +158,9 @@ import InfoCircle from './InfoCircle'
     top: 0px;
     left: 0px;
     bottom: 0px;
-    height: calc(100% + 1px);
-    width: 100%;
-    
+    height: 100.2%;
+    width: 100.2%;
+    overflow: hidden;
     background: black;
   }
   #ramp1 {
