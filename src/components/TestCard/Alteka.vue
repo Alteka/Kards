@@ -187,7 +187,7 @@
           <transition name="fade">
             <g v-if="config.showInfo">
             <g v-if="config.alteka.showLogo && !config.alteka.logo == ''" :fill="config.alteka.bg" fill-opacity="75%">
-              <rect x="-45" y="10" width="90" height="5" />
+              <rect x="-45" y="11" width="90" height="4" />
               <rect x="-45" y="-15" width="90" height="7" />
             </g>
             <text x="0" y="-9.5" w="50" text-anchor="middle" font-size="5px" :style="{fill: text}">{{config.name}}</text>
