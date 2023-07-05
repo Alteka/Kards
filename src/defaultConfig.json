@@ -86,7 +86,7 @@
     "options": ["voice", "tone"],
     "prependText": "This is ",
     "voiceData": "",
-    "text": "Custom text can be read out too!",
+    "text": "You are listening to Kards!",
     "textData": "",
     "fileData": "",
     "fileName": "No File Selected"
