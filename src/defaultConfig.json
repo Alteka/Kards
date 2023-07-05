@@ -30,7 +30,7 @@
     "fg": "#fff",
     "gradient": true,
     "icon": "fa-desktop",
-    "custom": "fa-headset"
+    "custom": "fa-brands fa-spotify"
 },
 "bars": {
     "type": "simple",

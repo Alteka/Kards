@@ -5,7 +5,7 @@
     </transition>
     <div v-resize-text="{ratio:1.1, minFontSize: '10px', maxFontSize: '500px'}" class="name" :style="{ color:config.placeholder.fg }">
       <i v-if="config.placeholder.icon != 'custom'" style="font-size: 200%;" class="fa-solid" :class="config.placeholder.icon"></i>
-      <i v-else style="font-size: 200%;" class="fa-solid" :class="config.placeholder.custom"></i>
+      <i v-else style="font-size: 200%;" :class="config.placeholder.custom"></i>
       
       <br v-if="config.placeholder.icon != ''" />
       
