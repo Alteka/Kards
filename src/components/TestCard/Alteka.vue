@@ -129,7 +129,7 @@
 
     <div id="centerbox">
       <transition name="fade">
-        <img v-if="config.alteka.logo != ''" id="customLogo" :src="config.alteka.logo" />      
+        <img v-if="config.alteka.logo != ''" id="customLogo" :src="config.alteka.logo" height="0" width="0"/>      
       </transition>
 
       <svg viewBox="-50 -50 100 100" height="100%" width="100%">
