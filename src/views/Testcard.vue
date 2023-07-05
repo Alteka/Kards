@@ -5,6 +5,8 @@
     <div id="overlaymask" v-if="config.mask.enabled && !config.mask.applyBounds"><img :src="config.mask.imageSource" /></div>
     <div id="cards" :style="computedStyle">
 
+    <info-circle v-if="!config.infoCircleAnimated && (config.cardType == 'bars' || config.cardType=='grid' || config.cardType=='ramp')" :config="config" :info="info"></info-circle>
+
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost'}">
           <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
           <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
@@ -84,6 +86,7 @@ import BarsSDITestCard from '../components/TestCard/SDI.vue'
 import BarsSingle from '../components/TestCard/Single.vue'
 
 import domtoimage from 'dom-to-image'
+import InfoCircle from '../components/TestCard/InfoCircle.vue'
 
 var Mousetrap = require('mousetrap')
 Mousetrap.bind(['command+f', 'ctrl+f', 'esc', 'f'], function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
@@ -107,7 +110,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
   export default {
     name: 'TestCard',
-    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, BarsHDRTestCard, BarsSDITestCard, BarsSingle },
+    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, BarsHDRTestCard, BarsSDITestCard, BarsSingle, InfoCircle },
     data: function() { 
       return {
         config: {

@@ -1,6 +1,6 @@
 <template>
   <div id="ramp">
-    <info-circle :config="config" :info="info"/>
+    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info"/>
     <div id="ramp1" :style="computedRamp1">
       <div v-if="showSteps" class="steps" :style="computedSteps1">
         <swatch v-for="step in steps" :key="step" colour="white" :ire="step" :showText="config.ramp.overlay"></swatch>
