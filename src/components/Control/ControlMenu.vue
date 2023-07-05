@@ -25,8 +25,8 @@
           <el-dropdown-item divided @click="openHelp"><i class="fas fa-question green"></i> Help</el-dropdown-item>
           <el-dropdown-item divided @click="openLogs"><i class="fas fa-clipboard-list green"></i> Logs</el-dropdown-item>
           
-          <el-dropdown-item divided v-if="config.infoCircleAnimated" @click="config.infoCircleAnimated = false"><i class="fas fa-mask green"></i> Static Info Circle</el-dropdown-item>
-          <el-dropdown-item divided v-if="!config.infoCircleAnimated" @click="infoCircleAnimated = true"><i class="fas fa-mask green"></i> Animate Info Circle</el-dropdown-item>
+          <el-dropdown-item divided v-if="config.infoCircleAnimated" @click="config.infoCircleAnimated = false"><i class="fa-solid fa-circle-info green"></i> Static Info Circle</el-dropdown-item>
+          <el-dropdown-item divided v-if="!config.infoCircleAnimated" @click="infoCircleAnimated = true"><i class="fa-solid fa-circle-info green"></i> Animate Info Circle</el-dropdown-item>
 
           <el-dropdown-item divided v-if="config.mask.enabled" @click="config.mask.enabled = false"><i class="fas fa-mask green"></i> Disable Mask</el-dropdown-item>
           <el-dropdown-item divided v-if="!config.mask.enabled && config.mask.imageSource" @click="config.mask.enabled = true"><i class="fas fa-mask green"></i> Enable Mask</el-dropdown-item>
