@@ -315,6 +315,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
   color: white;
   border: 0px solid white;
   box-sizing: border-box;
+  overflow: hidden;
 }
 #bounds {
   font-family: Sansation, Helvetica, sans-serif;
