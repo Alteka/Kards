@@ -679,8 +679,6 @@ ipcMain.on('setAsWallpaper', (_, arg) => {
 //========================//
 //    Voice Generation    //
 //========================//
-setTimeout(createVoice, 10000)
-setTimeout(createTextAudio, 10000)
 ipcMain.on('createVoice', () => {
   createVoice()
 })
@@ -695,9 +693,12 @@ function resetAudio() {
   setTimeout(createTextAudio, 5000)
 }
 
+let lastCreatedVoice = ''
 function createVoice() {
   let dest = app.getPath('userData') + '/voice.wav'  
-  say.export(config.audio.prependText + config.name, null, null, dest, (err) => {
+  let voice = config.audio.prependText + config.name 
+
+  say.export(voice, null, null, dest, (err) => {
     if (err) {
       return log.error(err)
     }
@@ -718,6 +719,20 @@ function createTextAudio() {
     controlWindow.webContents.send('config', config)
   })
 }
+
+let textToSpeechCount = 0
+function textToSpeachData(text) {
+  let dest = app.getPath('userData') + '/tts0' + textToSpeechCount + '.wav'  
+  textToSpeechCount++
+  say.export(config.audio.text, null, null, dest, (err) => {
+    if (err) {
+      log.error(err)
+      return ''
+    }
+    return 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+  })
+}
+
 function loadAudioFile() {
   dialog.showOpenDialog(controlWindow, {title: 'Open Audio File', filters: [{name: "Audio", extensions: ['wav', 'mp3', 'ogg', 'aac']}]}).then(result => {
     if (!result.canceled) {
