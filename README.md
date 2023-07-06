@@ -11,12 +11,8 @@ Good test cards are often overlooked. Maybe you set a wallpaper, maybe you have 
 
 Kards generates a range of useful cards, with motion, audio sync tests. You can name them, brand them. Generate tone or even a text-to-speech that voices the computer name. 
 
-### Analytics
-We are using Google Analytics to anonymously track usage of Kards. This is mostly to help us focus development and give us an understanding of how you use the app. We try to keep this to the bare minimum, and all data is anonymous. You can see exactly what we track by looking in your log file (More > Open Logs) 
-
 #### Accuracy
-
-A note to say that whilst the app generates specific levels, which match standard cards (where 100% White is 235, 235, 235) however display profiles and operating system settings can override these settings. Whilst this may seem like a bad thing, it's likely that the same is being done to whatever app you want to use. More information on each Kard can be seen here: [Kards Help](https://alteka.solutions/kards/help)
+A note to say that whilst the app generates specific levels, which match standard cards (where 100% White is 235, 235, 235) display profiles and operating system settings can override these settings. Whilst this may seem like a bad thing, it's likely that the same is being done to whatever app you want to use. More information on each Kard can be seen here: [Kards Help](https://alteka.solutions/kards/help)
 
 #### Design
 
@@ -24,9 +20,9 @@ The app is based around Electron to create and manage the windows. The content i
 
 #### Build Setup
 ``` bash
-#Clone the repo into a folder
+# Clone the repo into a folder
 # cd into the folder and run the below
-#You'll need to have node.js as well as Yarn package manager
+# You'll need to have node.js as well as Yarn package manager
 
 # install dependencies
 yarn install
