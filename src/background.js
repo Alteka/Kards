@@ -31,15 +31,19 @@ const store = new Store()
 //         Rollbar        //
 //========================//
 var Rollbar = require("rollbar")
-if (!isDevelopment) {
+let env = require('../env')
+if (!isDevelopment && env.rollbarToken != '') {
   var rollbar = new Rollbar({
-    accessToken: 'e6f21f0291334229a79f4f2c9be7c4aa',
+    accessToken: env.rollbarToken,
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
       version: version
     }
   })
+}
+if (!env.rollbarToken) {
+  log.warn('No Rollbar token has been set!')
 }
 
 
