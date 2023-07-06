@@ -530,12 +530,14 @@ function showTestCardWindow(windowConfig) {
 }
 
 function handleTestCardResize() {
-  let bounds = testCardWindow.getBounds()
-  let t = 2
-  if (config.window.width < (bounds.width-t) || config.window.width > (bounds.width+t) || config.window.height < (bounds.height-t) || config.window.height > (bounds.height+t) || process.platform == 'darwin') {
-    config.window.width = bounds.width
-    config.window.height = bounds.height
-    controlWindow.webContents.send('config', config)
+  if (testCardWindow != null) {
+    let bounds = testCardWindow.getBounds()
+    let t = 2
+    if (config.window.width < (bounds.width-t) || config.window.width > (bounds.width+t) || config.window.height < (bounds.height-t) || config.window.height > (bounds.height+t) || process.platform == 'darwin') {
+      config.window.width = bounds.width
+      config.window.height = bounds.height
+      controlWindow.webContents.send('config', config)
+    }
   }
 }
 let testCardWindowResizeTimer
