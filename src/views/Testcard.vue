@@ -94,12 +94,16 @@ Mousetrap.bind(['command+i', 'ctrl+i', 'i'], function() {
   window.ipcRenderer.send('testCardKeyPress', 'showInfo')
   return false;
 })
-Mousetrap.bind(['command+m', 'ctrl+m', 'm'], function() {
+Mousetrap.bind(['command+m', 'ctrl+m', 'm', 'command+a', 'ctrl+a', 'a'], function() {
   window.ipcRenderer.send('testCardKeyPress', 'animated')
   return false;
 })
 Mousetrap.bind(['command+w', 'ctrl+w'], function() {
   window.ipcRenderer.send('testCardKeyPress', 'windowed')
+  return false;
+})
+Mousetrap.bind(['command+r', 'ctrl+r'], function() {
+  window.ipcRenderer.send('testCardKeyPress', 'raster')
   return false;
 })
 Mousetrap.bind(['command+s', 'ctrl+s'], function() {
