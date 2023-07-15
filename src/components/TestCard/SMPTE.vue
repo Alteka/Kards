@@ -19,7 +19,7 @@
       <swatch colour="black" ire="0" :showText="config.bars.overlay"></swatch>
       <swatch colour="white" ire="75" :showText="config.bars.overlay"></swatch>
     </div>
-    <div class="row">
+    <div class="row" style="height: 25.1%;">
       <div class="row" style="width: 500%;">
         <swatch colour="ntscInphase" :showText="config.bars.overlay"></swatch>
         <swatch colour="white" ire="100" :showText="config.bars.overlay"></swatch>
