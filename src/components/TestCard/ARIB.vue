@@ -108,6 +108,7 @@ import InfoCircle from './InfoCircle'
     height: 100%;
     width: 100%;
     background: grey;
+    overflow: hidden;
   }
   .row {
     height: 8.33333%;

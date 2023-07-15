@@ -70,7 +70,7 @@
     </div>
 
 
-    <div class="row last">
+    <div class="row last" style="height: 25%">
       <div v-if="config.showInfo" class="infoBox">
         <div>{{ info.cardSize }} - {{info.displayFrequency}}Hz</div>
         <div>{{config.name}}</div>
@@ -113,7 +113,7 @@ import Swatch from './Swatch'
     color: #6ab42f;
     width: 30%;
     display: flex;
-    padding: 10px;
+    /* padding-top: 10px; */
     flex-direction: column;
     justify-content: space-around;
     text-align: center;
