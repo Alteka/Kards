@@ -62,7 +62,7 @@
   position: absolute;
   width: 50%;
   left: 25%;
-  top: 5%;
+  top: 7%;
   overflow: hidden;
   font-size: 66%;
 }
