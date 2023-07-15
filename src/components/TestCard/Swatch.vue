@@ -103,6 +103,7 @@
    }
    .text {
         margin: auto;
+        width: 90%;
         text-align: center;
         margin-top: 6px;
         z-index:+100;
