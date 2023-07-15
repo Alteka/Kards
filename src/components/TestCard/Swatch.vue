@@ -98,12 +98,14 @@
    .swatch {
        border: none;
        margin: 0;
-       padding: 5px;
+       padding: 1px;
        overflow: hidden;
    }
    .text {
         margin: auto;
         text-align: center;
+        margin-top: 6px;
+        z-index:+100;
    }
    .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
