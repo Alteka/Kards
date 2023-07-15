@@ -1,7 +1,7 @@
 <template>
   <div id="arib">
 
-    <info-circle :config="config" :info="info" />
+    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info" />
   
     <div class="row grey40">
       <div class="endbit"><swatch colour="white" ire="40" :showText="config.bars.overlay"></swatch></div>

@@ -1,6 +1,6 @@
 <template>
   <div id="single">
-    <info-circle :config="config" :info="info" />
+    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info" />
     <div class="thebars">
         <swatch :colour="config.bars.color.toLowerCase()" :ire="config.bars.level" :showText="config.bars.overlay"></swatch>
     </div>

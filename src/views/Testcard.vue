@@ -5,7 +5,7 @@
     <div id="overlaymask" v-if="config.mask.enabled && !config.mask.applyBounds"><img :src="config.mask.imageSource" /></div>
     <div id="cards" :style="computedStyle">
 
-    <info-circle v-if="!config.infoCircleAnimated && (config.cardType == 'bars' || config.cardType=='grid' || config.cardType=='ramp')" :config="config" :info="info"></info-circle>
+    <info-circle v-if="!config.infoCircleAnimated && ((config.cardType == 'bars' && config.bars.type!='hdr') || config.cardType=='grid' || config.cardType=='ramp')" :config="config" :info="info"></info-circle>
 
       <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost'}">
           <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>

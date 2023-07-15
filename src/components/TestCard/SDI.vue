@@ -1,6 +1,6 @@
 <template>
   <div id="bars">
-    <info-circle :config="config" :info="info" />
+    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info" />
     <div class="top">
       <transition name="fade">
         <div v-if="config.bars.overlay" class="text">
