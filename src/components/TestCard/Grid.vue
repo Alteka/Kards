@@ -9,8 +9,8 @@
       <div class="cornerCircles">
         <svg>
           <defs>
-            <circle id="smallCircle" cx="0" cy="0" r="130" :stroke="config.grid.crosshair" stroke-width="2" fill="black" fill-opacity="0.5" />
-            <circle id="bigCircle" cx="0" cy="0" r="430" :stroke="config.grid.crosshair" stroke-width="2" fill="black" fill-opacity="0.5" />
+            <circle id="smallCircle" cx="0" cy="0" r="130" :stroke="config.grid.crosshair" stroke-width="2" :fill="config.grid.bg" fill-opacity="0.5" />
+            <circle id="bigCircle" cx="0" cy="0" r="430" :stroke="config.grid.crosshair" stroke-width="2" :fill="config.grid.bg" fill-opacity="0.5" />
           </defs>
         </svg>
         <div class="circleTopLeft">
