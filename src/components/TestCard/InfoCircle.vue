@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div v-if="config.showInfo" class="info" :style="cssVars">
-      <div class="infoText" :class="{ biggerText : config.name.length < 20, evenBiggerText : config.name.length < 12}">{{ config.name }}</div>
+      <div class="infoText" :class="{ biggerText : config.name.length < 11, evenBiggerText : config.name.length < 6}">{{ config.name }}</div>
       <div class="sizeText">{{ info.cardSize }}</div>
       <div v-if="config.showClock" class="clock">{{ info.time }}</div>
     </div>
@@ -53,10 +53,10 @@
   overflow-wrap: break-word;
 }
 .biggerText {
-  font-size: 140%;
+  font-size: 120%;
 }
 .evenBiggerText {
-  font-size: 180%;
+  font-size: 150%;
 }
 .sizeText {
   position: absolute;
