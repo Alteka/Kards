@@ -47,14 +47,17 @@
 
     <el-drawer :with-header="false" v-model="drawerAudio" direction="btt" size="150px">
       <el-row class="drawerContent">
-        <el-checkbox-group v-model="config.audio.options" size="medium" style="margin: auto;">
-          <el-checkbox-button label="voice">Voice</el-checkbox-button>
+        <el-checkbox-group v-model="config.audio.options" size="small" style="margin: auto;">
+          <el-checkbox-button label="voice">Name</el-checkbox-button>
           <el-checkbox-button label="text">Text</el-checkbox-button>
           <el-checkbox-button label="tone">Tone</el-checkbox-button>
           <el-checkbox-button label="pink">Pink</el-checkbox-button>
           <el-checkbox-button label="white">White</el-checkbox-button>
           <el-checkbox-button label="stereo">Stereo</el-checkbox-button>
           <el-checkbox-button label="phase">Phase</el-checkbox-button>
+          <el-tooltip content="20Hz - 20kHz" placement="top">
+            <el-checkbox-button label="sweep">Sweep</el-checkbox-button>
+          </el-tooltip>
           <el-tooltip :content="config.audio.fileName" placement="top">
             <el-checkbox-button label="file">File</el-checkbox-button>
           </el-tooltip>
@@ -92,6 +95,7 @@
     <audio id="pink" />
     <audio id="white" />
     <audio id="tone" />
+    <audio id="sweep" />
     <audio :src="config.audio.voiceData" id="voice" />
     <audio :src="config.audio.textData" id="text" />
     <audio :src="config.audio.fileData" id="file" />
@@ -177,6 +181,7 @@ let loadingInstance
       document.getElementById('phase').src = require("@/assets/audio/phase.wav")
       document.getElementById('tone').src = require("@/assets/audio/tone.wav")
       document.getElementById('white').src = require("@/assets/audio/white.wav")
+      document.getElementById('sweep').src = require("@/assets/audio/sweep.wav")
 
       window.ipcRenderer.receive('exportCardCompleted', function(msg) {
         if (msg) {
@@ -203,6 +208,7 @@ let loadingInstance
             document.getElementById('pink').setSinkId(val.audio.deviceId)
             document.getElementById('white').setSinkId(val.audio.deviceId)
             document.getElementById('tone').setSinkId(val.audio.deviceId)
+            document.getElementById('sweep').setSinkId(val.audio.deviceId)
             document.getElementById('voice').setSinkId(val.audio.deviceId)
             document.getElementById('text').setSinkId(val.audio.deviceId)
             document.getElementById('file').setSinkId(val.audio.deviceId)
@@ -312,6 +318,7 @@ let loadingInstance
         this.stopFile('white')
         this.stopFile('pink')
         this.stopFile('phase')
+        this.stopFile('sweep')
         this.stopFile('stereo')
         this.stopFile('file')
         this.stopFile('text')
