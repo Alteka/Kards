@@ -446,7 +446,8 @@ function setupNewTestCardWindow() {
 
 function closeTestCard() {
   log.info('Closing test card')
-  testCardWindow.close()
+  testCardWindow.destroy()
+  testCardWindow = null
   testCardWindowScreen = null
   clearTimeout(testCardWindowResizeTimer)
 }
