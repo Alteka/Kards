@@ -281,7 +281,7 @@ export default {
       
       let pillarLeft = document.getElementById("pillarLeft")
       let pillarRight = document.getElementById("pillarRight")
-      let circle = document.getElementById("clipCircle")
+      let circle = document.getElementById("clip-me")
       let customLogo = document.getElementById("customLogo")
       let circleWidth = circle.getBoundingClientRect().width
 
