@@ -150,6 +150,7 @@ ipcMain.on('config', (_, arg) => {
   rest.updateConfig(config)
   store.set('KardsConfig', config)
   touchBar.setConfig(config)
+  updateScreens()
 })
 ipcMain.on('getConfigTestCard', () => {
   testCardWindow.webContents.send('config', config)
@@ -269,6 +270,7 @@ function updateScreens() {
     if (screens[s].displayFrequency == 29) {
       screens[s].displayFrequency = 29.97
     }
+    screens[s].displayFrequency = Math.round(screens[s].displayFrequency*100)/100 // force elegant rounding 
   }
 
   if (controlWindow != null) {
