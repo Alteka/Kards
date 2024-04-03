@@ -23,6 +23,7 @@ The app is based around Electron to create and manage the windows. The content i
 # Clone the repo into a folder
 # cd into the folder and run the below
 # You'll need to have node.js as well as Yarn package manager
+# Currently building with node 16.20.2
 
 # install dependencies
 yarn install
