@@ -15,7 +15,8 @@
     "height": 1080,
     "top": 0,
     "left": 0,
-    "bounds": false
+    "bounds": false,
+    "rotate": 0
 },
 "window": {
     "width": 1280,

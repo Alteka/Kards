@@ -153,6 +153,18 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
         } else {
           r.border = 'none'
         }
+
+        if (this.config.notFilledCard.rotate == 90) {
+          r.transform = 'rotate(90deg) translateY(-100%)'
+          r.transformOrigin = 'top left'
+        } else if (this.config.notFilledCard.rotate == 180) {
+          r.transform = 'rotate(180deg)'
+          // r.transformOrigin = '50% 50%'
+        } else if (this.config.notFilledCard.rotate == 270) {
+          r.transform = 'rotate(270deg) translateX(-100%)'
+          r.transformOrigin = 'top left'
+        }
+
         return r;
       }
     },

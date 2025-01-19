@@ -143,6 +143,24 @@
         </el-col>
       </el-row>
 
+      <el-row v-if="!config.fullsize && config.screen!=0"> 
+      <el-col :span="2"></el-col>
+      <el-col :span="4">
+        <el-form-item label="Card Rotation"> 
+        </el-form-item>
+      </el-col>
+      <el-col :span="16">
+          <el-form-item label="" label-width="80px">
+            <el-radio-group v-model="config.notFilledCard.rotate" size="mini">
+              <el-radio-button :label="0">0º</el-radio-button>
+              <el-radio-button :label="90">90º</el-radio-button>
+              <el-radio-button :label="180">180º</el-radio-button>
+              <el-radio-button :label="270">270º</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+      </el-col>
+      </el-row>
+
       <control-menu v-model="config" :darkMode="darkMode"></control-menu>
 
       </el-form>
