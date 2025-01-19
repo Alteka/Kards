@@ -16,7 +16,7 @@ const mime = require('mime-types')
 const touchBar = require('./touchBar.js')
 const fs = require('fs')
 const say = require('say')
-var sizeOf = require('image-size')
+// var sizeOf = require('image-size')
 const wallpaper = require('wallpaper')
 import altekaMenu from './menu'
 import oscServer from './osc'
@@ -643,7 +643,7 @@ ipcMain.on('saveAsPNG', (_, arg) => {
           log.error('Couldnt save file: ', err)
           controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
         } else {
-          let dims = sizeOf(result.filePath)
+          // let dims = sizeOf(result.filePath)
           controlWindow.webContents.send('exportCardCompleted')
         }
       })
