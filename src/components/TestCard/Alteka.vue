@@ -60,12 +60,6 @@
           <clipPath id="clipSmallCircle">
             <circle cx="0" cy="0" r="25" />
           </clipPath>
-          <transition name="fade">
-            <g v-if="config.animated" id="spinny-radar" >
-                <animateTransform attributeName="transform" type="rotate" dur="4s" from="0" to="360" repeatCount="indefinite"/>
-                <path d='M0,0 L25,0 A25,25 0 0,1 24.9,2.18z' />
-            </g>
-          </transition>
           <linearGradient id="vAlphaB" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" style="stop-color:rgb(0 0 0);stop-opacity:0" />
             <stop offset="100%" style="stop-color:rgb(0 0 0);stop-opacity:1" />
@@ -217,7 +211,7 @@ export default {
   props: {
     config: Object,
     info: Object,
-    borderSize: Number
+    borderSize: Number 
   },
   watch: {
       config: {
@@ -236,6 +230,19 @@ export default {
          },
         deep: true
       },
+      borderSize: {
+        handler: function () { 
+          let vm = this
+          setTimeout(function(){
+            let size = {
+              width: document.getElementById("alteka").getBoundingClientRect().width,
+              height: document.getElementById("alteka").getBoundingClientRect().height
+            }
+            vm.handleResize(size)
+          }, 250)
+         },
+        deep: true
+      }
     },
   computed: {
     text: function() {
@@ -276,7 +283,7 @@ export default {
       return 0.2126 * r + 0.7152 * g + 0.0722 * b
     },
     handleResize: function({ width, height }) {
-      console.log('Handle Resize for ', width, height)
+      // console.log('Alteka Kard - Handle Resize for ', width, height)
       let ratio = width/height
       
       let pillarLeft = document.getElementById("pillarLeft")
@@ -295,28 +302,30 @@ export default {
       let long = width // the long edge of the card
       let short = height // the short edge of the card
       let aspect = ratio // like ratio but doesn't care about orientation
+let gridSize = this.borderSize * 2
+
       if (ratio < 1) {
         short = width
         long = height
         aspect = 1/ratio
       }
-      console.log(aspect)
+      // console.log(aspect)
 
       // core pillar size based on size and shape of card
-      let pillarShort = Math.round((long / 50) * aspect * 0.04) * 50 - 1;
-      if (pillarShort < 50) pillarShort = 50; // minimum short edge of 50px
-      let pillarLong = (Math.floor((short / 100) * 0.66)) * 100 - 1;
+      let pillarShort = Math.round((long / gridSize) * aspect * 0.04) * gridSize - 1;
+      if (pillarShort < gridSize) pillarShort = gridSize; // minimum short edge of 50px
+      let pillarLong = (Math.floor((short / (gridSize*2)) * 0.66)) * (gridSize*2) - 1;
 
-      if (aspect < 1.4) pillarLong -= 100 // avoid pillars being under the circles in cards that are nearly square
+      if (aspect < 1.4) pillarLong -= (gridSize*2) // avoid pillars being under the circles in cards that are nearly square
 
-      if (pillarShort > 300) pillarShort = 300; // limit short edge to 300px
+      if (pillarShort > (gridSize*6)) pillarShort = (gridSize*6); // limit short edge to 300px
 
       // gap is pixels from edge of circle to inside edge of pillar
       let gap = 0
-      if (Math.round(pillarShort/50) > 1) gap = 50
-      if (Math.round(pillarShort/50) > 2) gap = 100
-      if (gap == 0 && aspect > 1.8) gap = 50
-      if (gap >= 50 && circleWidth%50 < 15) gap -= 50
+      if (Math.round(pillarShort/gridSize) > 1) gap = gridSize
+      if (Math.round(pillarShort/gridSize) > 2) gap = 2*gridSize
+      if (gap == 0 && aspect > 1.8) gap = gridSize
+      if (gap >= gridSize && circleWidth%gridSize < 15) gap -= gridSize
 
       // now apply the pillar size and gap to the pillar objects
       if (ratio >= 1) {
@@ -332,7 +341,7 @@ export default {
         pillarRight.style.top = 'calc(50% + 0.5px)'
         pillarRight.style.transform = 'translateY(-50%)'
         
-        let left = (Math.ceil(circleWidth / 2 / 50) * 50 + width / 2) + gap
+        let left = (Math.ceil(circleWidth / 2 / gridSize) * gridSize + width / 2) + gap
         pillarRight.style.left = left + 1 + "px"
         pillarLeft.style.left = width - left - pillarShort + "px"
       } else {
@@ -347,15 +356,10 @@ export default {
         pillarLeft.style.transform = 'translateX(-50%)'
         pillarRight.style.transform = 'translateX(-50%)'
 
-        let leftBottom = (height/2) + (Math.ceil(circleWidth / 2 / 50) * 50) + gap
+        let leftBottom = (height/2) + (Math.ceil(circleWidth / 2 / gridSize) * gridSize) + gap
         pillarLeft.style.bottom = leftBottom + 'px'
         pillarRight.style.top = leftBottom + 1 + 'px'
       }
-
-      // console.log('gap', gap)
-      // console.log('pillarshort', pillarShort)
-      // console.log('pillarLong', pillarLong)
-      // console.log('circleWidth + %', circleWidth, circleWidth%50)
     }
   },
   mounted: function() {
@@ -389,18 +393,11 @@ export default {
   outline: 2px solid white;
   outline-offset: -2px;
   float: left;
-  background-size: 50px 50px;
+  background-size: calc(2*var(--border-size)) calc(2*var(--border-size));
   background-image: linear-gradient(to right, #666 1px, transparent 1px),
     linear-gradient(to bottom, #666 1px, transparent 1px);
 }
-@media screen and (max-height: 340px), (max-width: 340px) {
-  .gridQuadrant {
-    background-size: 25px 25px;
-  }
-  .pillar {
-    visibility: hidden;
-  }
-}
+
 .gridtopleft {
     background-position: bottom right;
   }
@@ -648,11 +645,9 @@ export default {
   left: 0;
 }
 .cornerCircles div {
-  /* these are a ratio of 9:16 to each other to make the scaling work sensibly */
   width: 14%;
   height: 25%;
   position: absolute;
-  /* border: 2px solid red; */
 }
 
 .circleTopLeft {
