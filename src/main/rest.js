@@ -1,11 +1,11 @@
-const { ipcMain, dialog } = require('electron')
-const express = require('express')
-var bodyParser = require('body-parser')
-const log = require('electron-log')
-const EventEmitter = require('events')
-const { hostname } = require('os')
+import { dialog, ipcMain } from 'electron'
+import express from 'express'
+import bodyParser from 'body-parser'
+import log from 'electron-log'
+import EventEmitter from 'events'
+import { hostname } from 'os'
 
-class restServer extends EventEmitter {
+export class RESTServer extends EventEmitter {
   constructor() {
     super()
 
@@ -156,5 +156,3 @@ class restServer extends EventEmitter {
     return this.mergeDeep(target, ...sources)
   }
 }
-
-export default restServer

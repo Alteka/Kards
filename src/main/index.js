@@ -19,8 +19,8 @@ import fs from 'fs'
 import say from 'say'
 import wallpaper from 'wallpaper'
 import { AltekaMenu } from './menu'
-import oscServer from './osc'
-import restServer from './rest'
+import { OSCServer } from './osc'
+import { RESTServer } from './rest'
 
 const version = require('../../package.json').version
 
@@ -565,7 +565,7 @@ let testCardWindowResizeTimer
 //========================//
 //    Setup OSC Server    //
 //========================//
-let osc = new oscServer()
+let osc = new OSCServer()
 app.on('ready', function () {
   osc.setup(bonjourInstance)
 })
@@ -587,7 +587,7 @@ osc.on('audioFile', (filePath) => {
   }
 })
 
-let rest = new restServer()
+let rest = new RESTServer()
 app.on('ready', function () {
   rest.setup(bonjourInstance)
 })

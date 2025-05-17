@@ -4,7 +4,7 @@ import log from 'electron-log'
 import EventEmitter from 'events'
 import { hostname } from 'os'
 
-class oscServer extends EventEmitter {
+export class OSCServer extends EventEmitter {
   constructor() {
     super()
 
@@ -517,5 +517,3 @@ class oscServer extends EventEmitter {
     this.screens = s
   }
 }
-
-export default oscServer

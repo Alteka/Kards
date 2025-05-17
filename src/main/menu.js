@@ -1,5 +1,5 @@
-const { app, Menu, MenuItem, ipcMain, shell } = require('electron')
-const EventEmitter = require('events')
+import { app, ipcMain, Menu, MenuItem, shell } from 'electron'
+import EventEmitter from 'events'
 
 export class AltekaMenu extends EventEmitter {
   constructor() {
