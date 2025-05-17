@@ -150,18 +150,18 @@
     <el-drawer v-model="drawerAudio" :with-header="false" direction="btt" size="150px">
       <el-row class="drawerContent">
         <el-checkbox-group v-model="config.audio.options" size="small" style="margin: auto">
-          <el-checkbox-button label="voice">Name</el-checkbox-button>
-          <el-checkbox-button label="text">Text</el-checkbox-button>
-          <el-checkbox-button label="tone">Tone</el-checkbox-button>
-          <el-checkbox-button label="pink">Pink</el-checkbox-button>
-          <el-checkbox-button label="white">White</el-checkbox-button>
-          <el-checkbox-button label="stereo">Stereo</el-checkbox-button>
-          <el-checkbox-button label="phase">Phase</el-checkbox-button>
+          <el-checkbox-button value="voice">Name</el-checkbox-button>
+          <el-checkbox-button value="text">Text</el-checkbox-button>
+          <el-checkbox-button value="tone">Tone</el-checkbox-button>
+          <el-checkbox-button value="pink">Pink</el-checkbox-button>
+          <el-checkbox-button value="white">White</el-checkbox-button>
+          <el-checkbox-button value="stereo">Stereo</el-checkbox-button>
+          <el-checkbox-button value="phase">Phase</el-checkbox-button>
           <el-tooltip content="20Hz - 20kHz" placement="top">
-            <el-checkbox-button label="sweep">Sweep</el-checkbox-button>
+            <el-checkbox-button value="sweep">Sweep</el-checkbox-button>
           </el-tooltip>
           <el-tooltip :content="config.audio.fileName" placement="top">
-            <el-checkbox-button label="file">File</el-checkbox-button>
+            <el-checkbox-button value="file">File</el-checkbox-button>
           </el-tooltip>
         </el-checkbox-group>
       </el-row>
