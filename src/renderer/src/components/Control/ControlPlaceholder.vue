@@ -41,42 +41,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object, // v-model object
-    colors: Array
-  },
-  data: function () {
-    return {
-      icons: [
-        'fa-desktop',
-        'fa-phone',
-        'fa-chart-line',
-        'fa-image',
-        'fa-file-powerpoint',
-        'fa-camera',
-        'fa-film',
-        'fa-microphone',
-        'fa-clock'
-      ],
-      smallInput: {
-        height: '24px',
-        fontSize: '80%'
-      }
-    }
-  },
-  computed: {
-    placeholder: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  }
+<script setup>
+defineProps({
+  colors: Array
+})
+
+const placeholder = defineModel({
+  type: Object
+})
+
+const icons = [
+  'fa-desktop',
+  'fa-phone',
+  'fa-chart-line',
+  'fa-image',
+  'fa-file-powerpoint',
+  'fa-camera',
+  'fa-film',
+  'fa-microphone',
+  'fa-clock'
+]
+
+const smallInput = {
+  height: '24px',
+  fontSize: '80%'
 }
 </script>
-
-<style scoped></style>

@@ -132,122 +132,99 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object // v-model object
-  },
-  data: function () {
-    return {
-      screens: [],
-      primaryScreen: null,
-      check: '\uf00c',
-      viewBox: '0 0 0 0'
+<script setup>
+import { onMounted, ref, watch } from 'vue'
+
+const config = defineModel({ type: Object })
+
+const screens = ref([])
+const primaryScreen = ref(null)
+const viewBox = ref('0 0 0 0')
+
+onMounted(() => {
+  window.ipcRenderer.receive('screens', function (data) {
+    screens.value = data.all
+    primaryScreen.value = data.primary
+
+    updateScreens()
+  })
+  window.ipcRenderer.send('getScreens')
+})
+
+function updateScreens() {
+  let left = 0
+  let right = 0
+  let top = 0
+  let bottom = 0
+
+  for (const scr of screens.value) {
+    if (scr.bounds.x < left) {
+      left = scr.bounds.x
     }
-  },
-  computed: {
-    config: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
+    if (scr.bounds.y < top) {
+      top = scr.bounds.y
     }
-  },
-  watch: {
-    config: {
-      handler: function () {
-        this.setOutputToMatchScreen()
-      },
-      deep: true
+
+    if (scr.bounds.x + scr.bounds.width > right) {
+      right = scr.bounds.x + scr.bounds.width
     }
-  },
-  mounted: function () {
-    let vm = this
-    window.ipcRenderer.receive('screens', function (data) {
-      vm.screens = data.all
-      vm.primaryScreen = data.primary
 
-      vm.updateScreens()
-    })
-    window.ipcRenderer.send('getScreens')
-  },
-  methods: {
-    updateScreens: function () {
-      let left = 0
-      let right = 0
-      let top = 0
-      let bottom = 0
+    if (scr.bounds.y + scr.bounds.height > bottom) {
+      bottom = scr.bounds.y + scr.bounds.height
+    }
+    scr.portrait = scr.bounds.width < scr.bounds.height ? true : false
+    scr.description = scr.size.width + ' x ' + scr.size.height
 
-      for (const scr of this.screens) {
-        if (scr.bounds.x < left) {
-          left = scr.bounds.x
-        }
-        if (scr.bounds.y < top) {
-          top = scr.bounds.y
-        }
+    if (scr.internal || scr.id == primaryScreen.value) {
+      scr.icon = '\uf109'
+      scr.primary = true
+    } else {
+      scr.icon = '\uf108'
+      scr.primary = false
+    }
+  }
 
-        if (scr.bounds.x + scr.bounds.width > right) {
-          right = scr.bounds.x + scr.bounds.width
-        }
+  viewBox.value =
+    left -
+    25 +
+    ' ' +
+    (top - 25) +
+    ' ' +
+    (Math.abs(right - left) + 50) +
+    ' ' +
+    (Math.abs(bottom - top) + 50)
+  setOutputToMatchScreen()
+}
 
-        if (scr.bounds.y + scr.bounds.height > bottom) {
-          bottom = scr.bounds.y + scr.bounds.height
-        }
-        scr.portrait = scr.bounds.width < scr.bounds.height ? true : false
-        scr.description = scr.size.width + ' x ' + scr.size.height
+function selectScreen(id) {
+  if (config.value.windowed && config.value.visible && config.value.screen != id) {
+    window.ipcRenderer.send('moveWindowTo', id)
+  }
+  config.value.screen = id
+}
 
-        if (scr.internal || scr.id == this.primaryScreen) {
-          scr.icon = '\uf109'
-          scr.primary = true
-        } else {
-          scr.icon = '\uf108'
-          scr.primary = false
-        }
-      }
-
-      this.viewBox =
-        left -
-        25 +
-        ' ' +
-        (top - 25) +
-        ' ' +
-        (Math.abs(right - left) + 50) +
-        ' ' +
-        (Math.abs(bottom - top) + 50)
-      this.setOutputToMatchScreen()
-    },
-    selectScreen: function (id) {
-      if (this.config.windowed && this.config.visible && this.config.screen != id) {
-        window.ipcRenderer.send('moveWindowTo', id)
-      }
-      this.config.screen = id
-    },
-    setOutputToMatchScreen: function () {
-      if (!this.config.windowed && this.config.fullsize) {
-        for (const scr of this.screens) {
-          if (scr.id == this.config.screen) {
-            this.config.notFilledCard.top = 0
-            this.config.notFilledCard.left = 0
-            this.config.notFilledCard.width = scr.size.width
-            this.config.notFilledCard.height = scr.size.height
-          }
-        }
-      }
-      let exists = false
-      for (const scr of this.screens) {
-        if (scr.id == this.config.screen) {
-          exists = true
-        }
-      }
-      if (!exists) {
-        console.log('Update screen as selected screen doesnt exist...', this.primaryScreen)
-        this.config.screen = this.primaryScreen
+function setOutputToMatchScreen() {
+  if (!config.value.windowed && config.value.fullsize) {
+    for (const scr of screens.value) {
+      if (scr.id == config.value.screen) {
+        config.value.notFilledCard.top = 0
+        config.value.notFilledCard.left = 0
+        config.value.notFilledCard.width = scr.size.width
+        config.value.notFilledCard.height = scr.size.height
       }
     }
   }
+  let exists = false
+  for (const scr of screens.value) {
+    if (scr.id == config.value.screen) {
+      exists = true
+    }
+  }
+  if (!exists) {
+    console.log('Update screen as selected screen doesnt exist...', primaryScreen.value)
+    config.value.screen = primaryScreen.value
+  }
 }
-</script>
 
-<style scoped></style>
+watch(config, setOutputToMatchScreen, { deep: true })
+</script>

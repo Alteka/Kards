@@ -41,22 +41,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object // v-model object
-  },
-  computed: {
-    ramp: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  }
-}
+<script setup>
+const ramp = defineModel({ type: Object })
 </script>
-
-<style scoped></style>

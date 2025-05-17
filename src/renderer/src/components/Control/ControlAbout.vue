@@ -55,37 +55,36 @@
   </el-dialog>
 </template>
 
-<script>
-export default {
-  props: {
-    darkMode: Boolean
-  },
-  data: function () {
-    return {
-      info: {}
-    }
-  },
-  mounted: function () {
-    let vm = this
-    window.ipcRenderer.receive('aboutDialogInfo', function (i) {
-      vm.info = i
-    })
-    window.ipcRenderer.send('aboutDialogInfo')
-  },
-  methods: {
-    openSite: function () {
-      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/')
-    },
-    openHelp: function () {
-      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
-    },
-    openGitHub: function () {
-      window.ipcRenderer.send('openUrl', 'https://github.com/Alteka/Kards')
-    },
-    openDonate: function () {
-      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/donateKards')
-    }
-  }
+<script setup>
+import { onMounted, ref } from 'vue'
+
+defineProps({
+  darkMode: Boolean
+})
+
+const info = ref({})
+
+onMounted(() => {
+  window.ipcRenderer.receive('aboutDialogInfo', function (i) {
+    info.value = i
+  })
+  window.ipcRenderer.send('aboutDialogInfo')
+})
+
+function openSite() {
+  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/')
+}
+
+function openHelp() {
+  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
+}
+
+function openGitHub() {
+  window.ipcRenderer.send('openUrl', 'https://github.com/Alteka/Kards')
+}
+
+function openDonate() {
+  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/donateKards')
 }
 </script>
 

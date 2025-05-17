@@ -24,50 +24,39 @@
           ><br /><i class="fas fa-exclamation-circle"></i> Video rate does not match screen</span
         >
         <span v-if="audioSync.rate > 60" class="audioSyncWarning" style="float: right"
-          ><i class="fas fa-exclamation-circle"></i> May require high performace computer</span
+          ><i class="fas fa-exclamation-circle"></i> May require high performance computer</span
         >
       </el-form-item>
     </el-row>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object,
-    displayFrequency: Number
-  },
-  data: function () {
-    return {
-      audioDevices: [],
-      rates: [24, 25, 29.97, 30, 50, 59.94, 60, 100, 120]
-    }
-  },
-  computed: {
-    audioSync: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  },
-  mounted: function () {
-    this.updateDevices()
-    setInterval(this.updateDevices, 5000)
-  },
-  methods: {
-    updateDevices: function () {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        this.audioDevices = devices
-          .filter((device) => device.kind === 'audiooutput')
-          .filter((device) => device.deviceId != 'communications')
-      })
-      window.ipcRenderer.send('audioDevices', JSON.parse(JSON.stringify(this.audioDevices)))
-    }
-  }
+<script setup>
+import { onMounted, ref } from 'vue'
+
+defineProps({
+  displayFrequency: Number
+})
+
+const audioSync = defineModel({ type: Object })
+
+const audioDevices = ref([])
+
+const rates = [24, 25, 29.97, 30, 50, 59.94, 60, 100, 120]
+
+function updateDevices() {
+  navigator.mediaDevices.enumerateDevices().then((devices) => {
+    audioDevices.value = devices
+      .filter((device) => device.kind === 'audiooutput')
+      .filter((device) => device.deviceId != 'communications')
+  })
+  window.ipcRenderer.send('audioDevices', JSON.parse(JSON.stringify(audioDevices.value)))
 }
+
+onMounted(() => {
+  updateDevices()
+  setInterval(updateDevices, 5000)
+})
 </script>
 
 <style scoped>

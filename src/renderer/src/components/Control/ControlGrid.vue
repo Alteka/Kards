@@ -39,23 +39,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object,
-    colors: Array
-  },
-  computed: {
-    grid: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  }
-}
-</script>
+<script setup>
+defineProps({
+  colors: Array
+})
 
-<style scoped></style>
+const grid = defineModel({ type: Object })
+</script>

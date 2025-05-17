@@ -59,37 +59,19 @@
   </div>
 </template>
 
-<script>
-// import { ref } from 'vue'
-export default {
-  props: {
-    modelValue: Object,
-    colors: Array
-  },
-  // data: function() {
-  //   return {
-  //     predefineColors: ref(this.colors)
-  //   }
-  // },
-  computed: {
-    alteka: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  },
-  methods: {
-    selectImage: function () {
-      window.ipcRenderer.send('selectImage')
-    },
-    clearImage: function () {
-      this.alteka.logo = ''
-    }
-  }
+<script setup>
+const alteka = defineModel({
+  type: Object
+})
+
+defineProps({
+  colors: Array
+})
+
+function selectImage() {
+  window.ipcRenderer.send('selectImage')
+}
+function clearImage() {
+  alteka.value.logo = ''
 }
 </script>
-
-<style scoped></style>

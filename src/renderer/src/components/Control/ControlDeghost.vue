@@ -27,22 +27,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object
-  },
-  computed: {
-    deghost: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  }
-}
+<script setup>
+const deghost = defineModel({ type: Object })
 </script>
-
-<style scoped></style>

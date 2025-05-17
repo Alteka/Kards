@@ -37,23 +37,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: Object,
-    colors: Array
-  },
-  computed: {
-    led: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  }
-}
+<script setup>
+defineProps({ colors: Array })
+const led = defineModel({ type: Object })
 </script>
-
-<style scoped></style>
