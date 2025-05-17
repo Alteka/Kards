@@ -206,10 +206,10 @@
         <el-col :span="16">
           <el-form-item label="" label-width="80px">
             <el-radio-group v-model="config.notFilledCard.rotate" size="small">
-              <el-radio-button :label="0">0º</el-radio-button>
-              <el-radio-button :label="90">90º</el-radio-button>
-              <el-radio-button :label="180">180º</el-radio-button>
-              <el-radio-button :label="270">270º</el-radio-button>
+              <el-radio-button :value="0">0º</el-radio-button>
+              <el-radio-button :value="90">90º</el-radio-button>
+              <el-radio-button :value="180">180º</el-radio-button>
+              <el-radio-button :value="270">270º</el-radio-button>
             </el-radio-group>
           </el-form-item>
         </el-col>

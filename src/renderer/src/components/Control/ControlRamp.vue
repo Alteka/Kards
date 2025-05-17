@@ -21,10 +21,10 @@
       <el-col :span="18">
         <el-form-item label="Direction">
           <el-radio-group v-model="ramp.direction" size="small">
-            <el-radio-button label="Horizontal" />
-            <el-radio-button label="Vertical" />
-            <el-radio-button label="Diagonal" />
-            <el-radio-button label="Radial" />
+            <el-radio-button value="Horizontal" />
+            <el-radio-button value="Vertical" />
+            <el-radio-button value="Diagonal" />
+            <el-radio-button value="Radial" />
           </el-radio-group>
         </el-form-item>
       </el-col>

@@ -15,7 +15,7 @@
     <el-row>
       <el-form-item label="Rate FPS" label-width="140px">
         <el-radio-group v-model="audioSync.rate" size="small">
-          <el-radio-button v-for="item in rates" :key="item" :label="item"
+          <el-radio-button v-for="item in rates" :key="item" :value="item"
             ><i v-if="item == displayFrequency" class="fas fa-star" style="font-size: 90%"></i>
             {{ item }}</el-radio-button
           >

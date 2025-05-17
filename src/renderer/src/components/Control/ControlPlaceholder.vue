@@ -21,11 +21,11 @@
     <el-row style="position: relative; top: -10px; left: 10px">
       <el-form-item label="Icon" label-width="60px">
         <el-radio-group v-model="placeholder.icon" size="small">
-          <el-radio-button label="">Blank</el-radio-button>
-          <el-radio-button v-for="icon in icons" :key="icon" :label="icon"
+          <el-radio-button value="">Blank</el-radio-button>
+          <el-radio-button v-for="icon in icons" :key="icon" :value="icon"
             ><i class="fas" :class="icon"></i
           ></el-radio-button>
-          <el-radio-button label="custom">Other</el-radio-button>
+          <el-radio-button value="custom">Other</el-radio-button>
         </el-radio-group>
       </el-form-item>
     </el-row>

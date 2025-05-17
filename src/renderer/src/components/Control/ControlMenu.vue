@@ -224,14 +224,14 @@
             size="medium"
             :disabled="config.cardType == 'audioSync' || config.cardType == 'deghost'"
           >
-            <el-radio-button label="card">Test Card</el-radio-button>
+            <el-radio-button value="card">Test Card</el-radio-button>
             <el-tooltip
               :disabled="!config.fullsize"
               content="Disable 'Fill Output' and 'Windowed' to save test card within larger canvas"
               placement="bottom"
               :open-delay="500"
             >
-              <el-radio-button label="canvas" :disabled="config.fullsize"
+              <el-radio-button value="canvas" :disabled="config.fullsize"
                 >Whole Canvas</el-radio-button
               >
             </el-tooltip>
@@ -243,8 +243,8 @@
             size="medium"
             :disabled="config.cardType == 'audioSync' || config.cardType == 'deghost'"
           >
-            <el-radio-button label="file">Save to File</el-radio-button>
-            <el-radio-button label="wallpaper">Set Wallpaper</el-radio-button>
+            <el-radio-button value="file">Save to File</el-radio-button>
+            <el-radio-button value="wallpaper">Set Wallpaper</el-radio-button>
           </el-radio-group>
         </el-col>
         <el-col :span="3">
