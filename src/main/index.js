@@ -2,7 +2,7 @@ import { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeThe
 import { optimizer, is } from '@electron-toolkit/utils'
 import defaultConfig from '../renderer/src/defaultConfig.json'
 import { installExtension, VUEJS_DEVTOOLS_BETA } from 'electron-devtools-installer'
-import compareVersions from 'compare-versions'
+import { compareVersions } from 'compare-versions'
 
 import log from 'electron-log'
 import { hostname, networkInterfaces } from 'os'
