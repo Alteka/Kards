@@ -39,10 +39,12 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  colors: Array
-})
+<script setup lang="ts">
+import type { Grid } from '@renderer/config'
 
-const grid = defineModel({ type: Object })
+defineProps<{
+  colors: string[]
+}>()
+
+const grid = defineModel<Grid>()
 </script>

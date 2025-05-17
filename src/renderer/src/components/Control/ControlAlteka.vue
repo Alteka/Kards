@@ -59,10 +59,10 @@
   </div>
 </template>
 
-<script setup>
-const alteka = defineModel({
-  type: Object
-})
+<script setup lang="ts">
+import type { Alteka } from '@renderer/config'
+
+const alteka = defineModel<Alteka>({ required: true })
 
 defineProps({
   colors: Array
@@ -71,6 +71,7 @@ defineProps({
 function selectImage() {
   window.ipcRenderer.send('selectImage')
 }
+
 function clearImage() {
   alteka.value.logo = ''
 }

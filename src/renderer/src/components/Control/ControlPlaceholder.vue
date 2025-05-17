@@ -41,14 +41,12 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  colors: Array
-})
+<script setup lang="ts">
+import type { Placeholder } from '@renderer/config'
 
-const placeholder = defineModel({
-  type: Object
-})
+defineProps<{ colors: string[] }>()
+
+const placeholder = defineModel<Placeholder>()
 
 const icons = [
   'fa-desktop',

@@ -16,11 +16,11 @@
       <el-form-item label="Rate FPS" label-width="140px">
         <el-radio-group v-model="audioSync.rate" size="small">
           <el-radio-button v-for="item in rates" :key="item" :value="item"
-            ><i v-if="item == displayFrequency" class="fas fa-star" style="font-size: 90%"></i>
+            ><i v-if="item === displayFrequency" class="fas fa-star" style="font-size: 90%"></i>
             {{ item }}</el-radio-button
           >
         </el-radio-group>
-        <span v-if="audioSync.rate != displayFrequency" class="audioSyncWarning"
+        <span v-if="audioSync.rate !== displayFrequency" class="audioSyncWarning"
           ><br /><i class="fas fa-exclamation-circle"></i> Video rate does not match screen</span
         >
         <span v-if="audioSync.rate > 60" class="audioSyncWarning" style="float: right"
@@ -31,16 +31,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import type { AudioSync } from '@renderer/config'
 
-defineProps({
-  displayFrequency: Number
-})
+defineProps<{ displayFrequency: number }>()
 
-const audioSync = defineModel({ type: Object })
+const audioSync = defineModel<AudioSync>({ required: true })
 
-const audioDevices = ref([])
+const audioDevices = ref<MediaDeviceInfo[]>([])
 
 const rates = [24, 25, 29.97, 30, 50, 59.94, 60, 100, 120]
 

@@ -132,10 +132,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
+import type { Config } from '@renderer/config'
 
-const config = defineModel({ type: Object })
+const config = defineModel<Config>()
 
 const screens = ref([])
 const primaryScreen = ref(null)

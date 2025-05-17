@@ -62,12 +62,13 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
+import type { Config } from '@renderer/config'
 
-const showShareDialog = defineModel({ type: Boolean })
+const showShareDialog = defineModel<boolean>()
 
-const props = defineProps({ config: Object })
+const props = defineProps<{ config: Config }>()
 
 const hideControls = ref(true)
 const supportedCards = ['alteka', 'bars', 'grid', 'ramp', 'placeholder', 'audioSync']

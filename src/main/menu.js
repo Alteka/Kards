@@ -425,7 +425,7 @@ export class AltekaMenu extends EventEmitter {
                   this.click()
                 }
               },
-          this.config.audio.options.includes('phase')
+          this.config.audio.options.includes('phase') // TODO sweep is missing here
             ? {
                 label: 'Phase',
                 type: 'checkbox',

@@ -55,12 +55,12 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-defineProps({
-  darkMode: Boolean
-})
+defineProps<{
+  darkMode: boolean
+}>()
 
 const info = ref({})
 

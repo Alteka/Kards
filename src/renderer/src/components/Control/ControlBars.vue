@@ -58,10 +58,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { Bars } from '@renderer/config'
+
 const simpleColors = ['Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow', 'White']
 
-const bars = defineModel({
-  type: Object
-})
+const bars = defineModel<Bars>()
 </script>

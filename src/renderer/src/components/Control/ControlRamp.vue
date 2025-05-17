@@ -41,6 +41,8 @@
   </div>
 </template>
 
-<script setup>
-const ramp = defineModel({ type: Object })
+<script setup lang="ts">
+import type { Ramp } from '@renderer/config'
+
+const ramp = defineModel<Ramp>({ required: true })
 </script>

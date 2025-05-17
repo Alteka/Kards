@@ -37,7 +37,11 @@
   </div>
 </template>
 
-<script setup>
-defineProps({ colors: Array })
-const led = defineModel({ type: Object })
+<script setup lang="ts">
+import type { LED } from '@renderer/config'
+
+defineProps<{
+  colors: string[]
+}>()
+const led = defineModel<LED>()
 </script>

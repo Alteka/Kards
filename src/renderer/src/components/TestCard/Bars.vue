@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Swatch from './Swatch.vue'
+import Swatch from './ColorSwatch.vue'
 import InfoCircle from './InfoCircle.vue'
 export default {
   name: 'BarsSimpleTestCard',

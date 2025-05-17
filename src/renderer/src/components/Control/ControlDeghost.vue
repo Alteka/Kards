@@ -27,6 +27,8 @@
   </div>
 </template>
 
-<script setup>
-const deghost = defineModel({ type: Object })
+<script setup lang="ts">
+import type { Deghost } from '@renderer/config'
+
+const deghost = defineModel<Deghost>({ required: true })
 </script>

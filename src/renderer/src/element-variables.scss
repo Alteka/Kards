@@ -5,31 +5,29 @@ For example, to overwrite the theme color:
 */
 $--color-primary: #6ab42f;
 
-
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'white': #ffffff,
     'black': #000000,
     'primary': (
-      'base': #6ab42f,
+      'base': #6ab42f
     ),
     'success': (
-      'base': #6ab42f,
+      'base': #6ab42f
     ),
     'warning': (
-      'base': #e6a23c,
+      'base': #e6a23c
     ),
     'danger': (
-      'base': #f56c6c,
+      'base': #f56c6c
     ),
     'error': (
-      'base': #f56c6c,
+      'base': #f56c6c
     ),
     'info': (
-      'base': #909399,
-    ),
+      'base': #909399
+    )
   )
 );
 
-@use "element-plus/theme-chalk/src/index.scss" as *;
-
+@use 'element-plus/theme-chalk/src/index.scss' as *;
