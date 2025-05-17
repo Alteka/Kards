@@ -1,6 +1,6 @@
-import {TouchBar} from "electron";
+import { TouchBar } from 'electron'
 
-const {TouchBarButton} = TouchBar
+const { TouchBarButton } = TouchBar
 
 let config = {}
 let window = null
@@ -38,9 +38,7 @@ const windowedButton = new TouchBarButton({
 })
 
 export const touchBar = new TouchBar({
-  items: [
-    enableButton, showInfoButton, motionButton, windowedButton
-  ]
+  items: [enableButton, showInfoButton, motionButton, windowedButton]
 })
 
 export function setTouchbarConfig(c) {

@@ -1,16 +1,21 @@
 <template>
-    <div id="wrapper" style="position: relative;" :class="{ darkMode : darkMode }">
-
-      <el-form ref="form" :model="config" label-width="120px" size="small">
-
+  <div id="wrapper" style="position: relative" :class="{ darkMode: darkMode }">
+    <el-form ref="form" :model="config" label-width="120px" size="small">
       <control-screen v-model="config"></control-screen>
       <el-divider content-position="center">Select Card Type</el-divider>
 
-      <el-row style="margin-left: 8px; margin-right: 8px;">
-        <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px; width: 100%;">
-
+      <el-row style="margin-left: 8px; margin-right: 8px">
+        <el-tabs
+          v-model="config.cardType"
+          type="border-card"
+          :stretch="true"
+          style="height: 165px; width: 100%"
+        >
           <el-tab-pane label="Alteka" name="alteka">
-            <control-alteka v-model="config.alteka" :colors="config.predefineColors"></control-alteka>
+            <control-alteka
+              v-model="config.alteka"
+              :colors="config.predefineColors"
+            ></control-alteka>
           </el-tab-pane>
 
           <el-tab-pane label="Bars" name="bars">
@@ -26,11 +31,17 @@
           </el-tab-pane>
 
           <el-tab-pane label="Name" name="placeholder">
-            <control-placeholder v-model="config.placeholder" :colors="config.predefineColors"></control-placeholder>
+            <control-placeholder
+              v-model="config.placeholder"
+              :colors="config.predefineColors"
+            ></control-placeholder>
           </el-tab-pane>
 
           <el-tab-pane label="Sync" name="audioSync">
-            <control-audio-sync v-model="config.audioSync" :displayFrequency="displayFrequency"></control-audio-sync>
+            <control-audio-sync
+              v-model="config.audioSync"
+              :display-frequency="displayFrequency"
+            ></control-audio-sync>
           </el-tab-pane>
 
           <el-tab-pane label="DeGhost" name="deghost">
@@ -40,7 +51,6 @@
           <el-tab-pane label="LED" name="led">
             <control-led v-model="config.led" :colors="config.predefineColors"></control-led>
           </el-tab-pane>
-
         </el-tabs>
       </el-row>
 
@@ -53,103 +63,147 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="Show Info"><i class="fas fa-info-circle green"></i>
+          <el-form-item label="Show Info"
+            ><i class="fas fa-info-circle green"></i>
             <el-switch v-model="config.showInfo"></el-switch>
           </el-form-item>
         </el-col>
-      <el-col :span="8">
-          <el-form-item label="Motion"><i class="fas fa-external-link-square-alt fa-rotate-90 green" style="position: relative; top: 1px; margin-right: 5px;"></i>
-            <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'"></el-switch>
+        <el-col :span="8">
+          <el-form-item label="Motion"
+            ><i
+              class="fas fa-external-link-square-alt fa-rotate-90 green"
+              style="position: relative; top: 1px; margin-right: 5px"
+            ></i>
+            <el-switch
+              v-model="config.animated"
+              :disabled="config.cardType == 'audioSync' || config.cardType == 'deghost'"
+            ></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row v-if="config.screen!=0">
+      <el-row v-if="config.screen != 0">
         <el-col :span="8">
-          <el-form-item label="Windowed"><i class="fas fa-window-maximize green"></i>
+          <el-form-item label="Windowed"
+            ><i class="fas fa-window-maximize green"></i>
             <el-switch v-model="config.windowed"></el-switch>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="config.windowed && config.cardType !== 'led'">
+        <el-col v-if="config.windowed && config.cardType !== 'led'" :span="8">
           <el-form-item label="Width" label-width="50px">
-            <el-input-number v-model="config.window.width" controls-position="right" :step="5" :min="48"></el-input-number>
+            <el-input-number
+              v-model="config.window.width"
+              controls-position="right"
+              :step="5"
+              :min="48"
+            ></el-input-number>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="config.windowed && config.cardType !== 'led'">
+        <el-col v-if="config.windowed && config.cardType !== 'led'" :span="8">
           <el-form-item label="Height" label-width="50px">
-            <el-input-number v-model="config.window.height" controls-position="right" :step="5" :min="39"></el-input-number>
+            <el-input-number
+              v-model="config.window.height"
+              controls-position="right"
+              :step="5"
+              :min="39"
+            ></el-input-number>
           </el-form-item>
         </el-col>
-        <el-col :span="16" v-if="config.windowed && config.cardType == 'led'">
+        <el-col v-if="config.windowed && config.cardType == 'led'" :span="16">
           <el-form-item label="Card Size Set by LED: " label-width="225px">
-            <span style="color: #e6a23c;">
-            {{ config.led.columns * config.led.width }} x {{ config.led.rows * config.led.height }} pixels
+            <span style="color: #e6a23c">
+              {{ config.led.columns * config.led.width }} x
+              {{ config.led.rows * config.led.height }} pixels
             </span>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="!config.windowed">
-          <el-form-item label="Fill Output"><i class="fas fa-expand-arrows-alt green"></i>
-            <el-switch v-model="config.fullsize" :disabled="this.config.cardType == 'led'"></el-switch>
+        <el-col v-if="!config.windowed" :span="8">
+          <el-form-item label="Fill Output"
+            ><i class="fas fa-expand-arrows-alt green"></i>
+            <el-switch v-model="config.fullsize" :disabled="config.cardType == 'led'"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item v-if="!config.fullsize" label="Show Bounds"><i class="fas fa-border-style green"></i>
+          <el-form-item v-if="!config.fullsize" label="Show Bounds"
+            ><i class="fas fa-border-style green"></i>
             <el-switch v-model="config.notFilledCard.bounds"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row v-if="!config.fullsize && config.screen!=0">
+      <el-row v-if="!config.fullsize && config.screen != 0">
         <el-col :span="2"></el-col>
         <el-col :span="4">
-          <el-form-item label="Card Size">
+          <el-form-item label="Card Size"> </el-form-item>
+        </el-col>
+        <el-col v-if="config.cardType == 'led'" :span="16">
+          <el-form-item label="Set by LED: " label-width="225px">
+            <span style="color: #e6a23c">
+              {{ config.led.columns * config.led.width }} x
+              {{ config.led.rows * config.led.height }} pixels
+            </span>
           </el-form-item>
         </el-col>
-        <el-col :span="16" v-if="config.cardType == 'led'">
-            <el-form-item label="Set by LED: " label-width="225px">
-              <span style="color: #e6a23c;">
-                {{ config.led.columns * config.led.width }} x {{ config.led.rows * config.led.height }} pixels
-              </span>
-            </el-form-item>
-        </el-col>
-        <el-col :span="8" v-if="config.cardType !== 'led'">
+        <el-col v-if="config.cardType !== 'led'" :span="8">
           <el-form-item label="Width" label-width="80px">
-            <el-input-number v-model="config.notFilledCard.width" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number
+              v-model="config.notFilledCard.width"
+              controls-position="right"
+              :step="5"
+              :min="1"
+            ></el-input-number>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="config.cardType !== 'led'">
+        <el-col v-if="config.cardType !== 'led'" :span="8">
           <el-form-item label="Height" label-width="80px">
-            <el-input-number v-if="config.cardType == 'led'" v-model="this.ledHeight" :disabled="true" controls-position="right"></el-input-number>
-            <el-input-number v-else v-model="config.notFilledCard.height" controls-position="right" :step="5" :min="1"></el-input-number>
+            <el-input-number
+              v-if="config.cardType == 'led'"
+              v-model="ledHeight"
+              :disabled="true"
+              controls-position="right"
+            ></el-input-number>
+            <el-input-number
+              v-else
+              v-model="config.notFilledCard.height"
+              controls-position="right"
+              :step="5"
+              :min="1"
+            ></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
 
-    <el-row v-if="!config.fullsize && config.screen!=0">
-      <el-col :span="2"></el-col>
-      <el-col :span="4">
-        <el-form-item label="Card Position">
-        </el-form-item>
-      </el-col>
-      <el-col :span="8">
-          <el-form-item label="Left" label-width="80px">
-            <el-input-number v-model="config.notFilledCard.left" controls-position="right" :step="5"></el-input-number>
-          </el-form-item>
-      </el-col>
+      <el-row v-if="!config.fullsize && config.screen != 0">
+        <el-col :span="2"></el-col>
+        <el-col :span="4">
+          <el-form-item label="Card Position"> </el-form-item>
+        </el-col>
         <el-col :span="8">
-        <el-form-item label="Top" label-width="80px">
-          <el-input-number v-model="config.notFilledCard.top" controls-position="right" :step="5"></el-input-number>
-        </el-form-item>
+          <el-form-item label="Left" label-width="80px">
+            <el-input-number
+              v-model="config.notFilledCard.left"
+              controls-position="right"
+              :step="5"
+            ></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Top" label-width="80px">
+            <el-input-number
+              v-model="config.notFilledCard.top"
+              controls-position="right"
+              :step="5"
+            ></el-input-number>
+          </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row v-if="!config.fullsize && config.screen!=0">
-      <el-col :span="2"></el-col>
-      <el-col :span="4">
-        <el-form-item label="Card Rotation">
-        </el-form-item>
-      </el-col>
-      <el-col :span="16">
+      <el-row v-if="!config.fullsize && config.screen != 0">
+        <el-col :span="2"></el-col>
+        <el-col :span="4">
+          <el-form-item label="Card Rotation"> </el-form-item>
+        </el-col>
+        <el-col :span="16">
           <el-form-item label="" label-width="80px">
             <el-radio-group v-model="config.notFilledCard.rotate" size="small">
               <el-radio-button :label="0">0º</el-radio-button>
@@ -158,12 +212,11 @@
               <el-radio-button :label="270">270º</el-radio-button>
             </el-radio-group>
           </el-form-item>
-      </el-col>
+        </el-col>
       </el-row>
 
-      <control-menu v-model="config" :darkMode="darkMode"></control-menu>
-
-      </el-form>
+      <control-menu v-model="config" :dark-mode="darkMode"></control-menu>
+    </el-form>
     <resize-observer @notify="handleResize" />
   </div>
 </template>
@@ -180,19 +233,29 @@ import ControlMenu from '../components/Control/ControlMenu.vue'
 import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
 import defaultConfig from '../defaultConfig.json'
-import Mousetrap from "mousetrap";
+import Mousetrap from 'mousetrap'
 
-Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
+Mousetrap.bind(
+  'esc',
+  function () {
+    window.ipcRenderer.send('closeTestCard')
+  },
+  'keyup'
+)
 
 export default {
   name: 'ControlView',
   components: {
-    ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost
-  },
-  methods: {
-    handleResize: function({ width, height }) {
-      window.ipcRenderer.send('controlResize', {height: height, width: width})
-    }
+    ControlBars,
+    ControlGrid,
+    ControlAlteka,
+    ControlRamp,
+    ControlPlaceholder,
+    ControlAudioSync,
+    ControlScreen,
+    ControlMenu,
+    ControlLed,
+    ControlDeghost
   },
   data: function () {
     return {
@@ -203,58 +266,13 @@ export default {
       prevFullsize: true
     }
   },
-  created: function() {
-    let vm = this
-    window.ipcRenderer.receive('closeTestCard', function() {
-      vm.config.visible = false
-    })
-    window.ipcRenderer.receive('config', function(val) {
-      vm.config = val
-      vm.sync = true
-    })
-    window.ipcRenderer.receive('darkMode', function(val) {
-      vm.darkMode = val
-    })
-    window.ipcRenderer.receive('screens', function(data) {
-      for (const scr of data.all) {
-        if (vm.config.screen == scr.id) {
-          vm.displayFrequency = scr.displayFrequency
-        }
-      }
-
-    })
-    window.ipcRenderer.send('getScreens')
-    window.ipcRenderer.receive('testCardMoveToScreen', function(id) {
-      vm.config.screen = id
-    })
-    window.ipcRenderer.send('getConfigControl')
-  },
-  mounted: function(){
-    let vm = this
-    this.$nextTick(function () {
-      window.ipcRenderer.send('controlResize', {height: document.getElementById('wrapper').clientHeight})
-    })
-    Mousetrap.bind(['command+f', 'ctrl+f'], function() {
-      vm.config.visible = !vm.config.visible
-      return false;
-    })
-    Mousetrap.bind(['command+i', 'ctrl+i'], function() {
-      vm.config.showInfo = !vm.config.showInfo
-      return false;
-    })
-    Mousetrap.bind(['command+m', 'ctrl+m'], function() {
-      vm.config.animated = !vm.config.animated
-      return false;
-    })
-    // bindings for windows...
-    Mousetrap.bind(['ctrl+1'], function() { vm.config.cardType = 'alteka'; return false; })
-    Mousetrap.bind(['ctrl+2'], function() { vm.config.cardType = 'bars'; return false; })
-    Mousetrap.bind(['ctrl+3'], function() { vm.config.cardType = 'grid'; return false; })
-    Mousetrap.bind(['ctrl+4'], function() { vm.config.cardType = 'ramp'; return false; })
-    Mousetrap.bind(['ctrl+5'], function() { vm.config.cardType = 'placeholder'; return false; })
-    Mousetrap.bind(['ctrl+6'], function() { vm.config.cardType = 'audioSync'; return false; })
-    Mousetrap.bind(['ctrl+7'], function() { vm.config.cardType = 'deghost'; return false; })
-    Mousetrap.bind(['ctrl+8'], function() { vm.config.cardType = 'led'; return false; })
+  computed: {
+    ledWidth: function () {
+      return this.config.led.width * this.config.led.columns
+    },
+    ledHeight: function () {
+      return this.config.led.height * this.config.led.rows
+    }
   },
   watch: {
     config: {
@@ -278,14 +296,89 @@ export default {
         }
       },
       deep: true
-    },
+    }
   },
-  computed: {
-    ledWidth: function() {
-      return this.config.led.width * this.config.led.columns
-    },
-    ledHeight: function() {
-      return this.config.led.height * this.config.led.rows
+  created: function () {
+    let vm = this
+    window.ipcRenderer.receive('closeTestCard', function () {
+      vm.config.visible = false
+    })
+    window.ipcRenderer.receive('config', function (val) {
+      vm.config = val
+      vm.sync = true
+    })
+    window.ipcRenderer.receive('darkMode', function (val) {
+      vm.darkMode = val
+    })
+    window.ipcRenderer.receive('screens', function (data) {
+      for (const scr of data.all) {
+        if (vm.config.screen == scr.id) {
+          vm.displayFrequency = scr.displayFrequency
+        }
+      }
+    })
+    window.ipcRenderer.send('getScreens')
+    window.ipcRenderer.receive('testCardMoveToScreen', function (id) {
+      vm.config.screen = id
+    })
+    window.ipcRenderer.send('getConfigControl')
+  },
+  mounted: function () {
+    let vm = this
+    this.$nextTick(function () {
+      window.ipcRenderer.send('controlResize', {
+        height: document.getElementById('wrapper').clientHeight
+      })
+    })
+    Mousetrap.bind(['command+f', 'ctrl+f'], function () {
+      vm.config.visible = !vm.config.visible
+      return false
+    })
+    Mousetrap.bind(['command+i', 'ctrl+i'], function () {
+      vm.config.showInfo = !vm.config.showInfo
+      return false
+    })
+    Mousetrap.bind(['command+m', 'ctrl+m'], function () {
+      vm.config.animated = !vm.config.animated
+      return false
+    })
+    // bindings for windows...
+    Mousetrap.bind(['ctrl+1'], function () {
+      vm.config.cardType = 'alteka'
+      return false
+    })
+    Mousetrap.bind(['ctrl+2'], function () {
+      vm.config.cardType = 'bars'
+      return false
+    })
+    Mousetrap.bind(['ctrl+3'], function () {
+      vm.config.cardType = 'grid'
+      return false
+    })
+    Mousetrap.bind(['ctrl+4'], function () {
+      vm.config.cardType = 'ramp'
+      return false
+    })
+    Mousetrap.bind(['ctrl+5'], function () {
+      vm.config.cardType = 'placeholder'
+      return false
+    })
+    Mousetrap.bind(['ctrl+6'], function () {
+      vm.config.cardType = 'audioSync'
+      return false
+    })
+    Mousetrap.bind(['ctrl+7'], function () {
+      vm.config.cardType = 'deghost'
+      return false
+    })
+    Mousetrap.bind(['ctrl+8'], function () {
+      vm.config.cardType = 'led'
+      return false
+    })
+  },
+  methods: {
+    handleResize: function ({ width, height }) {
+      window.ipcRenderer.send('controlResize', { height: height, width: width })
     }
   }
 }
@@ -299,7 +392,7 @@ body {
 }
 @font-face {
   font-family: Sansation;
-  src: url("@assets/Sansation-Regular.ttf");
+  src: url('@assets/Sansation-Regular.ttf');
 }
 .logo {
   margin-top: 10px;
@@ -327,11 +420,11 @@ body {
   background: #333;
   border: 1px solid #111;
 }
-.darkMode .el-tabs--border-card>.el-tabs__header {
+.darkMode .el-tabs--border-card > .el-tabs__header {
   background: #292929;
   border-bottom: 1px solid #111;
 }
-.darkMode .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+.darkMode .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   background: #333;
   border-right: 1px solid #111;
   border-left: 1px solid #111;
@@ -339,7 +432,7 @@ body {
 .darkMode .el-color-picker__trigger {
   border: 1px solid #666;
 }
- .el-radio-button__inner {
+.el-radio-button__inner {
   color: #777;
 }
 .el-checkbox-button__inner {
@@ -412,13 +505,13 @@ body {
 .el-dialog__body {
   padding: 10px;
 }
-  .darkMode .el-input-group__append {
-    background: #3d3d3d;
-    border: 1px solid #666;
-  }
-  .darkMode .el-input-group__append:hover {
-    color: #6ab42f;
-  }
+.darkMode .el-input-group__append {
+  background: #3d3d3d;
+  border: 1px solid #666;
+}
+.darkMode .el-input-group__append:hover {
+  color: #6ab42f;
+}
 .darkMode .el-input.is-disabled .el-input__inner {
   background: #444;
 }

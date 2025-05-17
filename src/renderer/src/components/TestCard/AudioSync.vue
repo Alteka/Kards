@@ -1,6 +1,5 @@
 <template>
   <div id="audioSync" :style="cssVars">
-
     <div class="border">
       <div class="borderTop"></div>
       <div class="borderBottom"></div>
@@ -22,54 +21,128 @@
       <div class="arrowLeft"></div>
     </div>
 
-    <video id="vt24" v-if="config.audioSync.rate == 24" src="@assets/audiosync/24.webm" loop autoplay class="vt" />
-    <video id="vt25" v-if="config.audioSync.rate == 25" src="@assets/audiosync/25.webm" loop autoplay class="vt" />
-    <video id="vt29-97" v-if="config.audioSync.rate == 29.97" src="@assets/audiosync/29.97.webm" loop autoplay class="vt" />
-    <video id="vt30" v-if="config.audioSync.rate == 30" src="@assets/audiosync/30.webm" loop autoplay class="vt" />
-    <video id="vt50" v-if="config.audioSync.rate == 50" src="@assets/audiosync/50.webm" loop autoplay class="vt" />
-    <video id="vt59-94" v-if="config.audioSync.rate == 59.94" src="@assets/audiosync/59.94.webm" loop autoplay class="vt" />
-    <video id="vt60" v-if="config.audioSync.rate == 60" src="@assets/audiosync/60.webm" loop autoplay class="vt" />
-    <video id="vt100" v-if="config.audioSync.rate == 100" src="@assets/audiosync/100.webm" loop autoplay class="vt" />
-    <video id="vt120" v-if="config.audioSync.rate == 120" src="@assets/audiosync/120.webm" loop autoplay class="vt" />
+    <video
+      v-if="config.audioSync.rate == 24"
+      id="vt24"
+      src="@assets/audiosync/24.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 25"
+      id="vt25"
+      src="@assets/audiosync/25.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 29.97"
+      id="vt29-97"
+      src="@assets/audiosync/29.97.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 30"
+      id="vt30"
+      src="@assets/audiosync/30.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 50"
+      id="vt50"
+      src="@assets/audiosync/50.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 59.94"
+      id="vt59-94"
+      src="@assets/audiosync/59.94.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 60"
+      id="vt60"
+      src="@assets/audiosync/60.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 100"
+      id="vt100"
+      src="@assets/audiosync/100.webm"
+      loop
+      autoplay
+      class="vt"
+    />
+    <video
+      v-if="config.audioSync.rate == 120"
+      id="vt120"
+      src="@assets/audiosync/120.webm"
+      loop
+      autoplay
+      class="vt"
+    />
 
     <div id="middleClock">
-      <span  v-if="config.showClock" style="text-align: center">{{ info.time }}</span>
+      <span v-if="config.showClock" style="text-align: center">{{ info.time }}</span>
     </div>
 
-    <div id="topText" class="textRow" v-if="config.showInfo">
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: left">{{ config.audioSync.rate }} FPS</span>
-      <span v-resize-text="{ratio:2, maxFontSize: '50px'}" style="text-align: right">{{ config.name }}</span>
+    <div v-if="config.showInfo" id="topText" class="textRow">
+      <span v-resize-text="{ ratio: 1.5, maxFontSize: '50px' }" style="text-align: left"
+        >{{ config.audioSync.rate }} FPS</span
+      >
+      <span v-resize-text="{ ratio: 2, maxFontSize: '50px' }" style="text-align: right">{{
+        config.name
+      }}</span>
     </div>
 
-    <div id="topText" class="textRow" v-if="!config.showInfo">
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="!config.showInfo">{{ config.audioSync.rate }} FPS</span>
+    <div v-if="!config.showInfo" id="topText" class="textRow">
+      <span v-if="!config.showInfo" v-resize-text="{ ratio: 1.5, maxFontSize: '50px' }"
+        >{{ config.audioSync.rate }} FPS</span
+      >
     </div>
 
-    <div id="bottomText" class="textRow" v-if="config.showInfo">
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
-      <span v-resize-text="{ratio:3, maxFontSize: '32px'}" style="text-align: center"><i class="fas fa-volume-up" /> {{ description }}</span>
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ info.network[info.networkIndex] }}</span>
+    <div v-if="config.showInfo" id="bottomText" class="textRow">
+      <span v-resize-text="{ ratio: 2, maxFontSize: '32px' }" style="text-align: left"
+        >{{ info.cardSize }} - {{ info.displayFrequency }}Hz</span
+      >
+      <span v-resize-text="{ ratio: 3, maxFontSize: '32px' }" style="text-align: center"
+        ><i class="fas fa-volume-up" /> {{ description }}</span
+      >
+      <span v-resize-text="{ ratio: 2, maxFontSize: '32px' }" style="text-align: right">{{
+        info.network[info.networkIndex]
+      }}</span>
     </div>
-
   </div>
 </template>
 
 <script>
 import VueResizeText from 'vue3-resize-text'
 export default {
-  name: "AudioSyncTestCard",
+  name: 'AudioSyncTestCard',
   directives: {
     ResizeText: VueResizeText.ResizeText
-   },
+  },
   props: {
     config: Object,
     info: Object,
     borderSize: Number
   },
-  data: function() {
+  data: function () {
     return {
-      description: "Default Interface",
-      rates: ['24', '25', '29-97', '30', '50', '59-94', '60' ]
+      description: 'Default Interface',
+      rates: ['24', '25', '29-97', '30', '50', '59-94', '60']
     }
   },
   computed: {
@@ -80,40 +153,39 @@ export default {
     }
   },
   watch: {
-      config: {
-        handler: function (val) {
-          this.updateDeviceName(val)
-         },
-        deep: true
+    config: {
+      handler: function (val) {
+        this.updateDeviceName(val)
       },
-    },
-    methods: {
-      updateDeviceName: function(val) {
-        for (const rate in this.rates) {
-          let element = document.getElementById('vt' + this.rates[rate])
-          if (element !== null) {
-            element.setSinkId(val.audioSync.deviceId)
+      deep: true
+    }
+  },
+  mounted: function () {
+    this.updateDeviceName(this.config)
+  },
+  methods: {
+    updateDeviceName: function (val) {
+      for (const rate in this.rates) {
+        let element = document.getElementById('vt' + this.rates[rate])
+        if (element !== null) {
+          element.setSinkId(val.audioSync.deviceId)
+        }
+      }
+
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        devices = devices.filter((device) => device.kind === 'audiooutput')
+        for (const dev of devices) {
+          if (dev.deviceId == val.audioSync.deviceId) {
+            this.description = dev.label
           }
         }
-
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-          devices = devices.filter(device => device.kind === 'audiooutput')
-          for (const dev of devices) {
-            if (dev.deviceId == val.audioSync.deviceId) {
-              this.description = dev.label
-            }
-          }
-        })
-      }
-    },
-    mounted: function() {
-      this.updateDeviceName(this.config)
+      })
     }
+  }
 }
 </script>
 
 <style scoped>
-
 .textRow {
   position: absolute;
   font-size: 28px;
@@ -178,7 +250,7 @@ export default {
 }
 .border div {
   position: absolute;
-  background-size: calc(var(--border-size)*4) calc(var(--border-size)*4);
+  background-size: calc(var(--border-size) * 4) calc(var(--border-size) * 4);
   background-position: 50%;
 }
 .borderTop {
@@ -209,7 +281,6 @@ export default {
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
 }
-
 
 .corners {
   position: absolute;
@@ -247,7 +318,6 @@ export default {
   border-bottom: var(--border-size) solid #6ab42e;
   border-right: var(--border-size) solid #6ab42e;
 }
-
 
 .arrows {
   position: absolute;
@@ -295,5 +365,4 @@ export default {
   color: white;
   font-size: 16px;
 }
-
 </style>

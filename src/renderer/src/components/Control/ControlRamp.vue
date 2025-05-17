@@ -28,8 +28,12 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-        <el-col :span="6">
-        <el-form-item v-if="ramp.stepped && (ramp.direction == 'Horizontal' || ramp.direction == 'Vertical')" label="Overlay" label-width="80">
+      <el-col :span="6">
+        <el-form-item
+          v-if="ramp.stepped && (ramp.direction == 'Horizontal' || ramp.direction == 'Vertical')"
+          label="Overlay"
+          label-width="80"
+        >
           <el-switch v-model="ramp.overlay"></el-switch>
         </el-form-item>
       </el-col>
@@ -38,23 +42,21 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      modelValue: Object, // v-model object
-    },
-    computed: {
-      ramp: {
-        get() {
-          return this.modelValue // return v-model
-        },
-        set(value) {
-          this.$emit('update:modelValue', value) // update the v-model object to parent component
-        }
+export default {
+  props: {
+    modelValue: Object // v-model object
+  },
+  computed: {
+    ramp: {
+      get() {
+        return this.modelValue // return v-model
       },
+      set(value) {
+        this.$emit('update:modelValue', value) // update the v-model object to parent component
+      }
     }
   }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

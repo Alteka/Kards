@@ -1,24 +1,24 @@
 import { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
 import { optimizer, is } from '@electron-toolkit/utils'
-import defaultConfig from "../renderer/src/defaultConfig.json"
+import defaultConfig from '../renderer/src/defaultConfig.json'
 import { installExtension, VUEJS_DEVTOOLS_BETA } from 'electron-devtools-installer'
 import compareVersions from 'compare-versions'
 
-import log from "electron-log";
-import {hostname, networkInterfaces} from "os";
-import axios from "axios";
-import Store from "electron-store";
+import log from 'electron-log'
+import { hostname, networkInterfaces } from 'os'
+import axios from 'axios'
+import Store from 'electron-store'
 import path from 'path'
 import { Bonjour } from 'bonjour-service'
 import mime from 'mime-types'
 import Rollbar from 'rollbar'
 
 // Project specific includes
-import {touchBar, setTouchbarWindow, setTouchbarConfig} from "./touchbar"
+import { touchBar, setTouchbarWindow, setTouchbarConfig } from './touchbar'
 import fs from 'fs'
 import say from 'say'
 import wallpaper from 'wallpaper'
-import {AltekaMenu} from './menu'
+import { AltekaMenu } from './menu'
 import oscServer from './osc'
 import restServer from './rest'
 
@@ -46,7 +46,6 @@ if (!env.rollbarToken) {
   log.warn('No Rollbar token has been set!')
 }
 
-
 //======================================//
 //      BOILER PLATE ELECTRON STUFF     //
 //======================================//
@@ -56,7 +55,7 @@ protocol.registerSchemesAsPrivileged([
 
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
-  dialog.showErrorBox("Error", "Another instance of Kards is already running")
+  dialog.showErrorBox('Error', 'Another instance of Kards is already running')
   app.quit()
 }
 
@@ -84,7 +83,7 @@ app.on('activate', () => {
     })
 
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
-   })
+  })
 })
 
 app.on('ready', async () => {
@@ -120,13 +119,11 @@ if (is.dev) {
   }
 }
 
-
-
 //==========================//
 //       CONFIG OBJECT      //
 //==========================//
 let config
-app.on('ready', function() {
+app.on('ready', function () {
   log.info('Launching Kards')
   config = {
     ...getDefaultConfig(),
@@ -174,21 +171,19 @@ ipcMain.on('aboutDialogInfo', () => {
   controlWindow.webContents.send('aboutDialogInfo', about)
 })
 
-
 ipcMain.on('resetDefault', () => {
   controlWindow.webContents.send('config', getDefaultConfig())
   resetAudio()
 })
 
 function getDefaultConfig() {
-  defaultConfig.name = hostname().split('.')[0].replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, "$1 $2").replace(/-|_|\.|\||\+|=|~|<|>|\/|\\/g, ' ')
+  defaultConfig.name = hostname()
+    .split('.')[0]
+    .replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, '$1 $2')
+    .replace(/-|_|\.|\||\+|=|~|<|>|\/|\\/g, ' ')
   defaultConfig.screen = screen.getPrimaryDisplay().id
   return defaultConfig
 }
-
-
-
-
 
 //==========================//
 //       WINDOW HANDLER     //
@@ -219,13 +214,13 @@ async function createWindow() {
     show: false,
     useContentSize: true,
     maximizable: false,
-    title: "Kards",
+    title: 'Kards',
     resizable: false,
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       sandbox: false,
-      preload: path.join(__dirname, '../preload/index.js'),
+      preload: path.join(__dirname, '../preload/index.js')
     }
   })
 
@@ -255,7 +250,6 @@ ipcMain.on('controlResize', (_, data) => {
   controlWindow.setContentSize(675, data.height)
 })
 
-
 //========================//
 //   Screen Management    //
 //========================//
@@ -274,11 +268,11 @@ function updateScreens() {
     if (screens[s].displayFrequency == 29) {
       screens[s].displayFrequency = 29.97
     }
-    screens[s].displayFrequency = Math.round(screens[s].displayFrequency*100)/100 // force elegant rounding
+    screens[s].displayFrequency = Math.round(screens[s].displayFrequency * 100) / 100 // force elegant rounding
   }
 
   if (controlWindow != null) {
-    controlWindow.webContents.send('screens', {all: screens, primary: primaryScreen})
+    controlWindow.webContents.send('screens', { all: screens, primary: primaryScreen })
     controlMenu.updateScreens(screens)
     rest.updateScreens(screens)
     osc.updateScreens(screens)
@@ -294,26 +288,22 @@ function updateScreens() {
 ipcMain.on('getScreens', () => {
   updateScreens()
 })
-app.on('ready', function() {
+app.on('ready', function () {
   updateScreens()
 
-  screen.on('display-added', function() {
+  screen.on('display-added', function () {
     setTimeout(updateScreens, 500)
   })
-  screen.on('display-removed', function() {
+  screen.on('display-removed', function () {
     setTimeout(updateScreens, 500)
   })
-  screen.on('display-metrics-changed', function() {
+  screen.on('display-metrics-changed', function () {
     setTimeout(updateScreens, 500)
   })
 })
 
-
-
-
 // app.on('ready', async () => {
 // })
-
 
 //========================//
 //       IPC Handlers     //
@@ -337,7 +327,11 @@ ipcMain.on('openUrl', (_, arg) => {
 })
 
 ipcMain.on('selectMaskImage', () => {
-  let result = dialog.showOpenDialogSync({ title: "Select Image", properties: ['openFile'], filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif', 'svg']}] })
+  let result = dialog.showOpenDialogSync({
+    title: 'Select Image',
+    properties: ['openFile'],
+    filters: [{ name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif', 'svg'] }]
+  })
   if (result != null) {
     let data = fs.readFileSync(result[0], { encoding: 'base64' })
     config.mask.imageSource = 'data:' + mime.lookup(result[0]) + ';base64,' + data
@@ -349,43 +343,44 @@ ipcMain.on('selectMaskImage', () => {
 })
 
 ipcMain.on('networkInfo', (event) => {
-  const nets = networkInterfaces();
+  const nets = networkInterfaces()
   const results = ['Kards v' + version, hostname().split('.')[0]]
 
   for (const name of Object.keys(nets)) {
-      for (const net of nets[name]) {
-          if (net.family === 'IPv4' && !net.internal) {
-              results.push(name + ': ' + net.address)
-          }
+    for (const net of nets[name]) {
+      if (net.family === 'IPv4' && !net.internal) {
+        results.push(name + ': ' + net.address)
       }
+    }
   }
   if (testCardWindow !== null) {
     testCardWindow.webContents.send('networkInfo', results)
   }
 })
 
-
-
-
-
 //==========================//
 //   Test Card Management   //
 //==========================//
 // called when config is updated
 function manageTestCardWindow() {
-  if (testCardWindow == null && config.visible) { // Test card doesn't exist, but now needs to
+  if (testCardWindow == null && config.visible) {
+    // Test card doesn't exist, but now needs to
     setupNewTestCardWindow()
-  } else if (testCardWindow != null && !config.visible && !headlessExportMode) { // A window exists and shouldn't so lets close it
+  } else if (testCardWindow != null && !config.visible && !headlessExportMode) {
+    // A window exists and shouldn't so lets close it
     closeTestCard()
-  } else if (testCardWindow != null && config.visible && config.screen != testCardWindowScreen) { // a different screen as been selected..
+  } else if (testCardWindow != null && config.visible && config.screen != testCardWindowScreen) {
+    // a different screen as been selected..
     moveTestCardToNewScreen()
   } else if (testCardWindow != null) {
     if (testCardWindow.isFullScreen() || testCardWindow.isSimpleFullScreen()) {
-      if (config.windowed) { // A full screen test card now needs to be windowed - hard to handle elegantly so close and reopen
+      if (config.windowed) {
+        // A full screen test card now needs to be windowed - hard to handle elegantly so close and reopen
         reopenTestCard()
       }
     } else if (!testCardWindow.isFullScreen() && !testCardWindow.isSimpleFullScreen()) {
-      if (!config.windowed) { // A windowed test card now needs to be full screen.
+      if (!config.windowed) {
+        // A windowed test card now needs to be full screen.
         reopenTestCard()
       }
     }
@@ -400,38 +395,45 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  let windowConfig = {title: "Kards - Output", show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, '../preload/index.js')}}
+  let windowConfig = {
+    title: 'Kards - Output',
+    show: false,
+    frame: false,
+    width: config.window.width,
+    height: config.window.height,
+    webPreferences: { preload: path.join(__dirname, '../preload/index.js') }
+  }
 
-  if (!config.windowed) { // Setting up for full screen test card
+  if (!config.windowed) {
+    // Setting up for full screen test card
     windowConfig.fullscreen = true
 
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-          if (process.platform == 'darwin') {
-
-            // figure out if it's newer macos...
-            let version = process.getSystemVersion().split('.')
-            let catalina = false
-            if (version[0] > 10) {
-              catalina = true
-            }
-            if (version[0] == 10 && version[1] >= 15) {
-              catalina = true
-            }
-
-            if (disp.bounds.height != disp.workArea.height && catalina) {
-              log.info('Running in seperate spaces mode - this is Catalina or newer')
-              windowConfig.simpleFullscreen = false
-            } else if (!catalina) {
-              log.info('Using legacy full screen mode as this is not Catalina (or newer)')
-              windowConfig.simpleFullscreen = true
-            } else {
-              log.info('Using legacy full screen mode')
-              windowConfig.simpleFullscreen = true
-            }
-          } else {
-            log.info('Using windows full screen system. Easy.')
+        if (process.platform == 'darwin') {
+          // figure out if it's newer macos...
+          let version = process.getSystemVersion().split('.')
+          let catalina = false
+          if (version[0] > 10) {
+            catalina = true
           }
+          if (version[0] == 10 && version[1] >= 15) {
+            catalina = true
+          }
+
+          if (disp.bounds.height != disp.workArea.height && catalina) {
+            log.info('Running in seperate spaces mode - this is Catalina or newer')
+            windowConfig.simpleFullscreen = false
+          } else if (!catalina) {
+            log.info('Using legacy full screen mode as this is not Catalina (or newer)')
+            windowConfig.simpleFullscreen = true
+          } else {
+            log.info('Using legacy full screen mode')
+            windowConfig.simpleFullscreen = true
+          }
+        } else {
+          log.info('Using windows full screen system. Easy.')
+        }
         windowConfig.x = disp.bounds.x
         windowConfig.y = disp.bounds.y
         windowConfig.width = disp.bounds.width
@@ -442,8 +444,8 @@ function setupNewTestCardWindow() {
     windowConfig.roundedCorners = false
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-        windowConfig.x = disp.bounds.x + (disp.bounds.width - config.window.width)/2
-        windowConfig.y = disp.bounds.y + (disp.bounds.height - config.window.height)/2
+        windowConfig.x = disp.bounds.x + (disp.bounds.width - config.window.width) / 2
+        windowConfig.y = disp.bounds.y + (disp.bounds.height - config.window.height) / 2
       }
     }
   }
@@ -469,7 +471,7 @@ function moveTestCardToNewScreen() {
   if (config.windowed) {
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-          testCardWindowScreen = disp.id
+        testCardWindowScreen = disp.id
       }
     }
   } else {
@@ -481,10 +483,10 @@ ipcMain.on('moveWindowTo', (_, arg) => {
   log.info('Move active window to screen: ', arg)
   for (const disp of screen.getAllDisplays()) {
     if (disp.id == arg) {
-        testCardWindowScreen = disp.id
-        let x = disp.bounds.x + (disp.bounds.width - config.window.width)/2
-        let y = disp.bounds.y + (disp.bounds.height - config.window.height)/2
-        testCardWindow.setPosition(Math.round(x), Math.round(y))
+      testCardWindowScreen = disp.id
+      let x = disp.bounds.x + (disp.bounds.width - config.window.width) / 2
+      let y = disp.bounds.y + (disp.bounds.height - config.window.height) / 2
+      testCardWindow.setPosition(Math.round(x), Math.round(y))
     }
   }
 })
@@ -499,7 +501,7 @@ function showTestCardWindow(windowConfig) {
     testCardWindow = null
   })
 
-  if(config.windowed || headlessExportMode){
+  if (config.windowed || headlessExportMode) {
     testCardWindow.setBounds({ width: windowConfig.width, height: windowConfig.height })
   }
 
@@ -516,18 +518,23 @@ function showTestCardWindow(windowConfig) {
     }
   })
 
-  testCardWindow.on('resize', function() {
+  testCardWindow.on('resize', function () {
     clearTimeout(testCardWindowResizeTimer)
     testCardWindowResizeTimer = setTimeout(handleTestCardResize, 500)
   })
 
-  testCardWindow.on('move', function() {
+  testCardWindow.on('move', function () {
     let x = testCardWindow.getBounds().x
     let y = testCardWindow.getBounds().y
 
     for (const disp of screen.getAllDisplays()) {
-      if (x > disp.bounds.x && x < (disp.bounds.x + disp.bounds.width) && y > disp.bounds.y && y < (disp.bounds.y + disp.bounds.height)) {
-        if (testCardWindowScreen!=disp.id) {
+      if (
+        x > disp.bounds.x &&
+        x < disp.bounds.x + disp.bounds.width &&
+        y > disp.bounds.y &&
+        y < disp.bounds.y + disp.bounds.height
+      ) {
+        if (testCardWindowScreen != disp.id) {
           config.screen = disp.id
           controlWindow.webContents.send('config', config)
         }
@@ -540,7 +547,13 @@ function handleTestCardResize() {
   if (testCardWindow != null) {
     let bounds = testCardWindow.getBounds()
     let t = 2
-    if (config.window.width < (bounds.width-t) || config.window.width > (bounds.width+t) || config.window.height < (bounds.height-t) || config.window.height > (bounds.height+t) || process.platform == 'darwin') {
+    if (
+      config.window.width < bounds.width - t ||
+      config.window.width > bounds.width + t ||
+      config.window.height < bounds.height - t ||
+      config.window.height > bounds.height + t ||
+      process.platform == 'darwin'
+    ) {
       config.window.width = bounds.width
       config.window.height = bounds.height
       controlWindow.webContents.send('config', config)
@@ -549,14 +562,11 @@ function handleTestCardResize() {
 }
 let testCardWindowResizeTimer
 
-
-
-
 //========================//
 //    Setup OSC Server    //
 //========================//
 let osc = new oscServer()
-app.on('ready', function() {
+app.on('ready', function () {
   osc.setup(bonjourInstance)
 })
 osc.on('updateConfig', (c) => {
@@ -565,17 +575,20 @@ osc.on('updateConfig', (c) => {
 osc.on('audioFile', (filePath) => {
   log.debug('Audio File!', filePath)
   if (fs.lstatSync(filePath).isFile()) {
-    config.audio.fileData = 'data:audio/' + filePath.split('.').pop() + ';base64,' + fs.readFileSync(filePath, {encoding: 'base64'})
+    config.audio.fileData =
+      'data:audio/' +
+      filePath.split('.').pop() +
+      ';base64,' +
+      fs.readFileSync(filePath, { encoding: 'base64' })
     config.audio.fileName = 'Opened ' + filePath
     controlWindow.webContents.send('config', config)
   } else {
-    log.warning("Selected audio file does not exist")
+    log.warning('Selected audio file does not exist')
   }
 })
 
-
 let rest = new restServer()
-app.on('ready', function() {
+app.on('ready', function () {
   rest.setup(bonjourInstance)
 })
 rest.on('updateConfig', (c) => {
@@ -600,7 +613,13 @@ ipcMain.on('exportCard', () => {
     testCardWindow.webContents.send('exportCard')
   } else {
     headlessExportMode = true
-    let c = {show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: {preload: path.join(__dirname, 'preload.js')}}
+    let c = {
+      show: false,
+      frame: false,
+      width: config.window.width,
+      height: config.window.height,
+      webPreferences: { preload: path.join(__dirname, 'preload.js') }
+    }
 
     if (config.windowed) {
       c.minWidth = config.window.width
@@ -621,7 +640,11 @@ ipcMain.on('exportCard', () => {
 })
 
 ipcMain.on('selectImage', () => {
-  let result = dialog.showOpenDialogSync({ title: "Select Image", properties: ['openFile'], filters: [{name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif']}] })
+  let result = dialog.showOpenDialogSync({
+    title: 'Select Image',
+    properties: ['openFile'],
+    filters: [{ name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif'] }]
+  })
   if (result != null) {
     let data = fs.readFileSync(result[0], { encoding: 'base64' })
     config.alteka.logo = 'data:' + mime.lookup(result[0]) + ';base64,' + data
@@ -636,25 +659,31 @@ ipcMain.on('saveAsPNG', (_, arg) => {
   let suffix = config.cardType[0].toUpperCase() + config.cardType.slice(1)
   if (suffix == 'Placeholder') suffix = 'Name'
   if (suffix == 'Led') suffix = 'LED'
-  var name = config.name.replace(/ /g,"-") + '-' + suffix + 'Kard.png'
-  dialog.showSaveDialog(controlWindow, {title: 'Save PNG', defaultPath: name, filters: [{name: 'Images', extensions: ['png']}]}).then(result => {
-    if (!result.canceled) {
-      var base64Data = arg.replace(/^data:image\/png;base64,/, "")
-      fs.writeFile(result.filePath, base64Data, 'base64', function(err) {
-        if (err) {
-          dialog.showErrorBox('Error Saving File', JSON.stringify(err))
-          log.error('Couldnt save file: ', err)
-          controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
-        } else {
-          // let dims = sizeOf(result.filePath)
-          controlWindow.webContents.send('exportCardCompleted')
-        }
-      })
-    } else {
-      log.info('Save dialog closed')
-      controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
-    }
-  })
+  var name = config.name.replace(/ /g, '-') + '-' + suffix + 'Kard.png'
+  dialog
+    .showSaveDialog(controlWindow, {
+      title: 'Save PNG',
+      defaultPath: name,
+      filters: [{ name: 'Images', extensions: ['png'] }]
+    })
+    .then((result) => {
+      if (!result.canceled) {
+        var base64Data = arg.replace(/^data:image\/png;base64,/, '')
+        fs.writeFile(result.filePath, base64Data, 'base64', function (err) {
+          if (err) {
+            dialog.showErrorBox('Error Saving File', JSON.stringify(err))
+            log.error('Couldnt save file: ', err)
+            controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
+          } else {
+            // let dims = sizeOf(result.filePath)
+            controlWindow.webContents.send('exportCardCompleted')
+          }
+        })
+      } else {
+        log.info('Save dialog closed')
+        controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
+      }
+    })
   if (!config.visible && testCardWindow !== null) {
     log.info('Closing dummy test card window')
     testCardWindow.close()
@@ -663,31 +692,25 @@ ipcMain.on('saveAsPNG', (_, arg) => {
 
 ipcMain.on('setAsWallpaper', (_, arg) => {
   headlessExportMode = false
-  let dest = app.getPath('userData') + '/wallpaper' + Math.round((Math.random()*100000)) + '.png'
-  var base64Data = arg.replace(/^data:image\/png;base64,/, "")
-  fs.writeFile(dest, base64Data, 'base64', err => {
+  let dest = app.getPath('userData') + '/wallpaper' + Math.round(Math.random() * 100000) + '.png'
+  var base64Data = arg.replace(/^data:image\/png;base64,/, '')
+  fs.writeFile(dest, base64Data, 'base64', (err) => {
     if (err) {
       dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
       log.error('Couldnt save wallpaper file ', err)
       controlWindow.webContents.send('exportCardCompleted', 'Could not write temporary file')
       return
     }
-    (async () => {
+    ;(async () => {
       await wallpaper.set(dest)
       controlWindow.webContents.send('exportCardCompleted')
-      })();
-    })
-    if (!config.visible) {
-      log.info('Closing dummy test card window')
-      testCardWindow.close()
-    }
+    })()
   })
-
-
-
-
-
-
+  if (!config.visible) {
+    log.info('Closing dummy test card window')
+    testCardWindow.close()
+  }
+})
 
 //========================//
 //    Voice Generation    //
@@ -716,7 +739,8 @@ function createVoice() {
       return log.error(err)
     }
     log.info('Audio :: Updated name (' + config.name + ') has been saved to ', dest)
-    config.audio.voiceData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    config.audio.voiceData =
+      'data:audio/wav;base64,' + fs.readFileSync(dest, { encoding: 'base64' })
     controlWindow.webContents.send('config', config)
   })
 }
@@ -728,7 +752,7 @@ function createTextAudio() {
       return log.error(err)
     }
     log.info('Audio :: Updated audio text (' + config.audio.text + ') has been saved to ', dest)
-    config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, { encoding: 'base64' })
     controlWindow.webContents.send('config', config)
   })
 }
@@ -742,24 +766,32 @@ function textToSpeachData(text) {
       log.error(err)
       return ''
     }
-    return 'data:audio/wav;base64,' + fs.readFileSync(dest, {encoding: 'base64'})
+    return 'data:audio/wav;base64,' + fs.readFileSync(dest, { encoding: 'base64' })
   })
 }
 
 function loadAudioFile() {
-  dialog.showOpenDialog(controlWindow, {title: 'Open Audio File', filters: [{name: "Audio", extensions: ['wav', 'mp3', 'ogg', 'aac']}]}).then(result => {
-    if (!result.canceled) {
-      let path = result.filePaths[0]
-      config.audio.fileData = 'data:audio/' + path.split('.').pop() + ';base64,' + fs.readFileSync(path, {encoding: 'base64'})
-      config.audio.fileName = 'Opened ' + path
-      controlWindow.webContents.send('config', config)
-      log.info('Audio :: Audio file imported - ' + path)
-    } else {
-      log.info('Audio :: Save dialog closed')
-    }
-  })
+  dialog
+    .showOpenDialog(controlWindow, {
+      title: 'Open Audio File',
+      filters: [{ name: 'Audio', extensions: ['wav', 'mp3', 'ogg', 'aac'] }]
+    })
+    .then((result) => {
+      if (!result.canceled) {
+        let path = result.filePaths[0]
+        config.audio.fileData =
+          'data:audio/' +
+          path.split('.').pop() +
+          ';base64,' +
+          fs.readFileSync(path, { encoding: 'base64' })
+        config.audio.fileName = 'Opened ' + path
+        controlWindow.webContents.send('config', config)
+        log.info('Audio :: Audio file imported - ' + path)
+      } else {
+        log.info('Audio :: Save dialog closed')
+      }
+    })
 }
-
 
 //============================//
 //   Import/Export Settings   //
@@ -781,41 +813,58 @@ controlMenu.on('exportSettings', () => {
 })
 
 function exportSettings() {
-  dialog.showSaveDialog({title: 'Export Settings', buttonLabel: 'Export', defaultPath: 'KardsSettings.json', filters: [{extensions: ['json']}]}).then(result => {
-    if (!result.canceled) {
-      let path = result.filePath
-      let cfg = config
-      cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt
-      cfg.audio.textData = '' // clear this out as it can be easily rebuilt
-      cfg.createdBy = 'Kards'
-      cfg.exportedVersion = version
+  dialog
+    .showSaveDialog({
+      title: 'Export Settings',
+      buttonLabel: 'Export',
+      defaultPath: 'KardsSettings.json',
+      filters: [{ extensions: ['json'] }]
+    })
+    .then((result) => {
+      if (!result.canceled) {
+        let path = result.filePath
+        let cfg = config
+        cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt
+        cfg.audio.textData = '' // clear this out as it can be easily rebuilt
+        cfg.createdBy = 'Kards'
+        cfg.exportedVersion = version
 
-      let data = JSON.stringify(cfg, null, 2)
+        let data = JSON.stringify(cfg, null, 2)
 
-      fs.writeFile(path, data, function(err) {
-        if (err) {
-          dialog.showErrorBox('Error Saving File', JSON.stringify(err))
-          log.error('Couldnt save file: ', err)
-        }
-      })
-    } else {
-      log.info('Save dialog closed')
-    }
-  })
+        fs.writeFile(path, data, function (err) {
+          if (err) {
+            dialog.showErrorBox('Error Saving File', JSON.stringify(err))
+            log.error('Couldnt save file: ', err)
+          }
+        })
+      } else {
+        log.info('Save dialog closed')
+      }
+    })
 }
 
 function importSettings() {
-  let result = dialog.showOpenDialogSync({ title: "Import Settings", properties: ['openFile'], filters: [{name: 'JSON', extensions: ['json', 'JSON']}]})
+  let result = dialog.showOpenDialogSync({
+    title: 'Import Settings',
+    properties: ['openFile'],
+    filters: [{ name: 'JSON', extensions: ['json', 'JSON'] }]
+  })
   if (result != null) {
     fs.readFile(result[0], (err, data) => {
-      if (err) throw err;
+      if (err) throw err
       let d = JSON.parse(data)
       let count = 0
 
       if (d.createdBy == 'Kards') {
         if (d.exportedVersion == version) {
           for (let key in config) {
-            if (d[key] != undefined && key != 'visible' && key != 'exportedVersion' && key != 'createdBy' && typeof d[key] === typeof config[key]) {
+            if (
+              d[key] != undefined &&
+              key != 'visible' &&
+              key != 'exportedVersion' &&
+              key != 'createdBy' &&
+              typeof d[key] === typeof config[key]
+            ) {
               config[key] = d[key]
               count++
             }
@@ -825,7 +874,10 @@ function importSettings() {
           controlWindow.webContents.send('config', config)
           controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
         } else {
-          controlWindow.webContents.send('importSettings', 'Skipping - The file is from a different version of Kards')
+          controlWindow.webContents.send(
+            'importSettings',
+            'Skipping - The file is from a different version of Kards'
+          )
         }
       } else {
         controlWindow.webContents.send('importSettings', 'Failed - That file was not made by Kards')
@@ -839,23 +891,32 @@ function importSettings() {
 //========================//
 //     Update Checker     //
 //========================//
-setTimeout(function() {
-  axios.get('https://api.github.com/repos/alteka/kards/releases/latest')
+setTimeout(function () {
+  axios
+    .get('https://api.github.com/repos/alteka/kards/releases/latest')
     .then(function (response) {
       let online = response.data.tag_name
       let status = compareVersions(online, version, '>')
       if (status == 1) {
-        log.info('Update :: A newer version (' + online + ') is available. ' + version + ' currently installed.')
-        dialog.showMessageBox(controlWindow, {
-          type: 'question',
-          title: 'An Update Is Available',
-          message: 'Would you like to download version: ' + online,
-          buttons: ['Cancel', 'Yes']
-        }).then(function (response) {
-          if (response.response == 1) {
-            shell.openExternal('https://alteka.solutions/kards')
-          }
-        });
+        log.info(
+          'Update :: A newer version (' +
+            online +
+            ') is available. ' +
+            version +
+            ' currently installed.'
+        )
+        dialog
+          .showMessageBox(controlWindow, {
+            type: 'question',
+            title: 'An Update Is Available',
+            message: 'Would you like to download version: ' + online,
+            buttons: ['Cancel', 'Yes']
+          })
+          .then(function (response) {
+            if (response.response == 1) {
+              shell.openExternal('https://alteka.solutions/kards')
+            }
+          })
       } else if (status == 0) {
         log.info('Update :: Running latest version - ' + online)
       } else if (status == -1) {
@@ -863,6 +924,6 @@ setTimeout(function() {
       }
     })
     .catch(function (error) {
-      log.error(error);
+      log.error(error)
     })
-  }, 10000)
+}, 10000)

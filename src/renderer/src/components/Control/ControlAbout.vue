@@ -1,10 +1,9 @@
 <template>
   <el-dialog width="85%" center top="10vh">
-    
     <img v-if="darkMode" src="../../assets/Logo_Dark.png" alt="Logo" />
     <img v-else src="../../assets/Logo_Standard.png" alt="Logo" />
 
-    <el-row style="padding-bottom: 20px;">
+    <el-row style="padding-bottom: 20px">
       <el-col :span="24">
         <h2>Better test cards for the AV Professional.</h2>
         Software made in the UK by those who use it.<br />
@@ -13,7 +12,7 @@
         To help us keep it this way, and to support more features and platforms, we'd<br />
         really appreciate any donation you're able to give.<br />
         <br />
-        <el-button @click="openDonate" type="primary">
+        <el-button type="primary" @click="openDonate">
           <i class="fa-solid fa-hand-holding-heart"></i> Donate
         </el-button>
       </el-col>
@@ -21,69 +20,73 @@
 
     <el-row class="version">
       <el-col :span="12">
-        <el-form-item label="Version">{{info.version}}</el-form-item>
+        <el-form-item label="Version">{{ info.version }}</el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="Electron">{{info.electron}}</el-form-item>
+        <el-form-item label="Electron">{{ info.electron }}</el-form-item>
       </el-col>
     </el-row>
     <el-row class="version">
       <el-col :span="12">
-        <el-form-item label="Node">{{info.node}}</el-form-item>
+        <el-form-item label="Node">{{ info.node }}</el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="Vue">{{info.vue}}</el-form-item>
+        <el-form-item label="Vue">{{ info.vue }}</el-form-item>
       </el-col>
     </el-row>
 
-    <el-row style="padding-top: 20px;">
+    <el-row style="padding-top: 20px">
       <el-col :span="8">
-        <el-button size="small" round @click="openSite"><i class="fa-solid fa-globe green"></i> Website</el-button>
+        <el-button size="small" round @click="openSite"
+          ><i class="fa-solid fa-globe green"></i> Website</el-button
+        >
       </el-col>
       <el-col :span="8">
-        <el-button size="small" round @click="openHelp"><i class="fa-solid fa-circle-question green"></i> Help</el-button>
+        <el-button size="small" round @click="openHelp"
+          ><i class="fa-solid fa-circle-question green"></i> Help</el-button
+        >
       </el-col>
       <el-col :span="8">
-        <el-button size="small" round @click="openGitHub"><i class="fa-brands fa-github green"></i> GitHub</el-button>
+        <el-button size="small" round @click="openGitHub"
+          ><i class="fa-brands fa-github green"></i> GitHub</el-button
+        >
       </el-col>
     </el-row>
-
   </el-dialog>
 </template>
 
 <script>
-
-  export default {
-    props: {
-      darkMode: Boolean
+export default {
+  props: {
+    darkMode: Boolean
+  },
+  data: function () {
+    return {
+      info: {}
+    }
+  },
+  mounted: function () {
+    let vm = this
+    window.ipcRenderer.receive('aboutDialogInfo', function (i) {
+      vm.info = i
+    })
+    window.ipcRenderer.send('aboutDialogInfo')
+  },
+  methods: {
+    openSite: function () {
+      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/')
     },
-    data: function() {
-      return {
-        info: {}
-      }
+    openHelp: function () {
+      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
     },
-    mounted: function() {
-      let vm = this
-      window.ipcRenderer.receive('aboutDialogInfo', function(i) {
-        vm.info = i
-      })
-      window.ipcRenderer.send('aboutDialogInfo')
+    openGitHub: function () {
+      window.ipcRenderer.send('openUrl', 'https://github.com/Alteka/Kards')
     },
-    methods: {
-      openSite: function() {
-        window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/')
-      },
-      openHelp: function() {
-        window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
-      },
-      openGitHub: function() {
-        window.ipcRenderer.send('openUrl', 'https://github.com/Alteka/Kards')
-      },
-      openDonate: function() {
-        window.ipcRenderer.send('openUrl', 'https://alteka.solutions/donateKards')
-      }
+    openDonate: function () {
+      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/donateKards')
     }
   }
+}
 </script>
 
 <style scoped>

@@ -4,7 +4,9 @@
   "description": "A cross-platform test card generator for AV professionals",
   "author": "Alteka Solutions <info@alteka.solutions>",
   "scripts": {
+    "format": "prettier --write .",
     "lint": "eslint --cache .",
+    "lint:fix": "eslint --fix .",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
@@ -31,6 +33,7 @@
     "mime-types": "^2.1.34",
     "mousetrap": "^1.6.5",
     "osc-js": "^2.4.1",
+    "prettier": "^3.5.3",
     "rollbar": "^2.24.0",
     "say": "^0.16.0",
     "tsparticles": "^3.8.1",
