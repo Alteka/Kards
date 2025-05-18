@@ -223,7 +223,7 @@ import ControlAudioSync from '../components/Control/ControlAudioSync.vue'
 import ControlMenu from '../components/Control/ControlMenu.vue'
 import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
-import defaultConfig from '../defaultConfig.json'
+import defaultConfig from '@shared/defaultConfig.json'
 import Mousetrap from 'mousetrap'
 import { computed, onBeforeMount, onMounted, ref, watch, nextTick } from 'vue'
 
@@ -289,9 +289,6 @@ onBeforeMount(() => {
     }
   })
   window.ipcRenderer.send('getScreens')
-  window.ipcRenderer.receive('testCardMoveToScreen', function (id) {
-    config.value.screen = id
-  })
   window.ipcRenderer.send('getConfigControl')
 })
 

@@ -11,7 +11,7 @@ import path from 'path'
 import { Bonjour } from 'bonjour-service'
 import mime from 'mime-types'
 import Rollbar from 'rollbar'
-import defaultConfig from '../renderer/src/defaultConfig.json'
+import defaultConfig from '../shared/defaultConfig.json'
 
 // Project specific includes
 import { touchBar, setTouchbarWindow, setTouchbarConfig } from './touchbar'
@@ -95,28 +95,6 @@ app.on('ready', async () => {
   await createWindow()
 })
 
-if (is.dev) {
-  if (process.platform === 'win32') {
-    process.on('message', (data) => {
-      if (data === 'graceful-exit') {
-        bonjourInstance.unpublishAll()
-        bonjourInstance.destroy()
-        log.info('OS called for graceful exit - Quitting App')
-        rest.stop()
-        app.quit()
-      }
-    })
-  } else {
-    process.on('SIGTERM', () => {
-      bonjourInstance.unpublishAll()
-      bonjourInstance.destroy()
-      log.info('OS call SIGTERM - Quitting App')
-      rest.stop()
-      app.quit()
-    })
-  }
-}
-
 //==========================//
 //       CONFIG OBJECT      //
 //==========================//
@@ -185,9 +163,9 @@ function getDefaultConfig() {
 //==========================//
 //       WINDOW HANDLER     //
 //==========================//
-let controlWindow
-let testCardWindow
-let testCardWindowScreen
+let controlWindow: BrowserWindow
+let testCardWindow: BrowserWindow
+let testCardWindowScreen: number
 const controlMenu = new AltekaMenu()
 
 controlMenu.on('menuClick', (c) => {
@@ -297,9 +275,6 @@ app.on('ready', function () {
   })
 })
 
-// app.on('ready', async () => {
-// })
-
 //========================//
 //       IPC Handlers     //
 //========================//
@@ -389,7 +364,7 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  const windowConfig = {
+  const windowConfig: Electron.BrowserWindowConstructorOptions = {
     title: 'Kards - Output',
     show: false,
     frame: false,
@@ -485,7 +460,7 @@ ipcMain.on('moveWindowTo', (_, arg) => {
   }
 })
 
-function showTestCardWindow(windowConfig) {
+function showTestCardWindow(windowConfig: Electron.BrowserWindowConstructorOptions) {
   log.info('Showing test card with config: ', windowConfig)
 
   testCardWindow = new BrowserWindow(windowConfig)
@@ -607,7 +582,7 @@ ipcMain.on('exportCard', () => {
     testCardWindow.webContents.send('exportCard')
   } else {
     headlessExportMode = true
-    const c = {
+    const c: Electron.BrowserWindowConstructorOptions = {
       show: false,
       frame: false,
       width: config.window.width,
