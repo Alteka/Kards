@@ -1503,6 +1503,11 @@
   resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.16.tgz#1d12873a8e49567371f2a75fe3e7f7edca6662d8"
   integrity sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==
 
+"@types/web-bluetooth@^0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.21.tgz#525433c784aed9b457aaa0ee3d92aeb71f346b63"
+  integrity sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==
+
 "@types/yauzl@^2.9.1":
   version "2.10.3"
   resolved "https://registry.yarnpkg.com/@types/yauzl/-/yauzl-2.10.3.tgz#e9b2808b4f109504a03cda958259876f61017999"
@@ -1748,6 +1753,15 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.5.14.tgz#8fcdc6c69661a1163c173cafb6129c3f8ad01122"
   integrity sha512-oXTwNxVfc9EtP1zzXAlSlgARLXNC84frFYkS0HHz0h3E4WZSP9sywqjqzGCP9Y34M8ipNmd380pVgmMuwELDyQ==
 
+"@vueuse/core@^13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-13.2.0.tgz#f19afa06449110ff3a649ea06b661c3c37c43c34"
+  integrity sha512-n5TZoIAxbWAQ3PqdVPDzLgIRQOujFfMlatdI+f7ditSmoEeNpPBvp7h2zamzikCmrhFIePAwdEQB6ENccHr7Rg==
+  dependencies:
+    "@types/web-bluetooth" "^0.0.21"
+    "@vueuse/metadata" "13.2.0"
+    "@vueuse/shared" "13.2.0"
+
 "@vueuse/core@^9.1.0":
   version "9.13.0"
   resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-9.13.0.tgz#2f69e66d1905c1e4eebc249a01759cf88ea00cf4"
@@ -1758,10 +1772,20 @@
     "@vueuse/shared" "9.13.0"
     vue-demi "*"
 
+"@vueuse/metadata@13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-13.2.0.tgz#a839028d43c3206b674dd1d59a77b9c80f4d9d5f"
+  integrity sha512-kPpzuQCU0+D8DZCzK0iPpIcXI+6ufWSgwnjJ6//GNpEn+SHViaCtR+XurzORChSgvpHO9YC8gGM97Y1kB+UabA==
+
 "@vueuse/metadata@9.13.0":
   version "9.13.0"
   resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-9.13.0.tgz#bc25a6cdad1b1a93c36ce30191124da6520539ff"
   integrity sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==
+
+"@vueuse/shared@13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-13.2.0.tgz#26d89103201bafc7daa4dfc5bc92b512526b788b"
+  integrity sha512-vx9ZPDF5HcU9up3Jgt3G62dMUfZEdk6tLyBAHYAG4F4n73vpaA7J5hdncDI/lS9Vm7GA/FPlbOmh9TrDZROTpg==
 
 "@vueuse/shared@9.13.0":
   version "9.13.0"

@@ -1,5 +1,5 @@
-import { app, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
-import { optimizer, is } from '@electron-toolkit/utils'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, screen, shell } from 'electron'
+import { is, optimizer } from '@electron-toolkit/utils'
 import { installExtension, VUEJS_DEVTOOLS_BETA } from 'electron-devtools-installer'
 import { compareVersions } from 'compare-versions'
 
@@ -14,13 +14,16 @@ import Rollbar from 'rollbar'
 import defaultConfig from '../shared/defaultConfig.json'
 
 // Project specific includes
-import { touchBar, setTouchbarWindow, setTouchbarConfig } from './touchbar'
+import { setTouchbarConfig, setTouchbarWindow, touchBar } from './touchbar'
 import fs from 'fs'
+import fsPromises from 'node:fs/promises'
 import say from 'say'
 import wallpaper from 'wallpaper'
 import { AltekaMenu } from './menu'
 import { OSCServer } from './osc'
 import { RESTServer } from './rest'
+import { Config, ConfigSchema, ExportedConfig, ExportedConfigSchema } from '../shared/config'
+import { defu } from 'defu'
 
 log.initialize()
 const version = require('../../package.json').version
@@ -98,13 +101,15 @@ app.on('ready', async () => {
 //==========================//
 //       CONFIG OBJECT      //
 //==========================//
-let config
+let config: Config
 app.on('ready', function () {
   log.info('Launching Kards')
-  config = {
-    ...getDefaultConfig(),
-    ...store.get('KardsConfig', getDefaultConfig())
-  }
+
+  const storedConfig = store.get('KardsConfig')
+  const { data: parsedStoredConfig } = ConfigSchema.safeParse(storedConfig)
+
+  config = defu(parsedStoredConfig, getDefaultConfig())
+
   config.visible = false
   config.audio.enabled = false
   log.info('Loaded Config')
@@ -117,7 +122,7 @@ ipcMain.on('config', (_, arg) => {
     testCardWindow.webContents.send('config', config)
     if (config.windowed) {
       if (config.window.width > 0) {
-        testCardWindow.setContentSize(parseInt(config.window.width), parseInt(config.window.height))
+        testCardWindow.setContentSize(config.window.width, config.window.height)
       }
     }
   }
@@ -221,6 +226,7 @@ async function createWindow() {
   controlWindow.setTouchBar(touchBar)
   setTouchbarWindow(controlWindow)
 }
+
 ipcMain.on('controlResize', (_, data) => {
   controlWindow.setContentSize(675, data.height)
 })
@@ -258,6 +264,7 @@ function updateScreens() {
     }
   }
 }
+
 ipcMain.on('getScreens', () => {
   updateScreens()
 })
@@ -311,20 +318,18 @@ ipcMain.on('selectMaskImage', () => {
   }
 })
 
-ipcMain.on('networkInfo', (event) => {
+ipcMain.handle('networkInfo', (event) => {
   const nets = networkInterfaces()
   const results = ['Kards v' + version, hostname().split('.')[0]]
 
   for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
+    for (const net of nets[name]!) {
       if (net.family === 'IPv4' && !net.internal) {
         results.push(name + ': ' + net.address)
       }
     }
   }
-  if (testCardWindow !== null) {
-    testCardWindow.webContents.send('networkInfo', results)
-  }
+  return results
 })
 
 //==========================//
@@ -529,6 +534,7 @@ function handleTestCardResize() {
     }
   }
 }
+
 let testCardWindowResizeTimer
 
 //========================//
@@ -693,6 +699,7 @@ ipcMain.on('updateAudioText', () => {
 ipcMain.on('loadAudioFile', () => {
   loadAudioFile()
 })
+
 function resetAudio() {
   setTimeout(createVoice, 5000)
   setTimeout(createTextAudio, 5000)
@@ -726,6 +733,7 @@ function createTextAudio() {
 }
 
 let textToSpeechCount = 0
+
 function textToSpeachData(text) {
   const dest = app.getPath('userData') + '/tts0' + textToSpeechCount + '.wav'
   textToSpeechCount++
@@ -764,96 +772,82 @@ function loadAudioFile() {
 //============================//
 //   Import/Export Settings   //
 //============================//
-ipcMain.on('exportSettings', () => {
-  exportSettings()
-})
+ipcMain.on('exportSettings', exportSettings)
+ipcMain.on('importSettings', importSettings)
 
-ipcMain.on('importSettings', () => {
-  importSettings()
-})
+controlMenu.on('exportSettings', exportSettings)
+controlMenu.on('importSettings', importSettings)
 
-controlMenu.on('importSettings', () => {
-  importSettings()
-})
+async function exportSettings() {
+  const result = await dialog.showSaveDialog({
+    title: 'Export Settings',
+    buttonLabel: 'Export',
+    defaultPath: 'KardsSettings.json',
+    filters: [{ extensions: ['json'], name: 'JSON' }]
+  })
+  if (!result.canceled) {
+    const path = result.filePath
+    const cfg: ExportedConfig = defu(
+      {
+        audio: {
+          voiceData: '', // clear this out as it can be easily rebuilt
+          textData: '' // clear this out as it can be easily rebuilt
+        },
+        createdBy: 'Kards',
+        exportedVersion: version
+      },
+      config
+    )
+    const data = JSON.stringify(cfg, null, 2)
 
-controlMenu.on('exportSettings', () => {
-  exportSettings()
-})
-
-function exportSettings() {
-  dialog
-    .showSaveDialog({
-      title: 'Export Settings',
-      buttonLabel: 'Export',
-      defaultPath: 'KardsSettings.json',
-      filters: [{ extensions: ['json'] }]
+    await fsPromises.writeFile(path, data).catch((err) => {
+      dialog.showErrorBox('Error Saving File', JSON.stringify(err))
+      log.error("Couldn't save file: ", err)
     })
-    .then((result) => {
-      if (!result.canceled) {
-        const path = result.filePath
-        const cfg = config
-        cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt
-        cfg.audio.textData = '' // clear this out as it can be easily rebuilt
-        cfg.createdBy = 'Kards'
-        cfg.exportedVersion = version
-
-        const data = JSON.stringify(cfg, null, 2)
-
-        fs.writeFile(path, data, function (err) {
-          if (err) {
-            dialog.showErrorBox('Error Saving File', JSON.stringify(err))
-            log.error('Couldnt save file: ', err)
-          }
-        })
-      } else {
-        log.info('Save dialog closed')
-      }
-    })
+  } else {
+    log.info('Save dialog closed')
+  }
 }
 
-function importSettings() {
-  const result = dialog.showOpenDialogSync({
+async function importSettings() {
+  const result = await dialog.showOpenDialog({
     title: 'Import Settings',
     properties: ['openFile'],
     filters: [{ name: 'JSON', extensions: ['json', 'JSON'] }]
   })
-  if (result != null) {
-    fs.readFile(result[0], (err, data) => {
-      if (err) throw err
-      const d = JSON.parse(data)
-      let count = 0
-
-      if (d.createdBy == 'Kards') {
-        if (d.exportedVersion == version) {
-          for (const key in config) {
-            if (
-              d[key] != undefined &&
-              key != 'visible' &&
-              key != 'exportedVersion' &&
-              key != 'createdBy' &&
-              typeof d[key] === typeof config[key]
-            ) {
-              config[key] = d[key]
-              count++
-            }
-          }
-          createVoice() // recreate voice data after importing settings.
-          createTextAudio()
-          controlWindow.webContents.send('config', config)
-          controlWindow.webContents.send('importSettings', 'Imported ' + count + ' settings')
-        } else {
-          controlWindow.webContents.send(
-            'importSettings',
-            'Skipping - The file is from a different version of Kards'
-          )
-        }
-      } else {
-        controlWindow.webContents.send('importSettings', 'Failed - That file was not made by Kards')
-      }
-    })
-  } else {
-    log.info('No file selected')
+  if (result.canceled) {
+    log.info('Import settings dialog closed')
+    return
   }
+  const fileContent = await fsPromises.readFile(result.filePaths[0], 'utf-8')
+  const fileJson = JSON.parse(fileContent)
+  const { data, success, error } = ExportedConfigSchema.safeParse(fileJson)
+  if (!success) {
+    log.error('Import settings failed: ', error)
+    controlWindow.webContents.send('importSettings', 'Failed - Invalid file format')
+    return
+  }
+  if (data.createdBy != 'Kards') {
+    log.error('Import settings failed: ', error)
+    controlWindow.webContents.send('importSettings', 'Failed - That file was not made by Kards')
+    return
+  }
+  if (data.exportedVersion != version) {
+    log.error('Import settings failed: ', error)
+    controlWindow.webContents.send(
+      'importSettings',
+      'Failed - The file is from a different version of Kards'
+    )
+    return
+  }
+
+  const configWithoutMetadata = ConfigSchema.parse(data)
+
+  config = defu(configWithoutMetadata, config)
+  createVoice() // recreate voice data after importing settings.
+  createTextAudio()
+  controlWindow.webContents.send('config', config)
+  controlWindow.webContents.send('importSettings', 'Imported config successfully')
 }
 
 //========================//

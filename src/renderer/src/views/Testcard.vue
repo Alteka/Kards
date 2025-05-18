@@ -294,9 +294,6 @@ onMounted(() => {
 
   updateNetworkInfo()
   setInterval(updateNetworkInfo, 10000)
-  window.ipcRenderer.receive('networkInfo', function (networkInfo) {
-    info.value.network = networkInfo
-  })
   setInterval(function () {
     info.value.networkIndex++
     if (info.value.networkIndex >= info.value.network.length) {
@@ -440,8 +437,8 @@ function exportTestCard(settings) {
   })
 }
 
-function updateNetworkInfo() {
-  window.ipcRenderer.send('networkInfo')
+async function updateNetworkInfo() {
+  info.value.network = (await window.api.networkInfo()) as string[]
 }
 </script>
 

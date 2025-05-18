@@ -138,7 +138,7 @@ import type { Config } from '@shared/config'
 
 const config = defineModel<Config>()
 
-const screens = ref([])
+const screens = ref([]) // todo type this
 const primaryScreen = ref(null)
 const viewBox = ref('0 0 0 0')
 

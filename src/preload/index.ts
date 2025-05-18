@@ -6,6 +6,7 @@ export const api = {
   aboutDialogInfo: () => ipcRenderer.invoke('aboutDialogInfo'),
   openUrl: (url: string) => ipcRenderer.send('openUrl', url),
   selectImage: () => ipcRenderer.send('selectImage'),
+  networkInfo: () => ipcRenderer.invoke('networkInfo'),
   audioDevices: (devices: MediaDeviceInfo[]) => ipcRenderer.send('audioDevices', devices)
 }
 

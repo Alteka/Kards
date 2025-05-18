@@ -170,3 +170,10 @@ export const ConfigSchema = z.object({
 })
 
 export type Config = z.infer<typeof ConfigSchema>
+
+export const ExportedConfigSchema = ConfigSchema.extend({
+  createdBy: z.string(),
+  exportedVersion: z.string()
+})
+
+export type ExportedConfig = z.infer<typeof ExportedConfigSchema>
