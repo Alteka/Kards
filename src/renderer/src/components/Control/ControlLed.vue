@@ -43,5 +43,5 @@ import type { LED } from '@renderer/config'
 defineProps<{
   colors: string[]
 }>()
-const led = defineModel<LED>()
+const led = defineModel<LED>({ required: true })
 </script>

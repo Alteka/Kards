@@ -63,5 +63,5 @@ import type { Bars } from '@renderer/config'
 
 const simpleColors = ['Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow', 'White']
 
-const bars = defineModel<Bars>()
+const bars = defineModel<Bars>({ required: true })
 </script>

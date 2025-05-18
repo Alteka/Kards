@@ -1,21 +1,15 @@
 import { app, ipcMain, Menu, MenuItem, shell } from 'electron'
 import EventEmitter from 'events'
+import type { Config } from './config'
 
 export class AltekaMenu extends EventEmitter {
-  constructor() {
-    super()
+  config: Config = {}
+  menu: Menu | null = null
+  screens: Electron.Display[] = []
+  active: boolean = false
+  audioDevices: MediaDeviceInfo[] = []
 
-    this.config = null
-    this.menu = null
-
-    this.screens = []
-
-    this.active = false
-
-    this.audioDevices = []
-  }
-
-  setup(c) {
+  setup(c: Config) {
     this.config = c
 
     if (process.platform == 'darwin') {
@@ -50,7 +44,7 @@ export class AltekaMenu extends EventEmitter {
           { role: 'services' },
           { type: 'separator' },
           { role: 'hide' },
-          { role: 'hideothers' },
+          { role: 'hideOthers' },
           { role: 'unhide' },
           { type: 'separator' },
           { role: 'quit' }
@@ -94,7 +88,7 @@ export class AltekaMenu extends EventEmitter {
       })
     )
 
-    let screensMenu = []
+    const screensMenu: Electron.MenuItemConstructorOptions[] = []
     for (const s in this.screens) {
       screensMenu.push({
         label:
@@ -273,7 +267,7 @@ export class AltekaMenu extends EventEmitter {
       })
     )
 
-    let audioDeviceMenu = []
+    const audioDeviceMenu: Electron.MenuItemConstructorOptions[] = []
     for (const d in this.audioDevices) {
       audioDeviceMenu.push({
         label: this.audioDevices[d].label,
@@ -501,7 +495,7 @@ export class AltekaMenu extends EventEmitter {
     this.emit('menuClick', this.config)
   }
 
-  updateConfig(c) {
+  updateConfig(c: Config) {
     if (this.active) {
       this.config = c
       this.buildMenu()
@@ -509,7 +503,7 @@ export class AltekaMenu extends EventEmitter {
     }
   }
 
-  updateScreens(s) {
+  updateScreens(s: Electron.Display[]) {
     this.screens = s
     this.updateConfig(this.config)
   }

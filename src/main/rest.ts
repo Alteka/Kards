@@ -1,30 +1,27 @@
 import { dialog, ipcMain } from 'electron'
-import express from 'express'
+import express, { Express } from 'express'
 import bodyParser from 'body-parser'
 import log from 'electron-log'
 import EventEmitter from 'events'
 import { hostname } from 'os'
+import { defu } from 'defu'
+
+import type { Bonjour } from 'bonjour-service'
+import type { Server } from 'http'
+import type { Config } from './config'
 
 export class RESTServer extends EventEmitter {
-  constructor() {
-    super()
+  config: Config = {}
+  port = 8321
 
-    this.config = {}
-    this.port = 8321
+  _jsonParser = bodyParser.json()
+  _app: Express | null = null
+  _server: Server | null = null
 
-    this._app = null
-    this._server = null
+  screens: Electron.Display[] = []
+  audioDevices: unknown[] = []
 
-    this.screens = []
-    this.audioDevices = []
-
-    this._jsonParser = bodyParser.json()
-  }
-
-  /**
-   * @param {import('bonjour-service').Bonjour} bonjour
-   */
-  setup(bonjour) {
+  setup(bonjour: Bonjour) {
     this._app = express()
 
     this._server = this._app
@@ -74,13 +71,13 @@ export class RESTServer extends EventEmitter {
   }
 
   stop() {
-    this._server.close()
+    this._server?.close()
     log.info('Stopping Rest Server')
   }
 
   _handleGet(req, res) {
-    let url = req.url.split('/')
-    let c = JSON.parse(JSON.stringify(this.config))
+    const url = req.url.split('/')
+    const c = JSON.parse(JSON.stringify(this.config))
     delete c.alteka.logo
     delete c.audio.textData
     delete c.audio.fileData
@@ -107,7 +104,7 @@ export class RESTServer extends EventEmitter {
 
   _handlePut(req, res) {
     if (Object.keys(req.body).length > 0) {
-      const returnedTarget = this.mergeDeep(this.config, req.body)
+      const returnedTarget = defu(req.body, this.config) // TODO not sure if this is the right way round, double check
       this.emit('updateConfig', returnedTarget)
 
       delete returnedTarget.alteka.logo
@@ -127,32 +124,11 @@ export class RESTServer extends EventEmitter {
     res.send(this.audioDevices)
   }
 
-  updateConfig(c) {
+  updateConfig(c: Config) {
     this.config = c
   }
 
-  updateScreens(s) {
+  updateScreens(s: Electron.Display[]) {
     this.screens = s
-  }
-
-  isObject(item) {
-    return item && typeof item === 'object' && !Array.isArray(item)
-  }
-
-  mergeDeep(target, ...sources) {
-    if (!sources.length) return target
-    const source = sources.shift()
-
-    if (this.isObject(target) && this.isObject(source)) {
-      for (const key in source) {
-        if (this.isObject(source[key])) {
-          if (!target[key]) Object.assign(target, { [key]: {} })
-          this.mergeDeep(target[key], source[key])
-        } else {
-          Object.assign(target, { [key]: source[key] })
-        }
-      }
-    }
-    return this.mergeDeep(target, ...sources)
   }
 }

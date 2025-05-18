@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import Swatch from './Swatch.vue'
+import Swatch from './ColorSwatch.vue'
 export default {
   name: 'BarsHDRTestCard',
   components: { Swatch },

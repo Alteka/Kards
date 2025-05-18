@@ -46,5 +46,5 @@ defineProps<{
   colors: string[]
 }>()
 
-const grid = defineModel<Grid>()
+const grid = defineModel<Grid>({ required: true })
 </script>

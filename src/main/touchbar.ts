@@ -1,8 +1,9 @@
 import { TouchBar } from 'electron'
+import type { Config } from './config'
 
 const { TouchBarButton } = TouchBar
 
-let config = {}
+let config: Config = {}
 let window = null
 
 const enableButton = new TouchBarButton({

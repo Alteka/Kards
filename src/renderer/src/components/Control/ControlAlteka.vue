@@ -69,7 +69,7 @@ defineProps({
 })
 
 function selectImage() {
-  window.ipcRenderer.send('selectImage')
+  window.api.selectImage()
 }
 
 function clearImage() {

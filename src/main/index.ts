@@ -1,10 +1,9 @@
 import { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
 import { optimizer, is } from '@electron-toolkit/utils'
-import defaultConfig from '../renderer/src/defaultConfig.json'
 import { installExtension, VUEJS_DEVTOOLS_BETA } from 'electron-devtools-installer'
 import { compareVersions } from 'compare-versions'
 
-import log from 'electron-log'
+import log from 'electron-log/main'
 import { hostname, networkInterfaces } from 'os'
 import axios from 'axios'
 import Store from 'electron-store'
@@ -12,6 +11,7 @@ import path from 'path'
 import { Bonjour } from 'bonjour-service'
 import mime from 'mime-types'
 import Rollbar from 'rollbar'
+import defaultConfig from '../renderer/src/defaultConfig.json'
 
 // Project specific includes
 import { touchBar, setTouchbarWindow, setTouchbarConfig } from './touchbar'
@@ -22,6 +22,7 @@ import { AltekaMenu } from './menu'
 import { OSCServer } from './osc'
 import { RESTServer } from './rest'
 
+log.initialize()
 const version = require('../../package.json').version
 
 const store = new Store()
@@ -30,9 +31,9 @@ const bonjourInstance = new Bonjour()
 //========================//
 //         Rollbar        //
 //========================//
-let env = require('../../env.json')
+const env = require('../../env.json')
 if (!is.dev && env.rollbarToken != '') {
-  var rollbar = new Rollbar({
+  const rollbar = new Rollbar({
     accessToken: env.rollbarToken,
     captureUncaught: true,
     captureUnhandledRejections: true,
@@ -161,14 +162,13 @@ ipcMain.on('getConfigControl', () => {
   controlWindow.webContents.send('darkMode', nativeTheme.shouldUseDarkColors)
 })
 
-ipcMain.on('aboutDialogInfo', () => {
-  let about = {
+ipcMain.handle('aboutDialogInfo', () => {
+  return {
     version: version,
     electron: process.versions.electron,
     node: process.versions.node,
     vue: require('vue/package.json').version
   }
-  controlWindow.webContents.send('aboutDialogInfo', about)
 })
 
 ipcMain.on('resetDefault', () => {
@@ -253,12 +253,10 @@ ipcMain.on('controlResize', (_, data) => {
 //========================//
 //   Screen Management    //
 //========================//
-let screens
-let primaryScreen
 
 function updateScreens() {
-  screens = screen.getAllDisplays()
-  primaryScreen = screen.getPrimaryDisplay().id
+  const screens = screen.getAllDisplays()
+  const primaryScreen = screen.getPrimaryDisplay().id
 
   // workaround for Electron's displayFrequency being rounded.
   for (const s in screens) {
@@ -308,7 +306,7 @@ app.on('ready', function () {
 //========================//
 //       IPC Handlers     //
 //========================//
-ipcMain.on('closeTestCard', (_, arg) => {
+ipcMain.on('closeTestCard', () => {
   controlWindow.webContents.send('closeTestCard')
 })
 
@@ -317,8 +315,7 @@ ipcMain.on('openLogs', () => {
 })
 
 function openLogs() {
-  const path = log.transports.file.findLogPath()
-  shell.showItemInFolder(path)
+  shell.showItemInFolder(log.transports.file.getFile().path)
 }
 
 ipcMain.on('openUrl', (_, arg) => {
@@ -327,13 +324,13 @@ ipcMain.on('openUrl', (_, arg) => {
 })
 
 ipcMain.on('selectMaskImage', () => {
-  let result = dialog.showOpenDialogSync({
+  const result = dialog.showOpenDialogSync({
     title: 'Select Image',
     properties: ['openFile'],
     filters: [{ name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif', 'svg'] }]
   })
   if (result != null) {
-    let data = fs.readFileSync(result[0], { encoding: 'base64' })
+    const data = fs.readFileSync(result[0], { encoding: 'base64' })
     config.mask.imageSource = 'data:' + mime.lookup(result[0]) + ';base64,' + data
     config.mask.enabled = true // enable when image is picked.
     controlWindow.webContents.send('config', config)
@@ -395,7 +392,7 @@ function manageTestCardWindow() {
 }
 
 function setupNewTestCardWindow() {
-  let windowConfig = {
+  const windowConfig = {
     title: 'Kards - Output',
     show: false,
     frame: false,
@@ -412,7 +409,7 @@ function setupNewTestCardWindow() {
       if (disp.id == config.screen) {
         if (process.platform == 'darwin') {
           // figure out if it's newer macos...
-          let version = process.getSystemVersion().split('.')
+          const version = process.getSystemVersion().split('.')
           let catalina = false
           if (version[0] > 10) {
             catalina = true
@@ -484,8 +481,8 @@ ipcMain.on('moveWindowTo', (_, arg) => {
   for (const disp of screen.getAllDisplays()) {
     if (disp.id == arg) {
       testCardWindowScreen = disp.id
-      let x = disp.bounds.x + (disp.bounds.width - config.window.width) / 2
-      let y = disp.bounds.y + (disp.bounds.height - config.window.height) / 2
+      const x = disp.bounds.x + (disp.bounds.width - config.window.width) / 2
+      const y = disp.bounds.y + (disp.bounds.height - config.window.height) / 2
       testCardWindow.setPosition(Math.round(x), Math.round(y))
     }
   }
@@ -524,8 +521,8 @@ function showTestCardWindow(windowConfig) {
   })
 
   testCardWindow.on('move', function () {
-    let x = testCardWindow.getBounds().x
-    let y = testCardWindow.getBounds().y
+    const x = testCardWindow.getBounds().x
+    const y = testCardWindow.getBounds().y
 
     for (const disp of screen.getAllDisplays()) {
       if (
@@ -545,8 +542,8 @@ function showTestCardWindow(windowConfig) {
 
 function handleTestCardResize() {
   if (testCardWindow != null) {
-    let bounds = testCardWindow.getBounds()
-    let t = 2
+    const bounds = testCardWindow.getBounds()
+    const t = 2
     if (
       config.window.width < bounds.width - t ||
       config.window.width > bounds.width + t ||
@@ -565,7 +562,7 @@ let testCardWindowResizeTimer
 //========================//
 //    Setup OSC Server    //
 //========================//
-let osc = new OSCServer()
+const osc = new OSCServer()
 app.on('ready', function () {
   osc.setup(bonjourInstance)
 })
@@ -583,11 +580,11 @@ osc.on('audioFile', (filePath) => {
     config.audio.fileName = 'Opened ' + filePath
     controlWindow.webContents.send('config', config)
   } else {
-    log.warning('Selected audio file does not exist')
+    log.warn('Selected audio file does not exist')
   }
 })
 
-let rest = new RESTServer()
+const rest = new RESTServer()
 app.on('ready', function () {
   rest.setup(bonjourInstance)
 })
@@ -613,7 +610,7 @@ ipcMain.on('exportCard', () => {
     testCardWindow.webContents.send('exportCard')
   } else {
     headlessExportMode = true
-    let c = {
+    const c = {
       show: false,
       frame: false,
       width: config.window.width,
@@ -640,13 +637,13 @@ ipcMain.on('exportCard', () => {
 })
 
 ipcMain.on('selectImage', () => {
-  let result = dialog.showOpenDialogSync({
+  const result = dialog.showOpenDialogSync({
     title: 'Select Image',
     properties: ['openFile'],
     filters: [{ name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif'] }]
   })
   if (result != null) {
-    let data = fs.readFileSync(result[0], { encoding: 'base64' })
+    const data = fs.readFileSync(result[0], { encoding: 'base64' })
     config.alteka.logo = 'data:' + mime.lookup(result[0]) + ';base64,' + data
     controlWindow.webContents.send('config', config)
   } else {
@@ -659,7 +656,7 @@ ipcMain.on('saveAsPNG', (_, arg) => {
   let suffix = config.cardType[0].toUpperCase() + config.cardType.slice(1)
   if (suffix == 'Placeholder') suffix = 'Name'
   if (suffix == 'Led') suffix = 'LED'
-  var name = config.name.replace(/ /g, '-') + '-' + suffix + 'Kard.png'
+  const name = config.name.replace(/ /g, '-') + '-' + suffix + 'Kard.png'
   dialog
     .showSaveDialog(controlWindow, {
       title: 'Save PNG',
@@ -668,7 +665,7 @@ ipcMain.on('saveAsPNG', (_, arg) => {
     })
     .then((result) => {
       if (!result.canceled) {
-        var base64Data = arg.replace(/^data:image\/png;base64,/, '')
+        const base64Data = arg.replace(/^data:image\/png;base64,/, '')
         fs.writeFile(result.filePath, base64Data, 'base64', function (err) {
           if (err) {
             dialog.showErrorBox('Error Saving File', JSON.stringify(err))
@@ -692,8 +689,8 @@ ipcMain.on('saveAsPNG', (_, arg) => {
 
 ipcMain.on('setAsWallpaper', (_, arg) => {
   headlessExportMode = false
-  let dest = app.getPath('userData') + '/wallpaper' + Math.round(Math.random() * 100000) + '.png'
-  var base64Data = arg.replace(/^data:image\/png;base64,/, '')
+  const dest = app.getPath('userData') + '/wallpaper' + Math.round(Math.random() * 100000) + '.png'
+  const base64Data = arg.replace(/^data:image\/png;base64,/, '')
   fs.writeFile(dest, base64Data, 'base64', (err) => {
     if (err) {
       dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
@@ -729,10 +726,9 @@ function resetAudio() {
   setTimeout(createTextAudio, 5000)
 }
 
-let lastCreatedVoice = ''
 function createVoice() {
-  let dest = app.getPath('userData') + '/voice.wav'
-  let voice = config.audio.prependText + config.name
+  const dest = app.getPath('userData') + '/voice.wav'
+  const voice = config.audio.prependText + config.name
 
   say.export(voice, null, null, dest, (err) => {
     if (err) {
@@ -746,7 +742,7 @@ function createVoice() {
 }
 
 function createTextAudio() {
-  let dest = app.getPath('userData') + '/text.wav'
+  const dest = app.getPath('userData') + '/text.wav'
   say.export(config.audio.text, null, null, dest, (err) => {
     if (err) {
       return log.error(err)
@@ -759,7 +755,7 @@ function createTextAudio() {
 
 let textToSpeechCount = 0
 function textToSpeachData(text) {
-  let dest = app.getPath('userData') + '/tts0' + textToSpeechCount + '.wav'
+  const dest = app.getPath('userData') + '/tts0' + textToSpeechCount + '.wav'
   textToSpeechCount++
   say.export(config.audio.text, null, null, dest, (err) => {
     if (err) {
@@ -778,7 +774,7 @@ function loadAudioFile() {
     })
     .then((result) => {
       if (!result.canceled) {
-        let path = result.filePaths[0]
+        const path = result.filePaths[0]
         config.audio.fileData =
           'data:audio/' +
           path.split('.').pop() +
@@ -822,14 +818,14 @@ function exportSettings() {
     })
     .then((result) => {
       if (!result.canceled) {
-        let path = result.filePath
-        let cfg = config
+        const path = result.filePath
+        const cfg = config
         cfg.audio.voiceData = '' // clear this out as it can be easily rebuilt
         cfg.audio.textData = '' // clear this out as it can be easily rebuilt
         cfg.createdBy = 'Kards'
         cfg.exportedVersion = version
 
-        let data = JSON.stringify(cfg, null, 2)
+        const data = JSON.stringify(cfg, null, 2)
 
         fs.writeFile(path, data, function (err) {
           if (err) {
@@ -844,7 +840,7 @@ function exportSettings() {
 }
 
 function importSettings() {
-  let result = dialog.showOpenDialogSync({
+  const result = dialog.showOpenDialogSync({
     title: 'Import Settings',
     properties: ['openFile'],
     filters: [{ name: 'JSON', extensions: ['json', 'JSON'] }]
@@ -852,12 +848,12 @@ function importSettings() {
   if (result != null) {
     fs.readFile(result[0], (err, data) => {
       if (err) throw err
-      let d = JSON.parse(data)
+      const d = JSON.parse(data)
       let count = 0
 
       if (d.createdBy == 'Kards') {
         if (d.exportedVersion == version) {
-          for (let key in config) {
+          for (const key in config) {
             if (
               d[key] != undefined &&
               key != 'visible' &&
@@ -895,8 +891,8 @@ setTimeout(function () {
   axios
     .get('https://api.github.com/repos/alteka/kards/releases/latest')
     .then(function (response) {
-      let online = response.data.tag_name
-      let status = compareVersions(online, version, '>')
+      const online = response.data.tag_name
+      const status = compareVersions(online, version)
       if (status == 1) {
         log.info(
           'Update :: A newer version (' +

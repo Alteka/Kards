@@ -4,24 +4,20 @@ import log from 'electron-log'
 import EventEmitter from 'events'
 import { hostname } from 'os'
 
+import type { Bonjour } from 'bonjour-service'
+import type { Config } from './config'
+
 export class OSCServer extends EventEmitter {
-  constructor() {
-    super()
+  config: Config = {}
+  port = 25518
+  portReplies = 25519
 
-    this.config = {}
-    this.port = 25518
-    this.portReplies = 25519
+  screens: unknown[] = []
+  audioDevices: unknown[] = []
 
-    this.screens = []
-    this.audioDevices = []
+  _server: OSC | null = null
 
-    this._server = null
-  }
-
-  /**
-   * @param {import('bonjour-service').Bonjour} bonjour
-   */
-  setup(bonjour) {
+  setup(bonjour: Bonjour) {
     log.info('OSC :: Starting Server on port ' + this.port)
 
     ipcMain.on('audioDevices', (_, msg) => {
@@ -58,7 +54,7 @@ export class OSCServer extends EventEmitter {
       this._reply(message.address, JSON.stringify(this.screens))
     })
     this._server.on('/get/config', (message) => {
-      let c = JSON.parse(JSON.stringify(this.config))
+      const c = JSON.parse(JSON.stringify(this.config))
       delete c.alteka.logo
       delete c.audio.textData
       delete c.audio.fileData
@@ -107,6 +103,7 @@ export class OSCServer extends EventEmitter {
     })
 
     this._server.on('/showInfo', (message) => {
+      // TODO why does showInfo exist twice?
       if (message.args.length > 0) {
         this.config.showInfo = String(message.args[0])
         this._update()

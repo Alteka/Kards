@@ -46,7 +46,7 @@ import type { Placeholder } from '@renderer/config'
 
 defineProps<{ colors: string[] }>()
 
-const placeholder = defineModel<Placeholder>()
+const placeholder = defineModel<Placeholder>({ required: true })
 
 const icons = [
   'fa-desktop',

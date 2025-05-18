@@ -49,7 +49,7 @@ function updateDevices() {
       .filter((device) => device.kind === 'audiooutput')
       .filter((device) => device.deviceId != 'communications')
   })
-  window.ipcRenderer.send('audioDevices', JSON.parse(JSON.stringify(audioDevices.value)))
+  window.api.audioDevices(JSON.parse(JSON.stringify(audioDevices.value)))
 }
 
 onMounted(() => {

@@ -221,7 +221,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import ControlBars from '../components/Control/ControlBars.vue'
 import ControlGrid from '../components/Control/ControlGrid.vue'
 import ControlLed from '../components/Control/ControlLed.vue'
@@ -234,6 +234,7 @@ import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
 import defaultConfig from '../defaultConfig.json'
 import Mousetrap from 'mousetrap'
+import { computed, onBeforeMount, onMounted, ref, watch, nextTick } from 'vue'
 
 Mousetrap.bind(
   'esc',
@@ -243,144 +244,119 @@ Mousetrap.bind(
   'keyup'
 )
 
-export default {
-  name: 'ControlView',
-  components: {
-    ControlBars,
-    ControlGrid,
-    ControlAlteka,
-    ControlRamp,
-    ControlPlaceholder,
-    ControlAudioSync,
-    ControlScreen,
-    ControlMenu,
-    ControlLed,
-    ControlDeghost
-  },
-  data: function () {
-    return {
-      config: defaultConfig,
-      sync: false,
-      darkMode: false,
-      displayFrequency: 0,
-      prevFullsize: true
+const config = ref(defaultConfig)
+const sync = ref(false)
+const darkMode = ref(false)
+const displayFrequency = ref(0)
+
+const ledHeight = computed(() => {
+  return config.value.led.height * config.value.led.rows
+})
+
+watch(
+  config,
+  (val) => {
+    if (sync.value) {
+      window.ipcRenderer.send('config', JSON.parse(JSON.stringify(config.value)))
+    }
+    if (val.windowed) {
+      config.value.fullsize = true
+    }
+    if (val.cardType == 'led' && !val.windowed) {
+      config.value.fullsize = false
+    }
+    if (val.cardType == 'led' && val.windowed) {
+      config.value.window.width = val.led.width * val.led.columns
+      config.value.window.height = val.led.height * val.led.rows
+    }
+    if (val.cardType == 'led') {
+      config.value.notFilledCard.width = val.led.width * val.led.columns
+      config.value.notFilledCard.height = val.led.height * val.led.rows
     }
   },
-  computed: {
-    ledWidth: function () {
-      return this.config.led.width * this.config.led.columns
-    },
-    ledHeight: function () {
-      return this.config.led.height * this.config.led.rows
-    }
-  },
-  watch: {
-    config: {
-      handler: function (val) {
-        if (this.sync) {
-          window.ipcRenderer.send('config', JSON.parse(JSON.stringify(this.config)))
-        }
-        if (val.windowed) {
-          this.config.fullsize = true
-        }
-        if (val.cardType == 'led' && !val.windowed) {
-          this.config.fullsize = false
-        }
-        if (val.cardType == 'led' && val.windowed) {
-          this.config.window.width = val.led.width * val.led.columns
-          this.config.window.height = val.led.height * val.led.rows
-        }
-        if (val.cardType == 'led') {
-          this.config.notFilledCard.width = val.led.width * val.led.columns
-          this.config.notFilledCard.height = val.led.height * val.led.rows
-        }
-      },
-      deep: true
-    }
-  },
-  created: function () {
-    let vm = this
-    window.ipcRenderer.receive('closeTestCard', function () {
-      vm.config.visible = false
-    })
-    window.ipcRenderer.receive('config', function (val) {
-      vm.config = val
-      vm.sync = true
-    })
-    window.ipcRenderer.receive('darkMode', function (val) {
-      vm.darkMode = val
-    })
-    window.ipcRenderer.receive('screens', function (data) {
-      for (const scr of data.all) {
-        if (vm.config.screen == scr.id) {
-          vm.displayFrequency = scr.displayFrequency
-        }
+  { deep: true }
+)
+
+onBeforeMount(() => {
+  window.ipcRenderer.receive('closeTestCard', function () {
+    config.value.visible = false
+  })
+  window.ipcRenderer.receive('config', function (val) {
+    config.value = val
+    sync.value = true
+  })
+  window.ipcRenderer.receive('darkMode', function (val) {
+    darkMode.value = val
+  })
+  window.ipcRenderer.receive('screens', function (data) {
+    for (const scr of data.all) {
+      if (config.value.screen == scr.id) {
+        displayFrequency.value = scr.displayFrequency
       }
-    })
-    window.ipcRenderer.send('getScreens')
-    window.ipcRenderer.receive('testCardMoveToScreen', function (id) {
-      vm.config.screen = id
-    })
-    window.ipcRenderer.send('getConfigControl')
-  },
-  mounted: function () {
-    let vm = this
-    this.$nextTick(function () {
-      window.ipcRenderer.send('controlResize', {
-        height: document.getElementById('wrapper').clientHeight
-      })
-    })
-    Mousetrap.bind(['command+f', 'ctrl+f'], function () {
-      vm.config.visible = !vm.config.visible
-      return false
-    })
-    Mousetrap.bind(['command+i', 'ctrl+i'], function () {
-      vm.config.showInfo = !vm.config.showInfo
-      return false
-    })
-    Mousetrap.bind(['command+m', 'ctrl+m'], function () {
-      vm.config.animated = !vm.config.animated
-      return false
-    })
-    // bindings for windows...
-    Mousetrap.bind(['ctrl+1'], function () {
-      vm.config.cardType = 'alteka'
-      return false
-    })
-    Mousetrap.bind(['ctrl+2'], function () {
-      vm.config.cardType = 'bars'
-      return false
-    })
-    Mousetrap.bind(['ctrl+3'], function () {
-      vm.config.cardType = 'grid'
-      return false
-    })
-    Mousetrap.bind(['ctrl+4'], function () {
-      vm.config.cardType = 'ramp'
-      return false
-    })
-    Mousetrap.bind(['ctrl+5'], function () {
-      vm.config.cardType = 'placeholder'
-      return false
-    })
-    Mousetrap.bind(['ctrl+6'], function () {
-      vm.config.cardType = 'audioSync'
-      return false
-    })
-    Mousetrap.bind(['ctrl+7'], function () {
-      vm.config.cardType = 'deghost'
-      return false
-    })
-    Mousetrap.bind(['ctrl+8'], function () {
-      vm.config.cardType = 'led'
-      return false
-    })
-  },
-  methods: {
-    handleResize: function ({ width, height }) {
-      window.ipcRenderer.send('controlResize', { height: height, width: width })
     }
-  }
+  })
+  window.ipcRenderer.send('getScreens')
+  window.ipcRenderer.receive('testCardMoveToScreen', function (id) {
+    config.value.screen = id
+  })
+  window.ipcRenderer.send('getConfigControl')
+})
+
+onMounted(() => {
+  nextTick(() => {
+    window.ipcRenderer.send('controlResize', {
+      height: document.getElementById('wrapper').clientHeight
+    })
+  })
+  Mousetrap.bind(['command+f', 'ctrl+f'], function () {
+    config.value.visible = !config.value.visible
+    return false
+  })
+  Mousetrap.bind(['command+i', 'ctrl+i'], function () {
+    config.value.showInfo = !config.value.showInfo
+    return false
+  })
+  Mousetrap.bind(['command+m', 'ctrl+m'], function () {
+    config.value.animated = !config.value.animated
+    return false
+  })
+  // bindings for windows...
+  Mousetrap.bind(['ctrl+1'], function () {
+    config.value.cardType = 'alteka'
+    return false
+  })
+  Mousetrap.bind(['ctrl+2'], function () {
+    config.value.cardType = 'bars'
+    return false
+  })
+  Mousetrap.bind(['ctrl+3'], function () {
+    config.value.cardType = 'grid'
+    return false
+  })
+  Mousetrap.bind(['ctrl+4'], function () {
+    config.value.cardType = 'ramp'
+    return false
+  })
+  Mousetrap.bind(['ctrl+5'], function () {
+    config.value.cardType = 'placeholder'
+    return false
+  })
+  Mousetrap.bind(['ctrl+6'], function () {
+    config.value.cardType = 'audioSync'
+    return false
+  })
+  Mousetrap.bind(['ctrl+7'], function () {
+    config.value.cardType = 'deghost'
+    return false
+  })
+  Mousetrap.bind(['ctrl+8'], function () {
+    config.value.cardType = 'led'
+    return false
+  })
+})
+
+function handleResize({ width, height }) {
+  window.ipcRenderer.send('controlResize', { height: height, width: width })
 }
 </script>
 

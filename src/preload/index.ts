@@ -2,6 +2,13 @@ console.log('Preload.js Loaded')
 
 import { contextBridge, ipcRenderer } from 'electron'
 
+export const api = {
+  aboutDialogInfo: () => ipcRenderer.invoke('aboutDialogInfo'),
+  openUrl: (url: string) => ipcRenderer.send('openUrl', url),
+  selectImage: () => ipcRenderer.send('selectImage'),
+  audioDevices: (devices: MediaDeviceInfo[]) => ipcRenderer.send('audioDevices', devices)
+}
+
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -20,3 +27,5 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     // }
   }
 })
+
+contextBridge.exposeInMainWorld('api', api)

@@ -284,7 +284,7 @@
   </el-row>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ElLoading } from 'element-plus'
 import { ElNotification } from 'element-plus'
 import ControlShare from './ControlShare.vue'
@@ -296,276 +296,252 @@ import phase from '@assets/audio/phase.wav'
 import tone from '@assets/audio/tone.wav'
 import white from '@assets/audio/white.wav'
 import sweep from '@assets/audio/sweep.wav'
+import type { Config } from '@renderer/src/types/config'
+import { onMounted, ref, watch } from 'vue'
 
 let loadingInstance
 
-export default {
-  components: { ControlShare, ControlAbout },
-  props: {
-    modelValue: Object, // v-model object
-    darkMode: Boolean
-  },
-  data: function () {
-    return {
-      confirmResetVisible: false,
-      drawerAudio: false,
-      drawerImage: false,
-      curAudio: null,
-      playing: false,
-      name: '',
-      voiceTimer: null,
-      text: '',
-      textTimer: null,
-      audioDevices: [],
-      showShareDialog: false,
-      showAboutDialog: false
+const config = defineModel<Config>({ required: true })
+defineProps<{ darkMode: boolean }>()
+
+const confirmResetVisible = ref(false)
+const drawerAudio = ref(false)
+const drawerImage = ref(false)
+const curAudio = ref(null)
+const playing = ref(false)
+const name = ref('')
+const voiceTimer = ref(null)
+const text = ref('')
+const textTimer = ref(null)
+const audioDevices = ref<MediaDeviceInfo[]>([])
+const showShareDialog = ref(false)
+const showAboutDialog = ref(false)
+
+watch(
+  config,
+  (val, oldVal) => {
+    document.getElementById('stereo').setSinkId(val.audio.deviceId)
+    document.getElementById('phase').setSinkId(val.audio.deviceId)
+    document.getElementById('pink').setSinkId(val.audio.deviceId)
+    document.getElementById('white').setSinkId(val.audio.deviceId)
+    document.getElementById('tone').setSinkId(val.audio.deviceId)
+    document.getElementById('sweep').setSinkId(val.audio.deviceId)
+    document.getElementById('voice').setSinkId(val.audio.deviceId)
+    document.getElementById('text').setSinkId(val.audio.deviceId)
+    document.getElementById('file').setSinkId(val.audio.deviceId)
+
+    if (val.name != name.value) {
+      name.value = val.name
+      doNameUpdate()
+    }
+
+    if (val.audio.text != text.value) {
+      text.value = val.audio.text
+      doTextUpdate()
+    }
+
+    if (val.audio.enabled && !playing.value) {
+      console.log('Starting audio output')
+      curAudio.value = null // so it starts from the first item
+      playNext()
+    }
+    if (val.audio.options.length == 0) {
+      stopAudio()
+      config.value.audio.enabled = false // stop playing if no options selected
+    }
+    if (!val.audio.enabled && playing.value) {
+      stopAudio()
+    }
+    if (val.fullsize == 1) {
+      // imageSource.value = 'card' // TODO no idea why it was like this?
+    }
+
+    if (val.fullsize || val.windowed) {
+      config.value.export.imageSource = 'card'
+    }
+
+    if (
+      val.audio.voiceData != oldVal.audio.voiceData &&
+      playing.value &&
+      curAudio.value == 'voice'
+    ) {
+      setTimeout(function () {
+        curAudio.value = null
+        stopAudio()
+        playNext()
+      }, 500)
+    }
+    if (val.audio.textData != oldVal.audio.textData && playing.value && curAudio.value == 'text') {
+      setTimeout(function () {
+        curAudio.value = null
+        stopAudio()
+        playNext()
+      }, 500)
+    }
+    if (val.audio.fileData != oldVal.audio.fileData && playing.value && curAudio.value == 'file') {
+      setTimeout(function () {
+        curAudio.value = null
+        stopAudio()
+        playNext()
+      }, 500)
     }
   },
-  computed: {
-    config: {
-      get() {
-        return this.modelValue // return v-model
-      },
-      set(value) {
-        this.$emit('update:modelValue', value) // update the v-model object to parent component
-      }
-    }
-  },
-  watch: {
-    config: {
-      handler: function (val, oldVal) {
-        document.getElementById('stereo').setSinkId(val.audio.deviceId)
-        document.getElementById('phase').setSinkId(val.audio.deviceId)
-        document.getElementById('pink').setSinkId(val.audio.deviceId)
-        document.getElementById('white').setSinkId(val.audio.deviceId)
-        document.getElementById('tone').setSinkId(val.audio.deviceId)
-        document.getElementById('sweep').setSinkId(val.audio.deviceId)
-        document.getElementById('voice').setSinkId(val.audio.deviceId)
-        document.getElementById('text').setSinkId(val.audio.deviceId)
-        document.getElementById('file').setSinkId(val.audio.deviceId)
+  { deep: true }
+)
 
-        if (val.name != this.name) {
-          this.name = val.name
-          this.doNameUpdate()
-        }
+onMounted(() => {
+  updateDevices()
+  setInterval(updateDevices, 5000)
+  setTimeout(doNameUpdate, 2000)
 
-        if (val.audio.text != this.text) {
-          this.text = val.audio.text
-          this.doTextUpdate()
-        }
+  document.getElementById('stereo').src = stereo
+  document.getElementById('pink').src = pink
+  document.getElementById('phase').src = phase
+  document.getElementById('tone').src = tone
+  document.getElementById('white').src = white
+  document.getElementById('sweep').src = sweep
 
-        if (val.audio.enabled && !this.playing) {
-          console.log('Starting audio output')
-          this.curAudio = null // so it starts from the first item
-          this.playNext()
-        }
-        if (val.audio.options.length == 0) {
-          this.stopAudio()
-          this.config.audio.enabled = false // stop playing if no options selected
-        }
-        if (!val.audio.enabled && this.playing) {
-          this.stopAudio()
-        }
-        if (val.fullsize == 1) {
-          this.imageSource = 'card'
-        }
-
-        if (val.fullsize || val.windowed) {
-          this.config.export.imageSource = 'card'
-        }
-
-        let vm = this
-        if (
-          val.audio.voiceData != oldVal.audio.voiceData &&
-          this.playing &&
-          this.curAudio == 'voice'
-        ) {
-          setTimeout(function () {
-            vm.curAudio = null
-            vm.stopAudio()
-            vm.playNext()
-          }, 500)
-        }
-        if (
-          val.audio.textData != oldVal.audio.textData &&
-          this.playing &&
-          this.curAudio == 'text'
-        ) {
-          setTimeout(function () {
-            vm.curAudio = null
-            vm.stopAudio()
-            vm.playNext()
-          }, 500)
-        }
-        if (
-          val.audio.fileData != oldVal.audio.fileData &&
-          this.playing &&
-          this.curAudio == 'file'
-        ) {
-          setTimeout(function () {
-            vm.curAudio = null
-            vm.stopAudio()
-            vm.playNext()
-          }, 500)
-        }
-      },
-      deep: true
-    }
-  },
-  mounted: function () {
-    this.updateDevices()
-    setInterval(this.updateDevices, 5000)
-    setTimeout(this.doNameUpdate, 2000)
-
-    document.getElementById('stereo').src = stereo
-    document.getElementById('pink').src = pink
-    document.getElementById('phase').src = phase
-    document.getElementById('tone').src = tone
-    document.getElementById('white').src = white
-    document.getElementById('sweep').src = sweep
-
-    window.ipcRenderer.receive('exportCardCompleted', function (msg) {
-      if (msg) {
-        ElNotification({
-          title: 'Oops',
-          message: msg,
-          duration: 2500,
-          showClose: false,
-          onClick: function () {
-            this.close()
-          }
-        })
-      }
-      loadingInstance.close()
-    })
-
-    window.ipcRenderer.receive('importSettings', function (msg) {
+  window.ipcRenderer.receive('exportCardCompleted', function (msg) {
+    if (msg) {
       ElNotification({
-        title: 'Import Settings',
+        title: 'Oops',
         message: msg,
         duration: 2500,
         showClose: false,
         onClick: function () {
-          this.close()
+          close()
         }
       })
-    })
-
-    let vm = this
-    window.ipcRenderer.receive('aboutDialog', function () {
-      vm.showAboutDialog = true
-    })
-  },
-  methods: {
-    handleMoreMenuChange: function (visible) {
-      if (!visible) {
-        this.confirmResetVisible = false
-      }
-    },
-    loadAudioFile: function () {
-      window.ipcRenderer.send('loadAudioFile')
-    },
-    updateDevices: function () {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        this.audioDevices = devices
-          .filter((device) => device.kind === 'audiooutput')
-          .filter((device) => device.deviceId != 'communications')
-        window.ipcRenderer.send('audioDevices', JSON.parse(JSON.stringify(this.audioDevices)))
-      })
-    },
-    ipcSend: function (val) {
-      window.ipcRenderer.send(val)
-    },
-    reset: function () {
-      window.ipcRenderer.send('resetDefault')
-      this.confirmResetVisible = false
-    },
-    exportCard: function () {
-      window.ipcRenderer.send('exportCard')
-
-      loadingInstance = ElLoading.service({
-        fullscreen: true,
-        text: 'Capturing Test Card',
-        background: 'rgba(0, 0, 0, 0.85)'
-      })
-      this.drawerImage = false
-    },
-    importSettings: function () {
-      window.ipcRenderer.send('importSettings')
-    },
-    exportSettings: function () {
-      window.ipcRenderer.send('exportSettings')
-    },
-    selectMaskImage: function () {
-      window.ipcRenderer.send('selectMaskImage')
-    },
-    openHelp: function () {
-      window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
-    },
-    openLogs: function () {
-      window.window.ipcRenderer.send('openLogs')
-    },
-    stopAudio: function () {
-      console.log('Stopping audio output')
-      this.stopFile('tone')
-      this.stopFile('white')
-      this.stopFile('pink')
-      this.stopFile('phase')
-      this.stopFile('sweep')
-      this.stopFile('stereo')
-      this.stopFile('file')
-      this.stopFile('text')
-      this.playing = false
-    },
-    stopFile: function (file) {
-      let f = document.getElementById(file)
-      f.pause()
-      f.currentTime = 0
-    },
-    playNext: function () {
-      if (this.config.audio.enabled) {
-        this.playing = true
-        let opts = this.config.audio.options
-
-        if (this.curAudio == null && opts.length > 0) {
-          this.curAudio = opts[0]
-        } else if (opts.length > 0) {
-          var curIndex = opts.indexOf(this.curAudio)
-          if (opts[curIndex + 1] == undefined) {
-            this.curAudio = opts[0]
-          } else {
-            this.curAudio = opts[curIndex + 1]
-          }
-        }
-
-        this.playFile(this.curAudio)
-      } else {
-        this.playing = false
-      }
-    },
-    playFile: function (file) {
-      let vm = this
-      var x = document.getElementById(file)
-      x.play()
-      x.onended = function () {
-        setTimeout(vm.playNext(), 500)
-      }
-    },
-    doNameUpdate: function () {
-      clearTimeout(this.voiceTimer)
-      this.voiceTimer = setTimeout(this.updateName, 1000)
-    },
-    updateName: function () {
-      window.ipcRenderer.send('createVoice')
-    },
-    doTextUpdate: function () {
-      clearTimeout(this.textTimer)
-      this.textTimer = setTimeout(this.updateText, 1000)
-    },
-    updateText: function () {
-      window.ipcRenderer.send('updateAudioText')
     }
+    loadingInstance.close()
+  })
+
+  window.ipcRenderer.receive('importSettings', function (msg) {
+    ElNotification({
+      title: 'Import Settings',
+      message: msg,
+      duration: 2500,
+      showClose: false,
+      onClick: function () {
+        close()
+      }
+    })
+  })
+
+  window.ipcRenderer.receive('aboutDialog', function () {
+    showAboutDialog.value = true
+  })
+})
+
+function handleMoreMenuChange(visible) {
+  if (!visible) {
+    confirmResetVisible.value = false
   }
+}
+function loadAudioFile() {
+  window.ipcRenderer.send('loadAudioFile')
+}
+function updateDevices() {
+  navigator.mediaDevices.enumerateDevices().then((devices) => {
+    audioDevices.value = devices
+      .filter((device) => device.kind === 'audiooutput')
+      .filter((device) => device.deviceId != 'communications')
+    window.ipcRenderer.send('audioDevices', JSON.parse(JSON.stringify(audioDevices.value)))
+  })
+}
+function ipcSend(val) {
+  window.ipcRenderer.send(val)
+}
+function reset() {
+  window.ipcRenderer.send('resetDefault')
+  confirmResetVisible.value = false
+}
+function exportCard() {
+  window.ipcRenderer.send('exportCard')
+
+  loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: 'Capturing Test Card',
+    background: 'rgba(0, 0, 0, 0.85)'
+  })
+  drawerImage.value = false
+}
+function importSettings() {
+  window.ipcRenderer.send('importSettings')
+}
+function exportSettings() {
+  window.ipcRenderer.send('exportSettings')
+}
+function selectMaskImage() {
+  window.ipcRenderer.send('selectMaskImage')
+}
+function openHelp() {
+  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
+}
+function openLogs() {
+  window.window.ipcRenderer.send('openLogs')
+}
+function stopAudio() {
+  console.log('Stopping audio output')
+  stopFile('tone')
+  stopFile('white')
+  stopFile('pink')
+  stopFile('phase')
+  stopFile('sweep')
+  stopFile('stereo')
+  stopFile('file')
+  stopFile('text')
+  playing.value = false
+}
+
+function stopFile(file) {
+  let f = document.getElementById(file)
+  f.pause()
+  f.currentTime = 0
+}
+
+function playNext() {
+  if (config.value.audio.enabled) {
+    playing.value = true
+    let opts = config.value.audio.options
+
+    if (curAudio.value == null && opts.length > 0) {
+      curAudio.value = opts[0]
+    } else if (opts.length > 0) {
+      const curIndex = opts.indexOf(curAudio.value)
+      if (opts[curIndex + 1] == undefined) {
+        curAudio.value = opts[0]
+      } else {
+        curAudio.value = opts[curIndex + 1]
+      }
+    }
+
+    playFile(curAudio.value)
+  } else {
+    playing.value = false
+  }
+}
+function playFile(file) {
+  var x = document.getElementById(file)
+  x.play()
+  x.onended = function () {
+    setTimeout(playNext, 500)
+  }
+}
+function doNameUpdate() {
+  clearTimeout(voiceTimer.value)
+  voiceTimer.value = setTimeout(updateName, 1000)
+}
+function updateName() {
+  window.ipcRenderer.send('createVoice')
+}
+function doTextUpdate() {
+  clearTimeout(textTimer.value)
+  textTimer.value = setTimeout(updateText, 1000)
+}
+
+function updateText() {
+  window.ipcRenderer.send('updateAudioText')
 }
 </script>
 

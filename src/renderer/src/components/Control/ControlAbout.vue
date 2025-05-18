@@ -64,27 +64,24 @@ defineProps<{
 
 const info = ref({})
 
-onMounted(() => {
-  window.ipcRenderer.receive('aboutDialogInfo', function (i) {
-    info.value = i
-  })
-  window.ipcRenderer.send('aboutDialogInfo')
+onMounted(async () => {
+  info.value = await window.api.aboutDialogInfo()
 })
 
 function openSite() {
-  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/')
+  window.api.openUrl('https://alteka.solutions/kards/')
 }
 
 function openHelp() {
-  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/kards/help')
+  window.api.openUrl('https://alteka.solutions/kards/help')
 }
 
 function openGitHub() {
-  window.ipcRenderer.send('openUrl', 'https://github.com/Alteka/Kards')
+  window.api.openUrl('https://github.com/Alteka/Kards')
 }
 
 function openDonate() {
-  window.ipcRenderer.send('openUrl', 'https://alteka.solutions/donateKards')
+  window.api.openUrl('https://alteka.solutions/donateKards')
 }
 </script>
 

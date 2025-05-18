@@ -41,7 +41,7 @@ const bgCol = computed(() => {
   let bg
 
   if (props.colour.includes('rec709') || props.colour.includes('ntsc')) {
-    bg = props.colours[props.colour]
+    bg = colours[props.colour]
   } else {
     let dec = ireToDecimal(props.ire)
     let r = dec * colours[props.colour][0]
