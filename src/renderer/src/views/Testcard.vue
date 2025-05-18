@@ -258,20 +258,23 @@
   </div>
 </template>
 
-<script>
-import GridTestCard from '../components/TestCard/Grid.vue'
-import RampTestCard from '../components/TestCard/Ramp.vue'
-import AltekaTestCard from '../components/TestCard/Alteka.vue'
-import BarsSmpteTestCard from '../components/TestCard/SMPTE.vue'
-import BarsAribTestCard from '../components/TestCard/ARIB.vue'
-import BarsSimpleTestCard from '../components/TestCard/Bars.vue'
-import LedWallTestCard from '../components/TestCard/LedWall.vue'
-import AudioSyncTestCard from '../components/TestCard/AudioSync.vue'
-import PlaceholderTestCard from '../components/TestCard/Placeholder.vue'
-import DeghostTestCard from '../components/TestCard/Deghost.vue'
-import BarsHDRTestCard from '../components/TestCard/HDR.vue'
-import BarsSDITestCard from '../components/TestCard/SDI.vue'
-import BarsSingle from '../components/TestCard/Single.vue'
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
+import type { Config } from '@renderer/config'
+import GridTestCard from '../components/TestCard/GridCard.vue'
+import RampTestCard from '../components/TestCard/RampCard.vue'
+import AltekaTestCard from '../components/TestCard/AltekaCard.vue'
+import BarsAribTestCard from '../components/TestCard/ARIBCard.vue'
+import BarsSimpleTestCard from '../components/TestCard/BarsCard.vue'
+import BarsSmpteTestCard from '../components/TestCard/BarsSmpteCard.vue'
+import BarsHDRTestCard from '../components/TestCard/BarsHdrCard.vue'
+import BarsSingle from '../components/TestCard/BarsSingleCard.vue'
+import BarsSDITestCard from '../components/TestCard/BarsSimpleCard.vue'
+
+import LedWallTestCard from '../components/TestCard/LedWallCard.vue'
+import AudioSyncTestCard from '../components/TestCard/AudioSyncCard.vue'
+import PlaceholderTestCard from '../components/TestCard/PlaceholderCard.vue'
+import DeghostTestCard from '../components/TestCard/DeghostCard.vue'
 
 import domtoimage from 'dom-to-image'
 import InfoCircle from '../components/TestCard/InfoCircle.vue'
@@ -306,239 +309,233 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function () {
   return false
 })
 
-export default {
-  name: 'TestCard',
-  components: {
-    GridTestCard,
-    AltekaTestCard,
-    BarsSmpteTestCard,
-    BarsAribTestCard,
-    BarsSimpleTestCard,
-    PlaceholderTestCard,
-    RampTestCard,
-    AudioSyncTestCard,
-    LedWallTestCard,
-    DeghostTestCard,
-    BarsHDRTestCard,
-    BarsSDITestCard,
-    BarsSingle,
-    InfoCircle
+const config = ref<Config>({
+  notFilledCard: {
+    bounds: false
   },
-  data: function () {
-    return {
-      config: {
-        notFilledCard: {
-          bounds: false
-        },
-        mask: {
-          enabled: false,
-          imageSource: '',
-          applyBounds: false
-        }
-      },
-      boundsInfo: Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height),
-      borderSize: 25,
-      info: {
-        cardSize: '',
-        circleSize: 500,
-        displayFrequency: 0,
-        time: '00:00',
-        network: ['127.0.0.1'],
-        networkIndex: 0
-      }
-    }
-  },
-  computed: {
-    computedStyle: function () {
-      let r = {}
-      if (!this.config.fullsize && this.config.screen != 0) {
-        r.height = this.config.notFilledCard.height + 'px'
-        r.width = this.config.notFilledCard.width + 'px'
-        r.top = this.config.notFilledCard.top + 'px'
-        r.left = this.config.notFilledCard.left + 'px'
-      }
-      if (this.config.raster && !this.config.windowed) {
-        r.border = '1px solid white'
-      } else {
-        r.border = 'none'
-      }
-
-      if (this.config.notFilledCard.rotate == 90) {
-        r.transform = 'rotate(90deg) translateY(-100%)'
-        r.transformOrigin = 'top left'
-      } else if (this.config.notFilledCard.rotate == 180) {
-        r.transform = 'rotate(180deg)'
-        // r.transformOrigin = '50% 50%'
-      } else if (this.config.notFilledCard.rotate == 270) {
-        r.transform = 'rotate(270deg) translateX(-100%)'
-        r.transformOrigin = 'top left'
-      }
-
-      return r
-    }
-  },
-  mounted: function () {
-    console.log('Test card mounted')
-    let vm = this
-    window.ipcRenderer.receive('config', function (args) {
-      vm.config = args
-      vm.updateCardSize()
-      if (!vm.config.visible) vm.exportTestCard(args.export)
-    })
-
-    window.ipcRenderer.receive('displayFrequency', function (args) {
-      vm.info.displayFrequency = args
-    })
-    window.ipcRenderer.send('getScreens')
-
-    vm.updateCardSize()
-    setTimeout(vm.updateCardSize, 1000)
-    vm.updateTime()
-    setInterval(vm.updateTime, 1000)
-
-    vm.updateNetworkInfo()
-    setInterval(vm.updateNetworkInfo, 10000)
-    window.ipcRenderer.receive('networkInfo', function (networkInfo) {
-      vm.info.network = networkInfo
-    })
-    setInterval(function () {
-      vm.info.networkIndex++
-      if (vm.info.networkIndex >= vm.info.network.length) {
-        vm.info.networkIndex = 0
-      }
-    }, 5000)
-
-    window.ipcRenderer.send('getConfigTestCard')
-    this.$message({
-      customClass: 'modal',
-      showClose: false,
-      duration: 3000,
-      message: 'Press escape to close test card'
-    })
-    window.addEventListener('resize', function () {
-      vm.boundsInfo = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
-    })
-    window.ipcRenderer.receive('exportCard', function () {
-      console.log('exportCard', vm.config.export)
-      vm.exportTestCard(vm.config.export)
-    })
-
-    window.addEventListener(
-      'contextmenu',
-      (e) => {
-        e.preventDefault()
-      },
-      false
-    )
-  },
-  methods: {
-    toggleWindowed: function () {
-      window.ipcRenderer.send('testCardKeyPress', 'windowed')
-    },
-    updateTime: function () {
-      var cd = new Date()
-      this.info.time =
-        this.zeroPadding(cd.getHours(), 2) +
-        ':' +
-        this.zeroPadding(cd.getMinutes(), 2) +
-        ':' +
-        this.zeroPadding(cd.getSeconds(), 2)
-    },
-    zeroPadding: function (num, digit) {
-      var zero = ''
-      for (var i = 0; i < digit; i++) {
-        zero += '0'
-      }
-      return (zero + num).slice(-digit)
-    },
-    closeTestCard: function () {
-      window.ipcRenderer.send('closeTestCard')
-    },
-    updateCardSize: function () {
-      let w = 1280
-      let h = 720
-      if (this.config.windowed) {
-        w = this.config.window.width
-        h = this.config.window.height
-      } else if (!this.config.fullsize) {
-        w = this.config.notFilledCard.width
-        h = this.config.notFilledCard.height
-      } else {
-        w = Math.round(visualViewport.width)
-        h = Math.round(visualViewport.height)
-      }
-      this.info.cardSize = w + ' x ' + h
-      this.updateBorderSize(w, h)
-      this.updateInfoCircleSize(w, h)
-    },
-    updateBorderSize: function (w, h) {
-      this.borderSize = 25
-      if (w < 720 || h < 720) {
-        this.borderSize = 20
-      }
-      if (w < 600 || h < 600) {
-        this.borderSize = 15
-      }
-      if (w < 400 || h < 400) {
-        this.borderSize = 10
-      }
-      if (w < 250 || h < 250) {
-        this.borderSize = 6
-      }
-    },
-    updateInfoCircleSize: function (w, h) {
-      this.info.circleSize = 500
-      if (w < 1600 || h < 1600) {
-        this.info.circleSize = 400
-      }
-      if (w < 1300 || h < 1300) {
-        this.info.circleSize = 300
-      }
-      if (w < 900 || h < 900) {
-        this.info.circleSize = 200
-      }
-      if (w < 500 || h < 500) {
-        this.info.circleSize = 150
-      }
-      if (w < 300 || h < 300) {
-        this.info.circleSize = 100
-      }
-    },
-    exportTestCard: function (settings) {
-      var wasAnimated = this.config.animated
-      var wasShowingClock = this.config.showClock
-      var vm = this
-      this.config.animated = false // stop animations in order to capture image
-      this.config.showClock = false // hide the clock
-      this.info.networkIndex = 0 // show hostname during screenshot
-
-      console.log('Attempt to capture ' + settings.imageSource + ' as ' + settings.target)
-
-      let opts = {}
-      let element = 'bounds'
-
-      if (settings.imageSource == 'card') {
-        let size = document.getElementById('cardForPNG').getBoundingClientRect()
-        opts.width = size.width
-        opts.height = size.height
-        element = 'cardForPNG'
-      }
-
-      domtoimage.toPng(document.getElementById(element), opts).then(function (dataUrl) {
-        if (settings.target == 'file') {
-          window.ipcRenderer.send('saveAsPNG', dataUrl)
-        } else {
-          window.ipcRenderer.send('setAsWallpaper', dataUrl)
-        }
-        console.log('Resetting animated to ', wasAnimated)
-        vm.config.animated = wasAnimated
-        vm.config.showClock = wasShowingClock
-      })
-    },
-    updateNetworkInfo: function () {
-      window.ipcRenderer.send('networkInfo')
-    }
+  mask: {
+    enabled: false,
+    imageSource: '',
+    applyBounds: false
   }
+})
+
+export interface Info {
+  cardSize: string
+  circleSize: number
+  displayFrequency: number
+  time: string
+  network: string[]
+  networkIndex: number
+}
+
+const boundsInfo = ref(Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height))
+const borderSize = ref(25)
+const info = ref<Info>({
+  cardSize: '',
+  circleSize: 500,
+  displayFrequency: 0,
+  time: '00:00',
+  network: ['127.0.0.1'],
+  networkIndex: 0
+})
+
+const computedStyle = computed(() => {
+  let r = {}
+  if (!config.value.fullsize && config.value.screen != 0) {
+    r.height = config.value.notFilledCard.height + 'px'
+    r.width = config.value.notFilledCard.width + 'px'
+    r.top = config.value.notFilledCard.top + 'px'
+    r.left = config.value.notFilledCard.left + 'px'
+  }
+  if (config.value.raster && !config.value.windowed) {
+    r.border = '1px solid white'
+  } else {
+    r.border = 'none'
+  }
+
+  if (config.value.notFilledCard.rotate == 90) {
+    r.transform = 'rotate(90deg) translateY(-100%)'
+    r.transformOrigin = 'top left'
+  } else if (config.value.notFilledCard.rotate == 180) {
+    r.transform = 'rotate(180deg)'
+    // r.transformOrigin = '50% 50%'
+  } else if (config.value.notFilledCard.rotate == 270) {
+    r.transform = 'rotate(270deg) translateX(-100%)'
+    r.transformOrigin = 'top left'
+  }
+
+  return r
+})
+
+onMounted(() => {
+  console.log('Test card mounted')
+  window.ipcRenderer.receive('config', function (args) {
+    config.value = args
+    updateCardSize()
+    if (!config.value.visible) exportTestCard(args.export)
+  })
+
+  window.ipcRenderer.receive('displayFrequency', function (args) {
+    info.value.displayFrequency = args
+  })
+  window.ipcRenderer.send('getScreens')
+
+  updateCardSize()
+  setTimeout(updateCardSize, 1000)
+  updateTime()
+  setInterval(updateTime, 1000)
+
+  updateNetworkInfo()
+  setInterval(updateNetworkInfo, 10000)
+  window.ipcRenderer.receive('networkInfo', function (networkInfo) {
+    info.value.network = networkInfo
+  })
+  setInterval(function () {
+    info.value.networkIndex++
+    if (info.value.networkIndex >= info.value.network.length) {
+      info.value.networkIndex = 0
+    }
+  }, 5000)
+
+  window.ipcRenderer.send('getConfigTestCard')
+
+  // TODO re-add this
+  // $message({
+  //   customClass: 'modal',
+  //   showClose: false,
+  //   duration: 3000,
+  //   message: 'Press escape to close test card'
+  // })
+  window.addEventListener('resize', function () {
+    boundsInfo.value = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
+  })
+  window.ipcRenderer.receive('exportCard', function () {
+    console.log('exportCard', config.value.export)
+    exportTestCard(config.value.export)
+  })
+
+  window.addEventListener(
+    'contextmenu',
+    (e) => {
+      e.preventDefault()
+    },
+    false
+  )
+})
+
+function toggleWindowed() {
+  window.ipcRenderer.send('testCardKeyPress', 'windowed')
+}
+
+function updateTime() {
+  const cd = new Date()
+  info.value.time =
+    zeroPadding(cd.getHours(), 2) +
+    ':' +
+    zeroPadding(cd.getMinutes(), 2) +
+    ':' +
+    zeroPadding(cd.getSeconds(), 2)
+}
+
+function zeroPadding(num, digit) {
+  let zero = ''
+  for (let i = 0; i < digit; i++) {
+    zero += '0'
+  }
+  return (zero + num).slice(-digit)
+}
+
+function closeTestCard() {
+  window.ipcRenderer.send('closeTestCard')
+}
+
+function updateCardSize() {
+  let w = 1280
+  let h = 720
+  if (config.value.windowed) {
+    w = config.value.window.width
+    h = config.value.window.height
+  } else if (!config.value.fullsize) {
+    w = config.value.notFilledCard.width
+    h = config.value.notFilledCard.height
+  } else {
+    w = Math.round(visualViewport.width)
+    h = Math.round(visualViewport.height)
+  }
+  info.value.cardSize = w + ' x ' + h
+  updateBorderSize(w, h)
+  updateInfoCircleSize(w, h)
+}
+
+function updateBorderSize(w, h) {
+  borderSize.value = 25
+  if (w < 720 || h < 720) {
+    borderSize.value = 20
+  }
+  if (w < 600 || h < 600) {
+    borderSize.value = 15
+  }
+  if (w < 400 || h < 400) {
+    borderSize.value = 10
+  }
+  if (w < 250 || h < 250) {
+    borderSize.value = 6
+  }
+}
+
+function updateInfoCircleSize(w, h) {
+  info.value.circleSize = 500
+  if (w < 1600 || h < 1600) {
+    info.value.circleSize = 400
+  }
+  if (w < 1300 || h < 1300) {
+    info.value.circleSize = 300
+  }
+  if (w < 900 || h < 900) {
+    info.value.circleSize = 200
+  }
+  if (w < 500 || h < 500) {
+    info.value.circleSize = 150
+  }
+  if (w < 300 || h < 300) {
+    info.value.circleSize = 100
+  }
+}
+
+function exportTestCard(settings) {
+  const wasAnimated = config.value.animated
+  const wasShowingClock = config.value.showClock
+  config.value.animated = false // stop animations in order to capture image
+  config.value.showClock = false // hide the clock
+  info.value.networkIndex = 0 // show hostname during screenshot
+
+  console.log('Attempt to capture ' + settings.imageSource + ' as ' + settings.target)
+
+  let opts = {}
+  let element = 'bounds'
+
+  if (settings.imageSource == 'card') {
+    let size = document.getElementById('cardForPNG').getBoundingClientRect()
+    opts.width = size.width
+    opts.height = size.height
+    element = 'cardForPNG'
+  }
+
+  domtoimage.toPng(document.getElementById(element), opts).then(function (dataUrl) {
+    if (settings.target == 'file') {
+      window.ipcRenderer.send('saveAsPNG', dataUrl)
+    } else {
+      window.ipcRenderer.send('setAsWallpaper', dataUrl)
+    }
+    console.log('Resetting animated to ', wasAnimated)
+    config.value.animated = wasAnimated
+    config.value.showClock = wasShowingClock
+  })
+}
+
+function updateNetworkInfo() {
+  window.ipcRenderer.send('networkInfo')
 }
 </script>
 

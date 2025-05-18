@@ -102,17 +102,16 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import Swatch from './ColorSwatch.vue'
 import InfoCircle from './InfoCircle.vue'
-export default {
-  name: 'BarsAribTestCard',
-  components: { Swatch, InfoCircle },
-  props: {
-    config: Object,
-    info: Object
-  }
-}
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+defineProps<{
+  config: Config
+  info: Info
+}>()
 </script>
 
 <style scoped>

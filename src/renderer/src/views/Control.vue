@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper" style="position: relative" :class="{ darkMode: darkMode }">
+  <div ref="wrapper" style="position: relative" :class="{ darkMode: darkMode }">
     <el-form ref="form" :model="config" label-width="120px" size="small">
       <control-screen v-model="config"></control-screen>
       <el-divider content-position="center">Select Card Type</el-divider>
@@ -249,6 +249,8 @@ const sync = ref(false)
 const darkMode = ref(false)
 const displayFrequency = ref(0)
 
+const wrapper = ref<HTMLDivElement>()
+
 const ledHeight = computed(() => {
   return config.value.led.height * config.value.led.rows
 })
@@ -305,7 +307,7 @@ onBeforeMount(() => {
 onMounted(() => {
   nextTick(() => {
     window.ipcRenderer.send('controlResize', {
-      height: document.getElementById('wrapper').clientHeight
+      height: wrapper.value!.clientHeight
     })
   })
   Mousetrap.bind(['command+f', 'ctrl+f'], function () {

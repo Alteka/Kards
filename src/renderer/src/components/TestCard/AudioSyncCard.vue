@@ -127,61 +127,50 @@
   </div>
 </template>
 
-<script>
-import VueResizeText from 'vue3-resize-text'
-export default {
-  name: 'AudioSyncTestCard',
-  directives: {
-    ResizeText: VueResizeText.ResizeText
-  },
-  props: {
-    config: Object,
-    info: Object,
-    borderSize: Number
-  },
-  data: function () {
-    return {
-      description: 'Default Interface',
-      rates: ['24', '25', '29-97', '30', '50', '59-94', '60']
-    }
-  },
-  computed: {
-    cssVars() {
-      return {
-        '--border-size': this.borderSize + 'px'
-      }
-    }
-  },
-  watch: {
-    config: {
-      handler: function (val) {
-        this.updateDeviceName(val)
-      },
-      deep: true
-    }
-  },
-  mounted: function () {
-    this.updateDeviceName(this.config)
-  },
-  methods: {
-    updateDeviceName: function (val) {
-      for (const rate in this.rates) {
-        let element = document.getElementById('vt' + this.rates[rate])
-        if (element !== null) {
-          element.setSinkId(val.audioSync.deviceId)
-        }
-      }
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
 
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        devices = devices.filter((device) => device.kind === 'audiooutput')
-        for (const dev of devices) {
-          if (dev.deviceId == val.audioSync.deviceId) {
-            this.description = dev.label
-          }
-        }
-      })
+const props = defineProps<{
+  config: Config
+  info: Info
+  borderSize: number
+}>()
+
+const description = ref('Default Interface')
+const rates = ['24', '25', '29-97', '30', '50', '59-94', '60']
+
+const cssVars = computed(() => {
+  return {
+    '--border-size': props.borderSize + 'px'
+  }
+})
+
+watch(
+  () => props.config,
+  (val) => {
+    updateDeviceName(val)
+  },
+  { deep: true, immediate: true }
+)
+
+function updateDeviceName(val) {
+  for (const rate in rates) {
+    let element = document.getElementById('vt' + rates[rate])
+    if (element !== null) {
+      element.setSinkId(val.audioSync.deviceId)
     }
   }
+
+  navigator.mediaDevices.enumerateDevices().then((devices) => {
+    devices = devices.filter((device) => device.kind === 'audiooutput')
+    for (const dev of devices) {
+      if (dev.deviceId == val.audioSync.deviceId) {
+        description.value = dev.label
+      }
+    }
+  })
 }
 </script>
 

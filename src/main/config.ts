@@ -128,6 +128,14 @@ export const ConfigSchema = z.object({
   visible: z.boolean(),
   name: z.string(),
   cardType: z.string(), // TODO use CardTypeSchema
+  animated: z.boolean(),
+  showInfo: z.boolean(),
+  windowed: z.boolean(),
+  fullsize: z.boolean(),
+  screen: z.number(),
+  raster: z.boolean(),
+  showClock: z.boolean(),
+  infoCircleAnimated: z.boolean(),
   notFilledCard: NotFilledCardSchema,
   window: WindowSchema,
   mask: MaskSchema,
@@ -141,12 +149,7 @@ export const ConfigSchema = z.object({
   deghost: DeghostSchema,
   export: ExportSchema,
   audio: AudioSchema,
-  predefineColors: z.array(z.string()),
-  animated: z.boolean(), // TODO these might be nullable
-  windowed: z.boolean(), // TODO these might be nullable
-  fullsize: z.boolean(), // TODO these might be nullable
-  screen: z.number(), // TODO these might be nullable
-  showInfo: z.boolean() // TODO these might be nullable
+  predefineColors: z.array(z.string())
 })
 
 export type Config = z.infer<typeof ConfigSchema>

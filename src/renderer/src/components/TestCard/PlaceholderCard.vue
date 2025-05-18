@@ -49,18 +49,14 @@
   </div>
 </template>
 
-<script>
-import VueResizeText from 'vue3-resize-text'
-export default {
-  name: 'PlaceholderTestCard',
-  directives: {
-    ResizeText: VueResizeText.ResizeText
-  },
-  props: {
-    config: Object,
-    info: Object
-  }
-}
+<script setup lang="ts">
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+defineProps<{
+  config: Config
+  info: Info
+}>()
 </script>
 
 <style scoped>

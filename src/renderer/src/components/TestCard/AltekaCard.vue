@@ -1,5 +1,5 @@
 <template>
-  <div id="alteka" :class="{ gradient: config.alteka.gradient }" :style="cssVars">
+  <div id="alteka" ref="alteka" :class="{ gradient: config.alteka.gradient }" :style="cssVars">
     <resize-observer @notify="handleResize" />
     <div class="grid">
       <div class="gridQuadrant gridtopleft" :style="grid"></div>
@@ -29,7 +29,7 @@
       <div class="arrowLeft" :style="{ 'border-right-color': config.alteka.fg }"></div>
     </div>
 
-    <div id="pillarLeft" class="pillar">
+    <div ref="pillarLeft" class="pillar">
       <swatch colour="black" ire="-7.5" :show-text="false"></swatch>
       <swatch colour="black" ire="0" :show-text="false"></swatch>
       <swatch colour="black" ire="10" :show-text="false"></swatch>
@@ -45,7 +45,7 @@
       <swatch colour="black" ire="109" :show-text="false"></swatch>
     </div>
 
-    <div id="pillarRight" class="pillar">
+    <div ref="pillarRight" class="pillar">
       <div class="stripe-v-4"></div>
       <div class="stripe-v-2"></div>
       <div class="stripe-v-1"></div>
@@ -126,6 +126,7 @@
         <img
           v-if="config.alteka.logo != ''"
           id="customLogo"
+          ref="customLogo"
           :src="config.alteka.logo"
           height="0"
           width="0"
@@ -159,7 +160,7 @@
           </linearGradient>
         </defs>
 
-        <g id="clip-me" clip-path="url('#clipCircle')">
+        <g ref="circle" clip-path="url('#clipCircle')">
           <transition name="fade">
             <svg
               v-if="!config.alteka.showLogo || config.alteka.logo == ''"
@@ -297,170 +298,174 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import Swatch from './ColorSwatch.vue'
-export default {
-  name: 'AltekaTestCard',
-  components: { Swatch },
-  props: {
-    config: Object,
-    info: Object,
-    borderSize: Number
-  },
-  computed: {
-    text: function () {
-      if (this.config.alteka.showLogo && this.config.alteka.logo != '') {
-        return this.config.alteka.textColour
-      } else {
-        return '#fff'
-      }
-    },
-    grid: function () {
-      var luma = this.toLuma(this.config.alteka.bg)
-      if (luma > 127) {
-        return {
-          outline: '2px solid #000',
-          'background-image': `linear-gradient(to right, #444 1px, transparent 1px), linear-gradient(to bottom, #444 1px, transparent 1px)`
+import type { Config } from '@renderer/config'
+import { computed, onMounted, ref, watch } from 'vue'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+const props = defineProps<{
+  config: Config
+  info: Info
+  borderSize: number
+}>()
+
+const alteka = ref<HTMLDivElement>()
+const pillarLeft = ref<HTMLDivElement>()
+const pillarRight = ref<HTMLDivElement>()
+const circle = ref<SVGGElement>()
+const customLogo = ref<HTMLImageElement>()
+
+const text = computed(() => {
+  if (props.config.alteka.showLogo && props.config.alteka.logo != '') {
+    return props.config.alteka.textColour
+  } else {
+    return '#fff'
+  }
+})
+
+const grid = computed(() => {
+  const luma = toLuma(props.config.alteka.bg)
+  if (luma > 127) {
+    return {
+      outline: '2px solid #000',
+      'background-image': `linear-gradient(to right, #444 1px, transparent 1px), linear-gradient(to bottom, #444 1px, transparent 1px)`
+    }
+  } else {
+    return {
+      outline: '2px solid white',
+      'background-image': `linear-gradient(to right, #bbb 1px, transparent 1px), linear-gradient(to bottom, #bbb 1px, transparent 1px)`
+    }
+  }
+})
+
+const cssVars = computed(() => {
+  return {
+    background: props.config.alteka.bg,
+    '--border-size': props.borderSize + 'px'
+  }
+})
+
+watch(
+  () => props.config,
+  (val, oldVal) => {
+    if (val.alteka != oldVal.alteka) {
+      setTimeout(function () {
+        let size = {
+          width: alteka.value!.getBoundingClientRect().width,
+          height: alteka.value!.getBoundingClientRect().height
         }
-      } else {
-        return {
-          outline: '2px solid white',
-          'background-image': `linear-gradient(to right, #bbb 1px, transparent 1px), linear-gradient(to bottom, #bbb 1px, transparent 1px)`
-        }
-      }
-    },
-    cssVars: function () {
-      return {
-        background: this.config.alteka.bg,
-        '--border-size': this.borderSize + 'px'
-      }
+        handleResize(size)
+      }, 250)
     }
   },
-  watch: {
-    config: {
-      handler: function (val, oldVal) {
-        if (val.alteka != oldVal.alteka) {
-          let vm = this
-          setTimeout(function () {
-            let size = {
-              width: document.getElementById('alteka').getBoundingClientRect().width,
-              height: document.getElementById('alteka').getBoundingClientRect().height
-            }
-            vm.handleResize(size)
-          }, 250)
-        }
-      },
-      deep: true
-    },
-    borderSize: {
-      handler: function () {
-        let vm = this
-        setTimeout(function () {
-          let size = {
-            width: document.getElementById('alteka').getBoundingClientRect().width,
-            height: document.getElementById('alteka').getBoundingClientRect().height
-          }
-          vm.handleResize(size)
-        }, 250)
-      },
-      deep: true
-    }
+  { deep: true }
+)
+
+watch(
+  () => props.borderSize,
+  () => {
+    setTimeout(function () {
+      let size = {
+        width: alteka.value!.getBoundingClientRect().width,
+        height: alteka.value!.getBoundingClientRect().height
+      }
+      handleResize(size)
+    }, 250)
   },
-  mounted: function () {
-    let size = {
-      width: document.getElementById('alteka').getBoundingClientRect().width,
-      height: document.getElementById('alteka').getBoundingClientRect().height
-    }
-    this.handleResize(size)
-  },
-  methods: {
-    toLuma: function (hex) {
-      var c = hex.substring(1)
-      var rgb = parseInt(c, 16)
-      var r = (rgb >> 16) & 0xff
-      var g = (rgb >> 8) & 0xff
-      var b = (rgb >> 0) & 0xff
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b
-    },
-    handleResize: function ({ width, height }) {
-      // console.log('Alteka Kard - Handle Resize for ', width, height)
-      let ratio = width / height
+  { deep: true }
+)
 
-      let pillarLeft = document.getElementById('pillarLeft')
-      let pillarRight = document.getElementById('pillarRight')
-      let circle = document.getElementById('clip-me')
-      let customLogo = document.getElementById('customLogo')
-      let circleWidth = circle.getBoundingClientRect().width
+onMounted(() => {
+  let size = {
+    width: alteka.value!.getBoundingClientRect().width,
+    height: alteka.value!.getBoundingClientRect().height
+  }
+  handleResize(size)
+})
 
-      if (customLogo) {
-        customLogo.style.width = circleWidth + 'px'
-        customLogo.style.height = circle.getBoundingClientRect().height / 3 + 2 + 'px'
-      }
+function toLuma(hex: string) {
+  const c = hex.substring(1)
+  const rgb = parseInt(c, 16)
+  const r = (rgb >> 16) & 0xff
+  const g = (rgb >> 8) & 0xff
+  const b = (rgb >> 0) & 0xff
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
 
-      // New and improved pillar size and position algorithm
+function handleResize({ width, height }) {
+  // console.log('Alteka Kard - Handle Resize for ', width, height)
+  let ratio = width / height
 
-      let long = width // the long edge of the card
-      let short = height // the short edge of the card
-      let aspect = ratio // like ratio but doesn't care about orientation
-      let gridSize = this.borderSize * 2
+  let circleWidth = circle.value!.getBoundingClientRect().width
 
-      if (ratio < 1) {
-        short = width
-        long = height
-        aspect = 1 / ratio
-      }
-      // console.log(aspect)
+  if (customLogo.value) {
+    customLogo.value!.style.width = circleWidth + 'px'
+    customLogo.value!.style.height = circle.value!.getBoundingClientRect().height / 3 + 2 + 'px'
+  }
 
-      // core pillar size based on size and shape of card
-      let pillarShort = Math.round((long / gridSize) * aspect * 0.04) * gridSize - 1
-      if (pillarShort < gridSize) pillarShort = gridSize // minimum short edge of 50px
-      let pillarLong = Math.floor((short / (gridSize * 2)) * 0.66) * (gridSize * 2) - 1
+  // New and improved pillar size and position algorithm
 
-      if (aspect < 1.4) pillarLong -= gridSize * 2 // avoid pillars being under the circles in cards that are nearly square
+  let long = width // the long edge of the card
+  let short = height // the short edge of the card
+  let aspect = ratio // like ratio but doesn't care about orientation
+  let gridSize = props.borderSize * 2
 
-      if (pillarShort > gridSize * 6) pillarShort = gridSize * 6 // limit short edge to 300px
+  if (ratio < 1) {
+    short = width
+    long = height
+    aspect = 1 / ratio
+  }
+  // console.log(aspect)
 
-      // gap is pixels from edge of circle to inside edge of pillar
-      let gap = 0
-      if (Math.round(pillarShort / gridSize) > 1) gap = gridSize
-      if (Math.round(pillarShort / gridSize) > 2) gap = 2 * gridSize
-      if (gap == 0 && aspect > 1.8) gap = gridSize
-      if (gap >= gridSize && circleWidth % gridSize < 15) gap -= gridSize
+  // core pillar size based on size and shape of card
+  let pillarShort = Math.round((long / gridSize) * aspect * 0.04) * gridSize - 1
+  if (pillarShort < gridSize) pillarShort = gridSize // minimum short edge of 50px
+  let pillarLong = Math.floor((short / (gridSize * 2)) * 0.66) * (gridSize * 2) - 1
 
-      // now apply the pillar size and gap to the pillar objects
-      if (ratio >= 1) {
-        pillarLeft.style.width = pillarShort + 'px'
-        pillarRight.style.width = pillarShort + 'px'
-        pillarLeft.style.height = pillarLong + 'px'
-        pillarRight.style.height = pillarLong + 'px'
-        pillarLeft.style.flexDirection = 'column'
-        pillarRight.style.flexDirection = 'column'
-        pillarLeft.style.bottom = '50%'
-        pillarLeft.style.transform = 'none'
-        pillarLeft.style.transform = 'translateY(calc(+50% + 0.5px))'
-        pillarRight.style.top = 'calc(50% + 0.5px)'
-        pillarRight.style.transform = 'translateY(-50%)'
+  if (aspect < 1.4) pillarLong -= gridSize * 2 // avoid pillars being under the circles in cards that are nearly square
 
-        let left = Math.ceil(circleWidth / 2 / gridSize) * gridSize + width / 2 + gap
-        pillarRight.style.left = left + 1 + 'px'
-        pillarLeft.style.left = width - left - pillarShort + 'px'
-      } else {
-        pillarLeft.style.width = pillarLong + 'px'
-        pillarRight.style.width = pillarLong + 'px'
-        pillarLeft.style.height = pillarShort + 'px'
-        pillarRight.style.height = pillarShort + 'px'
-        pillarLeft.style.flexDirection = 'row'
-        pillarRight.style.flexDirection = 'row'
-        pillarLeft.style.left = 'calc(50% + 0.5px)'
-        pillarRight.style.left = 'calc(50% + 0.5px)'
-        pillarLeft.style.transform = 'translateX(-50%)'
-        pillarRight.style.transform = 'translateX(-50%)'
+  if (pillarShort > gridSize * 6) pillarShort = gridSize * 6 // limit short edge to 300px
 
-        let leftBottom = height / 2 + Math.ceil(circleWidth / 2 / gridSize) * gridSize + gap
-        pillarLeft.style.bottom = leftBottom + 'px'
-        pillarRight.style.top = leftBottom + 1 + 'px'
-      }
-    }
+  // gap is pixels from edge of circle to inside edge of pillar
+  let gap = 0
+  if (Math.round(pillarShort / gridSize) > 1) gap = gridSize
+  if (Math.round(pillarShort / gridSize) > 2) gap = 2 * gridSize
+  if (gap == 0 && aspect > 1.8) gap = gridSize
+  if (gap >= gridSize && circleWidth % gridSize < 15) gap -= gridSize
+
+  // now apply the pillar size and gap to the pillar objects
+  if (ratio >= 1) {
+    pillarLeft.value!.style.width = pillarShort + 'px'
+    pillarRight.value!.style.width = pillarShort + 'px'
+    pillarLeft.value!.style.height = pillarLong + 'px'
+    pillarRight.value!.style.height = pillarLong + 'px'
+    pillarLeft.value!.style.flexDirection = 'column'
+    pillarRight.value!.style.flexDirection = 'column'
+    pillarLeft.value!.style.bottom = '50%'
+    pillarLeft.value!.style.transform = 'none'
+    pillarLeft.value!.style.transform = 'translateY(calc(+50% + 0.5px))'
+    pillarRight.value!.style.top = 'calc(50% + 0.5px)'
+    pillarRight.value!.style.transform = 'translateY(-50%)'
+
+    let left = Math.ceil(circleWidth / 2 / gridSize) * gridSize + width / 2 + gap
+    pillarRight.value!.style.left = left + 1 + 'px'
+    pillarLeft.value!.style.left = width - left - pillarShort + 'px'
+  } else {
+    pillarLeft.value!.style.width = pillarLong + 'px'
+    pillarRight.value!.style.width = pillarLong + 'px'
+    pillarLeft.value!.style.height = pillarShort + 'px'
+    pillarRight.value!.style.height = pillarShort + 'px'
+    pillarLeft.value!.style.flexDirection = 'row'
+    pillarRight.value!.style.flexDirection = 'row'
+    pillarLeft.value!.style.left = 'calc(50% + 0.5px)'
+    pillarRight.value!.style.left = 'calc(50% + 0.5px)'
+    pillarLeft.value!.style.transform = 'translateX(-50%)'
+    pillarRight.value!.style.transform = 'translateX(-50%)'
+
+    let leftBottom = height / 2 + Math.ceil(circleWidth / 2 / gridSize) * gridSize + gap
+    pillarLeft.value!.style.bottom = leftBottom + 'px'
+    pillarRight.value!.style.top = leftBottom + 1 + 'px'
   }
 }
 </script>

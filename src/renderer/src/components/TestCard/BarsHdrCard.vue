@@ -84,16 +84,15 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import Swatch from './ColorSwatch.vue'
-export default {
-  name: 'BarsHDRTestCard',
-  components: { Swatch },
-  props: {
-    config: Object,
-    info: Object
-  }
-}
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+defineProps<{
+  config: Config
+  info: Info
+}>()
 </script>
 
 <style scoped>

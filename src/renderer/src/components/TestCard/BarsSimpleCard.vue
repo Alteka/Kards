@@ -10,16 +10,15 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import InfoCircle from './InfoCircle.vue'
-export default {
-  name: 'BarsSimpleTestCard',
-  components: { InfoCircle },
-  props: {
-    config: Object,
-    info: Object
-  }
-}
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+defineProps<{
+  config: Config
+  info: Info
+}>()
 </script>
 
 <style scoped>

@@ -18,47 +18,41 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LedPanel',
-  props: {
-    config: Object,
-    row: Number,
-    column: Number
-  },
-  data: function () {
-    return {
-      vertical: false
-    }
-  },
-  computed: {
-    odd: function () {
-      if (this.row % 2 == 0 && this.column % 2 != 0) {
-        return false
-      } else if (this.row % 2 != 0 && this.column % 2 == 0) {
-        return false
-      } else {
-        return true
-      }
-    },
-    bgCol: function () {
-      if (this.odd) {
-        return 'blue'
-      } else {
-        return 'red'
-      }
-    },
-    animClass: function () {
-      if (this.odd && this.config.animated) {
-        return 'animatedOdd'
-      } else if (this.config.animated) {
-        return 'animatedEven'
-      } else {
-        return 'notAnimated'
-      }
-    }
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { Config } from '@renderer/config'
+
+const props = defineProps<{
+  config: Config
+  row: number
+  column: number
+}>()
+
+const odd = computed(() => {
+  if (props.row % 2 == 0 && props.column % 2 != 0) {
+    return false
+  } else {
+    return !(props.row % 2 != 0 && props.column % 2 == 0)
   }
-}
+})
+
+const bgCol = computed(() => {
+  if (odd.value) {
+    return 'blue'
+  } else {
+    return 'red'
+  }
+})
+
+const animClass = computed(() => {
+  if (odd.value && props.config.animated) {
+    return 'animatedOdd'
+  } else if (props.config.animated) {
+    return 'animatedEven'
+  } else {
+    return 'notAnimated'
+  }
+})
 </script>
 
 <style scoped>

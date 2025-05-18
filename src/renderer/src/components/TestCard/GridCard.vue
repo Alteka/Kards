@@ -83,25 +83,24 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue'
 import InfoCircle from './InfoCircle.vue'
-export default {
-  name: 'GridTestCard',
-  components: { InfoCircle },
-  props: {
-    config: Object,
-    info: Object
-  },
-  computed: {
-    quadrantStyle: function () {
-      return {
-        outline: '1px solid ' + this.config.grid.crosshair,
-        'background-size': this.config.grid.size + 'px ' + this.config.grid.size + 'px',
-        'background-image': `linear-gradient(to right, ${this.config.grid.lines} 1px, transparent 1px), linear-gradient(to bottom, ${this.config.grid.lines} 1px, transparent 1px)`
-      }
-    }
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+const props = defineProps<{
+  config: Config
+  info: Info
+}>()
+
+const quadrantStyle = computed(() => {
+  return {
+    outline: '1px solid ' + props.config.grid.crosshair,
+    'background-size': props.config.grid.size + 'px ' + props.config.grid.size + 'px',
+    'background-image': `linear-gradient(to right, ${props.config.grid.lines} 1px, transparent 1px), linear-gradient(to bottom, ${props.config.grid.lines} 1px, transparent 1px)`
   }
-}
+})
 </script>
 
 <style scoped>

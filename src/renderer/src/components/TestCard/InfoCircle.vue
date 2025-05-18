@@ -13,21 +13,21 @@
   </transition>
 </template>
 
-<script>
-export default {
-  name: 'InfoCircle',
-  props: {
-    config: Object,
-    info: Object
-  },
-  computed: {
-    cssVars() {
-      return {
-        '--info-circle-size': this.info.circleSize + 'px'
-      }
-    }
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { Config } from '@renderer/config'
+import type { Info } from '@renderer/views/Testcard.vue'
+
+const props = defineProps<{
+  config: Config
+  info: Info
+}>()
+
+const cssVars = computed(() => {
+  return {
+    '--info-circle-size': props.info.circleSize + 'px'
   }
-}
+})
 </script>
 
 <style scoped>
