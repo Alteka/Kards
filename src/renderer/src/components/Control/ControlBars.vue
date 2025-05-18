@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Bars } from '@renderer/config'
+import type { Bars } from '@shared/config'
 
 const simpleColors = ['Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow', 'White']
 

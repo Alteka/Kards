@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import type { AudioSync } from '@renderer/config'
+import type { AudioSync } from '@shared/config'
 
 defineProps<{ displayFrequency: number }>()
 

@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Placeholder } from '@renderer/config'
+import type { Placeholder } from '@shared/config'
 
 defineProps<{ colors: string[] }>()
 

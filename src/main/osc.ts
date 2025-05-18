@@ -5,7 +5,7 @@ import EventEmitter from 'events'
 import { hostname } from 'os'
 
 import type { Bonjour } from 'bonjour-service'
-import type { Config } from './config'
+import type { Config } from '../shared/config'
 
 export class OSCServer extends EventEmitter {
   config: Config = {}

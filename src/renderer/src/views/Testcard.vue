@@ -166,7 +166,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import type { Config } from '@renderer/config'
+import type { Config } from '@shared/config'
 import GridTestCard from '../components/TestCard/GridCard.vue'
 import RampTestCard from '../components/TestCard/RampCard.vue'
 import AltekaTestCard from '../components/TestCard/AltekaCard.vue'

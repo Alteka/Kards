@@ -300,7 +300,7 @@
 
 <script setup lang="ts">
 import Swatch from './ColorSwatch.vue'
-import type { Config } from '@renderer/config'
+import type { Config } from '@shared/config'
 import { computed, onMounted, ref, watch } from 'vue'
 import type { Info } from '@renderer/views/Testcard.vue'
 

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Deghost } from '@renderer/config'
+import type { Deghost } from '@shared/config'
 
 const deghost = defineModel<Deghost>({ required: true })
 </script>

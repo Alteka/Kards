@@ -1,6 +1,6 @@
 import { app, ipcMain, Menu, MenuItem, shell } from 'electron'
 import EventEmitter from 'events'
-import type { Config } from './config'
+import type { Config } from '../shared/config'
 
 export class AltekaMenu extends EventEmitter {
   config: Config = {}

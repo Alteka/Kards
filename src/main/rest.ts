@@ -8,7 +8,7 @@ import { defu } from 'defu'
 
 import type { Bonjour } from 'bonjour-service'
 import type { Server } from 'http'
-import type { Config } from './config'
+import type { Config } from '../shared/config'
 
 export class RESTServer extends EventEmitter {
   config: Config = {}

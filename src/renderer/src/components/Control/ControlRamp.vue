@@ -42,6 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Ramp } from '@renderer/config'
+import type { Ramp } from '@shared/config'
 const ramp = defineModel<Ramp>({ required: true })
 </script>

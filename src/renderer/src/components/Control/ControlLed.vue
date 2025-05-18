@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import type { LED } from '@renderer/config'
+import type { LED } from '@shared/config'
 
 defineProps<{
   colors: string[]

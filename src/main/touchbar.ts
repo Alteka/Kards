@@ -1,5 +1,5 @@
 import { TouchBar } from 'electron'
-import type { Config } from './config'
+import type { Config } from '../shared/config'
 
 const { TouchBarButton } = TouchBar
 

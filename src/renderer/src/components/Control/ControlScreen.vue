@@ -134,7 +134,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import type { Config } from '@renderer/config'
+import type { Config } from '@shared/config'
 
 const config = defineModel<Config>()
 

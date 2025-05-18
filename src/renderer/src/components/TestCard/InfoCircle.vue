@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Config } from '@renderer/config'
+import type { Config } from '@shared/config'
 import type { Info } from '@renderer/views/Testcard.vue'
 
 const props = defineProps<{

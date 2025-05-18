@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Grid } from '@renderer/config'
+import type { Grid } from '@shared/config'
 
 defineProps<{
   colors: string[]
