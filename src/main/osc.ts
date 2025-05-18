@@ -484,7 +484,7 @@ export class OSCServer extends EventEmitter {
       this._reply(message.address, this.config.audio.deviceId)
     })
 
-    var p = require('../../package.json')
+    const p = require('../../package.json')
 
     bonjour.publish({
       name: 'Kards-' + hostname().split('.')[0],

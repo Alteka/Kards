@@ -28,7 +28,7 @@ export class RESTServer extends EventEmitter {
       .listen(this.port, () => {
         log.info('REST :: HTTP Server running and listening on port ' + this.port)
 
-        var p = require('../../package.json')
+        const p = require('../../package.json')
 
         bonjour.publish({
           name: 'Kards-' + hostname().split('.')[0],

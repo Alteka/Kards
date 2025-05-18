@@ -36,8 +36,12 @@ export const PlaceholderSchema = z.object({
 
 export type Placeholder = z.infer<typeof PlaceholderSchema>
 
+export const BarTypeSchema = z.enum(['simple', 'smpte', 'arib', 'hdr', 'sdi', 'single'])
+
+export type BarType = z.infer<typeof BarTypeSchema>
+
 export const BarsSchema = z.object({
-  type: z.string(), // TODO use schema
+  type: BarTypeSchema,
   overlay: z.boolean(),
   level: z.string(),
   color: z.string()
@@ -124,10 +128,23 @@ export const AudioSchema = z.object({
 
 export type Audio = z.infer<typeof AudioSchema>
 
+export const CardTypeSchema = z.enum([
+  'alteka',
+  'bars',
+  'grid',
+  'ramp',
+  'placeholder',
+  'audioSync',
+  'deghost',
+  'led'
+])
+
+export type CardType = z.infer<typeof CardTypeSchema>
+
 export const ConfigSchema = z.object({
   visible: z.boolean(),
   name: z.string(),
-  cardType: z.string(), // TODO use CardTypeSchema
+  cardType: CardTypeSchema,
   animated: z.boolean(),
   showInfo: z.boolean(),
   windowed: z.boolean(),

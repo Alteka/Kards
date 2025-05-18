@@ -12,44 +12,35 @@
           style="height: 165px; width: 100%"
         >
           <el-tab-pane label="Alteka" name="alteka">
-            <control-alteka
-              v-model="config.alteka"
-              :colors="config.predefineColors"
-            ></control-alteka>
+            <control-alteka v-model="config.alteka" :colors="config.predefineColors" />
           </el-tab-pane>
 
           <el-tab-pane label="Bars" name="bars">
-            <control-bars v-model="config.bars"></control-bars>
+            <control-bars v-model="config.bars" />
           </el-tab-pane>
 
           <el-tab-pane label="Grid" name="grid">
-            <control-grid v-model="config.grid" :colors="config.predefineColors"></control-grid>
+            <control-grid v-model="config.grid" :colors="config.predefineColors" />
           </el-tab-pane>
 
           <el-tab-pane label="Ramp" name="ramp">
-            <control-ramp v-model="config.ramp"></control-ramp>
+            <control-ramp v-model="config.ramp" />
           </el-tab-pane>
 
           <el-tab-pane label="Name" name="placeholder">
-            <control-placeholder
-              v-model="config.placeholder"
-              :colors="config.predefineColors"
-            ></control-placeholder>
+            <control-placeholder v-model="config.placeholder" :colors="config.predefineColors" />
           </el-tab-pane>
 
           <el-tab-pane label="Sync" name="audioSync">
-            <control-audio-sync
-              v-model="config.audioSync"
-              :display-frequency="displayFrequency"
-            ></control-audio-sync>
+            <control-audio-sync v-model="config.audioSync" :display-frequency="displayFrequency" />
           </el-tab-pane>
 
           <el-tab-pane label="DeGhost" name="deghost">
-            <control-deghost v-model="config.deghost"></control-deghost>
+            <control-deghost v-model="config.deghost" />
           </el-tab-pane>
 
           <el-tab-pane label="LED" name="led">
-            <control-led v-model="config.led" :colors="config.predefineColors"></control-led>
+            <control-led v-model="config.led" :colors="config.predefineColors" />
           </el-tab-pane>
         </el-tabs>
       </el-row>
@@ -161,14 +152,14 @@
               v-model="ledHeight"
               :disabled="true"
               controls-position="right"
-            ></el-input-number>
+            />
             <el-input-number
               v-else
               v-model="config.notFilledCard.height"
               controls-position="right"
               :step="5"
               :min="1"
-            ></el-input-number>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -193,7 +184,7 @@
               v-model="config.notFilledCard.top"
               controls-position="right"
               :step="5"
-            ></el-input-number>
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -215,7 +206,7 @@
         </el-col>
       </el-row>
 
-      <control-menu v-model="config" :dark-mode="darkMode"></control-menu>
+      <control-menu v-model="config" :dark-mode="darkMode" />
     </el-form>
     <resize-observer @notify="handleResize" />
   </div>

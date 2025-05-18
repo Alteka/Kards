@@ -1,4 +1,4 @@
-import { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
 import { optimizer, is } from '@electron-toolkit/utils'
 import { installExtension, VUEJS_DEVTOOLS_BETA } from 'electron-devtools-installer'
 import { compareVersions } from 'compare-versions'
@@ -50,9 +50,6 @@ if (!env.rollbarToken) {
 //======================================//
 //      BOILER PLATE ELECTRON STUFF     //
 //======================================//
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true, stream: true } }
-])
 
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {

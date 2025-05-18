@@ -26,7 +26,7 @@
         "
         :config="config"
         :info="info"
-      ></info-circle>
+      />
 
       <div
         id="cardForPNG"
@@ -40,65 +40,36 @@
             config.cardType != 'deghost'
         }"
       >
-        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
-        <BarsSmpteTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'smpte'"
-          :config="config"
-          :info="info"
-        ></BarsSmpteTestCard>
-        <BarsAribTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'arib'"
-          :config="config"
-          :info="info"
-        ></BarsAribTestCard>
-        <BarsSimpleTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'simple'"
-          :config="config"
-          :info="info"
-        ></BarsSimpleTestCard>
-        <BarsHDRTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'hdr'"
-          :config="config"
-          :info="info"
-        ></BarsHDRTestCard>
-        <BarsSDITestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'sdi'"
-          :config="config"
-          :info="info"
-        ></BarsSDITestCard>
-        <BarsSingle
-          v-if="config.cardType == 'bars' && config.bars.type == 'single'"
-          :config="config"
-          :info="info"
-        ></BarsSingle>
-        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info" />
+        <template v-if="config.cardType == 'bars'">
+          <BarsSmpteTestCard v-if="config.bars.type == 'smpte'" :config="config" :info="info" />
+          <BarsAribTestCard v-if="config.bars.type == 'arib'" :config="config" :info="info" />
+          <BarsSimpleTestCard v-if="config.bars.type == 'simple'" :config="config" :info="info" />
+          <BarsHDRTestCard v-if="config.bars.type == 'hdr'" :config="config" :info="info" />
+          <BarsSDITestCard v-if="config.bars.type == 'sdi'" :config="config" :info="info" />
+          <BarsSingle v-if="config.bars.type == 'single'" :config="config" :info="info" />
+        </template>
+
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info" />
         <AudioSyncTestCard
           v-if="config.cardType == 'audioSync'"
           :config="config"
           :info="info"
           :border-size="borderSize"
-        ></AudioSyncTestCard>
+        />
         <PlaceholderTestCard
           v-if="config.cardType == 'placeholder'"
           :config="config"
           :info="info"
-        ></PlaceholderTestCard>
+        />
         <AltekaTestCard
           v-if="config.cardType == 'alteka'"
           :config="config"
           :info="info"
           :border-size="borderSize"
-        ></AltekaTestCard>
-        <LedWallTestCard
-          v-if="config.cardType == 'led'"
-          :config="config"
-          :info="info"
-        ></LedWallTestCard>
-        <DeghostTestCard
-          v-if="config.cardType == 'deghost'"
-          :config="config"
-          :info="info"
-        ></DeghostTestCard>
+        />
+        <LedWallTestCard v-if="config.cardType == 'led'" :config="config" :info="info" />
+        <DeghostTestCard v-if="config.cardType == 'deghost'" :config="config" :info="info" />
       </div>
 
       <div
@@ -112,42 +83,20 @@
         :class="{ animatedAbove: config.animated }"
       >
         <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
-        <BarsSmpteTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'smpte'"
-          :config="config"
-          :info="info"
-        ></BarsSmpteTestCard>
-        <BarsAribTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'arib'"
-          :config="config"
-          :info="info"
-        ></BarsAribTestCard>
-        <BarsSimpleTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'simple'"
-          :config="config"
-          :info="info"
-        ></BarsSimpleTestCard>
-        <BarsHDRTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'hdr'"
-          :config="config"
-          :info="info"
-        ></BarsHDRTestCard>
-        <BarsSDITestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'sdi'"
-          :config="config"
-          :info="info"
-        ></BarsSDITestCard>
-        <BarsSingle
-          v-if="config.cardType == 'bars' && config.bars.type == 'single'"
-          :config="config"
-          :info="info"
-        ></BarsSingle>
-        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <template v-if="config.cardType == 'bars'">
+          <BarsSmpteTestCard v-if="config.bars.type == 'smpte'" :config="config" :info="info" />
+          <BarsAribTestCard v-if="config.bars.type == 'arib'" :config="config" :info="info" />
+          <BarsSimpleTestCard v-if="config.bars.type == 'simple'" :config="config" :info="info" />
+          <BarsHDRTestCard v-if="config.bars.type == 'hdr'" :config="config" :info="info" />
+          <BarsSDITestCard v-if="config.bars.type == 'sdi'" :config="config" :info="info" />
+          <BarsSingle v-if="config.bars.type == 'single'" :config="config" :info="info" />
+        </template>
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info" />
         <PlaceholderTestCard
           v-if="config.cardType == 'placeholder'"
           :config="config"
           :info="info"
-        ></PlaceholderTestCard>
+        />
       </div>
 
       <div
@@ -160,43 +109,21 @@
         class="testcard"
         :class="{ animatedLeft: config.animated }"
       >
-        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
-        <BarsSmpteTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'smpte'"
-          :config="config"
-          :info="info"
-        ></BarsSmpteTestCard>
-        <BarsAribTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'arib'"
-          :config="config"
-          :info="info"
-        ></BarsAribTestCard>
-        <BarsSimpleTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'simple'"
-          :config="config"
-          :info="info"
-        ></BarsSimpleTestCard>
-        <BarsHDRTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'hdr'"
-          :config="config"
-          :info="info"
-        ></BarsHDRTestCard>
-        <BarsSDITestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'sdi'"
-          :config="config"
-          :info="info"
-        ></BarsSDITestCard>
-        <BarsSingle
-          v-if="config.cardType == 'bars' && config.bars.type == 'single'"
-          :config="config"
-          :info="info"
-        ></BarsSingle>
-        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info" />
+        <template v-if="config.cardType == 'bars'">
+          <BarsSmpteTestCard v-if="config.bars.type == 'smpte'" :config="config" :info="info" />
+          <BarsAribTestCard v-if="config.bars.type == 'arib'" :config="config" :info="info" />
+          <BarsSimpleTestCard v-if="config.bars.type == 'simple'" :config="config" :info="info" />
+          <BarsHDRTestCard v-if="config.bars.type == 'hdr'" :config="config" :info="info" />
+          <BarsSDITestCard v-if="config.bars.type == 'sdi'" :config="config" :info="info" />
+          <BarsSingle v-if="config.bars.type == 'single'" :config="config" :info="info" />
+        </template>
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info" />
         <PlaceholderTestCard
           v-if="config.cardType == 'placeholder'"
           :config="config"
           :info="info"
-        ></PlaceholderTestCard>
+        />
       </div>
 
       <div
@@ -209,43 +136,22 @@
         class="testcard"
         :class="{ animatedAboveLeft: config.animated }"
       >
-        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
-        <BarsSmpteTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'smpte'"
-          :config="config"
-          :info="info"
-        ></BarsSmpteTestCard>
-        <BarsAribTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'arib'"
-          :config="config"
-          :info="info"
-        ></BarsAribTestCard>
-        <BarsSimpleTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'simple'"
-          :config="config"
-          :info="info"
-        ></BarsSimpleTestCard>
-        <BarsHDRTestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'hdr'"
-          :config="config"
-          :info="info"
-        ></BarsHDRTestCard>
-        <BarsSDITestCard
-          v-if="config.cardType == 'bars' && config.bars.type == 'sdi'"
-          :config="config"
-          :info="info"
-        ></BarsSDITestCard>
-        <BarsSingle
-          v-if="config.cardType == 'bars' && config.bars.type == 'single'"
-          :config="config"
-          :info="info"
-        ></BarsSingle>
-        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info"></RampTestCard>
+        <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info" />
+        <template v-if="config.cardType == 'bars'">
+          <BarsSmpteTestCard v-if="config.bars.type == 'smpte'" :config="config" :info="info" />
+          <BarsAribTestCard v-if="config.bars.type == 'arib'" :config="config" :info="info" />
+          <BarsSimpleTestCard v-if="config.bars.type == 'simple'" :config="config" :info="info" />
+          <BarsHDRTestCard v-if="config.bars.type == 'hdr'" :config="config" :info="info" />
+          <BarsSDITestCard v-if="config.bars.type == 'sdi'" :config="config" :info="info" />
+          <BarsSingle v-if="config.bars.type == 'single'" :config="config" :info="info" />
+        </template>
+
+        <RampTestCard v-if="config.cardType == 'ramp'" :config="config" :info="info" />
         <PlaceholderTestCard
           v-if="config.cardType == 'placeholder'"
           :config="config"
           :info="info"
-        ></PlaceholderTestCard>
+        />
       </div>
     </div>
 
