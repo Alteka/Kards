@@ -10,8 +10,13 @@ import Store from 'electron-store'
 import path from 'path'
 import { Bonjour } from 'bonjour-service'
 import mime from 'mime-types'
+import { defu } from 'defu'
 import Rollbar from 'rollbar'
+
 import defaultConfig from '../shared/defaultConfig.json'
+import packageJson from '../../package.json'
+import vuePackageJson from 'vue/package.json'
+import envFile from '../../env.json'
 
 // Project specific includes
 import { setTouchbarConfig, setTouchbarWindow, touchBar } from './touchbar'
@@ -23,10 +28,9 @@ import { AltekaMenu } from './menu'
 import { OSCServer } from './osc'
 import { RESTServer } from './rest'
 import { Config, ConfigSchema, ExportedConfig, ExportedConfigSchema } from '../shared/config'
-import { defu } from 'defu'
 
 log.initialize()
-const version = require('../../package.json').version
+const version = packageJson.version
 
 const store = new Store()
 const bonjourInstance = new Bonjour()
@@ -34,10 +38,9 @@ const bonjourInstance = new Bonjour()
 //========================//
 //         Rollbar        //
 //========================//
-const env = require('../../env.json')
-if (!is.dev && env.rollbarToken != '') {
+if (!is.dev && envFile.rollbarToken != '') {
   const rollbar = new Rollbar({
-    accessToken: env.rollbarToken,
+    accessToken: envFile.rollbarToken,
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
@@ -46,7 +49,7 @@ if (!is.dev && env.rollbarToken != '') {
   })
   // rollbar.debug('Hello World')
 }
-if (!env.rollbarToken) {
+if (!envFile.rollbarToken) {
   log.warn('No Rollbar token has been set!')
 }
 
@@ -147,7 +150,7 @@ ipcMain.handle('aboutDialogInfo', () => {
     version: version,
     electron: process.versions.electron,
     node: process.versions.node,
-    vue: require('vue/package.json').version
+    vue: vuePackageJson.version
   }
 })
 
@@ -197,8 +200,6 @@ async function createWindow() {
     title: 'Kards',
     resizable: false,
     webPreferences: {
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       sandbox: false,
       preload: path.join(__dirname, '../preload/index.js')
     }
@@ -375,7 +376,7 @@ function setupNewTestCardWindow() {
     frame: false,
     width: config.window.width,
     height: config.window.height,
-    webPreferences: { preload: path.join(__dirname, '../preload/index.js') }
+    webPreferences: { preload: path.join(__dirname, '../preload/index.js'), sandbox: false }
   }
 
   if (!config.windowed) {
@@ -593,7 +594,7 @@ ipcMain.on('exportCard', () => {
       frame: false,
       width: config.window.width,
       height: config.window.height,
-      webPreferences: { preload: path.join(__dirname, 'preload.js') }
+      webPreferences: { preload: path.join(__dirname, 'preload.js'), sandbox: false }
     }
 
     if (config.windowed) {

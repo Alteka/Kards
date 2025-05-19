@@ -1,5 +1,6 @@
 import { app, ipcMain, Menu, MenuItem, shell } from 'electron'
 import EventEmitter from 'events'
+import packageJson from '../../package.json'
 import type { Config } from '../shared/config'
 
 export class AltekaMenu extends EventEmitter {
@@ -478,7 +479,7 @@ export class AltekaMenu extends EventEmitter {
       new MenuItem({
         label: 'Help',
         submenu: [
-          { label: 'Version ' + require('../../package.json').version, enabled: false },
+          { label: 'Version ' + packageJson.version, enabled: false },
           { type: 'separator' },
           {
             label: 'Open Help Site',

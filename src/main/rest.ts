@@ -5,6 +5,7 @@ import log from 'electron-log'
 import EventEmitter from 'events'
 import { hostname } from 'os'
 import { defu } from 'defu'
+import packageJson from '../../package.json'
 
 import type { Bonjour } from 'bonjour-service'
 import type { Server } from 'http'
@@ -28,16 +29,14 @@ export class RESTServer extends EventEmitter {
       .listen(this.port, () => {
         log.info('REST :: HTTP Server running and listening on port ' + this.port)
 
-        const p = require('../../package.json')
-
         bonjour.publish({
           name: 'Kards-' + hostname().split('.')[0],
           type: 'alteka_http',
           port: this.port,
           txt: {
-            version: p.version,
-            website: p.homepage,
-            description: p.description
+            version: packageJson.version,
+            website: packageJson.homepage,
+            description: packageJson.description
           }
         })
 
@@ -46,9 +45,9 @@ export class RESTServer extends EventEmitter {
           type: 'http',
           port: this.port,
           txt: {
-            version: p.version,
-            website: p.homepage,
-            description: p.description
+            version: packageJson.version,
+            website: packageJson.homepage,
+            description: packageJson.description
           }
         })
       })

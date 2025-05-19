@@ -3,6 +3,7 @@ import OSC from 'osc-js'
 import log from 'electron-log'
 import EventEmitter from 'events'
 import { hostname } from 'os'
+import packageJson from '../../package.json'
 
 import type { Bonjour } from 'bonjour-service'
 import type { Config } from '../shared/config'
@@ -484,16 +485,14 @@ export class OSCServer extends EventEmitter {
       this._reply(message.address, this.config.audio.deviceId)
     })
 
-    const p = require('../../package.json')
-
     bonjour.publish({
       name: 'Kards-' + hostname().split('.')[0],
       type: 'alteka_osc',
       port: this.port,
       txt: {
-        version: p.version,
-        website: p.homepage,
-        description: p.description
+        version: packageJson.version,
+        website: packageJson.homepage,
+        description: packageJson.description
       }
     })
   }
