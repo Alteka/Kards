@@ -2,6 +2,7 @@ import { app, ipcMain, Menu, MenuItem, shell } from 'electron'
 import EventEmitter from 'events'
 import packageJson from '../../package.json'
 import type { Config } from '../shared/config'
+import { platform } from '@electron-toolkit/utils'
 
 export class AltekaMenu extends EventEmitter {
   config: Config = {}
@@ -13,7 +14,7 @@ export class AltekaMenu extends EventEmitter {
   setup(c: Config) {
     this.config = c
 
-    if (process.platform == 'darwin') {
+    if (platform.isMacOS) {
       this.active = true
       this.buildMenu()
       this.setMenu()
@@ -510,7 +511,7 @@ export class AltekaMenu extends EventEmitter {
   }
 
   setMenu() {
-    if (process.platform == 'darwin') {
+    if (platform.isMacOS) {
       Menu.setApplicationMenu(this.menu)
     } else {
       Menu.setApplicationMenu(null)

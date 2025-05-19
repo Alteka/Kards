@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme, screen, shell } from 'electron'
-import { is, optimizer } from '@electron-toolkit/utils'
+import { is, platform, optimizer } from '@electron-toolkit/utils'
 import { installExtension, VUEJS_DEVTOOLS_BETA } from 'electron-devtools-installer'
 import { compareVersions } from 'compare-versions'
 
@@ -71,13 +71,17 @@ process.on('uncaughtException', function (error) {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    bonjourInstance.unpublishAll()
-    bonjourInstance.destroy()
+  if (!platform.isMacOS) {
     log.info('All Windows closed - Quitting App')
-    rest.stop()
     app.quit()
   }
+})
+
+app.on('before-quit', () => {
+  log.info('App is quitting')
+  bonjourInstance.unpublishAll()
+  bonjourInstance.destroy()
+  rest.stop()
 })
 
 app.on('activate', () => {
@@ -211,9 +215,6 @@ async function createWindow() {
 
   controlWindow.on('closed', () => {
     log.info('Control Window closed - Quitting App')
-    bonjourInstance.unpublishAll()
-    bonjourInstance.destroy()
-    rest.stop()
     app.quit()
   })
 
@@ -385,7 +386,7 @@ function setupNewTestCardWindow() {
 
     for (const disp of screen.getAllDisplays()) {
       if (disp.id == config.screen) {
-        if (process.platform == 'darwin') {
+        if (platform.isMacOS) {
           // figure out if it's newer macos...
           const version = process.getSystemVersion().split('.')
           let catalina = false
@@ -527,7 +528,7 @@ function handleTestCardResize() {
       config.window.width > bounds.width + t ||
       config.window.height < bounds.height - t ||
       config.window.height > bounds.height + t ||
-      process.platform == 'darwin'
+      platform.isMacOS
     ) {
       config.window.width = bounds.width
       config.window.height = bounds.height
