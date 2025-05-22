@@ -135,11 +135,19 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import type { Config } from '@shared/config'
+import type Electron from 'electron'
 
-const config = defineModel<Config>()
+const config = defineModel<Config>({ required: true })
 
-const screens = ref([]) // todo type this
-const primaryScreen = ref(null)
+interface Screen extends Electron.Display {
+  icon: string
+  description: string
+  primary: boolean
+  portrait: boolean
+}
+
+const screens = ref<Screen[]>([])
+const primaryScreen = ref<number | null>(null)
 const viewBox = ref('0 0 0 0')
 
 onMounted(() => {
@@ -221,7 +229,7 @@ function setOutputToMatchScreen() {
       exists = true
     }
   }
-  if (!exists) {
+  if (!exists && primaryScreen.value !== null) {
     console.log('Update screen as selected screen doesnt exist...', primaryScreen.value)
     config.value.screen = primaryScreen.value
   }
