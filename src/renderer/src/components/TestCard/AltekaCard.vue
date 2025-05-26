@@ -1,6 +1,5 @@
 <template>
-  <div id="alteka" ref="alteka" :class="{ gradient: config.alteka.gradient }" :style="cssVars">
-    <resize-observer @notify="handleResize" />
+  <div id="alteka" ref="alteka" :class="{ gradient: config.alteka.gradient }">
     <div class="grid">
       <div class="gridQuadrant gridtopleft" :style="grid"></div>
       <div class="gridQuadrant gridtopright" :style="grid"></div>
@@ -301,8 +300,9 @@
 <script setup lang="ts">
 import Swatch from './ColorSwatch.vue'
 import type { Config } from '@shared/config'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import type { Info } from '@renderer/views/Testcard.vue'
+import { useElementSize } from '@vueuse/core'
 
 const props = defineProps<{
   config: Config
@@ -310,11 +310,11 @@ const props = defineProps<{
   borderSize: number
 }>()
 
-const alteka = ref<HTMLDivElement>()
-const pillarLeft = ref<HTMLDivElement>()
-const pillarRight = ref<HTMLDivElement>()
-const circle = ref<SVGGElement>()
-const customLogo = ref<HTMLImageElement>()
+const alteka = useTemplateRef<HTMLDivElement>('alteka')
+const pillarLeft = useTemplateRef<HTMLDivElement>('pillarLeft')
+const pillarRight = useTemplateRef<HTMLDivElement>('pillarRight')
+const circle = useTemplateRef<SVGGElement>('circle')
+const customLogo = useTemplateRef<HTMLImageElement>('customLogo')
 
 const text = computed(() => {
   if (props.config.alteka.showLogo && props.config.alteka.logo != '') {
@@ -339,24 +339,20 @@ const grid = computed(() => {
   }
 })
 
-const cssVars = computed(() => {
-  return {
-    background: props.config.alteka.bg,
-    '--border-size': props.borderSize + 'px'
-  }
+const background = computed(() => {
+  return props.config.alteka.bg
+})
+
+const borderSize = computed(() => {
+  return props.borderSize + 'px'
 })
 
 watch(
   () => props.config,
-  (val, oldVal) => {
+  async (val, oldVal) => {
     if (val.alteka != oldVal.alteka) {
-      setTimeout(function () {
-        let size = {
-          width: alteka.value!.getBoundingClientRect().width,
-          height: alteka.value!.getBoundingClientRect().height
-        }
-        handleResize(size)
-      }, 250)
+      await nextTick()
+      handleResize()
     }
   },
   { deep: true }
@@ -364,25 +360,12 @@ watch(
 
 watch(
   () => props.borderSize,
-  () => {
-    setTimeout(function () {
-      let size = {
-        width: alteka.value!.getBoundingClientRect().width,
-        height: alteka.value!.getBoundingClientRect().height
-      }
-      handleResize(size)
-    }, 250)
+  async () => {
+    await nextTick()
+    handleResize()
   },
   { deep: true }
 )
-
-onMounted(() => {
-  let size = {
-    width: alteka.value!.getBoundingClientRect().width,
-    height: alteka.value!.getBoundingClientRect().height
-  }
-  handleResize(size)
-})
 
 function toLuma(hex: string) {
   const c = hex.substring(1)
@@ -393,9 +376,21 @@ function toLuma(hex: string) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b
 }
 
-function handleResize({ width, height }) {
+const { width, height } = useElementSize(alteka)
+
+watch(
+  [width, height],
+  ([newWidth, newHeight]) => {
+    if (newWidth > 0 && newHeight > 0) {
+      handleResize()
+    }
+  },
+  { immediate: true }
+)
+
+function handleResize() {
   // console.log('Alteka Kard - Handle Resize for ', width, height)
-  let ratio = width / height
+  let ratio = width.value / height.value
 
   let circleWidth = circle.value!.getBoundingClientRect().width
 
@@ -406,14 +401,14 @@ function handleResize({ width, height }) {
 
   // New and improved pillar size and position algorithm
 
-  let long = width // the long edge of the card
-  let short = height // the short edge of the card
+  let long = width.value // the long edge of the card
+  let short = height.value // the short edge of the card
   let aspect = ratio // like ratio but doesn't care about orientation
   let gridSize = props.borderSize * 2
 
   if (ratio < 1) {
-    short = width
-    long = height
+    short = width.value
+    long = height.value
     aspect = 1 / ratio
   }
   // console.log(aspect)
@@ -448,9 +443,9 @@ function handleResize({ width, height }) {
     pillarRight.value!.style.top = 'calc(50% + 0.5px)'
     pillarRight.value!.style.transform = 'translateY(-50%)'
 
-    let left = Math.ceil(circleWidth / 2 / gridSize) * gridSize + width / 2 + gap
+    let left = Math.ceil(circleWidth / 2 / gridSize) * gridSize + width.value / 2 + gap
     pillarRight.value!.style.left = left + 1 + 'px'
-    pillarLeft.value!.style.left = width - left - pillarShort + 'px'
+    pillarLeft.value!.style.left = width.value - left - pillarShort + 'px'
   } else {
     pillarLeft.value!.style.width = pillarLong + 'px'
     pillarRight.value!.style.width = pillarLong + 'px'
@@ -463,7 +458,7 @@ function handleResize({ width, height }) {
     pillarLeft.value!.style.transform = 'translateX(-50%)'
     pillarRight.value!.style.transform = 'translateX(-50%)'
 
-    let leftBottom = height / 2 + Math.ceil(circleWidth / 2 / gridSize) * gridSize + gap
+    let leftBottom = height.value / 2 + Math.ceil(circleWidth / 2 / gridSize) * gridSize + gap
     pillarLeft.value!.style.bottom = leftBottom + 'px'
     pillarRight.value!.style.top = leftBottom + 1 + 'px'
   }
@@ -747,7 +742,8 @@ function handleResize({ width, height }) {
 }
 
 #alteka {
-  background: #3d3d3d;
+  background: v-bind('background');
+  --border-size: v-bind('borderSize');
   height: 100%;
   width: 100%;
   color: white;

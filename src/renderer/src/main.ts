@@ -6,15 +6,12 @@ import VueResizeText from 'vue3-resize-text'
 
 import '@fortawesome/fontawesome-free/css/all.css'
 
-import 'vue3-resize/dist/vue3-resize.css'
-import Vue3Resize from 'vue3-resize'
 import router from './router'
 
 const app = createApp(App).use(router)
 
 installElementPlus(app)
 installParticles(app)
-app.use(Vue3Resize)
 app.directive('ResizeText', VueResizeText.ResizeText)
 
 app.mount('#app')

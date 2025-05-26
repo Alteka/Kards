@@ -5638,11 +5638,6 @@ vue3-resize-text@^0.1.0:
     core-js "^3.6.5"
     vue "^3.0.0"
 
-vue3-resize@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/vue3-resize/-/vue3-resize-0.2.0.tgz#a1f06468cb7add911dfe3cb980984fa865ea1c8b"
-  integrity sha512-vZkbEv4PjMEWFV0igAxCvdSIH9hrIJjXyJ9XPTxH0cS/L2/VW1dLVORMWJKU0VXHpHiYKwskB62ju7aBQMVpOQ==
-
 vue@^3.0.0, vue@^3.3.13, vue@^3.5.13:
   version "3.5.13"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.13.tgz#9f760a1a982b09c0c04a867903fc339c9f29ec0a"

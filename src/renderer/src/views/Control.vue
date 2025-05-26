@@ -208,7 +208,6 @@
 
       <control-menu v-model="config" :dark-mode="darkMode" />
     </el-form>
-    <resize-observer @notify="handleResize" />
   </div>
 </template>
 
@@ -225,7 +224,17 @@ import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
 import defaultConfig from '@shared/defaultConfig.json'
 import Mousetrap from 'mousetrap'
-import { computed, onBeforeMount, onMounted, ref, watch, nextTick } from 'vue'
+import {
+  computed,
+  onBeforeMount,
+  onMounted,
+  ref,
+  watch,
+  nextTick,
+  watchEffect,
+  useTemplateRef
+} from 'vue'
+import { useElementSize } from '@vueuse/core'
 
 Mousetrap.bind(
   'esc',
@@ -240,7 +249,7 @@ const sync = ref(false)
 const darkMode = ref(false)
 const displayFrequency = ref(0)
 
-const wrapper = ref<HTMLDivElement>()
+const wrapper = useTemplateRef<HTMLDivElement>('wrapper')
 
 const ledHeight = computed(() => {
   return config.value.led.height * config.value.led.rows
@@ -345,9 +354,15 @@ onMounted(() => {
   })
 })
 
-function handleResize({ width, height }) {
-  window.ipcRenderer.send('controlResize', { height: height, width: width })
-}
+const { width, height } = useElementSize(wrapper)
+
+watchEffect(() => {
+  if (!width.value || !height.value) return
+  window.ipcRenderer.send('controlResize', {
+    height: Math.round(height.value),
+    width: Math.round(width.value)
+  })
+})
 </script>
 
 <style>
