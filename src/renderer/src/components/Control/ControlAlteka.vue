@@ -64,9 +64,7 @@ import type { Alteka } from '@shared/config'
 
 const alteka = defineModel<Alteka>({ required: true })
 
-defineProps({
-  colors: Array
-})
+defineProps<{ colors: string[] }>()
 
 function selectImage() {
   window.api.selectImage()

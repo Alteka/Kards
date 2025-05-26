@@ -116,6 +116,7 @@ export const AudioSchema = z.object({
   deviceId: z.string(),
   enabled: z.boolean(),
   options: z.array(
+    // TODO this will get broken by defu
     z.enum(['voice', 'text', 'tone', 'pink', 'white', 'stereo', 'phase', 'sweep', 'file'])
   ),
   prependText: z.string(),
@@ -165,8 +166,7 @@ export const ConfigSchema = z.object({
   ramp: RampSchema,
   deghost: DeghostSchema,
   export: ExportSchema,
-  audio: AudioSchema,
-  predefineColors: z.array(z.string())
+  audio: AudioSchema
 })
 
 export type Config = z.infer<typeof ConfigSchema>

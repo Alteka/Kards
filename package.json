@@ -35,7 +35,7 @@
     "dom-to-image": "^2.6.0",
     "electron-log": "^5.4.0",
     "electron-store": "^8.2.0",
-    "element-plus": "^2.9.10",
+    "element-plus": "^2.9.11",
     "express": "^4.17.2",
     "mime-types": "^3.0.1",
     "mousetrap": "^1.6.5",

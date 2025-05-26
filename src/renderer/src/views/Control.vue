@@ -12,7 +12,7 @@
           style="height: 165px; width: 100%"
         >
           <el-tab-pane label="Alteka" name="alteka">
-            <control-alteka v-model="config.alteka" :colors="config.predefineColors" />
+            <control-alteka v-model="config.alteka" :colors="predefineColors" />
           </el-tab-pane>
 
           <el-tab-pane label="Bars" name="bars">
@@ -20,7 +20,7 @@
           </el-tab-pane>
 
           <el-tab-pane label="Grid" name="grid">
-            <control-grid v-model="config.grid" :colors="config.predefineColors" />
+            <control-grid v-model="config.grid" :colors="predefineColors" />
           </el-tab-pane>
 
           <el-tab-pane label="Ramp" name="ramp">
@@ -28,7 +28,7 @@
           </el-tab-pane>
 
           <el-tab-pane label="Name" name="placeholder">
-            <control-placeholder v-model="config.placeholder" :colors="config.predefineColors" />
+            <control-placeholder v-model="config.placeholder" :colors="predefineColors" />
           </el-tab-pane>
 
           <el-tab-pane label="Sync" name="audioSync">
@@ -40,7 +40,7 @@
           </el-tab-pane>
 
           <el-tab-pane label="LED" name="led">
-            <control-led v-model="config.led" :colors="config.predefineColors" />
+            <control-led v-model="config.led" :colors="predefineColors" />
           </el-tab-pane>
         </el-tabs>
       </el-row>
@@ -248,6 +248,29 @@ const config = ref(defaultConfig)
 const sync = ref(false)
 const darkMode = ref(false)
 const displayFrequency = ref(0)
+
+const predefineColors = ref([
+  '#ffffff',
+  '#d3d3d3',
+  '#7f7f7f',
+  '#3e3e3e',
+  '#000000',
+  '#ff0000',
+  '#ff7f00',
+  '#ffff00',
+  '#00ff00',
+  '#00ffff',
+  '#0000ff',
+  '#ff00ff',
+  '#BF3030',
+  '#BF9B30',
+  '#78BF30',
+  '#30BF54',
+  '#30BFBF',
+  '#3054BF',
+  '#7830BF',
+  '#BF309B'
+])
 
 const wrapper = useTemplateRef<HTMLDivElement>('wrapper')
 
