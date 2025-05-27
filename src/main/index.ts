@@ -388,14 +388,7 @@ function setupNewTestCardWindow() {
       if (disp.id == config.screen) {
         if (platform.isMacOS) {
           // figure out if it's newer macos...
-          const version = process.getSystemVersion().split('.')
-          let catalina = false
-          if (version[0] > 10) {
-            catalina = true
-          }
-          if (version[0] == 10 && version[1] >= 15) {
-            catalina = true
-          }
+          const catalina = compareVersions(process.getSystemVersion(), '10.15') >= 0
 
           if (disp.bounds.height != disp.workArea.height && catalina) {
             log.info('Running in seperate spaces mode - this is Catalina or newer')
