@@ -141,7 +141,7 @@ ipcMain.on('config', (_, arg) => {
   updateScreens()
 })
 ipcMain.on('getConfigTestCard', () => {
-  testCardWindow.webContents.send('config', config)
+  testCardWindow!.webContents.send('config', config)
 })
 
 ipcMain.on('getConfigControl', () => {
@@ -176,8 +176,8 @@ function getDefaultConfig() {
 //       WINDOW HANDLER     //
 //==========================//
 let controlWindow: BrowserWindow
-let testCardWindow: BrowserWindow
-let testCardWindowScreen: number
+let testCardWindow: BrowserWindow | null = null
+let testCardWindowScreen: number | null = null
 const controlMenu = new AltekaMenu()
 
 controlMenu.on('menuClick', (c) => {
@@ -320,7 +320,7 @@ ipcMain.on('selectMaskImage', () => {
   }
 })
 
-ipcMain.handle('networkInfo', (event) => {
+ipcMain.handle('networkInfo', () => {
   const nets = networkInterfaces()
   const results = ['Kards v' + version, hostname().split('.')[0]]
 
@@ -423,7 +423,7 @@ function setupNewTestCardWindow() {
 
 function closeTestCard() {
   log.info('Closing test card')
-  testCardWindow.destroy()
+  testCardWindow!.destroy()
   testCardWindow = null
   testCardWindowScreen = null
   clearTimeout(testCardWindowResizeTimer)
@@ -455,7 +455,7 @@ ipcMain.on('moveWindowTo', (_, arg) => {
       testCardWindowScreen = disp.id
       const x = disp.bounds.x + (disp.bounds.width - config.window.width) / 2
       const y = disp.bounds.y + (disp.bounds.height - config.window.height) / 2
-      testCardWindow.setPosition(Math.round(x), Math.round(y))
+      testCardWindow?.setPosition(Math.round(x), Math.round(y))
     }
   }
 })
@@ -493,8 +493,8 @@ function showTestCardWindow(windowConfig: Electron.BrowserWindowConstructorOptio
   })
 
   testCardWindow.on('move', function () {
-    const x = testCardWindow.getBounds().x
-    const y = testCardWindow.getBounds().y
+    const x = testCardWindow!.getBounds().x
+    const y = testCardWindow!.getBounds().y
 
     for (const disp of screen.getAllDisplays()) {
       if (
@@ -678,7 +678,7 @@ ipcMain.on('setAsWallpaper', (_, arg) => {
   })
   if (!config.visible) {
     log.info('Closing dummy test card window')
-    testCardWindow.close()
+    testCardWindow?.close()
   }
 })
 
@@ -704,7 +704,7 @@ function createVoice() {
   const dest = app.getPath('userData') + '/voice.wav'
   const voice = config.audio.prependText + config.name
 
-  say.export(voice, null, null, dest, (err) => {
+  say.export(voice, undefined, undefined, dest, (err) => {
     if (err) {
       return log.error(err)
     }
@@ -717,27 +717,13 @@ function createVoice() {
 
 function createTextAudio() {
   const dest = app.getPath('userData') + '/text.wav'
-  say.export(config.audio.text, null, null, dest, (err) => {
+  say.export(config.audio.text, undefined, undefined, dest, (err) => {
     if (err) {
       return log.error(err)
     }
     log.info('Audio :: Updated audio text (' + config.audio.text + ') has been saved to ', dest)
     config.audio.textData = 'data:audio/wav;base64,' + fs.readFileSync(dest, { encoding: 'base64' })
     controlWindow.webContents.send('config', config)
-  })
-}
-
-let textToSpeechCount = 0
-
-function textToSpeachData(text) {
-  const dest = app.getPath('userData') + '/tts0' + textToSpeechCount + '.wav'
-  textToSpeechCount++
-  say.export(config.audio.text, null, null, dest, (err) => {
-    if (err) {
-      log.error(err)
-      return ''
-    }
-    return 'data:audio/wav;base64,' + fs.readFileSync(dest, { encoding: 'base64' })
   })
 }
 

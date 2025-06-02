@@ -1,16 +1,16 @@
-import { TouchBar } from 'electron'
+import { BrowserWindow, TouchBar } from 'electron'
 import type { Config } from '../shared/config'
 
 const { TouchBarButton } = TouchBar
 
 let config: Config = {}
-let window = null
+let window: BrowserWindow | null = null
 
 const enableButton = new TouchBarButton({
   label: config.visible ? 'Disable Card' : 'Enable Card',
   click: () => {
     config.visible = !config.visible
-    window.webContents.send('config', config)
+    window?.webContents.send('config', config)
   }
 })
 
@@ -18,7 +18,7 @@ const motionButton = new TouchBarButton({
   label: 'Motion',
   click: () => {
     config.animated = !config.animated
-    window.webContents.send('config', config)
+    window?.webContents.send('config', config)
   }
 })
 
@@ -26,7 +26,7 @@ const showInfoButton = new TouchBarButton({
   label: 'Show Info',
   click: () => {
     config.showInfo = !config.showInfo
-    window.webContents.send('config', config)
+    window?.webContents.send('config', config)
   }
 })
 
@@ -34,7 +34,7 @@ const windowedButton = new TouchBarButton({
   label: 'Windowed',
   click: () => {
     config.windowed = !config.windowed
-    window.webContents.send('config', config)
+    window?.webContents.send('config', config)
   }
 })
 
@@ -42,7 +42,7 @@ export const touchBar = new TouchBar({
   items: [enableButton, showInfoButton, motionButton, windowedButton]
 })
 
-export function setTouchbarConfig(c) {
+export function setTouchbarConfig(c: Config) {
   config = c
 
   enableButton.label = config.visible ? 'Disable Card' : 'Enable Card'
@@ -51,6 +51,6 @@ export function setTouchbarConfig(c) {
   windowedButton.label = config.windowed ? 'Disable Windowed' : 'Enable Windowed'
 }
 
-export function setTouchbarWindow(w) {
+export function setTouchbarWindow(w: BrowserWindow) {
   window = w
 }
