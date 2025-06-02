@@ -1,0 +1,68 @@
+<template>
+  <div>
+    <el-row>
+      <el-form-item label="Audio Device" label-width="140px">
+        <el-select v-model="audioSync.deviceId" placeholder="Select" style="width: 353px">
+          <el-option
+            v-for="item in audioDevices"
+            :key="item.deviceId"
+            :label="item.label"
+            :value="item.deviceId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-row>
+    <el-row>
+      <el-form-item label="Rate FPS" label-width="140px">
+        <el-radio-group v-model="audioSync.rate" size="small">
+          <el-radio-button v-for="item in rates" :key="item" :value="item"
+            ><i v-if="item === displayFrequency" class="fas fa-star" style="font-size: 90%"></i>
+            {{ item }}</el-radio-button
+          >
+        </el-radio-group>
+        <span v-if="audioSync.rate !== displayFrequency" class="audioSyncWarning"
+          ><br /><i class="fas fa-exclamation-circle"></i> Video rate does not match screen</span
+        >
+        <span v-if="audioSync.rate > 60" class="audioSyncWarning" style="float: right"
+          ><i class="fas fa-exclamation-circle"></i> May require high performance computer</span
+        >
+      </el-form-item>
+    </el-row>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import type { AudioSync } from '@shared/config'
+
+defineProps<{ displayFrequency: number }>()
+
+const audioSync = defineModel<AudioSync>({ required: true })
+
+const audioDevices = ref<MediaDeviceInfo[]>([])
+
+const rates = [24, 25, 29.97, 30, 50, 59.94, 60, 100, 120]
+
+function updateDevices() {
+  navigator.mediaDevices.enumerateDevices().then((devices) => {
+    audioDevices.value = devices
+      .filter((device) => device.kind === 'audiooutput')
+      .filter((device) => device.deviceId != 'communications')
+  })
+  window.api.audioDevices(JSON.parse(JSON.stringify(audioDevices.value)))
+}
+
+onMounted(() => {
+  updateDevices()
+  setInterval(updateDevices, 5000)
+})
+</script>
+
+<style scoped>
+.audioSyncWarning {
+  position: relative;
+  color: #e6a23c;
+  font-size: 80%;
+  top: -5px;
+}
+</style>
