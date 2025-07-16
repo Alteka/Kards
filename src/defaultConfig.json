@@ -45,7 +45,9 @@
     "crosshair": "#ffffff",
     "lines": "#888888",
     "size": 50,
-    "circles": false
+    "circles": false,
+    "diagonals": false,
+    "diagColour": "#6ab42f"
   },
   "led": {
     "width": 128,
