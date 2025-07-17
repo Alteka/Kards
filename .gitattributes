@@ -1,0 +1,7 @@
+* text eol=lf
+
+*.wav binary
+*.png binary
+*.ttf binary
+*.ico binary
+*.webm binary
