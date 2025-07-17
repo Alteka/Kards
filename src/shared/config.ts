@@ -88,8 +88,12 @@ export const AltekaSchema = z.object({
 
 export type Alteka = z.infer<typeof AltekaSchema>
 
+export const RampDirectionSchema = z.enum(['Horizontal', 'Vertical', 'Diagonal', 'Radial'])
+
+export type RampDirection = z.infer<typeof RampDirectionSchema>
+
 export const RampSchema = z.object({
-  direction: z.enum(['Horizontal', 'Vertical', 'Diagonal', 'Radial']),
+  direction: RampDirectionSchema,
   reverse: z.boolean(),
   stepped: z.boolean(),
   double: z.boolean(),
@@ -112,12 +116,26 @@ export const ExportSchema = z.object({
 
 export type Export = z.infer<typeof ExportSchema>
 
+export const AudioOptionSchema = z.enum([
+  'voice',
+  'text',
+  'tone',
+  'pink',
+  'white',
+  'stereo',
+  'phase',
+  'sweep',
+  'file'
+])
+
+export type AudioOption = z.infer<typeof AudioOptionSchema>
+
 export const AudioSchema = z.object({
   deviceId: z.string(),
   enabled: z.boolean(),
   options: z.array(
     // TODO this will get broken by defu
-    z.enum(['voice', 'text', 'tone', 'pink', 'white', 'stereo', 'phase', 'sweep', 'file'])
+    AudioOptionSchema
   ),
   prependText: z.string(),
   voiceData: z.string(),

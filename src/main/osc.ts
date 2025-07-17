@@ -6,15 +6,21 @@ import { hostname } from 'os'
 import packageJson from '../../package.json'
 
 import type { Bonjour } from 'bonjour-service'
-import type { Config } from '../shared/config'
+import {
+  AudioOptionSchema,
+  BarTypeSchema,
+  CardTypeSchema,
+  Config,
+  RampDirectionSchema
+} from '../shared/config'
 
 export class OSCServer extends EventEmitter {
   config: Config = {}
   port = 25518
   portReplies = 25519
 
-  screens: unknown[] = []
-  audioDevices: unknown[] = []
+  screens: Electron.Display[] = []
+  audioDevices: MediaDeviceInfo[] = []
 
   _server: OSC | null = null
 
@@ -28,6 +34,7 @@ export class OSCServer extends EventEmitter {
     this._server = new OSC({
       plugin: new OSC.DatagramPlugin({
         type: 'udp4', // @param {string} 'udp4' or 'udp6'
+        // @ts-ignore The types here are just wrong
         open: {
           port: this.port, // @param {number} Port of udp server to bind to
           exclusive: false // @param {boolean} Exclusive flag
@@ -73,7 +80,7 @@ export class OSCServer extends EventEmitter {
 
     this._server.on('/cardType', (message) => {
       if (message.args.length > 0) {
-        this.config.cardType = String(message.args[0])
+        this.config.cardType = CardTypeSchema.parse(message.args[0])
         this._update()
       }
       this._reply(message.address, this.config.cardType)
@@ -101,15 +108,6 @@ export class OSCServer extends EventEmitter {
         this._update()
       }
       this._reply(message.address, this.config.visible)
-    })
-
-    this._server.on('/showInfo', (message) => {
-      // TODO why does showInfo exist twice?
-      if (message.args.length > 0) {
-        this.config.showInfo = String(message.args[0])
-        this._update()
-      }
-      this._reply(message.address, this.config.showInfo)
     })
 
     this._server.on('/windowed', (message) => {
@@ -236,7 +234,7 @@ export class OSCServer extends EventEmitter {
     // Bars endpoints
     this._server.on('/bars/type', (message) => {
       if (message.args.length > 0) {
-        this.config.bars.type = String(message.args[0])
+        this.config.bars.type = BarTypeSchema.parse(message.args[0])
         this._update()
       }
       this._reply(message.address, this.config.bars.type)
@@ -379,7 +377,7 @@ export class OSCServer extends EventEmitter {
     // ramp endpoints
     this._server.on('/ramp/direction', (message) => {
       if (message.args.length > 0) {
-        this.config.ramp.direction = String(message.args[0])
+        this.config.ramp.direction = RampDirectionSchema.parse(message.args[0])
         this._update()
       }
       this._reply(message.address, this.config.ramp.direction)
@@ -442,8 +440,8 @@ export class OSCServer extends EventEmitter {
     })
     this._server.on('/audio/options/add', (message) => {
       if (message.args.length > 0) {
-        if (!this.config.audio.options.includes(String(message.args[0]))) {
-          this.config.audio.options.push(String(message.args[0]))
+        if (!this.config.audio.options.includes(AudioOptionSchema.parse(message.args[0]))) {
+          this.config.audio.options.push(AudioOptionSchema.parse(message.args[0]))
         }
         this._update()
       }
@@ -451,7 +449,7 @@ export class OSCServer extends EventEmitter {
     })
     this._server.on('/audio/options/remove', (message) => {
       if (message.args.length > 0) {
-        const index = this.config.audio.options.indexOf(String(message.args[0]))
+        const index = this.config.audio.options.indexOf(AudioOptionSchema.parse(message.args[0]))
         if (index > -1) {
           this.config.audio.options.splice(index, 1)
         }
