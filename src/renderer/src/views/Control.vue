@@ -235,6 +235,7 @@ import {
   useTemplateRef
 } from 'vue'
 import { useElementSize } from '@vueuse/core'
+import type { Config } from '@shared/config'
 
 Mousetrap.bind(
   'esc',
@@ -244,7 +245,7 @@ Mousetrap.bind(
   'keyup'
 )
 
-const config = ref(defaultConfig)
+const config = ref<Config>(defaultConfig as Config)
 const sync = ref(false)
 const darkMode = ref(false)
 const displayFrequency = ref(0)
