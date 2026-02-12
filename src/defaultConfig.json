@@ -79,7 +79,8 @@
 },
 "clock": {
     "bg": "#000000",
-    "fg": "#00ff00"
+    "fg": "#00ff00",
+    "gradient": false
 },
 "export": {
     "imageSource": "card",

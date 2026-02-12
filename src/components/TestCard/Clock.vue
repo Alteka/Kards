@@ -1,5 +1,8 @@
 <template>
   <div id="clock-card" :style="{ background: clockStyle.bg }">
+    <transition name="fade">
+      <div id="clock-gradient" v-if="clockStyle.gradient"></div>
+    </transition>
     <div v-if="config.showInfo" class="clock-header" :style="{ color: clockStyle.fg }">
       {{ config.name }}
     </div>
@@ -60,7 +63,8 @@ export default {
       return {
         bg: c.bg || '#000000',
         fg: c.fg || '#00ff00',
-        unlit: c.unlit != null ? c.unlit : 'rgba(255,255,255,0.12)'
+        unlit: c.unlit != null ? c.unlit : 'rgba(255,255,255,0.12)',
+        gradient: !!c.gradient
       }
     },
     timeParts() {
@@ -156,6 +160,16 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#clock-gradient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0) 25%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
 }
 
 .dot-ring {

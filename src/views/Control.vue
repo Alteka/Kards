@@ -39,7 +39,7 @@
           </el-tab-pane>
           
           <el-tab-pane label="Clock" name="clock">
-            <control-clock v-model="config.clock"></control-clock>
+            <control-clock v-model="config.clock" :colors="config.predefineColors"></control-clock>
           </el-tab-pane>
 
           <el-tab-pane label="DeGhost" name="deghost">
@@ -216,6 +216,7 @@ export default {
       vm.config.visible = false
     })
     window.ipcRenderer.receive('config', function(val) {
+      if (val && !val.clock) val.clock = { bg: '#000000', fg: '#00ff00', gradient: false }
       vm.config = val
       vm.sync = true
     })
