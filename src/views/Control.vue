@@ -38,16 +38,14 @@
             <control-led v-model="config.led" :colors="config.predefineColors"></control-led>
           </el-tab-pane>
           
-      
+          <el-tab-pane label="Clock" name="clock">
+            <control-clock v-model="config.clock"></control-clock>
+          </el-tab-pane>
 
-              <el-tab-pane label="Clock">
-                <control-deghost v-model="config.deghost"></control-deghost>
-              </el-tab-pane>
-              <el-tab-pane label="DeGhost">
-                <control-deghost v-model="config.deghost"></control-deghost>
-              </el-tab-pane>
+          <el-tab-pane label="DeGhost" name="deghost">
+            <control-deghost v-model="config.deghost"></control-deghost>
+          </el-tab-pane>
            
-
    
         </el-tabs>
       </el-row>
@@ -67,7 +65,7 @@
         </el-col>
       <el-col :span="8">
           <el-form-item label="Motion"><i class="fas fa-external-link-square-alt fa-rotate-90 green" style="position: relative; top: 1px; margin-right: 5px;"></i>
-            <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync' || config.cardType=='deghost'"></el-switch>
+            <el-switch v-model="config.animated" :disabled="config.cardType=='audioSync' || config.cardType=='deghost' || config.cardType=='clock'"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
@@ -187,6 +185,7 @@ import ControlAudioSync from '../components/Control/ControlAudioSync.vue'
 import ControlMenu from '../components/Control/ControlMenu.vue'
 import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
+import ControlClock from '../components/Control/ControlClock.vue'
 import Mousetrap from 'mousetrap'
 import defaultConfig from '../defaultConfig.json'
 
@@ -195,7 +194,7 @@ Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, '
 export default {
   name: 'ControlView',
   components: {
-    ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost
+    ControlBars, ControlGrid, ControlAlteka, ControlRamp, ControlPlaceholder, ControlAudioSync, ControlScreen, ControlMenu, ControlLed, ControlDeghost, ControlClock
   },
   methods: {
     handleResize: function({ width, height }) {
@@ -263,6 +262,7 @@ export default {
     Mousetrap.bind(['ctrl+6'], function() { vm.config.cardType = 'audioSync'; return false; })
     Mousetrap.bind(['ctrl+7'], function() { vm.config.cardType = 'deghost'; return false; })
     Mousetrap.bind(['ctrl+8'], function() { vm.config.cardType = 'led'; return false; })
+    Mousetrap.bind(['ctrl+9'], function() { vm.config.cardType = 'clock'; return false; })
   },
   watch: {
     config: {

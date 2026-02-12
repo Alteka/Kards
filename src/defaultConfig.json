@@ -77,6 +77,10 @@
     "density": 75,
     "speed": 3
 },
+"clock": {
+    "bg": "#000000",
+    "fg": "#00ff00"
+},
 "export": {
     "imageSource": "card",
     "target": "file"

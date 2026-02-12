@@ -7,7 +7,7 @@
 
     <info-circle v-if="!config.infoCircleAnimated && ((config.cardType == 'bars' && config.bars.type!='hdr') || config.cardType=='grid' || config.cardType=='ramp')" :config="config" :info="info"></info-circle>
 
-      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost'}">
+      <div id="cardForPNG" class="testcard" :class="{animated: config.animated && config.cardType !='alteka' && config.cardType != 'audioSync' && config.cardType !='led' && config.cardType !='deghost' && config.cardType !='clock'}">
           <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
           <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
           <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
@@ -21,9 +21,10 @@
           <AltekaTestCard v-if="config.cardType == 'alteka'" :config="config" :info="info" :borderSize="borderSize"></AltekaTestCard>
           <LedWallTestCard v-if="config.cardType == 'led'" :config="config" :info="info"></LedWallTestCard>
           <DeghostTestCard v-if="config.cardType == 'deghost'" :config="config" :info="info"></DeghostTestCard>
+          <ClockTestCard v-if="config.cardType == 'clock'" :config="config" :info="info"></ClockTestCard>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'"  class="testcard" :class="{animatedAbove: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led' && config.cardType !='clock'"  class="testcard" :class="{animatedAbove: config.animated}">
         <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
         <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
         <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
@@ -35,7 +36,7 @@
         <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'" class="testcard" :class="{animatedLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led' && config.cardType !='clock'" class="testcard" :class="{animatedLeft: config.animated}">
         <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
         <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
         <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
@@ -47,7 +48,7 @@
         <PlaceholderTestCard v-if="config.cardType == 'placeholder'" :config="config" :info="info"></PlaceholderTestCard>
       </div>
 
-      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led'" class="testcard" :class="{animatedAboveLeft: config.animated}">
+      <div v-if="config.animated && config.cardType !='alteka' && config.cardType !='audioSync' && config.cardType !='led' && config.cardType !='clock'" class="testcard" :class="{animatedAboveLeft: config.animated}">
         <GridTestCard v-if="config.cardType == 'grid'" :config="config" :info="info"></GridTestCard>
         <BarsSmpteTestCard v-if="config.cardType == 'bars' && config.bars.type=='smpte'" :config="config" :info="info"></BarsSmpteTestCard>
         <BarsAribTestCard v-if="config.cardType == 'bars' && config.bars.type=='arib'" :config="config" :info="info"></BarsAribTestCard>
@@ -84,6 +85,7 @@ import DeghostTestCard from '../components/TestCard/Deghost.vue'
 import BarsHDRTestCard from '../components/TestCard/HDR.vue'
 import BarsSDITestCard from '../components/TestCard/SDI.vue'
 import BarsSingle from '../components/TestCard/Single.vue'
+import ClockTestCard from '../components/TestCard/Clock.vue'
 
 import domtoimage from 'dom-to-image'
 import InfoCircle from '../components/TestCard/InfoCircle.vue'
@@ -113,7 +115,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 
   export default {
     name: 'TestCard',
-    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, BarsHDRTestCard, BarsSDITestCard, BarsSingle, InfoCircle },
+    components: { GridTestCard, AltekaTestCard, BarsSmpteTestCard, BarsAribTestCard, BarsSimpleTestCard, PlaceholderTestCard, RampTestCard, AudioSyncTestCard, LedWallTestCard, DeghostTestCard, ClockTestCard, BarsHDRTestCard, BarsSDITestCard, BarsSingle, InfoCircle },
     data: function() { 
       return {
         config: {
