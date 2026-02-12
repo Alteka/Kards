@@ -22,17 +22,16 @@ The app is based around Electron to create and manage the windows. The content i
 ``` bash
 # Clone the repo into a folder
 # cd into the folder and run the below
-# You'll need to have node.js as well as Yarn package manager
-# Currently building with node 16.20.2
+# You'll need Node.js (e.g. node 16+)
 
 # install dependencies
-yarn install
+npm install
 
-# serve with hot reload at localhost:9080
-yarn run electron:serve
+# serve with hot reload at localhost:5173
+npm run electron:serve
 
 # build electron application for production
-yarn run electron:build
+npm run electron:build
 ```
 
 ---

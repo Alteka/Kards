@@ -6,8 +6,8 @@
       <control-screen v-model="config"></control-screen>
       <el-divider content-position="center">Select Card Type</el-divider>
 
-      <el-row style="margin-left: 8px; margin-right: 8px;">
-        <el-tabs type="border-card"  v-model="config.cardType" :stretch="true" style="height: 165px; width: 100%;">
+      <el-row style="margin-left: 10px; margin-right: 10px;">
+        <el-tabs v-model="config.cardType" :stretch="true" style="min-height: 165px; width: 100%;">
           
           <el-tab-pane label="Alteka" name="alteka">
             <control-alteka v-model="config.alteka" :colors="config.predefineColors"></control-alteka>
@@ -33,14 +33,22 @@
             <control-audio-sync v-model="config.audioSync" :displayFrequency="displayFrequency"></control-audio-sync>
           </el-tab-pane>
 
-          <el-tab-pane label="DeGhost" name="deghost">
-            <control-deghost v-model="config.deghost"></control-deghost>
-          </el-tab-pane>
-
+          
           <el-tab-pane label="LED" name="led">
             <control-led v-model="config.led" :colors="config.predefineColors"></control-led>
           </el-tab-pane>
+          
+      
 
+              <el-tab-pane label="Clock">
+                <control-deghost v-model="config.deghost"></control-deghost>
+              </el-tab-pane>
+              <el-tab-pane label="DeGhost">
+                <control-deghost v-model="config.deghost"></control-deghost>
+              </el-tab-pane>
+           
+
+   
         </el-tabs>
       </el-row>
 
@@ -179,8 +187,9 @@ import ControlAudioSync from '../components/Control/ControlAudioSync.vue'
 import ControlMenu from '../components/Control/ControlMenu.vue'
 import ControlScreen from '../components/Control/ControlScreen.vue'
 import ControlDeghost from '../components/Control/ControlDeghost.vue'
+import Mousetrap from 'mousetrap'
+import defaultConfig from '../defaultConfig.json'
 
-var Mousetrap = require('mousetrap')
 Mousetrap.bind('esc', function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
 
 export default {
@@ -195,7 +204,7 @@ export default {
   },
   data: function () {
     return {
-      config: require('../defaultConfig.json'),
+      config: defaultConfig,
       sync: false,
       darkMode: false,
       displayFrequency: 0,
@@ -295,15 +304,22 @@ body {
   font-family: Sansation, Helvetica, sans-serif;
   overflow: hidden !important;
   margin: 0;
+
+  --el-text-color-primary: #ddd;
+  --el-text-color-regular: #bbb;
+  --el-border-color-light: #777;
 }
 @font-face {
   font-family: Sansation;
-  src: url("~@/assets/Sansation-Regular.ttf");
+  src: url("@/assets/Sansation-Regular.ttf");
 }
 .logo {
   margin-top: 10px;
   margin-bottom: 0px;
   font-family: Sansation;
+}
+.el-tabs__item {
+  padding: 0;
 }
 .green {
   color: #6ab42f;
@@ -319,9 +335,7 @@ body {
   background: #222;
   color: #aaa;
 }
-.darkMode label {
-  color: #bbb;
-}
+
 .darkMode .el-tabs--border-card {
   background: #333;
   border: 1px solid #111;
@@ -421,4 +435,6 @@ body {
 .darkMode .el-input.is-disabled .el-input__inner {
   background: #444;
 }
+
+
 </style>

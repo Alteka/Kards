@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import InfoCircle from './InfoCircle'
+import InfoCircle from './InfoCircle.vue'
 import '../../../public/particles.js'
 
 export default {

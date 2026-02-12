@@ -136,6 +136,12 @@ import { ElLoading } from 'element-plus'
 import { ElNotification } from 'element-plus'
 import ControlShare from './ControlShare.vue'
 import ControlAbout from './ControlAbout.vue'
+import stereoWav from '@/assets/audio/stereo.wav'
+import pinkWav from '@/assets/audio/pink.wav'
+import phaseWav from '@/assets/audio/phase.wav'
+import toneWav from '@/assets/audio/tone.wav'
+import whiteWav from '@/assets/audio/white.wav'
+import sweepWav from '@/assets/audio/sweep.wav'
 
 let loadingInstance
 
@@ -176,12 +182,12 @@ let loadingInstance
       setInterval(this.updateDevices, 5000)
       setTimeout(this.doNameUpdate, 2000)
 
-      document.getElementById('stereo').src = require("@/assets/audio/stereo.wav")
-      document.getElementById('pink').src = require("@/assets/audio/pink.wav")
-      document.getElementById('phase').src = require("@/assets/audio/phase.wav")
-      document.getElementById('tone').src = require("@/assets/audio/tone.wav")
-      document.getElementById('white').src = require("@/assets/audio/white.wav")
-      document.getElementById('sweep').src = require("@/assets/audio/sweep.wav")
+      document.getElementById('stereo').src = stereoWav
+      document.getElementById('pink').src = pinkWav
+      document.getElementById('phase').src = phaseWav
+      document.getElementById('tone').src = toneWav
+      document.getElementById('white').src = whiteWav
+      document.getElementById('sweep').src = sweepWav
 
       window.ipcRenderer.receive('exportCardCompleted', function(msg) {
         if (msg) {

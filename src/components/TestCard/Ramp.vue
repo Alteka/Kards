@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import Swatch from './Swatch'
-import InfoCircle from './InfoCircle'
+import Swatch from './Swatch.vue'
+import InfoCircle from './InfoCircle.vue'
   export default {
     name: "RampTestCard",
     components: { Swatch, InfoCircle },

@@ -22,15 +22,15 @@
       <div class="arrowLeft"></div>
     </div>
 
-    <video id="vt24" v-if="config.audioSync.rate == 24" src="~@/assets/audiosync/24.webm" loop autoplay class="vt" />
-    <video id="vt25" v-if="config.audioSync.rate == 25" src="~@/assets/audiosync/25.webm" loop autoplay class="vt" />
-    <video id="vt29-97" v-if="config.audioSync.rate == 29.97" src="~@/assets/audiosync/29.97.webm" loop autoplay class="vt" />
-    <video id="vt30" v-if="config.audioSync.rate == 30" src="~@/assets/audiosync/30.webm" loop autoplay class="vt" />
-    <video id="vt50" v-if="config.audioSync.rate == 50" src="~@/assets/audiosync/50.webm" loop autoplay class="vt" />
-    <video id="vt59-94" v-if="config.audioSync.rate == 59.94" src="~@/assets/audiosync/59.94.webm" loop autoplay class="vt" />
-    <video id="vt60" v-if="config.audioSync.rate == 60" src="~@/assets/audiosync/60.webm" loop autoplay class="vt" />
-    <video id="vt100" v-if="config.audioSync.rate == 100" src="~@/assets/audiosync/100.webm" loop autoplay class="vt" />
-    <video id="vt120" v-if="config.audioSync.rate == 120" src="~@/assets/audiosync/120.webm" loop autoplay class="vt" />
+    <video id="vt24" v-if="config.audioSync.rate == 24" :src="video24" loop autoplay class="vt" />
+    <video id="vt25" v-if="config.audioSync.rate == 25" :src="video25" loop autoplay class="vt" />
+    <video id="vt29-97" v-if="config.audioSync.rate == 29.97" :src="video29_97" loop autoplay class="vt" />
+    <video id="vt30" v-if="config.audioSync.rate == 30" :src="video30" loop autoplay class="vt" />
+    <video id="vt50" v-if="config.audioSync.rate == 50" :src="video50" loop autoplay class="vt" />
+    <video id="vt59-94" v-if="config.audioSync.rate == 59.94" :src="video59_94" loop autoplay class="vt" />
+    <video id="vt60" v-if="config.audioSync.rate == 60" :src="video60" loop autoplay class="vt" />
+    <video id="vt100" v-if="config.audioSync.rate == 100" :src="video100" loop autoplay class="vt" />
+    <video id="vt120" v-if="config.audioSync.rate == 120" :src="video120" loop autoplay class="vt" />
 
     <div id="middleClock">
       <span  v-if="config.showClock" style="text-align: center">{{ info.time }}</span>
@@ -56,6 +56,16 @@
 
 <script>
 import VueResizeText from 'vue3-resize-text'
+import video24 from '@/assets/audiosync/24.webm'
+import video25 from '@/assets/audiosync/25.webm'
+import video29_97 from '@/assets/audiosync/29.97.webm'
+import video30 from '@/assets/audiosync/30.webm'
+import video50 from '@/assets/audiosync/50.webm'
+import video59_94 from '@/assets/audiosync/59.94.webm'
+import video60 from '@/assets/audiosync/60.webm'
+import video100 from '@/assets/audiosync/100.webm'
+import video120 from '@/assets/audiosync/120.webm'
+
 export default {
   name: "AudioSyncTestCard",
   directives: { 
@@ -69,7 +79,16 @@ export default {
   data: function() {
     return {
       description: "Default Interface",
-      rates: ['24', '25', '29-97', '30', '50', '59-94', '60' ]
+      rates: ['24', '25', '29-97', '30', '50', '59-94', '60' ],
+      video24,
+      video25,
+      video29_97,
+      video30,
+      video50,
+      video59_94,
+      video60,
+      video100,
+      video120
     }
   },
   computed: {

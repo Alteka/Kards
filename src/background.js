@@ -1,9 +1,8 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
-import compareVersions from 'compare-versions'
+const { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } = require('electron')
+const { default: installExtension, VUEJS3_DEVTOOLS } = require('electron-devtools-installer')
+const compareVersions = require('compare-versions')
 const log = require('electron-log')
 const { networkInterfaces, hostname } = require('os')
 const axios = require('axios')
@@ -18,9 +17,9 @@ const fs = require('fs')
 const say = require('say')
 // var sizeOf = require('image-size')
 const wallpaper = require('wallpaper')
-import altekaMenu from './menu'
-import oscServer from './osc'
-import restServer from './rest'
+const altekaMenu = require('./menu.js')
+const oscServer = require('./osc.js')
+const restServer = require('./rest.js')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const version = require('./../package.json').version
@@ -236,19 +235,18 @@ async function createWindow() {
     app.quit()
   })
 
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    await controlWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+  if (process.env.VITE_DEV_SERVER_URL) {
+    await controlWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
     if (!process.env.IS_TEST) controlWindow.webContents.openDevTools()
   } else {
-    createProtocol('app')
-    controlWindow.loadURL('app://./index.html')
+    controlWindow.loadFile(path.join(__dirname, '..', 'dist', 'index.html'))
   }
 
   controlWindow.setTouchBar(touchBar.touchBar)
   touchBar.setWindow(controlWindow)
 }
 ipcMain.on('controlResize', (_, data) => {
-  controlWindow.setContentSize(675, data.height)
+  controlWindow.setContentSize(700, data.height)
 })
 
 
@@ -499,12 +497,13 @@ function showTestCardWindow(windowConfig) {
     testCardWindow.setBounds({ width: windowConfig.width, height: windowConfig.height })
   }
 
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    testCardWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/testcard')
+  if (process.env.VITE_DEV_SERVER_URL) {
+    testCardWindow.loadURL(process.env.VITE_DEV_SERVER_URL + '#/testcard')
     if (isDevelopment) testCardWindow.webContents.openDevTools()
   } else {
-    createProtocol('app')
-    testCardWindow.loadURL('app://./index.html#testcard')
+    const { pathToFileURL } = require('url')
+    const fileUrl = pathToFileURL(path.join(__dirname, '..', 'dist', 'index.html')).href
+    testCardWindow.loadURL(fileUrl + '#/testcard')
   }
 
   testCardWindow.once('ready-to-show', () => {

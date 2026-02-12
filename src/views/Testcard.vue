@@ -87,8 +87,7 @@ import BarsSingle from '../components/TestCard/Single.vue'
 
 import domtoimage from 'dom-to-image'
 import InfoCircle from '../components/TestCard/InfoCircle.vue'
-
-var Mousetrap = require('mousetrap')
+import Mousetrap from 'mousetrap'
 Mousetrap.bind(['command+f', 'ctrl+f', 'esc', 'f'], function() { window.ipcRenderer.send('closeTestCard') }, 'keyup')
 Mousetrap.bind(['command+i', 'ctrl+i', 'i'], function() {
   window.ipcRenderer.send('testCardKeyPress', 'showInfo')
@@ -323,7 +322,7 @@ Mousetrap.bind(['command+s', 'ctrl+s'], function() {
 <style>
 @font-face {
   font-family: Sansation;
-  src: url("~@/assets/Sansation-Regular.ttf");
+  src: url("@/assets/Sansation-Regular.ttf");
 }
 #cards {
   position: absolute;

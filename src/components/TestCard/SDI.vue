@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import InfoCircle from './InfoCircle'
+import InfoCircle from './InfoCircle.vue'
   export default {
     name: "BarsSimpleTestCard",
     components: { InfoCircle },

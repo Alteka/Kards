@@ -204,7 +204,7 @@
 </template>
 
 <script>
-import Swatch from "./Swatch"
+import Swatch from "./Swatch.vue"
 export default {
   name: "AltekaTestCard",
   components: { Swatch },

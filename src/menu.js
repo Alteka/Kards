@@ -199,4 +199,4 @@ class altekaMenu extends EventEmitter {
   }
 }
 
-export default altekaMenu
+module.exports = altekaMenu

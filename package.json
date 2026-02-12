@@ -4,19 +4,20 @@
   "description": "A cross-platform test card generator for AV professionals",
   "author": "Alteka Solutions <info@alteka.solutions>",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "electron:build:matt": "vue-cli-service electron:build --mac --x64",
-    "electron:build:universal": "vue-cli-service electron:build --universal",
-    "electron:serve": "vue-cli-service electron:serve",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
+    "electron:serve": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "electron:build": "vite build && electron-builder",
+    "electron:build:matt": "vite build && electron-builder --mac --x64",
+    "electron:build:universal": "vite build && electron-builder --universal",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
-  "main": "background.js",
+  "main": "src/background.js",
   "dependencies": {
-    "@electron/universal": "^2.0.1",
+    "@electron/universal": "^1.2.1",
     "@fortawesome/fontawesome-free": "^6.1.1",
     "axios": "0.27.2",
     "body-parser": "^1.19.1",
@@ -41,33 +42,56 @@
     "wallpaper": "5.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^34.0.0",
+    "electron-builder": "^24.0.0",
     "electron-devtools-installer": "^3.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.0.0",
     "sass": "^1.49.11",
-    "sass-loader": "^10.0.4",
-    "vue-cli-plugin-electron-builder": "~2.1.1",
-    "vue-cli-plugin-element-plus": "~0.0.13"
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "productName": "Kards",
+    "appId": "solutions.alteka.kards",
+    "files": [
+      "dist/**",
+      "src/**",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist_electron"
+    },
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "mac": {
+      "icon": "public/icon.png",
+      "target": "pkg"
+    },
+    "win": {
+      "icon": "public/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "createDesktopShortcut": false,
+      "menuCategory": true
+    }
   },
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "es2022": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "plugin:vue/vue3-recommended"
     ],
     "parserOptions": {
-      "parser": "@babel/eslint-parser"
+      "ecmaVersion": "latest",
+      "sourceType": "module"
     },
     "rules": {}
   },
@@ -82,7 +106,7 @@
     "type": "git",
     "url": "https://github.com/Alteka/Kards"
   },
-  "resolutions": {
-    "@electron/universal": "^1.2.1"
+  "volta": {
+    "node": "22.22.0"
   }
 }

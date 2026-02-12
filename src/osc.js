@@ -517,4 +517,4 @@ class oscServer extends EventEmitter {
     }
 }
 
-export default oscServer
+module.exports = oscServer
