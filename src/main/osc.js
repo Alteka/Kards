@@ -486,7 +486,7 @@ class oscServer extends EventEmitter {
         })
 
 
-        var p = require('../package.json')
+        var p = require('../../package.json')
 
         bonjour.publish({ 
             name: 'Kards-' + hostname().split('.')[0],

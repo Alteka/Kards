@@ -162,7 +162,7 @@ class altekaMenu extends EventEmitter {
       this.menu.append(new MenuItem({
         label: 'Help',
         submenu: [
-            { label: 'Version ' + require('../package.json').version, enabled: false },
+            { label: 'Version ' + require('../../package.json').version, enabled: false },
             { type: 'separator' },
             { label: 'Open Help Site', click: () => { 
               shell.openExternal('http://www.alteka.solutions/kards/help')
