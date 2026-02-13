@@ -10,16 +10,16 @@ import InfoCircle from './InfoCircle.vue'
 import '../../../public/particles.js'
 
 export default {
-  name: "DeghostTestCard",
+  name: 'DeghostTestCard',
   components: { InfoCircle },
   props: {
     config: Object,
     info: Object
   },
   computed: {
-      particlesConfig: function() {
-        return {
-          particles: {
+    particlesConfig: function () {
+      return {
+        particles: {
           number: {
             value: this.config.deghost.density,
             density: {
@@ -28,13 +28,13 @@ export default {
             }
           },
           color: {
-            value: "#ffffff"
+            value: '#ffffff'
           },
           shape: {
-            type: "circle",
+            type: 'circle',
             stroke: {
               width: 5,
-              color: "#000000"
+              color: '#000000'
             }
           },
           opacity: {
@@ -60,26 +60,26 @@ export default {
           line_linked: {
             enable: true,
             distance: 200,
-            color: "#000",
+            color: '#000',
             opacity: 1.0,
             width: 2
           },
           move: {
             enable: true,
             speed: this.config.deghost.speed,
-            direction: "none",
+            direction: 'none',
             random: true,
             straight: false,
-            out_mode: "out",
+            out_mode: 'out',
             bounce: false
           }
         },
         interactivity: {
-          detect_on: "canvas",
+          detect_on: 'canvas',
           events: {
             onclick: {
               enable: false,
-              mode: "push"
+              mode: 'push'
             },
             onhover: {
               enable: false
@@ -90,49 +90,41 @@ export default {
         retina_detect: true
       }
     },
-    deghostStyle: function() {
+    deghostStyle: function () {
       return {
         animationDuration: Math.abs(15 - this.config.deghost.speed) + 's'
       }
     }
   },
-  mounted: function() {
-    window.particlesJS('particles-js', this.particlesConfig);
+  mounted: function () {
+    window.particlesJS('particles-js', this.particlesConfig)
   },
   watch: {
-      config: {
-        handler: function (val, oldVal) { 
-          if (val.deghost.density !== oldVal.deghost.density || val.deghost.speed !== oldVal.deghost.speed) {
-            
-            // window.particlesJS.apply('particles-js', this.particlesConfig);
-            location.reload()
-            
-          }
-         },
-        deep: true
+    config: {
+      handler: function (val, oldVal) {
+        if (val.deghost.density !== oldVal.deghost.density || val.deghost.speed !== oldVal.deghost.speed) {
+          // window.particlesJS.apply('particles-js', this.particlesConfig);
+          location.reload()
+        }
       },
-    },
+      deep: true
+    }
+  }
 }
 </script>
 
 <style scoped>
-
 .info {
   /* position: relative; */
   animation: circle 20s linear infinite;
 }
 
-@keyframes circle{
-  0%{
-    transform:rotate(0deg)
-              translate(calc(-100%))
-              rotate(0deg);
-  
+@keyframes circle {
+  0% {
+    transform: rotate(0deg) translate(calc(-100%)) rotate(0deg);
   }
-  100%{
-    transform:rotate(360deg)
-              translate(calc(-100%))
-              rotate(-360deg);
+  100% {
+    transform: rotate(360deg) translate(calc(-100%)) rotate(-360deg);
   }
 }
 
@@ -143,10 +135,10 @@ export default {
   width: 100%;
   color: white;
   animation-name: backgroundColorPalette;
-	animation-duration: 5s;
-	animation-iteration-count: infinite;
-	animation-direction:normal;
-	animation-timing-function: linear; 
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-timing-function: linear;
 }
 
 #particles-js {
@@ -155,45 +147,44 @@ export default {
 }
 
 @keyframes backgroundColorPalette {
-	0% {
-		background: hsl(0deg, 100%, 50%);
-	}
-	8.333% {
-		background: hsl(30deg, 100%, 50%);
-	}
+  0% {
+    background: hsl(0deg, 100%, 50%);
+  }
+  8.333% {
+    background: hsl(30deg, 100%, 50%);
+  }
   16.667% {
-		background: hsl(60deg, 100%, 50%);
-	}
-	25% {
-		background: hsl(90deg, 100%, 50%);
-	}
+    background: hsl(60deg, 100%, 50%);
+  }
+  25% {
+    background: hsl(90deg, 100%, 50%);
+  }
   33.333% {
-		background: hsl(120deg, 100%, 50%);
-	}
+    background: hsl(120deg, 100%, 50%);
+  }
   41.667% {
-		background: hsl(150deg, 100%, 50%);
-	}
+    background: hsl(150deg, 100%, 50%);
+  }
   50% {
-		background: hsl(180deg, 100%, 50%);
-	}
+    background: hsl(180deg, 100%, 50%);
+  }
   58.333% {
-		background: hsl(210deg, 100%, 50%);
-	}
+    background: hsl(210deg, 100%, 50%);
+  }
   66.667% {
-		background: hsl(240deg, 100%, 50%);
-	}
+    background: hsl(240deg, 100%, 50%);
+  }
   75% {
-		background: hsl(270deg, 100%, 50%);
-	}
+    background: hsl(270deg, 100%, 50%);
+  }
   83.333% {
-		background: hsl(300deg, 100%, 50%);
-	}
+    background: hsl(300deg, 100%, 50%);
+  }
   91.667% {
-		background: hsl(330deg, 100%, 50%);
-	}
+    background: hsl(330deg, 100%, 50%);
+  }
   100% {
-		background: hsl(360deg, 100%, 50%);
-	}
+    background: hsl(360deg, 100%, 50%);
+  }
 }
-
 </style>

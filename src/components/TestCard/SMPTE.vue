@@ -1,6 +1,6 @@
 <template>
   <div id="smpte">
-    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info"/>
+    <info-circle v-if="config.infoCircleAnimated" :config="config" :info="info" />
     <div class="row">
       <swatch colour="white" ire="75" :showText="config.bars.overlay"></swatch>
       <swatch colour="yellow" ire="75" :showText="config.bars.overlay"></swatch>
@@ -19,8 +19,8 @@
       <swatch colour="black" ire="0" :showText="config.bars.overlay"></swatch>
       <swatch colour="white" ire="75" :showText="config.bars.overlay"></swatch>
     </div>
-    <div class="row" style="height: 25.1%;">
-      <div class="row" style="width: 500%;">
+    <div class="row" style="height: 25.1%">
+      <div class="row" style="width: 500%">
         <swatch colour="ntscInphase" :showText="config.bars.overlay"></swatch>
         <swatch colour="white" ire="100" :showText="config.bars.overlay"></swatch>
         <swatch colour="ntscQuadrature" :showText="config.bars.overlay"></swatch>
@@ -39,32 +39,32 @@
 <script>
 import Swatch from './Swatch.vue'
 import InfoCircle from './InfoCircle.vue'
-  export default {
-    name: "BarsSmpteTestCard",
-    components: { Swatch, InfoCircle },
-    props: {
-      config: Object,
-      info: Object
-    }
+export default {
+  name: 'BarsSmpteTestCard',
+  components: { Swatch, InfoCircle },
+  props: {
+    config: Object,
+    info: Object
   }
+}
 </script>
 
 <style scoped>
-  #smpte {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    height: 100%;
-    width: 100%;
-    background: grey;
-  }
-  .row {
-    height: 66.66%;
-    display: flex;
-  }
-  .row div {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
+#smpte {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background: grey;
+}
+.row {
+  height: 66.66%;
+  display: flex;
+}
+.row div {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 </style>

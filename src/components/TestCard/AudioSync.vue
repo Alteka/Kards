@@ -1,6 +1,5 @@
 <template>
   <div id="audioSync" :style="cssVars">
-
     <div class="border">
       <div class="borderTop"></div>
       <div class="borderBottom"></div>
@@ -33,24 +32,33 @@
     <video id="vt120" v-if="config.audioSync.rate == 120" :src="video120" loop autoplay class="vt" />
 
     <div id="middleClock">
-      <span  v-if="config.showClock" style="text-align: center">{{ info.time }}</span>
+      <span v-if="config.showClock" style="text-align: center">{{ info.time }}</span>
     </div>
 
     <div id="topText" class="textRow" v-if="config.showInfo">
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" style="text-align: left">{{ config.audioSync.rate }} FPS</span>
-      <span v-resize-text="{ratio:2, maxFontSize: '50px'}" style="text-align: right">{{ config.name }}</span>
+      <span v-resize-text="{ ratio: 1.5, maxFontSize: '50px' }" style="text-align: left"
+        >{{ config.audioSync.rate }} FPS</span
+      >
+      <span v-resize-text="{ ratio: 2, maxFontSize: '50px' }" style="text-align: right">{{ config.name }}</span>
     </div>
 
     <div id="topText" class="textRow" v-if="!config.showInfo">
-      <span v-resize-text="{ratio:1.5, maxFontSize: '50px'}" v-if="!config.showInfo">{{ config.audioSync.rate }} FPS</span>
+      <span v-resize-text="{ ratio: 1.5, maxFontSize: '50px' }" v-if="!config.showInfo"
+        >{{ config.audioSync.rate }} FPS</span
+      >
     </div>
 
     <div id="bottomText" class="textRow" v-if="config.showInfo">
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: left">{{ info.cardSize }} - {{info.displayFrequency}}Hz</span>
-      <span v-resize-text="{ratio:3, maxFontSize: '32px'}" style="text-align: center"><i class="fas fa-volume-up" /> {{ description }}</span>
-      <span v-resize-text="{ratio:2, maxFontSize: '32px'}" style="text-align: right">{{ info.network[info.networkIndex] }}</span>
+      <span v-resize-text="{ ratio: 2, maxFontSize: '32px' }" style="text-align: left"
+        >{{ info.cardSize }} - {{ info.displayFrequency }}Hz</span
+      >
+      <span v-resize-text="{ ratio: 3, maxFontSize: '32px' }" style="text-align: center"
+        ><i class="fas fa-volume-up" /> {{ description }}</span
+      >
+      <span v-resize-text="{ ratio: 2, maxFontSize: '32px' }" style="text-align: right">{{
+        info.network[info.networkIndex]
+      }}</span>
     </div>
-
   </div>
 </template>
 
@@ -67,19 +75,19 @@ import video100 from '@/assets/audiosync/100.webm'
 import video120 from '@/assets/audiosync/120.webm'
 
 export default {
-  name: "AudioSyncTestCard",
-  directives: { 
+  name: 'AudioSyncTestCard',
+  directives: {
     ResizeText: VueResizeText.ResizeText
-   },
+  },
   props: {
     config: Object,
     info: Object,
     borderSize: Number
   },
-  data: function() {
+  data: function () {
     return {
-      description: "Default Interface",
-      rates: ['24', '25', '29-97', '30', '50', '59-94', '60' ],
+      description: 'Default Interface',
+      rates: ['24', '25', '29-97', '30', '50', '59-94', '60'],
       video24,
       video25,
       video29_97,
@@ -99,40 +107,39 @@ export default {
     }
   },
   watch: {
-      config: {
-        handler: function (val) { 
-          this.updateDeviceName(val)
-         },
-        deep: true
+    config: {
+      handler: function (val) {
+        this.updateDeviceName(val)
       },
-    },
-    methods: {
-      updateDeviceName: function(val) {
-        for (const rate in this.rates) {
-          let element = document.getElementById('vt' + this.rates[rate])
-          if (element !== null) {
-            element.setSinkId(val.audioSync.deviceId)
+      deep: true
+    }
+  },
+  methods: {
+    updateDeviceName: function (val) {
+      for (const rate in this.rates) {
+        let element = document.getElementById('vt' + this.rates[rate])
+        if (element !== null) {
+          element.setSinkId(val.audioSync.deviceId)
+        }
+      }
+
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        devices = devices.filter((device) => device.kind === 'audiooutput')
+        for (const dev of devices) {
+          if (dev.deviceId == val.audioSync.deviceId) {
+            this.description = dev.label
           }
         }
-        
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-          devices = devices.filter(device => device.kind === 'audiooutput')
-          for (const dev of devices) {
-            if (dev.deviceId == val.audioSync.deviceId) {
-              this.description = dev.label
-            }
-          }
-        })
-      }
-    },
-    mounted: function() {
-      this.updateDeviceName(this.config)
+      })
     }
+  },
+  mounted: function () {
+    this.updateDeviceName(this.config)
+  }
 }
 </script>
 
 <style scoped>
-
 .textRow {
   position: absolute;
   font-size: 28px;
@@ -197,7 +204,7 @@ export default {
 }
 .border div {
   position: absolute;
-  background-size: calc(var(--border-size)*4) calc(var(--border-size)*4);
+  background-size: calc(var(--border-size) * 4) calc(var(--border-size) * 4);
   background-position: 50%;
 }
 .borderTop {
@@ -228,7 +235,6 @@ export default {
   background: black;
   background-image: linear-gradient(180deg, transparent 50%, currentColor 50%);
 }
-
 
 .corners {
   position: absolute;
@@ -266,7 +272,6 @@ export default {
   border-bottom: var(--border-size) solid #6ab42e;
   border-right: var(--border-size) solid #6ab42e;
 }
-
 
 .arrows {
   position: absolute;
@@ -314,5 +319,4 @@ export default {
   color: white;
   font-size: 16px;
 }
-
 </style>

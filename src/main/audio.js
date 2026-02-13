@@ -13,14 +13,7 @@
  */
 
 module.exports = function initAudio(ipcMain, state, deps) {
-  const {
-    app,
-    dialog,
-    fs,
-    say,
-    log,
-    getConfig
-  } = deps
+  const { app, dialog, fs, say, log, getConfig } = deps
 
   function resetAudio() {
     setTimeout(createVoice, 5000)
@@ -85,22 +78,25 @@ module.exports = function initAudio(ipcMain, state, deps) {
     const config = getConfig()
     if (!config || !state.controlWindow) return
 
-    dialog.showOpenDialog(state.controlWindow, {
-      title: 'Open Audio File',
-      filters: [{ name: "Audio", extensions: ['wav', 'mp3', 'ogg', 'aac'] }]
-    }).then(result => {
-      if (!result.canceled) {
-        let path = result.filePaths[0]
-        config.audio.fileData = 'data:audio/' + path.split('.').pop() + ';base64,' + fs.readFileSync(path, { encoding: 'base64' })
-        config.audio.fileName = 'Opened ' + path
-        if (state.controlWindow) {
-          state.controlWindow.webContents.send('config', config)
+    dialog
+      .showOpenDialog(state.controlWindow, {
+        title: 'Open Audio File',
+        filters: [{ name: 'Audio', extensions: ['wav', 'mp3', 'ogg', 'aac'] }]
+      })
+      .then((result) => {
+        if (!result.canceled) {
+          let path = result.filePaths[0]
+          config.audio.fileData =
+            'data:audio/' + path.split('.').pop() + ';base64,' + fs.readFileSync(path, { encoding: 'base64' })
+          config.audio.fileName = 'Opened ' + path
+          if (state.controlWindow) {
+            state.controlWindow.webContents.send('config', config)
+          }
+          log.info('Audio :: Audio file imported - ' + path)
+        } else {
+          log.info('Audio :: Save dialog closed')
         }
-        log.info('Audio :: Audio file imported - ' + path)
-      } else {
-        log.info('Audio :: Save dialog closed')
-      }
-    })
+      })
   }
 
   // IPC wiring
@@ -121,4 +117,3 @@ module.exports = function initAudio(ipcMain, state, deps) {
     loadAudioFile
   }
 }
-

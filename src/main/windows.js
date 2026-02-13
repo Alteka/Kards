@@ -53,7 +53,7 @@ module.exports = function initWindows(state, deps) {
       show: false,
       useContentSize: true,
       maximizable: false,
-      title: "Kards",
+      title: 'Kards',
       resizable: false,
       webPreferences: {
         nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -110,7 +110,7 @@ module.exports = function initWindows(state, deps) {
       if (screens[s].displayFrequency == 29) {
         screens[s].displayFrequency = 29.97
       }
-      screens[s].displayFrequency = Math.round(screens[s].displayFrequency * 100) / 100 // force elegant rounding 
+      screens[s].displayFrequency = Math.round(screens[s].displayFrequency * 100) / 100 // force elegant rounding
     }
 
     if (state.controlWindow != null) {
@@ -154,19 +154,24 @@ module.exports = function initWindows(state, deps) {
     const config = getConfig()
     if (!config) return
 
-    if (state.testCardWindow == null && config.visible) { // Test card doesn't exist, but now needs to
+    if (state.testCardWindow == null && config.visible) {
+      // Test card doesn't exist, but now needs to
       setupNewTestCardWindow()
-    } else if (state.testCardWindow != null && !config.visible && !state.headlessExportMode) { // A window exists and shouldn't so lets close it
+    } else if (state.testCardWindow != null && !config.visible && !state.headlessExportMode) {
+      // A window exists and shouldn't so lets close it
       closeTestCard()
-    } else if (state.testCardWindow != null && config.visible && config.screen != state.testCardWindowScreen) { // a different screen as been selected..
+    } else if (state.testCardWindow != null && config.visible && config.screen != state.testCardWindowScreen) {
+      // a different screen as been selected..
       moveTestCardToNewScreen()
     } else if (state.testCardWindow != null) {
       if (state.testCardWindow.isFullScreen() || state.testCardWindow.isSimpleFullScreen()) {
-        if (config.windowed) { // A full screen test card now needs to be windowed - hard to handle elegantly so close and reopen
+        if (config.windowed) {
+          // A full screen test card now needs to be windowed - hard to handle elegantly so close and reopen
           reopenTestCard()
         }
       } else if (!state.testCardWindow.isFullScreen() && !state.testCardWindow.isSimpleFullScreen()) {
-        if (!config.windowed) { // A windowed test card now needs to be full screen. 
+        if (!config.windowed) {
+          // A windowed test card now needs to be full screen.
           reopenTestCard()
         }
       }
@@ -185,7 +190,7 @@ module.exports = function initWindows(state, deps) {
     if (!config) return
 
     let windowConfig = {
-      title: "Kards - Output",
+      title: 'Kards - Output',
       show: false,
       frame: false,
       width: config.window.width,
@@ -193,13 +198,13 @@ module.exports = function initWindows(state, deps) {
       webPreferences: { preload: path.join(__dirname, '..', 'preload.js') }
     }
 
-    if (!config.windowed) { // Setting up for full screen test card
+    if (!config.windowed) {
+      // Setting up for full screen test card
       windowConfig.fullscreen = true
 
       for (const disp of screen.getAllDisplays()) {
         if (disp.id == config.screen) {
           if (process.platform == 'darwin') {
-
             // figure out if it's newer macos...
             let version = process.getSystemVersion().split('.')
             let catalina = false
@@ -336,7 +341,12 @@ module.exports = function initWindows(state, deps) {
       let y = state.testCardWindow.getBounds().y
 
       for (const disp of screen.getAllDisplays()) {
-        if (x > disp.bounds.x && x < (disp.bounds.x + disp.bounds.width) && y > disp.bounds.y && y < (disp.bounds.y + disp.bounds.height)) {
+        if (
+          x > disp.bounds.x &&
+          x < disp.bounds.x + disp.bounds.width &&
+          y > disp.bounds.y &&
+          y < disp.bounds.y + disp.bounds.height
+        ) {
           if (state.testCardWindowScreen != disp.id) {
             config.screen = disp.id
             if (state.controlWindow) {
@@ -355,7 +365,13 @@ module.exports = function initWindows(state, deps) {
     if (state.testCardWindow != null) {
       let bounds = state.testCardWindow.getBounds()
       let t = 2
-      if (config.window.width < (bounds.width - t) || config.window.width > (bounds.width + t) || config.window.height < (bounds.height - t) || config.window.height > (bounds.height + t) || process.platform == 'darwin') {
+      if (
+        config.window.width < bounds.width - t ||
+        config.window.width > bounds.width + t ||
+        config.window.height < bounds.height - t ||
+        config.window.height > bounds.height + t ||
+        process.platform == 'darwin'
+      ) {
         config.window.width = bounds.width
         config.window.height = bounds.height
         if (state.controlWindow) {
@@ -390,7 +406,13 @@ module.exports = function initWindows(state, deps) {
       state.testCardWindow.webContents.send('exportCard')
     } else {
       state.headlessExportMode = true
-      let c = { show: false, frame: false, width: config.window.width, height: config.window.height, webPreferences: { preload: path.join(__dirname, '..', 'preload.js') } }
+      let c = {
+        show: false,
+        frame: false,
+        width: config.window.width,
+        height: config.window.height,
+        webPreferences: { preload: path.join(__dirname, '..', 'preload.js') }
+      }
 
       if (config.windowed) {
         c.minWidth = config.window.width
@@ -414,7 +436,11 @@ module.exports = function initWindows(state, deps) {
     const config = getConfig()
     if (!config) return
 
-    let result = dialog.showOpenDialogSync({ title: "Select Image", properties: ['openFile'], filters: [{ name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif'] }] })
+    let result = dialog.showOpenDialogSync({
+      title: 'Select Image',
+      properties: ['openFile'],
+      filters: [{ name: 'Images', extensions: ['jpeg', 'jpg', 'png', 'gif'] }]
+    })
     if (result != null && result[0]) {
       let data = fs.readFileSync(result[0], { encoding: 'base64' })
       config.alteka.logo = 'data:' + mime.lookup(result[0]) + ';base64,' + data
@@ -434,30 +460,36 @@ module.exports = function initWindows(state, deps) {
     let suffix = config.cardType[0].toUpperCase() + config.cardType.slice(1)
     if (suffix == 'Placeholder') suffix = 'Name'
     if (suffix == 'Led') suffix = 'LED'
-    var name = config.name.replace(/ /g, "-") + '-' + suffix + 'Kard.png'
-    dialog.showSaveDialog(state.controlWindow, { title: 'Save PNG', defaultPath: name, filters: [{ name: 'Images', extensions: ['png'] }] }).then(result => {
-      if (!result.canceled) {
-        var base64Data = arg.replace(/^data:image\/png;base64,/, "")
-        fs.writeFile(result.filePath, base64Data, 'base64', function (err) {
-          if (err) {
-            dialog.showErrorBox('Error Saving File', JSON.stringify(err))
-            log.error('Couldnt save file: ', err)
-            if (state.controlWindow) {
-              state.controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
+    var name = config.name.replace(/ /g, '-') + '-' + suffix + 'Kard.png'
+    dialog
+      .showSaveDialog(state.controlWindow, {
+        title: 'Save PNG',
+        defaultPath: name,
+        filters: [{ name: 'Images', extensions: ['png'] }]
+      })
+      .then((result) => {
+        if (!result.canceled) {
+          var base64Data = arg.replace(/^data:image\/png;base64,/, '')
+          fs.writeFile(result.filePath, base64Data, 'base64', function (err) {
+            if (err) {
+              dialog.showErrorBox('Error Saving File', JSON.stringify(err))
+              log.error('Couldnt save file: ', err)
+              if (state.controlWindow) {
+                state.controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
+              }
+            } else {
+              if (state.controlWindow) {
+                state.controlWindow.webContents.send('exportCardCompleted')
+              }
             }
-          } else {
-            if (state.controlWindow) {
-              state.controlWindow.webContents.send('exportCardCompleted')
-            }
+          })
+        } else {
+          log.info('Save dialog closed')
+          if (state.controlWindow) {
+            state.controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
           }
-        })
-      } else {
-        log.info('Save dialog closed')
-        if (state.controlWindow) {
-          state.controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
         }
-      }
-    })
+      })
     if (!config.visible && state.testCardWindow !== null) {
       log.info('Closing dummy test card window')
       state.testCardWindow.close()
@@ -469,9 +501,9 @@ module.exports = function initWindows(state, deps) {
     if (!config) return
 
     state.headlessExportMode = false
-    let dest = app.getPath('userData') + '/wallpaper' + Math.round((Math.random() * 100000)) + '.png'
-    var base64Data = arg.replace(/^data:image\/png;base64,/, "")
-    fs.writeFile(dest, base64Data, 'base64', err => {
+    let dest = app.getPath('userData') + '/wallpaper' + Math.round(Math.random() * 100000) + '.png'
+    var base64Data = arg.replace(/^data:image\/png;base64,/, '')
+    fs.writeFile(dest, base64Data, 'base64', (err) => {
       if (err) {
         dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
         log.error('Couldnt save wallpaper file ', err)
@@ -480,12 +512,12 @@ module.exports = function initWindows(state, deps) {
         }
         return
       }
-      ; (async () => {
+      ;(async () => {
         await wallpaper.set(dest)
         if (state.controlWindow) {
           state.controlWindow.webContents.send('exportCardCompleted')
         }
-      })();
+      })()
     })
     if (!config.visible && state.testCardWindow !== null) {
       log.info('Closing dummy test card window')
@@ -498,4 +530,3 @@ module.exports = function initWindows(state, deps) {
   state.manageTestCardWindow = manageTestCardWindow
   state.updateScreens = updateScreens
 }
-

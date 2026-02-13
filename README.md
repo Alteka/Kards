@@ -7,11 +7,13 @@ A cross-platform test card generator for AV professionals.
 [![GitHub issues](https://img.shields.io/github/issues/Alteka/Kards.svg)](https://GitHub.com/Alteka/Kards/issues/)
 
 ## About
-Good test cards are often overlooked. Maybe you set a wallpaper, maybe you have some slides in PowerPoint. This is better. We’ve made the ultimate test tool, cross platform, free and easy to use. 
 
-Kards generates a range of useful cards, with motion, audio sync tests. You can name them, brand them. Generate tone or even a text-to-speech that voices the computer name. 
+Good test cards are often overlooked. Maybe you set a wallpaper, maybe you have some slides in PowerPoint. This is better. We’ve made the ultimate test tool, cross platform, free and easy to use.
+
+Kards generates a range of useful cards, with motion, audio sync tests. You can name them, brand them. Generate tone or even a text-to-speech that voices the computer name.
 
 #### Accuracy
+
 A note to say that whilst the app generates specific levels, which match standard cards (where 100% White is 235, 235, 235) display profiles and operating system settings can override these settings. Whilst this may seem like a bad thing, it's likely that the same is being done to whatever app you want to use. More information on each Kard can be seen here: [Kards Help](https://alteka.solutions/kards/help)
 
 #### Design
@@ -19,7 +21,8 @@ A note to say that whilst the app generates specific levels, which match standar
 The app is based around Electron to create and manage the windows. The content is heavily Vue.js driven, with some custom components to create the test cards.
 
 #### Build Setup
-``` bash
+
+```bash
 # Clone the repo into a folder
 # cd into the folder and run the below
 # You'll need Node.js (e.g. node 16+)
@@ -27,12 +30,17 @@ The app is based around Electron to create and manage the windows. The content i
 # install dependencies
 npm install
 
+# Copy the example env file and edit if needed (required for the app to start)
+cp env.example.json env.json
+
 # serve with hot reload at localhost:5173
 npm run electron:serve
 
 # build electron application for production
 npm run electron:build
 ```
+
+**Environment:** The app expects an `env.json` in the project root (see `env.example.json`). Copy it to `env.json`; leave `rollbarToken` empty unless you use [Rollbar](https://rollbar.com) for error reporting.
 
 ---
 

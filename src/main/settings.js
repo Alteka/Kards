@@ -11,44 +11,39 @@
  */
 
 module.exports = function initSettings(ipcMain, controlMenu, state, deps) {
-  const {
-    dialog,
-    fs,
-    log,
-    version,
-    getConfig,
-    audio
-  } = deps
+  const { dialog, fs, log, version, getConfig, audio } = deps
 
   function exportSettings() {
     const config = getConfig()
     if (!config) return
 
-    dialog.showSaveDialog({
-      title: 'Export Settings',
-      buttonLabel: 'Export',
-      defaultPath: 'KardsSettings.json',
-      filters: [{ extensions: ['json'] }]
-    }).then(result => {
-      if (!result.canceled) {
-        let path = result.filePath
-        let cfg = { ...config }
-        cfg.audio = { ...config.audio, voiceData: '', textData: '' } // clear audio blobs
-        cfg.createdBy = 'Kards'
-        cfg.exportedVersion = version
+    dialog
+      .showSaveDialog({
+        title: 'Export Settings',
+        buttonLabel: 'Export',
+        defaultPath: 'KardsSettings.json',
+        filters: [{ extensions: ['json'] }]
+      })
+      .then((result) => {
+        if (!result.canceled) {
+          let path = result.filePath
+          let cfg = { ...config }
+          cfg.audio = { ...config.audio, voiceData: '', textData: '' } // clear audio blobs
+          cfg.createdBy = 'Kards'
+          cfg.exportedVersion = version
 
-        let data = JSON.stringify(cfg, null, 2)
+          let data = JSON.stringify(cfg, null, 2)
 
-        fs.writeFile(path, data, function (err) {
-          if (err) {
-            dialog.showErrorBox('Error Saving File', JSON.stringify(err))
-            log.error('Couldnt save file: ', err)
-          }
-        })
-      } else {
-        log.info('Save dialog closed')
-      }
-    })
+          fs.writeFile(path, data, function (err) {
+            if (err) {
+              dialog.showErrorBox('Error Saving File', JSON.stringify(err))
+              log.error('Couldnt save file: ', err)
+            }
+          })
+        } else {
+          log.info('Save dialog closed')
+        }
+      })
   }
 
   function importSettings() {
@@ -56,20 +51,26 @@ module.exports = function initSettings(ipcMain, controlMenu, state, deps) {
     if (!config) return
 
     let result = dialog.showOpenDialogSync({
-      title: "Import Settings",
+      title: 'Import Settings',
       properties: ['openFile'],
       filters: [{ name: 'JSON', extensions: ['json', 'JSON'] }]
     })
     if (result != null) {
       fs.readFile(result[0], (err, data) => {
-        if (err) throw err;
+        if (err) throw err
         let d = JSON.parse(data)
         let count = 0
 
         if (d.createdBy == 'Kards') {
           if (d.exportedVersion == version) {
             for (let key in config) {
-              if (d[key] != undefined && key != 'visible' && key != 'exportedVersion' && key != 'createdBy' && typeof d[key] === typeof config[key]) {
+              if (
+                d[key] != undefined &&
+                key != 'visible' &&
+                key != 'exportedVersion' &&
+                key != 'createdBy' &&
+                typeof d[key] === typeof config[key]
+              ) {
                 config[key] = d[key]
                 count++
               }
@@ -82,7 +83,10 @@ module.exports = function initSettings(ipcMain, controlMenu, state, deps) {
             }
           } else {
             if (state.controlWindow) {
-              state.controlWindow.webContents.send('importSettings', 'Skipping - The file is from a different version of Kards')
+              state.controlWindow.webContents.send(
+                'importSettings',
+                'Skipping - The file is from a different version of Kards'
+              )
             }
           }
         } else {
@@ -114,4 +118,3 @@ module.exports = function initSettings(ipcMain, controlMenu, state, deps) {
     exportSettings()
   })
 }
-

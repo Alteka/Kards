@@ -48,9 +48,7 @@ initRollbar(env, version, isDevelopment, log)
 // ---------------------------------------
 // Boilerplate
 // ---------------------------------------
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true, stream: true } }
-])
+protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true, stream: true } }])
 
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {

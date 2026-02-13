@@ -168,7 +168,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: radial-gradient(circle, rgba(0,0,0,0) 25%, rgba(0,0,0,0.4) 100%);
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.4) 100%);
   pointer-events: none;
 }
 
