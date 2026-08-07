@@ -42,6 +42,8 @@ npm run electron:build
 
 **Environment:** The app expects an `env.json` in the project root (see `env.example.json`). Copy it to `env.json`; leave `rollbarToken` empty unless you use [Rollbar](https://rollbar.com) for error reporting.
 
+**NDI output:** An NDI sender is started automatically so the current test card is available as an NDI source (e.g. "Kards - &lt;hostname&gt;"). Resolution follows the configured window size. NDI support is optional: the app uses the `grandiose` optional dependency and requires the [NDI SDK](https://ndi.video/) to be installed. If `grandiose` is not available, the app runs normally with NDI disabled.
+
 ---
 
 For more information please see our website: [Alteka Solutions](https://alteka.solutions/kards)

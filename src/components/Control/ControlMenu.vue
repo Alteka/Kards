@@ -7,7 +7,7 @@
       <el-switch style="margin-left: 4px" v-model="config.visible"></el-switch>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :span="10">
       <el-button type="success" size="mini" round v-on:click="drawerAudio = true"
         ><i v-if="config.audio.enabled" class="fas fa-volume-up"></i
         ><i v-if="!config.audio.enabled" class="fas fa-volume-mute"></i> Audio</el-button
@@ -15,9 +15,12 @@
       <el-button type="success" size="mini" round v-on:click="drawerImage = true"
         ><i class="fas fa-image"></i> Export</el-button
       >
+      <el-button type="success" size="mini" round v-on:click="openNdiDrawer"
+        ><i class="fas fa-broadcast-tower" :class="{ green: ndiStatus.active }"></i> NDI</el-button
+      >
     </el-col>
 
-    <el-col :span="8" style="text-align: right">
+    <el-col :span="6" style="text-align: right">
       <el-dropdown size="mini" :hide-on-click="false" @visible-change="handleMoreMenuChange">
         <el-button size="mini" type="primary"> More<i class="el-icon-arrow-up el-icon--right"></i> </el-button>
         <template #dropdown>
@@ -230,6 +233,38 @@
       </el-row>
     </el-drawer>
 
+    <el-drawer :with-header="false" v-model="drawerNdi" direction="btt" size="160px" @open="fetchNdiStatus">
+      <el-row class="drawerContent">
+        <el-col :span="24" style="margin-bottom: 8px">
+          <span style="color: #606266">NDI output</span>
+        </el-col>
+        <el-col :span="24">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px">
+            <span>
+              <i class="fas fa-broadcast-tower" :class="{ green: ndiStatus.active }"></i>
+              {{ ndiStatus.active ? 'Sending' : 'Idle' }}
+            </span>
+            <span v-if="ndiStatus.senderName" style="color: #909399; font-size: 12px">
+              {{ ndiStatus.senderName }}
+            </span>
+            <span v-if="ndiStatus.active && ndiStatus.width" style="color: #909399; font-size: 12px">
+              {{ ndiStatus.width }}×{{ ndiStatus.height }}
+            </span>
+          </div>
+        </el-col>
+        <el-col :span="24" v-if="!ndiStatus.active">
+          <el-button type="primary" size="small" @click="startNdi">
+            <i class="fas fa-play"></i> Start NDI output
+          </el-button>
+        </el-col>
+        <el-col :span="24" v-if="!ndiStatus.available && !ndiStatus.active" style="margin-top: 6px">
+          <span style="color: #909399; font-size: 11px">
+            If NDI doesn’t start, ensure the NDI SDK is installed and the grandiose package built.
+          </span>
+        </el-col>
+      </el-row>
+    </el-drawer>
+
     <control-share v-model="showShareDialog" :config="config"></control-share>
     <control-about v-model="showAboutDialog" :darkMode="darkMode"></control-about>
   </el-row>
@@ -270,6 +305,9 @@ export default {
       confirmResetVisible: false,
       drawerAudio: false,
       drawerImage: false,
+      drawerNdi: false,
+      ndiStatus: { available: false, active: false },
+      ndiStatusInterval: null,
       curAudio: null,
       playing: false,
       name: '',
@@ -325,7 +363,16 @@ export default {
       vm.showAboutDialog = true
     })
   },
+  beforeUnmount() {
+    if (this.ndiStatusInterval) clearInterval(this.ndiStatusInterval)
+  },
   watch: {
+    drawerNdi(val) {
+      if (!val && this.ndiStatusInterval) {
+        clearInterval(this.ndiStatusInterval)
+        this.ndiStatusInterval = null
+      }
+    },
     config: {
       handler: function (val, oldVal) {
         document.getElementById('stereo').setSinkId(val.audio.deviceId)
@@ -442,6 +489,38 @@ export default {
     },
     openLogs: function () {
       window.ipcRenderer.send('openLogs')
+    },
+    openNdiDrawer: function () {
+      this.drawerNdi = true
+    },
+    startNdi: function () {
+      window.ipcRenderer.send('startNdi')
+      const vm = this
+      setTimeout(() => {
+        if (window.ipcRenderer.invoke) {
+          window.ipcRenderer.invoke('getNdiStatus').then((status) => {
+            vm.ndiStatus = status
+          })
+        }
+      }, 500)
+    },
+    fetchNdiStatus: function () {
+      const vm = this
+      if (!window.ipcRenderer.invoke) return
+      window.ipcRenderer.invoke('getNdiStatus').then((status) => {
+        vm.ndiStatus = status
+      })
+      if (this.ndiStatusInterval) clearInterval(this.ndiStatusInterval)
+      this.ndiStatusInterval = setInterval(() => {
+        if (!vm.drawerNdi) {
+          clearInterval(vm.ndiStatusInterval)
+          vm.ndiStatusInterval = null
+          return
+        }
+        window.ipcRenderer.invoke('getNdiStatus').then((status) => {
+          vm.ndiStatus = status
+        })
+      }, 2000)
     },
     stopAudio: function () {
       console.log('Stopping audio output')

@@ -24,6 +24,7 @@ const { initRollbar } = require('./main/rollbar')
 const { getDefaultConfig, initConfig, getConfig, setConfig, persist } = require('./main/config')
 const { createServices } = require('./main/services')
 const { initIpc } = require('./main/ipc')
+const { initNdi } = require('./main/ndi')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const version = require('../package.json').version
@@ -71,8 +72,13 @@ app.on('window-all-closed', () => {
     bonjour.destroy()
     log.info('All Windows closed - Quitting App')
     rest.stop()
+    if (state.ndi && state.ndi.stop) state.ndi.stop()
     app.quit()
   }
+})
+
+app.on('before-quit', () => {
+  if (state.ndi && state.ndi.stop) state.ndi.stop()
 })
 
 app.on('activate', () => {
@@ -116,6 +122,16 @@ app.on('ready', async () => {
   if (state.createControlWindow) {
     state.createControlWindow()
   }
+
+  initNdi(state, {
+    app,
+    BrowserWindow,
+    path,
+    log,
+    getConfig
+  })
+  // NDI is not auto-started: loading grandiose in this process can trigger macOS
+  // SIGSEGV (Mach rendezvous). User starts NDI from the NDI drawer when needed.
 })
 
 if (isDevelopment) {

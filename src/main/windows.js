@@ -377,6 +377,7 @@ module.exports = function initWindows(state, deps) {
         if (state.controlWindow) {
           state.controlWindow.webContents.send('config', config)
         }
+        if (state.ndi && state.ndi.updateConfig) state.ndi.updateConfig(config)
       }
     }
   }
@@ -396,6 +397,7 @@ module.exports = function initWindows(state, deps) {
     if (state.testCardWindow != null) {
       state.testCardWindow.webContents.send('config', config)
     }
+    if (state.ndi && state.ndi.updateConfig) state.ndi.updateConfig(config)
   })
 
   ipcMain.on('exportCard', () => {

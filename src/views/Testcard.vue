@@ -293,9 +293,11 @@ export default {
     })
 
     window.ipcRenderer.receive('config', (args) => {
-      vm.config = args
+      const { _captureOnly, ...config } = args
+      vm.config = config
       vm.updateCardSize()
-      if (!vm.config.visible) vm.exportTestCard(args.export)
+      // Only auto-export when this is the headless export dummy window (visible=false, not NDI capture)
+      if (!config.visible && !_captureOnly) vm.exportTestCard(args.export)
     })
     window.ipcRenderer.receive('displayFrequency', (args) => {
       vm.info.displayFrequency = args
