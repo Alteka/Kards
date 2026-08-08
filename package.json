@@ -13,6 +13,10 @@
     "electron:build": "vite build && electron-builder",
     "electron:build:matt": "vite build && electron-builder --mac --x64",
     "electron:build:universal": "vite build && electron-builder --universal",
+    "_comment_pixel": "Each of these rebuilds first on purpose: the harness loads dist/, and a stale dist silently tests the previous commit's code.",
+    "test:pixel": "vite build && node test/pixel/run.js",
+    "test:pixel:validate": "vite build && node test/pixel/run.js --validate",
+    "test:pixel:record": "vite build && node test/pixel/run.js --record",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },

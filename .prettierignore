@@ -3,3 +3,4 @@ dist
 dist_electron
 *.min.js
 package-lock.json
+test/pixel/baseline.json
