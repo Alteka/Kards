@@ -1024,7 +1024,7 @@ checker is unaffected: `updateChecker.js:17` reads only `tag_name`.
 2. **B4 Windows release build.** The build is confirmed working here — `--win --x64` produces
    `Kards-1.3.1-win-x64.exe` (NSIS). What remains is the signed-vs-unsigned decision (Q1b) and
    documenting it.
-3. **B5 update-notification reliability.** No external dependency, and F-005 is the highest High.
+3. ~~**B5 update-notification reliability**~~ — **done** (`0e8012c`). See the B5 section below.
 4. **Phase C** whenever Phase B stalls on other people. C1/C6 still need to absorb `mask.image`,
    `ramp.overlay` and F-036's per-type level domains as one problem.
 
@@ -1038,3 +1038,71 @@ moved this session; see the previous section for detail.
 `origin/feature/modernise` is at `5e9e1df`, so all 21 of those commits reached the remote after
 that block was written. This session's eight are **not** pushed; the branch is 8 ahead. Pushing is
 outward-facing and was not asked for.
+
+---
+
+## B5 done — same session
+
+`0e8012c`. Tree clean, lint 0 errors, build clean, harness 560/0.
+
+**F-005 was the highest-severity High and it is fixed.** The model was never the problem —
+notify-on-launch is right for event software and is unchanged. The mechanism was: one attempt at
+T+10 s, failures logged to a file behind More → Logs. An AV laptop ten seconds after launch is
+being plugged into house Ethernet or joining venue Wi-Fi, so the commonest real condition for this
+software was the one condition guaranteed to miss, silently, for the whole session.
+
+Now: backoff (10 s, 60 s, 5 min, 15 min, then hourly, stopping on success); re-check when the
+network appears; a manual check in both the More menu and the macOS app menu; and a visible status
+line so "it never told me" is distinguishable from "it told me and I ignored it". Plus a 15 s
+timeout and a User-Agent.
+
+**Verified two ways.** The real module driven with stubbed deps and a stubbed global `fetch` on
+fake timers — backoff fires 5 times over 81 minutes where the old code fired once; `rendererOnline`
+recovers and finds the update; the dialog appears exactly once however many checks run; retries
+stop after success with zero timers pending; a manual check reports success *and* failure; HTTP 403
+is an error rather than a false "up to date". Then for real: `npx electron .` logs
+`Update :: Running latest version - v1.3.1` at T+10 s against the live GitHub API, which also
+confirms the `v` tag prefix still compares correctly.
+
+**Two things left deliberately.**
+
+1. **`axios` is now unused** — this was its only call site, and the rewrite uses `fetch`. It is
+   still declared in `package.json`. Deleting it belongs to **D1**, with `core-js` and
+   `vue3-resize-text`. That is where the ~40 advisories go.
+2. **The Homebrew cask (S4b) is not done.** It is the other half of B5 and it needs a maintainer's
+   go-ahead before a PR is opened. Worth doing: WinGet already gives Windows a `winget upgrade`
+   path and macOS — 81% of downloads — has no equivalent.
+
+### Phase B state
+
+| | | |
+|---|---|---|
+| B1 | scripted signed mac build | **done**, unverified on a Mac |
+| B2 | first signed build | **blocked** on the Apple developer |
+| B3 | `v1.4.0-beta.1` | **blocked** on B2 |
+| B4 | Windows release build | **works** — `--win --x64` builds; needs the Q1b signed/unsigned decision |
+| B5 | update reliability | **done**; Homebrew cask needs approval |
+| B6 | `docs/RELEASING.md` | **done**, §3–5 not yet executed |
+| B7 | release CI | deferred past v1.4.0 by decision |
+
+**Everything left in Phase B needs a person, not a commit.** Phase C is entirely unblocked.
+
+### Starting Phase C — read this first
+
+C1 is the highest-value item in the project for an existing install base, and it should **absorb
+three findings as one problem** rather than fixing them separately:
+
+- `mask.image` vs `mask.imageSource` (fixed in code, but an existing install still has the stale
+  key persisted)
+- `ramp.overlay` — bound to a control, absent from `defaultConfig.json`, parked deliberately
+- F-036's per-type level domains — the maintainer chose "option 1 leading to option 3", and option
+  3 is per-card-type valid domains in the config schema, validated on load
+
+They are the same shape: **the default config and the code drift, and nothing checks.** A migration
+ladder that does not also close that gap will let it happen again.
+
+The warning from the previous session still stands and applies double here: **the harness catches
+what changed, not what was wrong to begin with.** Three of four substantive corrections in the A4
+session came from the maintainer reading output, not from the harness. C1 has no equivalent safety
+net at all — its test has to be built as part of it, against `defaultConfig.json` from every
+release tag.
