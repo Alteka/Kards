@@ -13,7 +13,7 @@
     "electron:build": "vite build && electron-builder",
     "electron:build:matt": "vite build && electron-builder --mac --x64",
     "electron:build:universal": "vite build && electron-builder --universal",
-    "postinstall": "node scripts/patch-grandiose.js && electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
   "main": "src/background.js",
@@ -40,8 +40,7 @@
     "vue-router": "^4.0.0-0",
     "vue3-resize": "^0.2.0",
     "vue3-resize-text": "^0.1.0",
-    "wallpaper": "5.0.1",
-    "grandiose": "rse/grandiose#cf09bb84"
+    "wallpaper": "5.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",

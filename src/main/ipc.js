@@ -49,7 +49,6 @@ function initIpc(ipcMain, state, deps) {
     osc.updateConfig(config)
     rest.updateConfig(config)
     touchBar.setConfig(config)
-    if (state.ndi && state.ndi.updateConfig) state.ndi.updateConfig(config)
     if (state.updateScreens) state.updateScreens()
   })
 
@@ -58,7 +57,6 @@ function initIpc(ipcMain, state, deps) {
     if (state.testCardWindow && config) {
       state.testCardWindow.webContents.send('config', config)
     }
-    if (state.ndi && state.ndi.updateConfig && config) state.ndi.updateConfig(config)
   })
 
   ipcMain.on('getConfigControl', () => {
@@ -137,15 +135,11 @@ function initIpc(ipcMain, state, deps) {
     }
   })
 
+  // NDI output is parked on the feature/ndi branch and ships disabled.
+  // The handler stays so that older renderers, and the REST/OSC surface, get a
+  // definite answer rather than an unhandled-invoke rejection.
   ipcMain.handle('getNdiStatus', () => {
-    if (state.ndi && state.ndi.getStatus) {
-      return state.ndi.getStatus()
-    }
     return { available: false, active: false }
-  })
-
-  ipcMain.on('startNdi', () => {
-    if (state.ndi && state.ndi.start) state.ndi.start()
   })
 }
 
