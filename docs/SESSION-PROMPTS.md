@@ -58,9 +58,11 @@ Copy-paste prompts for starting Claude Code sessions on this repo.
 > - **Never commit certificates, `.p12` files, API keys or `env.json`.**
 > - One concern per commit, real commit messages.
 >
-> This machine is Windows, so you cannot build, sign, notarise or test macOS locally — GitHub
-> Actions is the only route to a macOS artifact, and final acceptance needs a human with a Mac.
-> Say so rather than assuming CI green means working.
+> This machine is Windows, so you cannot build, sign, notarise or test macOS locally. **The Apple
+> developer builds macOS releases on their own Mac**; GitHub Actions is deferred until after
+> v1.4.0. Anything macOS-specific — signing, notarisation, fullscreen/spaces behaviour, Touch Bar,
+> the install experience — needs a handoff. Batch those requests rather than drip-feeding them,
+> and never report macOS behaviour as verified when it hasn't been.
 >
 > Append what you did to `docs/review/progress.md` before you run low on context.
 
@@ -70,10 +72,23 @@ Copy-paste prompts for starting Claude Code sessions on this repo.
 
 **If certificates have arrived and you want to unblock the release pipeline:**
 
-> As §2, but this session do **Phase B** from `09-kickoff.md` §5 — release CI first (it's the only
-> way to produce a macOS build from this machine), then macOS signing and notarisation. The Apple
-> credentials are in GitHub Actions secrets; tell me exactly which secret names you need and I'll
-> confirm they're set. Expect several push-and-wait iterations on the macOS runner.
+> As §2, but this session do **Phase B** from `09-kickoff.md` §5. Note that **the Apple developer
+> builds macOS releases on their own Mac** — GitHub Actions is deferred until after v1.4.0, so do
+> not set it up.
+>
+> Write **B1**: the scripted `npm run release:mac` build, with `mac.identity` set explicitly in
+> config and a preflight check that **fails the build** if the resolved identity does not begin
+> `Developer ID Application:`. That check is the whole reason local builds are acceptable here —
+> the original mistake was a build silently picking a development certificate out of a keychain.
+> Prove the check works by pointing it at a wrong identity and confirming it fails.
+>
+> I can't run it — it needs a Mac. So write it to be run by someone else: clear errors, no
+> assumptions about what's already in their keychain, and every command it runs visible. Then give
+> me a short list of what to ask the Apple developer for, and I'll relay it in one go rather than
+> piecemeal.
+>
+> Also start `docs/RELEASING.md` **as you go**, not afterwards — with builds running on one
+> person's laptop, that document is the bus-factor mitigation.
 
 **If you want to check progress without starting new work:**
 

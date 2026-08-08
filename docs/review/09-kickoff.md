@@ -103,10 +103,12 @@ turns into a rewrite by accident (`07-plan.md` §8a).
 **I cannot build, sign, notarise or test a macOS build locally.** That is not a small caveat on a
 product where macOS is the platform users are blocked on. Consequences:
 
-- **Release CI (S3) moves early**, because a GitHub Actions macOS runner is the *only* route to a
-  macOS artifact. It stops being "nice hygiene for later" and becomes a prerequisite.
-- Every macOS signing iteration is push → wait for runner → read logs. Minutes per attempt, not
-  seconds. Budget for it.
+- **A human with a Mac builds the macOS releases** (decided 2026-08-08 — see §5, Phase B). That
+  removes what would otherwise be a hard blocker, and it means **release CI is deferred until
+  after v1.4.0**, not a prerequisite. My earlier plan put CI first purely because it was my only
+  route to a macOS artifact — that was my constraint, not the project's.
+- **I write the build script; the Apple developer runs it.** Every macOS signing iteration is a
+  handoff, so batch questions rather than drip-feeding them.
 - **macOS behaviour cannot be verified by me at all**: fullscreen/spaces handling
   (`windows.js:205-235`), Touch Bar, the `.pkg` install experience, Gatekeeper acceptance. Someone
   with a Mac must do final acceptance. Flag this rather than quietly assuming CI green means
@@ -156,12 +158,29 @@ human-developer-days. Where they differ sharply from `07-plan.md`, that is why.
 
 ### Phase B — release pipeline (gated on certificates)
 
+> **Decided 2026-08-08: the Apple developer builds macOS releases on their own Mac for v1.4.0.
+> GitHub Actions is deferred until after the release.**
+>
+> Rationale: certificates never leave their keychain (nothing to export, nothing to transfer, no
+> secrets stored anywhere); notarisation debugging drops from minutes-per-attempt to
+> seconds-per-attempt; and they can verify Gatekeeper actually accepts the result by
+> double-clicking it, which no amount of green CI proves.
+>
+> **The objection this has to answer:** the original failure — a build silently selecting a
+> development certificate out of a keychain — is *precisely* a local-build failure mode, and it
+> survived four years because the knowledge lived in one person's keychain. So local builds are
+> acceptable **only** with the two mitigations in B2, both of which work on a laptop and neither
+> of which needs CI. Do not skip them; they are the entire reason this is safe.
+
 | | Task | Plan ref | Est. | Notes |
 |---|---|---|---|---|
-| **B1** | **Release CI.** GitHub Actions, macOS + Windows runners, `docs/RELEASING.md`. **Moved early — it is my only route to a macOS build.** | S3 | **1–2** | Iteration is push-and-wait. |
-| **B2** | **macOS signing + notarisation.** `mac.identity` set explicitly, `hardenedRuntime`, entitlements, `@electron/notarize` on `notarytool`, `xcrun stapler staple`, plus a CI assertion that the identity starts `Developer ID Application:`. | S2a | **1–3** | **Hard-gated on certificates.** Notarisation trial-and-error is unpredictable; 3 is not a pessimistic ceiling. |
-| **B3** | **`v1.4.0-beta.1` pre-release** — validate the chain on real Macs. | — | **0.5** | Needs a human with a Mac to confirm. |
-| **B4** | **Update notification reliability** (retry, re-check on network-up, visible failure, manual check) + **Homebrew cask**. | S4, S4b | **0.5–1** | Cask PR needs your go-ahead. |
+| **B1** | **Scripted macOS release build.** `npm run release:mac` — `mac.identity` set **explicitly** in config (never auto-selected), `hardenedRuntime`, entitlements, `@electron/notarize` on `notarytool`, `xcrun stapler staple`. Plus **a preflight check that fails the build if the resolved identity does not begin `Developer ID Application:`** — the guard whose absence caused this. Committed and reviewable, so the recipe does not live in someone's shell history. | S2a | **0.5–1** | I write it; the Apple developer runs it. |
+| **B2** | **First signed build, with the Apple developer.** Expect 1–2 rounds of entitlements / hardened-runtime failures; the errors are specific. | S2a | **0.5–1** | **Hard-gated on certificates.** Their time, not only mine. |
+| **B3** | **`v1.4.0-beta.1` pre-release** — signed, notarised, stapled. Validate `spctl --assess`, `pkgutil --check-signature`, `stapler validate`, and a real double-click install. | — | **0.5** | Needs the Mac. |
+| **B4** | **Windows release build**, locally here. Unsigned unless Q1b resolves yes. | — | **0.5** | I can do this without help. |
+| **B5** | **Update notification reliability** (retry, re-check on network-up, visible failure, manual check) + **Homebrew cask**. | S4, S4b | **0.5–1** | Cask PR needs your go-ahead. |
+| **B6** | **`docs/RELEASING.md`** — the full sequence incl. WinGet manifest PR and Homebrew cask bump. Written **as** B1–B4 happen, not after. | S3 | **0.5** | This is the real bus-factor mitigation. |
+| ~~B7~~ | **GitHub Actions release CI** — **deferred to after v1.4.0.** Porting a signing recipe that is known to work is mechanical; debugging an unknown one through a runner is where time goes. Will require exporting `.p12` files as encrypted secrets — deliberately not asked for yet. | S3 | 1–2 later | — |
 
 ### Phase C — correctness and data safety
 
@@ -193,10 +212,14 @@ human-developer-days. Where they differ sharply from `07-plan.md`, that is why.
 | Phase | Est. sessions |
 |---|---|
 | A — foundations | 3–4.5 |
-| B — release pipeline | 3–6.5 |
+| B — release pipeline | 3–4.5 |
 | C — correctness | 4.75–7.25 |
 | D — up to date | 7.5–13 |
-| **Total** | **~18–31 sessions** |
+| **Total** | **~18–29 sessions** |
+
+Phase B came down by ~2 sessions: CI deferred out, and local notarisation debugging is far cheaper
+than runner round-trips. Some of that cost moves to the Apple developer instead of disappearing —
+budget a few hours of their time, mostly in B2.
 
 **How to read that.** These are working sessions, not calendar days, and they assume a human is
 available to review, approve outward-facing actions, and test on a Mac. The wide ranges are honest:
@@ -256,7 +279,8 @@ is what makes D6 safe.
 - [ ] Signed **Developer ID Application**, packaged **Developer ID Installer**, notarised via
       `notarytool`, **stapled**; CI asserts the identity string
 - [ ] Windows: signed if Q1b resolved yes, otherwise explicitly noted as unsigned
-- [ ] Release CI green on both runners; `docs/RELEASING.md` incl. WinGet manifest + Homebrew cask
+- [ ] `npm run release:mac` scripted, committed, and its identity preflight check verified to
+      fail on a wrong certificate; `docs/RELEASING.md` complete incl. WinGet manifest + Homebrew cask
 - [ ] Update notification reliable; manual "Check for updates" present
 - [ ] Clock card — verified for an **upgrading** user, not just a fresh install (F-006)
 - [ ] Config migration ladder, tested against every historical `defaultConfig.json`

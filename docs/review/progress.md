@@ -440,3 +440,57 @@ as part of task A1.
 Start a session with §1 of `docs/SESSION-PROMPTS.md`. In parallel, send
 `docs/signing/apple-certificates.md` to the Apple account administrator — the certificates are
 the only hard external dependency and Phase B cannot start without them.
+
+---
+
+## Revision 5 — 2026-08-08, build location: local Mac, not CI (yet)
+
+Maintainer question: *"do we want to set up GitHub Actions yet? The alternative is the Apple
+developer builds the release on his machine."*
+
+**Decided: the Apple developer builds macOS releases on their own Mac for v1.4.0. GitHub Actions
+deferred until after the release.**
+
+**I had this wrong, and the reason matters.** Release CI was scheduled early because it was *my*
+only route to a macOS artifact from a Windows machine — a constraint of the assistant, not of the
+project. With a human Mac in the loop that reason disappears entirely.
+
+Case for local:
+
+- Certificates never leave the keychain — no `.p12` export, no password transfer, no secrets
+  stored anywhere. Removes the most awkward section of `apple-certificates.md`.
+- Notarisation is the highest-variance task in the plan (costed 1–3 sessions with the caveat that
+  3 was not a ceiling). Locally the loop is seconds instead of push-wait-read-logs.
+- They can verify Gatekeeper actually accepts the result by double-clicking it. Green CI proves
+  nothing about that.
+
+**The objection it has to answer:** the original failure — a build silently selecting a
+development certificate from a keychain — is precisely a local-build failure mode, and it survived
+four years because the knowledge lived in one person's keychain. So local is acceptable **only**
+with two mitigations, both of which work on a laptop and neither of which needs CI:
+
+1. A committed, scripted build (`npm run release:mac`) with `mac.identity` set **explicitly**.
+2. A preflight check that **fails the build** if the resolved identity does not begin
+   `Developer ID Application:`.
+
+Plus `docs/RELEASING.md` written *as* the first release happens, not after.
+
+### Changes
+
+- `docs/signing/apple-certificates.md` — §3.4 became "Nothing to export"; new §4 "What you will
+  actually do to cut a release"; new §8 flagging the later CI move and that `.p12` export will be
+  asked for separately, then. Note added about not revoking an existing Developer ID certificate,
+  and about the private key needing to be on the building machine.
+- `09-kickoff.md` §3 — constraint reframed; §5 Phase B rebuilt as B1–B6 with **B7 (CI) struck and
+  deferred**; definition of done now requires the identity preflight check to be *verified to fail*
+  on a wrong certificate.
+- `SESSION-PROMPTS.md` — Phase B variant rewritten; reusable prompt's macOS constraint updated.
+
+### Estimate effect
+
+Phase B: 3–6.5 → **3–4.5 sessions**. Total **~18–29**. Some of that cost moves to the Apple
+developer rather than disappearing — budget a few hours of their time, mostly on the first signed
+build.
+
+**Revisit after v1.4.0 ships.** Porting a known-good signing recipe to Actions is mechanical;
+debugging an unknown one through a runner is where the time goes.

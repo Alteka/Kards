@@ -2,8 +2,10 @@
 
 **For:** whoever administers the Apple Developer Program account (Team ID **D4H96T8MEW**).
 **From:** the Kards maintainers.
-**Ask:** two certificates and a notarisation credential. Roughly 30–60 minutes of portal work.
-**Written:** 2026-08-08.
+**Ask:** create two certificates, then run the release build on your Mac. Roughly 30–60 minutes of
+portal work, plus one build.
+**Written:** 2026-08-08. **Revised:** 2026-08-08 — you will be building releases locally, so the
+certificates never leave your machine and there is nothing to export or send.
 
 You do not need to know anything about Kards to action this. Section 1 is the problem, section 3
 is the actual to-do list.
@@ -82,8 +84,12 @@ Signs the `.app` bundle. **This is the one we should have been using.**
 
 > **Note:** Apple limits how many Developer ID certificates a team can have. If the portal will
 > not let you create one, check whether an existing Developer ID Application certificate is
-> already listed — if so, we need the existing one exported (§3.4) rather than a new one, and
-> **do not revoke the old one**: revoking breaks every build ever signed with it, retroactively.
+> already listed. If it is, and its private key is on **this** Mac, just use it — nothing further
+> is needed. If the private key is on a *different* machine, that machine is the one that has to
+> build, or the certificate needs re-issuing there.
+>
+> **Do not revoke an existing Developer ID certificate.** Revocation is retroactive and breaks
+> every build ever signed with it, including copies already installed on users' machines.
 
 ### 3.2 Developer ID Installer certificate
 
@@ -101,8 +107,8 @@ certificate cannot sign a package.
 Notarisation submits the signed package to Apple for an automated malware scan. Apple retired the
 old `altool` route in November 2023, so this must use **`notarytool`**. Either credential works:
 
-**Option A — App Store Connect API key (preferred; works cleanly in CI, no personal account tied
-to it):**
+**Option A — App Store Connect API key (preferred: not tied to a personal Apple ID, and it is
+what we would need later if builds ever move to CI):**
 
 1. <https://appstoreconnect.apple.com/access/integrations/api> → **Keys** → **+**
 2. Name it something like `Kards notarytool`, role **Developer**.
@@ -114,36 +120,59 @@ to it):**
 1. <https://appleid.apple.com> → *Sign-In and Security* → *App-Specific Passwords* → generate one.
 2. Record it, the Apple ID it belongs to, and the Team ID (`D4H96T8MEW`).
 
-### 3.4 Export both certificates for our build system
+### 3.4 Nothing to export
 
-Builds run on GitHub Actions, which needs the certificates **and their private keys** as `.p12`
-files:
+**You do not need to export anything.** Release builds will run on your Mac, so the certificates
+and their private keys stay in your keychain and never move. There is no `.p12` file, no password
+to share, and no credential stored anywhere else.
 
-1. In **Keychain Access**, select the certificate **and** its private key (expand the triangle;
-   select both rows).
-2. Right-click → **Export 2 items…** → format **Personal Information Exchange (.p12)**.
-3. Set a strong password. You will need to send us that password too.
-4. Do this twice — once for Developer ID Application, once for Developer ID Installer.
+This is deliberate. It also means notarisation problems can be debugged in seconds on your machine
+rather than minutes at a time through a build server, and you can confirm Gatekeeper actually
+accepts the result by double-clicking it — which is the only test that really counts.
 
 ---
 
-## 4. What to send us, and how
+## 4. What you will actually do to cut a release
 
-| Item | From |
+We will commit a scripted build so this is one command, not a sequence of remembered incantations:
+
+```bash
+git clone https://github.com/Alteka/Kards.git && cd Kards
+npm ci
+npm run release:mac        # builds, signs, notarises, staples — all three architectures
+```
+
+The script will:
+
+1. Build the app and sign it with **Developer ID Application** — with the identity named
+   **explicitly** in config, never auto-selected from the keychain. Auto-selection is what picked
+   the development certificate in the first place, and it did so silently.
+2. **Fail the build** if the resolved identity does not begin `Developer ID Application:`. This is
+   the guard that was missing, and it is the reason this mistake survived four years.
+3. Package with **Developer ID Installer**.
+4. Submit to Apple with `notarytool` and wait for the result.
+5. `xcrun stapler staple` the notarisation ticket onto the `.pkg`, so it validates **offline** —
+   which matters a great deal for users setting up in a venue with no internet.
+
+The first run will need your notarisation credential (§3.3). `notarytool` can store it in the
+keychain once — `xcrun notarytool store-credentials` — so subsequent releases do not prompt.
+
+Expect the first attempt to fail once or twice on entitlements or hardened-runtime settings. That
+is normal, the error messages are specific, and we will iterate with you.
+
+### What we need from you, then
+
+Only this:
+
+| Item | Why |
 |---|---|
-| `developer-id-application.p12` + its password | §3.4 |
-| `developer-id-installer.p12` + its password | §3.4 |
-| API key `.p8` + Key ID + Issuer ID — *or* the app-specific password + Apple ID | §3.3 |
-| Team ID (we believe **D4H96T8MEW** — please confirm) | portal |
+| Confirmation that both certificates exist and are installed in your login keychain | so the build can find them |
+| The exact identity strings — `security find-identity -v -p codesigning` | we hard-code them in the build config |
+| Team ID (we believe **D4H96T8MEW** — please confirm) | notarisation |
+| Which notarisation credential you set up (API key or app-specific password) | so the script prompts for the right one |
 
-**Please do not** email these, put them in Slack or Teams, commit them to a repository, or paste
-them into a chat with an AI assistant. Use a password manager's secure-sharing feature, or a
-one-time secret link (e.g. 1Password sharing, Bitwarden Send). Send the `.p12` files and their
-passwords by **two different channels**.
-
-They will be stored as GitHub Actions encrypted secrets and used only by the release workflow.
-
----
+**No secrets need to be sent to anyone.** If that changes later — see §8 — we will ask separately
+and explain exactly what is needed.
 
 ## 5. How we will verify it worked
 
@@ -195,3 +224,23 @@ have caught this in 2022.
    is how the original mistake survived four years unnoticed.
 
 Thank you — this unblocks roughly 40,000 users, and one 22-month-old bug report.
+
+---
+
+## 8. Later: moving builds to CI
+
+Once the signing recipe is known to work on your machine, we intend to move release builds to
+GitHub Actions so that the process is reproducible and does not depend on one person's laptop
+being available — the current arrangement is exactly how the original mistake went unnoticed for
+four years.
+
+That move **would** require exporting the certificates as password-protected `.p12` files to store
+as encrypted GitHub secrets. We are deliberately **not** asking for that yet, because:
+
+- debugging notarisation is far faster locally, and
+- there is no reason to copy private keys anywhere until the recipe is proven.
+
+When we get there we will ask separately, explain exactly what is needed, and suggest a safe
+transfer method. In the meantime the committed build script and the identity check mean the
+process is already documented and reproducible even though it runs locally — which addresses most
+of the bus-factor risk without moving any keys.
