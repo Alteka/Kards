@@ -1035,9 +1035,12 @@ wording for the stepped ramp · the dataJAR heads-up · 242 vulnerabilities on `
 moved this session; see the previous section for detail.
 
 **Correction to the previous handover:** it says `feature/modernise` is "not pushed". It is —
-`origin/feature/modernise` is at `5e9e1df`, so all 21 of those commits reached the remote after
-that block was written. This session's eight are **not** pushed; the branch is 8 ahead. Pushing is
-outward-facing and was not asked for.
+`origin/feature/modernise` was at `5e9e1df`, so all 21 of those commits reached the remote after
+that block was written.
+
+**Everything from this session is pushed too.** `origin/feature/modernise` is now at `236acd8`,
+all 16 commits, at the maintainer's instruction at the end of the session. Local and remote are
+in sync; there is nothing sitting only on this machine.
 
 ---
 
