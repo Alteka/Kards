@@ -1155,9 +1155,18 @@ it, and it is reversible — upstreaming later is one PR. Cost is discoverabilit
 `brew install kards` will not work, only `brew install alteka/tap/kards`. Acceptable while the
 signing chain is unproven.
 
-**Needs a maintainer, and it is the only blocker:** create `github.com/Alteka/homebrew-tap` (the
-name must be exactly that — Homebrew resolves taps by repository name) and seed `Casks/kards.rb`
-from `docs/homebrew/kards.rb`. Outward-facing, so not done.
+**Needs a maintainer, and it is the only blocker:** create the tap repository and seed
+`Casks/kards.rb` from `docs/homebrew/kards.rb`. Outward-facing, so not done.
+
+**Correction — I got the naming rule wrong first time and the maintainer caught it.** I wrote that
+the repository "must be named exactly `homebrew-tap`". It must not. The only requirement is the
+**`homebrew-` prefix**: *"a repository must be named `homebrew-<repository>` to use the
+one-argument form of `brew tap`"* (<https://docs.brew.sh/Taps>). Everything after the prefix is
+our choice and becomes what users type — `Alteka/homebrew-tap` gives
+`brew install --cask alteka/tap/kards`, `Alteka/homebrew-kards` gives `alteka/kards/kards`.
+`homebrew-tap` is still the recommendation, but because `alteka/kards/kards` is repetitive and a
+generic tap leaves room for a second product, **not** because anything mandates it. Table of
+options in `docs/homebrew/README.md`.
 
 **`kards.rb` here is a seed, not a second master copy.** Once the tap exists the tap is canonical
 and this file should be deleted or reduced to a pointer. Maintaining both is the same drift that

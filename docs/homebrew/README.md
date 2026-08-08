@@ -28,7 +28,20 @@ as the notify-then-send-to-the-website flow in the app. See F-005.
 
 ## Setting the tap up — one time, needs a maintainer
 
-Homebrew finds a tap by repository name, so it must be called exactly `homebrew-tap`:
+The only hard rule is the **`homebrew-` prefix**. From
+[Homebrew's docs](https://docs.brew.sh/Taps): *"a repository must be named `homebrew-<repository>`
+to use the one-argument form of `brew tap`"*. Everything after the prefix is our choice, and it
+becomes what users type:
+
+| Repository | `brew tap` | Install command |
+|---|---|---|
+| `Alteka/homebrew-tap` | `alteka/tap` | `brew install --cask alteka/tap/kards` |
+| `Alteka/homebrew-kards` | `alteka/kards` | `brew install --cask alteka/kards/kards` |
+
+**Recommendation: `homebrew-tap`.** Not because it is required — it is not — but because
+`alteka/kards/kards` is repetitive, and a generic tap has somewhere to put a second thing later
+without stranding anyone who has already tapped it. It is also the commonest choice among vendors
+who publish their own tap.
 
 1. Create **`github.com/Alteka/homebrew-tap`**, public.
 2. Add `Casks/kards.rb` — seed it with [`kards.rb`](kards.rb) from this directory.
