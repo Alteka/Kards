@@ -25,7 +25,7 @@
   "mask": {
     "enabled": false,
     "applyBounds": false,
-    "image": ""
+    "imageSource": ""
   },
   "placeholder": {
     "bg": "#6ab42f",
