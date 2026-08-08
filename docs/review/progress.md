@@ -494,3 +494,126 @@ build.
 
 **Revisit after v1.4.0 ships.** Porting a known-good signing recipe to Actions is mechanical;
 debugging an unknown one through a runner is where the time goes.
+
+---
+
+## Session record — 2026-08-08 — Phase A complete (A1–A4)
+
+First implementation session. Read-only rule lifted. All work on `feature/modernise`; six commits,
+`77ab43b..3a68a6f`. Nothing pushed, nothing deleted, nothing closed.
+
+### A1 — NDI parked
+
+`feature/ndi` created at `77ab43b` (local only, **not pushed**) and carries the uncommitted
+`grandiose` → `optionalDependencies` change as `f565670`. It is currently the only copy of that
+work outside this machine's working tree — worth pushing before `feature/modernise` merges.
+
+Removed from the release line (`87b7181`): `ndi.js`, `ndi-worker.js`, `scripts/patch-grandiose.js`,
+the `postinstall` hook that ran it, the `grandiose` dependency and ~240 lines of transitive
+lockfile, the NDI drawer and toolbar button in `ControlMenu.vue`, and the `state.ndi.updateConfig`
+fan-out in `ipc.js` and `windows.js`. `getNdiStatus` now returns `{available: false, active: false}`
+unconditionally rather than relying on `state.ndi` being absent — the handler is kept deliberately
+so anything still asking gets a definite answer.
+
+A status update for issue #41 is **drafted but not posted**, per the brief. It says plainly why NDI
+is not in v1.4.0, what has to happen before it can be, and does not commit to a version or a date.
+
+### A2 — git hygiene
+
+- `a6f8428` cherry-picks `3948005` (diagonal grid lines). Conflicts were formatting only — master's
+  copy predates the Prettier pass on this branch. Diff stat matches the original exactly (23/21/4).
+  `grid.diagonals` defaults to false, so no card renders differently until a user turns it on; that
+  is why it could land ahead of the harness.
+- `40ff643` adds `.github/dependabot.yml`. There was no `.github` directory at all, so Dependabot
+  has been running on GitHub's defaults. Grouped weekly, capped at five, with `electron` and
+  `electron-builder` **major** bumps excluded — D5/D6 step those by hand with the harness run
+  between each, and an unattended multi-major jump is exactly F-002's risk. **Caveat: GitHub reads
+  this file from the default branch only, so it does nothing until `feature/modernise` reaches
+  `master`.**
+- Branch deletions and dependabot PR closures are **prepared but not executed** — commands handed to
+  the maintainer for approval. Two branches (`Electron16ReWrite`, `hotfix/macclosewindowbug`) are 0
+  commits ahead and safe. `feature/previewwindow` is **1 commit ahead** and is deliberately excluded
+  from the batch.
+
+**Gap found in the review, recorded in `c5c2347`.** `06-branch-reconciliation.md` enumerated remote
+branches, not pull requests, so it missed **PR #119** — an outside contributor (`zusorio`, May 2025,
+123 files) doing substantially what `feature/modernise` does, plus WIP TypeScript and Zod config
+validation that overlaps plan task C6. A maintainer replied warmly and proposed a call; the thread
+has been silent since. **It must not be closed as branch hygiene.** It needs a reply and a decision.
+A note with the evidence is appended to `06-branch-reconciliation.md`; nothing has been posted on
+the PR.
+
+### A3 — pixel harness (`0dd8690`)
+
+`test/pixel/{run.js,cards.js,baseline.json,README.md}`, plus `npm run test:pixel[:validate|:record]`.
+Each npm script rebuilds first on purpose — a stale `dist/` silently tests the previous commit.
+
+**The day-one gate passed on the first run, and on four consecutive runs.** It reproduced
+`235,235,235` for 100% white *and* detected that 75% yellow was `180,180,0` rather than the correct
+`180,180,16`. Both assertions matter: one that only agrees with the app measures nothing, one that
+only disagrees is broken.
+
+Determinism measures, in rough order of importance: two byte-identical consecutive captures required
+before sampling; `--force-device-scale-factor=1` and hardware acceleration off;
+`--force-color-profile=srgb` (measures what the app *draws*, deliberately not what a display does
+with it — that is D7/Q5); specific coordinates rather than whole-image hashes; and `--record` keeps a
+point only if its 9×9 neighbourhood is flat, which rejects edges, text and antialiasing without
+anyone needing to know what each card looks like.
+
+Samples carry provenance. `source: 'spec'` means hand-authored from a documented value, and
+`--record` will not overwrite those — so re-baselining cannot quietly erase a known-correct number.
+
+Baseline recorded across the full matrix on **Electron 34.5.8 / Chrome 132, win32 x64** before any
+fix. That is the reference point D6 steps away from.
+
+### A4 — levels fixes
+
+**F1 (`8a38ff0`)** — `Swatch.vue` multiplied the level by a 0/1 unit vector, so an inactive channel
+landed on 0, sixteen code values *below* black. Now selects between the level and the black floor.
+Level convention extracted to `src/levels.js`, which is what let F3 share it.
+
+*What moved:* 101 of 398 samples, and every one is a channel going 0 → 16. Verified mechanically,
+not by eye — no sample changed in any other way. Affected: all four `bars-simple` cases, `smpte`,
+`arib`, `hdr`. Unaffected: everything else, including `bars-sdi` and `bars-single`.
+
+**F2 + F3 (`3a68a6f`)** — done as one change, as F-013 recommends: no point restoring a missing step
+in a 0-255 series that should be 16-235. Stops are now generated from the IRE step list already in
+the file, giving `0, 16, 38, 60, 82, 104, 126, 147, 169, 191, 213, 235, 255` — even across the legal
+range, with the existing -7.5 and 109 IRE sub-black/super-white markers at the ends.
+
+*What moved:* 45 samples on the smooth ramps (compressed 0-255 → 16-235, matching 16 + 219x exactly),
+and 42 on two **newly added** cases.
+
+**Worth knowing:** `ramp-stepped` showed *zero* change, and that is not an oversight. The horizontal
+and vertical stepped ramps draw swatch labels over the entire gradient, so what a user sees there was
+already on the 16-235 scale — the gradient behind it has simply stopped disagreeing with it.
+`showSteps` is false for Diagonal and Radial, which makes those the only variants where the stepped
+gradient is visible and therefore the only place F-008's missing step was ever seen. Both were added
+to the matrix and **recorded on the pre-fix code first**, so the change is measured rather than
+asserted.
+
+Final state: **440 samples across 22 cases, 0 failed.** `--validate` green.
+
+Mismatches on `deghost` and `audioSync` are now **advisory rather than failures**. Both animate by
+design, never produce two identical consecutive captures, and were flipping samples at random. They
+are still captured and printed as WARN, just not gated on. Those two cards are effectively uncovered;
+if that matters, give them a deterministic mode rather than loosening the harness.
+
+### Judgement calls a reviewer might want to reverse
+
+1. **The stepped ramp now has 13 bands, not 10.** Restoring only the missing 204 would have been a
+   smaller change. 13 comes from deriving the bands from the step list already in the file, which is
+   what makes the labels and the gradient agree and removes the duplication F-008 blames. It is more
+   visible change than "restore one step", and users have learned this card's appearance.
+2. **The harness forces `showInfo: false`**, so no text is measured anywhere. This is what keeps it
+   from breaking on font rendering, but it means the info circle is not covered at all.
+3. **`src/levels.js` is ESM** and imported via the `@` alias. Fine today (renderer only); worth
+   noting before D3 bundles the main process.
+
+### Still open from this session
+
+- Push `feature/ndi`; post the #41 draft; run the prepared branch/PR commands. All need approval.
+- **PR #119 needs a maintainer decision.** Oldest outstanding item created by this session.
+- F1/F2/F3 are both user-visible and both belong in the release notes — Q6 decided the comms for the
+  bars; the ramp change needs the same treatment and does not have it yet.
+- Not started: A5 (small cleanups), and all of Phases B, C, D.
