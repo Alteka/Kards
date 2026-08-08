@@ -826,7 +826,7 @@ request; fold into the C1 work above.
 
 ---
 
-## START HERE — state at end of 2026-08-08 session
+## START HERE — state at end of 2026-08-08 session (SUPERSEDED — see the final section)
 
 **Branch `feature/modernise`, 21 commits ahead of `origin/feature/modernise` (`77ab43b..56cf9e7`).**
 Working tree clean. Build clean. `npm run lint` clean (0 errors, 285 warnings). Pixel harness
@@ -884,3 +884,157 @@ A5 mostly done. Phases B, C, D not started.
 Three of the four substantive corrections in this session came from the maintainer reading the
 output, not from the harness. **The harness catches what changed; it does not catch what was wrong
 to begin with.** Phase C's config migration ladder has no equivalent safety net at all.
+
+---
+
+## A5 finished, B1 written — 2026-08-08, second session
+
+Six commits, `5e9e1df..fbdf084`, none pushed. Working tree clean. Build clean, `npm run lint` clean (0 errors,
+285 warnings, unchanged), pixel harness **560 samples, 0 failed** at every gate.
+
+### A5 — now complete
+
+**Export completion is reported on every path (`2fb9b25`).** Not on the A5 list; found while
+reading the wallpaper handlers for F-026, and it is the more serious of the two. The control
+window puts up a fullscreen `ElLoading` mask when it sends `exportCard` and only removes it on
+`exportCardCompleted`. Three paths never sent it:
+
+- `wallpaper.set()` was awaited in a bare async IIFE with no catch — any rejection became an
+  unhandled rejection and the export never finished.
+- `showSaveDialog()` had no `.catch()`.
+- `dom-to-image` failing in the renderer logged to console and told the main process nothing.
+
+Each leaves the control window **permanently masked until the app is restarted**. If anyone has
+ever reported Kards "hanging when you export", this is a candidate, and the wallpaper one is the
+most likely to fire in the field. All three now route through one `finishExport(message)`, which
+also closes the hidden capture window — picking up the third part of F-026, whose cleanup ran
+synchronously alongside the save and therefore never ran on a failure at all.
+
+**F-026 (`57d190f`).** Two fixed slots, `kards-wallpaper-a.png` / `-b.png`, used alternately by
+mtime. Two rather than one because Windows and macOS both cache the desktop picture by path.
+mtime rather than a counter because it survives a restart with nothing persisted. Legacy
+`wallpaper<digits>.png` files are swept **only after a successful set**, when none of them can
+still be the active background — a startup sweep would risk clearing the desktop of someone who
+upgraded and has not exported since. Consequence, stated plainly: a user who never uses the
+feature again keeps their existing pile; it just stops growing.
+
+Verified by driving the **real handler** with stubbed deps against a scratch userData dir
+(`windows.js` takes everything through injected `deps`, so this needs no Electron). Four exports
+used a → b → a → b, left exactly two files, removed all three planted legacy files, and left
+`wallpaper.png`, `wallpaperNotANumber.png` and `config.json` alone.
+
+**README (`306291c`).** Three false claims: `env.json` "required for the app to start" (it is
+try/caught with a fallback); an NDI section describing a feature A1 parked on `feature/ndi`, so
+the release line documented an NDI sender that does not start; and "node 16+" against a Volta pin
+of 22.22.0. Also added a pointer to the pixel harness, which had no mention in the README at all.
+
+**F-031 `particles.js` (`2c34178`).** `Deghost.vue` imported `../../../public/particles.js`, so
+Vite copied it verbatim *and* Rollup bundled it — the same 44 KB shipped twice, both inside the
+asar. Moved to `src/assets/`. Worth noting why the green harness means something here rather than
+being circular: `deghost` is one of the two animated cards whose mismatches are only advisory, so
+"0 failed" alone would prove little — but `Deghost.vue:100` calls `window.particlesJS(...)`
+unconditionally in `mounted()`, so a broken import throws and the card loses its canvas. Deghost
+reported **zero mismatched samples**, not merely zero failures.
+
+**Still deferred from A5:** `browserslist` removal, left folded into D1 as the previous session
+decided — it belongs with deleting `core-js` and `vue3-resize-text` in one commit.
+
+### B1 — scripted macOS release build (`6c82a39`, fixed in `fbdf084`)
+
+`npm run release:mac`: preflight → vite build → electron-builder per arch → notarise/staple the
+pkg → verify. Plus `build/entitlements.mac.plist`, an inherit variant for the helpers, and
+`asarUnpack`.
+
+**The guard is tested, not just written.** `scripts/mac/preflight.js` was driven on Windows with a
+faked `process.platform` against eight mutated configs. Every one is caught with a specific
+message, including the actual 2022 bug — an `Apple Development:` identity — and the omitted and
+`null` identity cases that let electron-builder auto-select. The committed config reports no
+configuration problems. Untested here: the keychain-presence and `notarytool` checks, because
+`security` and `xcrun` do not exist on Windows.
+
+`scripts/mac/verify.js` interrogates the **artifacts**, not the config: `codesign -dvvv`
+Authority, hardened-runtime flag, deep seal, `spctl --assess` for `source=Notarized Developer ID`,
+`pkgutil --check-signature`, `stapler validate`. A correct config is not a correct result.
+
+**Two design decisions a reviewer might want to reverse:**
+
+1. **Notarisation is an `afterSign` hook, and `mac.notarize` is `false`.** electron-builder
+   notarises the `.app` but never staples it, and Apple's guidance for an app inside an installer
+   is to staple both — the app before packaging, the package after. Stapling is what makes
+   verification work with **no network**, which matters because Kards gets installed in venues.
+   `afterSign` is the only hook that runs after signing and before the pkg target, so it is the
+   only place the app can be stapled. Cost: two Apple submissions per architecture.
+2. **`xcrun notarytool` directly, not `@electron/notarize`.** notarytool can read a credential
+   stored in the keychain; electron-builder's wrapper only accepts environment variables. An
+   app-specific password in the environment lands in shell history and `ps` output.
+
+**One assumption corrected by testing.** I had written that `wallpaper`'s bundled binary inside
+`app.asar` broke the feature at runtime. It does not — Electron patches `child_process` to
+extract asar-internal executables to a temp dir first, verified by exec'ing the real packaged
+`app.asar` on Windows. `asarUnpack` is still required, but **for signing only**: codesign cannot
+reach into an archive, and an unsigned Mach-O in the bundle is what Apple's notary rejects.
+
+**A trap that cost a build, and will cost the next person one too.** electron-builder validates
+its config against a strict schema and **rejects unknown keys**, so `_comment_*` annotations
+inside the `build` block fail the build outright — `configuration.mac has an unknown property`.
+They are fine in npm's `scripts` block (`_comment_pixel` is still there), which is what made it
+look safe. All the rationale that would have sat next to `mac.identity` now lives in
+`scripts/mac/preflight.js` and the commit messages instead. **The identity line in `package.json`
+therefore carries no warning at its own site**, and it is the most dangerous line in the
+repository — preflight is the only thing standing between a wrong certificate and a release. That
+is a real argument for moving the build config to `electron-builder.yml`, where comments are
+legal. Not done; flagged.
+
+### Needs the Apple developer — batch these, do not drip-feed
+
+Everything below is unverifiable from Windows. B1 is written on the assumption that each is fine;
+**none of it is confirmed, and none of it should be reported as working.**
+
+1. **The exact identity strings.** `package.json` ships placeholders reading
+   `Developer ID Application: REPLACE ME (D4H96T8MEW)` and the Installer equivalent. Preflight
+   fails until they are real. From `security find-identity -v -p codesigning` and
+   `security find-identity -v`.
+2. **Whether the entitlement set is sufficient.** Four hardened-runtime entitlements, all
+   Chromium's requirements rather than Kards'. Deliberately no `com.apple.security.device.*`.
+3. **Whether the two-submission scheme works** — app notarised and stapled in `afterSign`, then
+   pkg notarised and stapled. This is the least-certain part of B1.
+4. **A real double-click install** on a Mac that has never seen the build. No automated check
+   proves Gatekeeper acceptance.
+5. **First launch with networking disabled** — the specific test that settles whether the
+   stapling arrangement is right. If it fails, the fix is known: staple the app, rebuild the pkg.
+6. **Whether audio output device names are visible on macOS.** `ControlMenu.vue:406` uses
+   `navigator.mediaDevices.enumerateDevices()`, and macOS withholds device *labels* without
+   microphone permission. If that dropdown is blank there, it is a macOS-only bug nobody has
+   filed, and the fix is not obvious — asking for mic permission in a playback-only app is a bad
+   trade. Cheap for them to check, impossible here.
+
+### Artifact filenames will change, and it does not matter
+
+electron-builder 24's `${arch}` resolves to `x64` / `arm64` / `universal`
+(`builder-util/out/arch.js`, `getArtifactArchName`). v1.3.1 shipped `mac-apple-silicon.pkg` and
+`mac-intel.pkg`, so the names move. This is harmless because the version is in the filename too —
+every consumer breaks on v1.4.0 regardless. Relevant to the dataJAR recipe,
+`Event-Engineering/ProjectReady` and the Homebrew cask, all already on the list. The update
+checker is unaffected: `updateChecker.js:17` reads only `tag_name`.
+
+### Next session, in order
+
+1. **B6 `docs/RELEASING.md`** — the one Phase B item needing neither certificates nor a Mac, and
+   the kickoff says it should be written **as** B1–B4 happen, not after. B1 is fresh now.
+2. **B4 Windows release build.** The build is confirmed working here — `--win --x64` produces
+   `Kards-1.3.1-win-x64.exe` (NSIS). What remains is the signed-vs-unsigned decision (Q1b) and
+   documenting it.
+3. **B5 update-notification reliability.** No external dependency, and F-005 is the highest High.
+4. **Phase C** whenever Phase B stalls on other people. C1/C6 still need to absorb `mask.image`,
+   `ramp.overlay` and F-036's per-type level domains as one problem.
+
+### Unchanged and still open
+
+PR #119 · the IRE 109 decision · both drafts in `docs/review/drafts/` unposted · release-note
+wording for the stepped ramp · the dataJAR heads-up · 242 vulnerabilities on `master`. None of it
+moved this session; see the previous section for detail.
+
+**Correction to the previous handover:** it says `feature/modernise` is "not pushed". It is —
+`origin/feature/modernise` is at `5e9e1df`, so all 21 of those commits reached the remote after
+that block was written. This session's six are **not** pushed; the branch is 6 ahead. Pushing is
+outward-facing and was not asked for.
