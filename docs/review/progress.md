@@ -722,7 +722,7 @@ validated from Windows and they are self-selected volunteers.
 12 commits, `77ab43b..9978406`, working tree clean, `feature/modernise` **not pushed**.
 Harness: **560 samples across 27 cases, 0 failed.** `--validate` green.
 
-### Next session, in order
+### Next session, in order (SUPERSEDED — see the final section of this file)
 
 1. **A5** — the only unstarted Phase A work. Lint hygiene first (`npm run lint` still rewrites
    `dist/` and `particles.min.js`), then dead files, `mask.image`→`imageSource`, bonjour instances,
@@ -823,3 +823,64 @@ importing out of Vite's `publicDir` so particles.js is both bundled and copied v
 
 **`ramp.overlay` missing from `defaultConfig.json`** — parked deliberately at the maintainer's
 request; fold into the C1 work above.
+
+---
+
+## START HERE — state at end of 2026-08-08 session
+
+**Branch `feature/modernise`, 21 commits ahead of `origin/feature/modernise` (`77ab43b..56cf9e7`).**
+Working tree clean. Build clean. `npm run lint` clean (0 errors, 285 warnings). Pixel harness
+**560 samples across 27 cases, 0 failed**; `npm run test:pixel:validate` green.
+
+**Phase A is complete.** A1 NDI parked · A2 git hygiene · A3 pixel harness · A4 levels fixes ·
+A5 mostly done. Phases B, C, D not started.
+
+### Do this first
+
+1. **`npm run test:pixel`** before touching anything. If it is not 560/0, something changed
+   underneath you and that is the story, not whatever you were about to do.
+2. Read the three "judgement calls" and the F-013 note below before Phase D.
+
+### Traps that will bite you specifically
+
+- **Do not read F3 in `07-plan.md` literally.** "Ramp gradients on 16-235 like everything else" is
+  the half of F-013 that was wrong and was reverted. The finding carries a note. Read F3 as "make
+  the ramp internally consistent and derived from one source" — already done.
+- **`npm run lint` is now safe** (it no longer rewrites). `npm run lint:fix` would clear 217 of the
+  285 warnings mechanically, but it touches `src/components/TestCard/` — **run the harness either
+  side** and expect to justify anything that moves.
+- **A recursive `grep -rn` from the repo root walks `node_modules` and hangs.** Use the Grep tool or
+  scope the path.
+- `.github/dependabot.yml` is inert until this branch reaches `master` — GitHub reads it from the
+  default branch only.
+
+### Remaining work, in order
+
+1. **Finish A5** — wallpaper temp files (F-025/F-026); `browserslist` removal (fold into D1); the
+   `README.md:43` claim that `env.json` is "required for the app to start" when `background.js:33-37`
+   try/catches it; `Deghost.vue:10` importing out of Vite's `publicDir`.
+2. **Phase B** is gated on certificates and an Apple developer's time, not on engineering effort.
+   B1 (the scripted signed build) can be written before they are available.
+3. **Phase C.** Note that C1/C6 should absorb three findings as one problem — `mask.image`,
+   `ramp.overlay`, and F-036's per-type level domains are all the default config and the code
+   drifting with nothing checking.
+
+### Needs a human, not a commit
+
+- **PR #119** — outside contributor, ~15 months silent after a maintainer proposed a call.
+  Overlaps C6. Needs a reply and a decision.
+- **The IRE 109 question** — whether the black floor stays 16 above IRE 100. Changes shipped output.
+  Settle with F-013's Full/Legal switch and M7/Q5 together, not alone. Note on F-001.
+- **Two drafts in `docs/review/drafts/`**, neither posted (#41 and #110). The #110 one has a real
+  decision in it about how publicly to state the root cause.
+- **Release-note wording** for the stepped-ramp change. F1 has agreed comms under Q6; the ramp does not.
+- **dataJAR heads-up** before B2 ships — their AutoPkg recipe pins the old signing identity and will
+  fail. `Event-Engineering/ProjectReady` hard-codes the v1.3.1 filename and breaks the same day.
+- **242 vulnerabilities reported on `master`** (11 critical, 101 high) as of 2026-08-08. D1 alone
+  should clear ~40. The count will not move until this branch merges.
+
+### The observation most worth carrying forward
+
+Three of the four substantive corrections in this session came from the maintainer reading the
+output, not from the harness. **The harness catches what changed; it does not catch what was wrong
+to begin with.** Phase C's config migration ladder has no equivalent safety net at all.
