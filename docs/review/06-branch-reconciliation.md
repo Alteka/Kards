@@ -250,3 +250,45 @@ engineering effort.** That observation drives the recommendation in `07-plan.md`
 5. Merge `feature/modernise` → `master`. **Release nothing yet** — F-003 (signing) comes first.
 6. `git push origin --delete feature/previewwindow` once the preview feature is on the roadmap
    under its own ticket, with `previewStyle` and the toggle-placement notes copied into it.
+
+---
+
+## Note added 2026-08-08 during A2 — this document missed PR #119
+
+**The review enumerated remote branches on `origin`. It did not enumerate pull requests.** Pull
+requests opened from forks have no branch on `origin`, so one was invisible to the method used
+here, and the "six branches" framing above is therefore an incomplete picture of the project's
+open work.
+
+**Evidence** (`gh pr list --state open`, 2026-08-08):
+
+| PR | Author | Opened | Size | Head |
+|---|---|---|---|---|
+| **#119** refactor: Replace Vue CLI with Vite and modernize project | `zusorio` (Tobias Messner, outside contributor) | 2025-05-13 | **123 files, +11,123 / −17,380** | `replace-vue-cli` (fork) |
+| #117 Bump axios 0.27.2 → 1.8.2 | dependabot | 2025-03-07 | — | `origin/dependabot/npm_and_yarn/axios-1.8.2` |
+| #115 Bump follow-redirects 1.15.1 → 1.15.9 | dependabot | 2025-01-19 | — | `origin/dependabot/npm_and_yarn/follow-redirects-1.15.9` |
+
+#117 and #115 are the two dependabot PRs already covered above. **#119 is not covered anywhere in
+this review.**
+
+**Why it matters, beyond the omission.** #119 does substantially what `feature/modernise` does —
+Vue CLI → Vite, dependency modernisation — arrived from an outside contributor, and its comment
+thread reads:
+
+1. `zusorio`: has also added TypeScript support (WIP) and Zod schema validation for the config.
+2. `DrewLX`: warm reply — *"You're doing so many of the things we haven't had time to look at"* —
+   mentions `@canoemoose`, says both are at an event in Munich, proposes a Zoom call.
+3. `zusorio`: agrees, asks to be told when.
+
+Then nothing, from May 2025 to now. So the picture in `08-summary.md` — that the modernisation is
+concentrated in one branch — holds for *this* repository, but the project also has an unanswered
+offer of substantially the same work from a volunteer, and the last thing said to them was a
+maintainer proposing a call that never happened.
+
+**This is not a branch-hygiene item and must not be swept up with one.** Closing #119 alongside
+two stale dependabot PRs would be the wrong action and would read badly to a contributor who was
+invited into a conversation and then dropped. It needs a decision and a reply from the
+maintainers, not a cleanup script. The Zod config-schema idea in particular overlaps directly
+with plan task **C6** (F6 config schema + validation), and the contributor has already written it.
+
+**Not actioned.** Flagged for the maintainers. No comment has been posted on #119.
