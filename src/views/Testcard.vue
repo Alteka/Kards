@@ -261,6 +261,9 @@ export default {
           vm.config.animated = wasAnimated
           vm.config.showClock = wasShowingClock
           console.error('Export failed:', err)
+          // Without this the main process never hears back, so the control
+          // window's loading mask stays up until the app is restarted.
+          window.ipcRenderer.send('exportCardFailed', String(err && err.message ? err.message : err))
         })
     },
     updateNetworkInfo: function () {

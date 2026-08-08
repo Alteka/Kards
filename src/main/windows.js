@@ -452,6 +452,36 @@ module.exports = function initWindows(state, deps) {
     }
   })
 
+  /**
+   * End an export, however it ended.
+   *
+   * The control window puts up a fullscreen ElLoading mask when it sends
+   * `exportCard` and only takes it down on `exportCardCompleted`, so any path
+   * that fails to send this leaves the UI permanently masked — the user has to
+   * restart the app. Every exit from an export must come through here.
+   *
+   * This also disposes of the hidden window created purely to render the card
+   * for capture. Doing it here rather than synchronously alongside the save
+   * means the failure paths clean it up too.
+   */
+  function finishExport(message) {
+    const config = getConfig()
+    if (config && !config.visible && state.testCardWindow !== null) {
+      log.info('Closing dummy test card window')
+      state.testCardWindow.close()
+    }
+    if (state.controlWindow) {
+      state.controlWindow.webContents.send('exportCardCompleted', message)
+    }
+  }
+
+  // The renderer does the capture, so a capture failure is only visible there.
+  ipcMain.on('exportCardFailed', (_, message) => {
+    log.error('Test card capture failed: ' + message)
+    state.headlessExportMode = false
+    finishExport('Could Not Capture Test Card')
+  })
+
   ipcMain.on('saveAsPNG', (_, arg) => {
     const config = getConfig()
     if (!config) return
@@ -474,26 +504,20 @@ module.exports = function initWindows(state, deps) {
             if (err) {
               dialog.showErrorBox('Error Saving File', JSON.stringify(err))
               log.error('Couldnt save file: ', err)
-              if (state.controlWindow) {
-                state.controlWindow.webContents.send('exportCardCompleted', 'Could Not Write File')
-              }
+              finishExport('Could Not Write File')
             } else {
-              if (state.controlWindow) {
-                state.controlWindow.webContents.send('exportCardCompleted')
-              }
+              finishExport()
             }
           })
         } else {
           log.info('Save dialog closed')
-          if (state.controlWindow) {
-            state.controlWindow.webContents.send('exportCardCompleted', 'File Save Cancelled')
-          }
+          finishExport('File Save Cancelled')
         }
       })
-    if (!config.visible && state.testCardWindow !== null) {
-      log.info('Closing dummy test card window')
-      state.testCardWindow.close()
-    }
+      .catch((err) => {
+        log.error('Save dialog failed: ', err)
+        finishExport('Could Not Save File')
+      })
   })
 
   ipcMain.on('setAsWallpaper', (_, arg) => {
@@ -507,22 +531,17 @@ module.exports = function initWindows(state, deps) {
       if (err) {
         dialog.showErrorBox('Error Saving Wallpaper', JSON.stringify(err))
         log.error('Couldnt save wallpaper file ', err)
-        if (state.controlWindow) {
-          state.controlWindow.webContents.send('exportCardCompleted', 'Could not write temporary file')
-        }
+        finishExport('Could not write temporary file')
         return
       }
-      ;(async () => {
-        await wallpaper.set(dest)
-        if (state.controlWindow) {
-          state.controlWindow.webContents.send('exportCardCompleted')
-        }
-      })()
+      wallpaper
+        .set(dest)
+        .then(() => finishExport())
+        .catch((e) => {
+          log.error('Couldnt set wallpaper ', e)
+          finishExport('Could Not Set Wallpaper')
+        })
     })
-    if (!config.visible && state.testCardWindow !== null) {
-      log.info('Closing dummy test card window')
-      state.testCardWindow.close()
-    }
   })
 
   // Expose helpers back to the main module
