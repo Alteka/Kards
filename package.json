@@ -40,7 +40,9 @@
     "vue-router": "^4.0.0-0",
     "vue3-resize": "^0.2.0",
     "vue3-resize-text": "^0.1.0",
-    "wallpaper": "5.0.1",
+    "wallpaper": "5.0.1"
+  },
+  "optionalDependencies": {
     "grandiose": "rse/grandiose#cf09bb84"
   },
   "devDependencies": {
