@@ -7,7 +7,7 @@
 
 <script>
 import InfoCircle from './InfoCircle.vue'
-import '../../../public/particles.js'
+import '../../assets/particles.js'
 
 export default {
   name: 'DeghostTestCard',
