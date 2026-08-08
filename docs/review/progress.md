@@ -617,3 +617,117 @@ if that matters, give them a deterministic mode rather than loosening the harnes
 - F1/F2/F3 are both user-visible and both belong in the release notes — Q6 decided the comms for the
   bars; the ramp change needs the same treatment and does not have it yet.
 - Not started: A5 (small cleanups), and all of Phases B, C, D.
+
+### Addendum — same session, after maintainer review
+
+The record above was written at the end of A4. Everything below happened during review of that
+work, and **three of the four items came from the maintainer reading the output, not from the
+harness**. Worth carrying into Phase C: the harness catches what *changed*, not what was wrong to
+begin with.
+
+**1. The smooth ramp change was wrong and is reverted (`39ef429`).**
+
+I had narrowed the smooth ramp to 16-235 under F3. The maintainer rejected it: the stepped variant
+spans 0 to 255 at its extremes, so narrowing only the smooth one meant toggling `stepped` changed
+where the card started and finished. I had introduced the exact inconsistency I claimed to be
+fixing. My argument for it — that an unlabelled dark excursion "doesn't tell you anything" — was
+also backwards: a ramp starting at 16 has no sub-black content, so a display that crushes below
+black has nothing to crush and the fault becomes invisible.
+
+All 48 smooth-ramp samples now reproduce the pre-fix baseline at `0dd8690` exactly. Both variants
+take their extent from the same step list, so they cannot drift apart again.
+
+**F-013 carries a note recording this.** Its diagnosis was right; half its prescription was wrong.
+This matters because F3 in `07-plan.md` reads "ramp gradients on 16-235 like everything else" —
+without the note, Phase D would reapply the mistake straight from the plan text. **Read F3 as
+"make the ramp internally consistent and derived from one source", which is done.**
+
+**2. New finding F-036 — Simple bars at -9 IRE inverts black and white.**
+
+Found by the maintainer. `Bars.vue` drives bars 1-7 from `config.bars.level` and hardcodes bar 8 to
+`ire="0"`. `ControlBars.vue` has *two* level controls writing one key: Simple offers 75/100/109,
+Single offers -9/0/75/100/109. So -9 reaches Simple by being set on Single and switching type.
+
+Measured (`bars-simple-minus9`): bars 1-7 are `0,0,0`, bar 8 is `16,16,16`. **The bar labelled
+Black renders brighter than the bar labelled White.** Not a regression from F1 — identical before
+and after it.
+
+Fixed via option 1 of three (`6b6655f`): `ControlBars.vue` snaps an out-of-domain level back to 75.
+Maintainer chose "1 leading to 3", so **option 3 — per-card-type valid domains in the config
+schema, validated on load — is the agreed destination and belongs to C6.**
+
+Note for whoever does that: watching `bars.type` alone is *not* enough, and the case it misses is
+the one that matters. Switching Single→Simple changes the type and leaves a stale level; a config
+saved in the bad state and loaded later changes the level while the type stays put, so no type
+watcher fires. The second is what an existing install hits. Verified by driving the real control
+window and reading back the config it emits over IPC — not by reasoning about the watcher, which
+is how the gap was found.
+
+Still uncovered by option 1, all needing C6: configs persisted bad on disk beyond the moment the
+control window loads them; OSC/REST writes with no control window open; and the renderer itself,
+which still produces the inverted output if handed that config directly. Harness case
+`bars-simple-minus9` deliberately bypasses the UI and keeps recording `0,0,0` x7 plus `16` as
+documentation of exactly that.
+
+**3. OPEN AND NOT DECIDED — the black floor above IRE 100.**
+
+F1 landed the 16 floor unconditionally. At 75% and 100% that is unambiguous and matches reference
+values. Above 100 it is open. Shipped behaviour is `255,255,16` at level 109; it was `255,255,0`.
+
+The maintainer's framing, which is the useful part and is recorded as a note on F-001:
+
+> Full range versus reduced range is a property of the **whole scale** — it moves both ends at
+> once, 0-255 against 16-235. But 75/100/109% are statements about the **white end only**. They say
+> nothing about what is happening at the black end.
+
+So "109 therefore full range therefore black is 0" does not follow. Level and range convention are
+**orthogonal axes**, and the app has a control for one and none for the other. Choosing 0 or 16
+here is picking a default for an axis the user cannot see or set — which is the same missing
+concept as F-013's Full/Legal switch and M7/Q5. **Settle all three together, not piecemeal.**
+Covered by `bars-simple-109` and `bars-single-yellow-109`; flipping it is contained to re-recording
+those two.
+
+**4. Outward-facing actions — executed, with approval.**
+
+- `feature/ndi` **pushed**. No longer a single-machine copy.
+- PRs **#117 and #115 closed** with comments explaining the yarn→npm move.
+- Branches `Electron16ReWrite` and `hotfix/macclosewindowbug` **deleted** (both 0 ahead, re-checked
+  immediately before).
+- The two dependabot branch deletions **errored — already gone.** Dependabot deletes its own branch
+  when its PR closes. For the runbook: closing the PR is sufficient, the delete is redundant.
+- `feature/previewwindow` **deliberately not deleted** — 1 commit ahead, that commit exists nowhere
+  else. File the preview idea as its own issue first.
+
+Remote is now `master`, `feature/modernise`, `feature/ndi`, `feature/previewwindow`. One open PR:
+**#119**, still needing a maintainer reply.
+
+GitHub reported on push: **242 vulnerabilities on the default branch** (11 critical, 101 high).
+That is `master`. D1 alone should clear ~40. The count will not move until `feature/modernise`
+merges — and neither will `.github/dependabot.yml`, which GitHub reads from the default branch only.
+
+**5. Status drafts committed (`9978406`).**
+
+`docs/review/drafts/issue-41-ndi-status.md` and `issue-110-signing-status.md`. **Neither posted.**
+Each carries its sources and a notes section that is explicitly not for posting.
+
+The #110 draft has one real decision in it: it publicly states the root cause — installer never
+signed or notarised, app signed with a *development* certificate rather than Developer ID. Already
+public via the dataJAR AutoPkg recipe, so vagueness costs more than candour; the draft names no
+individual. Both paragraphs cut to one line without weakening the rest. It also invites the three
+affected users to test the signed pre-release, which is worth keeping — the signing chain cannot be
+validated from Windows and they are self-selected volunteers.
+
+### State at end of session
+
+12 commits, `77ab43b..9978406`, working tree clean, `feature/modernise` **not pushed**.
+Harness: **560 samples across 27 cases, 0 failed.** `--validate` green.
+
+### Next session, in order
+
+1. **A5** — the only unstarted Phase A work. Lint hygiene first (`npm run lint` still rewrites
+   `dist/` and `particles.min.js`), then dead files, `mask.image`→`imageSource`, bonjour instances,
+   wallpaper temp files. Plus `ramp.overlay` missing from `defaultConfig.json`, parked deliberately.
+2. **Phase B** is gated on certificates and on an Apple developer's time, not on engineering.
+3. Needing a maintainer, not a commit: **PR #119**; the **109 decision**; posting either draft;
+   release-note wording for the stepped-ramp change (F1 has agreed comms under Q6, the ramp does
+   not); and the **dataJAR heads-up** before B2 ships.
