@@ -924,6 +924,48 @@ change and cover both with the pixel test.
 
 **Related.** F-001, F-008, F-030.
 
+**Note added 2026-08-08 during A4 — the diagnosis holds, half the prescription does not.**
+
+The maintainer rejected the "apply 16-235 everywhere" half of the recommendation above, and was
+right to. Recorded here rather than by editing the finding, per the ground rule that
+`docs/review/` is a record.
+
+What stands:
+
+- The gradient and the swatch labels drawn on top of it *were* computed from different scales and
+  *did* disagree. That was a genuine self-contradiction and it is fixed — both now come from
+  `src/levels.js`.
+- The stepped gradient's interior values were a flat 0-255 division (26, 51, 77, 102 ...) rather
+  than a legal-range division. That is F-008 and it is fixed.
+
+What was wrong:
+
+- **Forcing the smooth ramp onto 16-235 was a mistake, and it was briefly shipped in `3a68a6f`
+  before being reverted in the commit that carries this note.** Two reasons, both of which the
+  finding missed:
+
+  1. **It breaks the card's own internal consistency.** The stepped variant spans 0 to 255 at its
+     extremes — the deliberate -7.5 and 109 IRE markers this finding itself cites as evidence of
+     intent. Narrowing only the smooth variant means toggling `stepped` changes where the card
+     starts and ends, which is a worse inconsistency than the one being fixed.
+  2. **It removes the diagnostic.** A ramp that starts at 16 contains no sub-black content, so a
+     display that crushes below black has nothing to crush and the fault becomes invisible. Seeing
+     clipping at both ends is a large part of what a ramp is *for*.
+
+The correct reading of the evidence: this card is deliberately a **wider-than-legal** card, with
+an evenly-stepped legal-range body and overshoot markers at both ends. The defect was never its
+range — it was that the range was applied inconsistently *within* the card.
+
+Both variants now take their extent from the same step list, so they cannot drift apart again.
+
+**Where this leaves F3.** As written, F3 said "unify the level range — ramp gradients on 16-235
+like everything else". That instruction should be read as **"make the ramp internally consistent
+and derived from one source"**, which is done. The "like everything else" part does not apply to
+this card and should not be applied to it later by someone reading the plan literally.
+
+The Full/Legal switch this finding floats as an alternative remains the genuinely better answer,
+and is still unbuilt. It would make the range an explicit user choice rather than an argument.
+
 ---
 
 ## Medium

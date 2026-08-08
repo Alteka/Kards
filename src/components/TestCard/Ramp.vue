@@ -19,7 +19,7 @@
 <script>
 import Swatch from './Swatch.vue'
 import InfoCircle from './InfoCircle.vue'
-import { BLACK_LEVEL, WHITE_LEVEL, ireToDecimal, greyString } from '@/levels'
+import { ireToDecimal, greyString } from '@/levels'
 export default {
   name: 'RampTestCard',
   components: { Swatch, InfoCircle },
@@ -151,10 +151,25 @@ export default {
         })
         .join(', ')
     },
-    /** Smooth black-to-white stops on the studio range (F-013). */
+    /**
+     * Smooth stops, spanning the same extent as the stepped variant.
+     *
+     * Both ends come from the step list, so the smooth and stepped ramps cannot
+     * disagree about where the card starts and finishes. That works out at
+     * 0 to 255, because the outermost steps are the deliberate sub-black (-7.5
+     * IRE) and super-white (109 IRE) markers.
+     *
+     * This card exceeding the legal range is the point of it, not a defect: a
+     * ramp that started at 16 could not show black crush at all, because there
+     * would be no sub-black content for a display to crush. See the note on
+     * F-013 in docs/review/04-findings.md.
+     */
     smoothStops: function (descending) {
-      const first = descending ? WHITE_LEVEL : BLACK_LEVEL
-      const last = descending ? BLACK_LEVEL : WHITE_LEVEL
+      const levels = this.stepLevels
+      const darkest = levels[0]
+      const brightest = levels[levels.length - 1]
+      const first = descending ? brightest : darkest
+      const last = descending ? darkest : brightest
       return greyString(first) + ' 0%, ' + greyString(last) + ' 100%'
     },
     /** The gradient body for one ramp, ascending or descending. */
