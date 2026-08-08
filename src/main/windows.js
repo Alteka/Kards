@@ -475,6 +475,60 @@ module.exports = function initWindows(state, deps) {
     }
   }
 
+  // The wallpaper image has to stay on disk for as long as it is the desktop
+  // background, so it cannot be written to a temp dir the OS will clean up.
+  // Two fixed slots, used alternately, keep it bounded at two files: a single
+  // fixed path is not enough because both Windows and macOS cache the desktop
+  // picture by path, and re-setting the same filename can leave the previous
+  // image on screen.
+  const WALLPAPER_SLOTS = ['kards-wallpaper-a.png', 'kards-wallpaper-b.png']
+
+  // Written by every version up to and including v1.3.1, one per export.
+  const LEGACY_WALLPAPER = /^wallpaper\d+\.png$/
+
+  /** The slot that is not currently on the desktop: the older of the two. */
+  function nextWallpaperPath() {
+    const paths = WALLPAPER_SLOTS.map((name) => path.join(app.getPath('userData'), name))
+    const modified = paths.map((p) => {
+      try {
+        return fs.statSync(p).mtimeMs
+      } catch (e) {
+        return -1 // missing counts as oldest, so it gets used first
+      }
+    })
+    return modified[0] <= modified[1] ? paths[0] : paths[1]
+  }
+
+  /**
+   * Delete the `wallpaper<random>.png` files older versions left behind.
+   *
+   * Only safe to call after a new wallpaper has been set successfully: at that
+   * moment none of them can still be the active desktop picture. Deleting them
+   * on startup instead would risk clearing the background of a user who has
+   * not exported since upgrading.
+   */
+  function sweepLegacyWallpapers() {
+    const dir = app.getPath('userData')
+    let removed = 0
+    try {
+      for (const name of fs.readdirSync(dir)) {
+        if (!LEGACY_WALLPAPER.test(name)) continue
+        try {
+          fs.unlinkSync(path.join(dir, name))
+          removed++
+        } catch (e) {
+          log.warn('Could not remove old wallpaper file ' + name, e)
+        }
+      }
+    } catch (e) {
+      log.warn('Could not scan userData for old wallpaper files', e)
+      return
+    }
+    if (removed > 0) {
+      log.info('Removed ' + removed + ' orphaned wallpaper file(s) from userData')
+    }
+  }
+
   // The renderer does the capture, so a capture failure is only visible there.
   ipcMain.on('exportCardFailed', (_, message) => {
     log.error('Test card capture failed: ' + message)
@@ -525,7 +579,7 @@ module.exports = function initWindows(state, deps) {
     if (!config) return
 
     state.headlessExportMode = false
-    let dest = app.getPath('userData') + '/wallpaper' + Math.round(Math.random() * 100000) + '.png'
+    const dest = nextWallpaperPath()
     var base64Data = arg.replace(/^data:image\/png;base64,/, '')
     fs.writeFile(dest, base64Data, 'base64', (err) => {
       if (err) {
@@ -536,7 +590,10 @@ module.exports = function initWindows(state, deps) {
       }
       wallpaper
         .set(dest)
-        .then(() => finishExport())
+        .then(() => {
+          sweepLegacyWallpapers()
+          finishExport()
+        })
         .catch((e) => {
           log.error('Couldnt set wallpaper ', e)
           finishExport('Could Not Set Wallpaper')
