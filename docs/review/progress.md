@@ -1069,9 +1069,9 @@ confirms the `v` tag prefix still compares correctly.
 1. **`axios` is now unused** — this was its only call site, and the rewrite uses `fetch`. It is
    still declared in `package.json`. Deleting it belongs to **D1**, with `core-js` and
    `vue3-resize-text`. That is where the ~40 advisories go.
-2. **The Homebrew cask (S4b) is not done.** It is the other half of B5 and it needs a maintainer's
-   go-ahead before a PR is opened. Worth doing: WinGet already gives Windows a `winget upgrade`
-   path and macOS — 81% of downloads — has no equivalent.
+2. **The Homebrew cask** is written and the tap decision is made — see the B5 follow-ups section
+   at the end of this file. Only blocker is creating the `Alteka/homebrew-tap` repo. WinGet
+   already gives Windows `winget upgrade`; macOS — 81% of downloads — has had no equivalent.
 
 ### Phase B state
 
@@ -1081,7 +1081,7 @@ confirms the `v` tag prefix still compares correctly.
 | B2 | first signed build | **blocked** on the Apple developer |
 | B3 | `v1.4.0-beta.1` | **blocked** on B2 |
 | B4 | Windows release build | **works** — `--win --x64` builds; needs the Q1b signed/unsigned decision |
-| B5 | update reliability | **done**; Homebrew cask needs approval |
+| B5 | update reliability | **done**; Homebrew cask written, needs the tap repo created |
 | B6 | `docs/RELEASING.md` | **done**, §3–5 not yet executed |
 | B7 | release CI | deferred past v1.4.0 by decision |
 
@@ -1106,3 +1106,67 @@ what changed, not what was wrong to begin with.** Three of four substantive corr
 session came from the maintainer reading output, not from the harness. C1 has no equivalent safety
 net at all — its test has to be built as part of it, against `defaultConfig.json` from every
 release tag.
+
+### B5 follow-ups, after maintainer review
+
+Three comments, all acted on.
+
+**1. "Nothing should be left in my head, it should all be in progress or handover files."**
+
+Correct, and the framing of my summary broke that rule even though the content was already in this
+file — I told the maintainer to "carry in your head" the point about C1 absorbing three findings.
+It was written up under *Starting Phase C* above, but saying it that way invites exactly the
+single-person-knowledge failure that produced four years of wrongly-signed builds. **The rule is
+that a verbal summary may only ever point at this file, never add to it.** If something is worth
+saying in a handover message, it is worth writing here first.
+
+Two things that were genuinely only verbal have been written down, below and in the code.
+
+**2. "Do we need the backoff if we're re-checking when the network appears?"**
+
+Fair challenge, and my original comment did not answer it — it explained the *spacing* of the
+schedule but not why the schedule exists alongside the network signal. Now documented at the top of
+`updateChecker.js`. The short answer is that **`navigator.onLine` cannot be trusted**, and the two
+mechanisms cover different failures:
+
+- `navigator.onLine` reports whether Chromium has *a route*, not whether the internet is
+  reachable. A laptop plugged into a venue switch reports online the instant the link comes up,
+  before DHCP or DNS — the event fires once, the check fails, and no second event ever arrives.
+- A machine already "online" at launch behind a captive portal or proxy **never transitions**, so
+  no event fires at all. There is nothing to transition from.
+- Some failures have no network transition behind them: GitHub 5xx, or a 403 rate limit that
+  clears an hour later.
+
+So the network signal makes recovery *fast* in the clean case; the timer makes recovery *happen*
+in the messy ones, which are the common ones here. Dropping either leaves a real gap.
+
+Why a backoff rather than a flat interval: the first minutes after launch are when a venue network
+is most likely to come up, so it pays to be eager early — but a flat 5-minute retry is 12
+requests/hour/machine, and five machines behind one venue's NAT would sit exactly on GitHub's
+unauthenticated limit of 60/hour/IP. Settling to hourly is what keeps it safe on a big show.
+
+**3. "The Homebrew cask should be in our own tap for now."** Decided and recorded.
+
+`docs/homebrew/kards.rb` (the cask) and `docs/homebrew/README.md` (the reasoning, the one-time
+setup, and the per-release step). `docs/RELEASING.md` §6 updated to match.
+
+Own tap rather than `homebrew/homebrew-cask`: no review queue, no notability argument, we control
+it, and it is reversible — upstreaming later is one PR. Cost is discoverability, since
+`brew install kards` will not work, only `brew install alteka/tap/kards`. Acceptable while the
+signing chain is unproven.
+
+**Needs a maintainer, and it is the only blocker:** create `github.com/Alteka/homebrew-tap` (the
+name must be exactly that — Homebrew resolves taps by repository name) and seed `Casks/kards.rb`
+from `docs/homebrew/kards.rb`. Outward-facing, so not done.
+
+**`kards.rb` here is a seed, not a second master copy.** Once the tap exists the tap is canonical
+and this file should be deleted or reduced to a pointer. Maintaining both is the same drift that
+produced `mask.image` vs `mask.imageSource` and the Kards Online divergence in F-027 — the failure
+mode this project keeps repeating.
+
+**Unverified, because it was written on Windows and none of it has been run:** the `zap` paths
+(derived from `name: "kards"` in package.json and electron-log's macOS default, not observed);
+whether `pkgutil: "solutions.alteka.kards"` matches the receipt the pkg actually registers; and
+`brew audit`. All cheap to check on a Mac, all listed in `docs/homebrew/README.md`. The install
+test is only meaningful **after B2** — Homebrew's `sha256` proves the file is the one we
+published, not that macOS will run it.

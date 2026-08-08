@@ -257,7 +257,13 @@ is right. If it fails there but succeeds online, the ticket is not embedded wher
 - [ ] Close or update the issues the release fixes — #110 (signing) at minimum.
 - [ ] **WinGet manifest PR** to `microsoft/winget-pkgs` for `AltekaSolutions.Kards`. Needs the new
       version, URL and SHA256. Undocumented channel until now; it exists and people use it.
-- [ ] **Homebrew cask bump.** Needs a maintainer's go-ahead before opening.
+- [ ] **Homebrew cask bump** in `github.com/Alteka/homebrew-tap` — our own tap, not
+      `homebrew/homebrew-cask` (decided 2026-08-08). Bump `version`, paste the new `sha256`, push.
+      No PR to wait on. `docs/homebrew/README.md` covers the one-time tap setup.
+
+      ```bash
+      shasum -a 256 dist_electron/Kards-1.4.0-mac-universal.pkg
+      ```
 - [ ] Update `Event-Engineering/ProjectReady`, which hard-codes
       `Kards-1.3.1-mac-apple-silicon.pkg` and breaks on the day this ships.
 
@@ -278,7 +284,7 @@ Everything that breaks when a release ships, so nobody has to rediscover the lis
 | dataJAR AutoPkg recipe | pinned signing identity **and** filename | dataJAR, external |
 | `Event-Engineering/ProjectReady` | hard-coded `Kards-1.3.1-mac-apple-silicon.pkg` | us, private repo |
 | WinGet `AltekaSolutions.Kards` | needs a manifest PR per version | us |
-| Homebrew cask | needs a version + SHA bump | us |
+| Homebrew cask, `Alteka/homebrew-tap` | needs a version + SHA bump per release | us |
 | Kards Online | separate codebase, separate deploy; card changes do not propagate (F-027) | us |
 
 ---
