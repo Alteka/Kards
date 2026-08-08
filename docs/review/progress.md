@@ -731,3 +731,87 @@ Harness: **560 samples across 27 cases, 0 failed.** `--validate` green.
 3. Needing a maintainer, not a commit: **PR #119**; the **109 decision**; posting either draft;
    release-note wording for the stepped-ramp change (F1 has agreed comms under Q6, the ramp does
    not); and the **dataJAR heads-up** before B2 ships.
+
+---
+
+## A5 — partially done (same session)
+
+Four commits, `e9d6488..5701211`. Build clean, lint clean, harness 560 samples 0 failed, tree clean.
+
+### Done
+
+**Lint hygiene, S9 — the documented trap is gone (`e9d6488`, `61d690c`).**
+
+Two separate faults made `npm run lint` something you had to know not to run:
+
+1. No ignore file, so `eslint .` walked `dist/`, `dist_electron/` and the vendored
+   `src/assets/particles.min.js`. Nearly every reported error came from minified build output,
+   burying the eight real ones.
+2. `--fix` was baked into the default script, so the documented way to *check* the code silently
+   rewrote it — build output and vendored bundles included.
+
+Now: `.eslintignore` added; `lint` reports and changes nothing; `lint:fix` is opt-in.
+**8 errors → 0.** The 285 warnings remain, nearly all `vue/attributes-order` and
+`vue/require-default-prop`; they need a separate pass and a decision on enforce-vs-relax, and
+`lint:fix` would handle 217 of them mechanically. **Do not run `lint:fix` across the tree without
+the harness green either side** — it touches `src/components/TestCard/`.
+
+Two of the eight errors were hiding something:
+
+- `audio.js` — `textToSpeachData()` was not merely unused, it was **broken by construction**:
+  it returns undefined immediately while the `say.export` callback returns into nothing. It could
+  never have worked, which is presumably why `createTextAudio` exists alongside it. Removed with
+  `lastCreatedVoice` and `textToSpeechCount`.
+- `Testcard.vue` — five `_`-prefixed keys in `data()`. **Vue 3 does not proxy `_` or `$` prefixed
+  data properties onto the instance**, so `this._timeIntervalId = ...` in `mounted()` wrote a plain
+  instance property unrelated to the `_timeIntervalId: null` declared in `data()`. The declarations
+  were inert; teardown worked only because both sides happened to touch the same non-reactive
+  property. Renamed so the declaration and the usage are the same thing.
+
+**F-029 (`12bd09a`)** — `defaultConfig.json` declared `mask.image`; every consumer uses
+`mask.imageSource`. The key was renamed in code and the defaults never followed, so the mask had no
+default at all and `GET /mask/imageSource` reported "Endpoint does not exist" until an image was
+chosen. Fixed. **An existing install still has a stale `mask.image` persisted** — harmless, but it
+wants pruning by C1's migration ladder rather than a one-off here.
+
+That is now the third instance of the same shape, and they should be treated as one problem in C1/C6
+rather than three fixes: `mask.image` vs `imageSource`, `ramp.overlay` bound to a control but absent
+from defaults, and F-036's per-type level domains. **The default config and the code drift and
+nothing checks.**
+
+**Shared Bonjour instance (`5701211`)** — `require('bonjour')()` was called three times
+independently (background.js, rest.js, osc.js), so the process held three mDNS sockets with three
+separate service registries. That made shutdown *wrong*, not just wasteful: background.js calls
+`unpublishAll()`/`destroy()` on its own instance, but the services actually advertised on the LAN
+are published by rest.js and osc.js on the other two, so they were never unpublished — other
+machines kept a stale advertisement pointing at a dead Kards until it aged out. Now one instance in
+`src/main/bonjour.js`.
+
+Bonus for D1: `bonjour`'s registry entry dates from **2013** and pulls the
+multicast-dns → dns-packet → ip advisory chain. `bonjour-service` is the maintained near-drop-in
+successor, and with the instance in one place that swap is now a one-line change.
+
+### Not done — remaining A5
+
+**Dead files (F-031).** All confirmed present and unreferenced by a `src/` grep, but **the deletion
+was not made** — verification of references outside `src/` was cut short. Verify then delete:
+
+| Path | Why |
+|---|---|
+| `about.html` | references `./src/renderer.js` and `./styles/ui.css`, neither of which exists; not in `build.files` |
+| `env.json.example` | superseded by `env.example.json` (`eebe793`) — **confirm they are identical first** |
+| `src/assets/particles.min.js` | nothing imports it; `Deghost.vue:10` imports `public/particles.js` instead. Also the file that makes F-019 dangerous |
+| `Swatch.vue:71` `vertical: false` | set, never read |
+
+Warning learned the hard way: a recursive `grep -rn` from the repo root walks `node_modules` and
+hangs. Use the Grep tool or scope the path.
+
+Also still open from F-031 and not started: `browserslist` in package.json (meaningless for an
+Electron target, vue-cli leftover — belongs with D1), the `README.md:43` claim that `env.json` is
+"required for the app to start" when `background.js:33-37` try/catches it, and `Deghost.vue:10`
+importing out of Vite's `publicDir` so particles.js is both bundled and copied verbatim.
+
+**Wallpaper temp files (F-025/F-026)** — not started.
+
+**`ramp.overlay` missing from `defaultConfig.json`** — parked deliberately at the maintainer's
+request; fold into the C1 work above.
