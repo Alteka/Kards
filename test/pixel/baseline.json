@@ -5977,6 +5977,1298 @@
           "source": "recorded"
         }
       ]
+    },
+    "bars-simple-109": {
+      "card": "bars",
+      "variant": "simple @ 109% (super-white)",
+      "size": [
+        1920,
+        1080
+      ],
+      "settled": true,
+      "samples": [
+        {
+          "name": "x120y180",
+          "point": [
+            120,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y540",
+          "point": [
+            120,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y900",
+          "point": [
+            120,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y180",
+          "point": [
+            360,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y540",
+          "point": [
+            360,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y900",
+          "point": [
+            360,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y180",
+          "point": [
+            600,
+            180
+          ],
+          "expected": [
+            16,
+            255,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y540",
+          "point": [
+            600,
+            540
+          ],
+          "expected": [
+            16,
+            255,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y900",
+          "point": [
+            600,
+            900
+          ],
+          "expected": [
+            16,
+            255,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y180",
+          "point": [
+            840,
+            180
+          ],
+          "expected": [
+            16,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y540",
+          "point": [
+            840,
+            540
+          ],
+          "expected": [
+            16,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y900",
+          "point": [
+            840,
+            900
+          ],
+          "expected": [
+            16,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y180",
+          "point": [
+            1080,
+            180
+          ],
+          "expected": [
+            255,
+            16,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y540",
+          "point": [
+            1080,
+            540
+          ],
+          "expected": [
+            255,
+            16,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y900",
+          "point": [
+            1080,
+            900
+          ],
+          "expected": [
+            255,
+            16,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y180",
+          "point": [
+            1320,
+            180
+          ],
+          "expected": [
+            255,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y540",
+          "point": [
+            1320,
+            540
+          ],
+          "expected": [
+            255,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y900",
+          "point": [
+            1320,
+            900
+          ],
+          "expected": [
+            255,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y180",
+          "point": [
+            1560,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y540",
+          "point": [
+            1560,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y900",
+          "point": [
+            1560,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            255
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y180",
+          "point": [
+            1800,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y540",
+          "point": [
+            1800,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y900",
+          "point": [
+            1800,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        }
+      ]
+    },
+    "bars-single-yellow-109": {
+      "card": "bars",
+      "variant": "single yellow @ 109%",
+      "size": [
+        1920,
+        1080
+      ],
+      "settled": true,
+      "samples": [
+        {
+          "name": "x120y180",
+          "point": [
+            120,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y540",
+          "point": [
+            120,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y900",
+          "point": [
+            120,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y180",
+          "point": [
+            360,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y540",
+          "point": [
+            360,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y900",
+          "point": [
+            360,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y180",
+          "point": [
+            600,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y540",
+          "point": [
+            600,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y900",
+          "point": [
+            600,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y180",
+          "point": [
+            840,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y540",
+          "point": [
+            840,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y900",
+          "point": [
+            840,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y180",
+          "point": [
+            1080,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y540",
+          "point": [
+            1080,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y900",
+          "point": [
+            1080,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y180",
+          "point": [
+            1320,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y540",
+          "point": [
+            1320,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y900",
+          "point": [
+            1320,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y180",
+          "point": [
+            1560,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y540",
+          "point": [
+            1560,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y900",
+          "point": [
+            1560,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y180",
+          "point": [
+            1800,
+            180
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y540",
+          "point": [
+            1800,
+            540
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y900",
+          "point": [
+            1800,
+            900
+          ],
+          "expected": [
+            255,
+            255,
+            16
+          ],
+          "source": "recorded"
+        }
+      ]
+    },
+    "bars-single-yellow-0": {
+      "card": "bars",
+      "variant": "single yellow @ 0%",
+      "size": [
+        1920,
+        1080
+      ],
+      "settled": true,
+      "samples": [
+        {
+          "name": "x120y180",
+          "point": [
+            120,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y540",
+          "point": [
+            120,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y900",
+          "point": [
+            120,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y180",
+          "point": [
+            360,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y540",
+          "point": [
+            360,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y900",
+          "point": [
+            360,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y180",
+          "point": [
+            600,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y540",
+          "point": [
+            600,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y900",
+          "point": [
+            600,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y180",
+          "point": [
+            840,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y540",
+          "point": [
+            840,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y900",
+          "point": [
+            840,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y180",
+          "point": [
+            1080,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y540",
+          "point": [
+            1080,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y900",
+          "point": [
+            1080,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y180",
+          "point": [
+            1320,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y540",
+          "point": [
+            1320,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y900",
+          "point": [
+            1320,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y180",
+          "point": [
+            1560,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y540",
+          "point": [
+            1560,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y900",
+          "point": [
+            1560,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y180",
+          "point": [
+            1800,
+            180
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y540",
+          "point": [
+            1800,
+            540
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y900",
+          "point": [
+            1800,
+            900
+          ],
+          "expected": [
+            16,
+            16,
+            16
+          ],
+          "source": "recorded"
+        }
+      ]
+    },
+    "bars-single-yellow-minus9": {
+      "card": "bars",
+      "variant": "single yellow @ -9% (sub-black)",
+      "size": [
+        1920,
+        1080
+      ],
+      "settled": true,
+      "samples": [
+        {
+          "name": "x120y180",
+          "point": [
+            120,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y540",
+          "point": [
+            120,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x120y900",
+          "point": [
+            120,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y180",
+          "point": [
+            360,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y540",
+          "point": [
+            360,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x360y900",
+          "point": [
+            360,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y180",
+          "point": [
+            600,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y540",
+          "point": [
+            600,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x600y900",
+          "point": [
+            600,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y180",
+          "point": [
+            840,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y540",
+          "point": [
+            840,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x840y900",
+          "point": [
+            840,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y180",
+          "point": [
+            1080,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y540",
+          "point": [
+            1080,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1080y900",
+          "point": [
+            1080,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y180",
+          "point": [
+            1320,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y540",
+          "point": [
+            1320,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1320y900",
+          "point": [
+            1320,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y180",
+          "point": [
+            1560,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y540",
+          "point": [
+            1560,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1560y900",
+          "point": [
+            1560,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y180",
+          "point": [
+            1800,
+            180
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y540",
+          "point": [
+            1800,
+            540
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        },
+        {
+          "name": "x1800y900",
+          "point": [
+            1800,
+            900
+          ],
+          "expected": [
+            0,
+            0,
+            0
+          ],
+          "source": "recorded"
+        }
+      ]
     }
   }
 }

@@ -71,6 +71,36 @@ const CASES = [
     size: HD,
     config: { cardType: 'bars', bars: { type: 'simple', level: '0', overlay: false, color: 'white' } }
   },
+  // The level control offers -9, 0, 75, 100 and 109. The excursion levels are
+  // where "is the black floor 16 or 0?" actually bites, so they need coverage.
+  {
+    id: 'bars-simple-109',
+    card: 'bars',
+    variant: 'simple @ 109% (super-white)',
+    size: HD,
+    config: { cardType: 'bars', bars: { type: 'simple', level: '109', overlay: false, color: 'white' } }
+  },
+  {
+    id: 'bars-single-yellow-109',
+    card: 'bars',
+    variant: 'single yellow @ 109%',
+    size: HD,
+    config: { cardType: 'bars', bars: { type: 'single', level: '109', overlay: false, color: 'Yellow' } }
+  },
+  {
+    id: 'bars-single-yellow-0',
+    card: 'bars',
+    variant: 'single yellow @ 0%',
+    size: HD,
+    config: { cardType: 'bars', bars: { type: 'single', level: '0', overlay: false, color: 'Yellow' } }
+  },
+  {
+    id: 'bars-single-yellow-minus9',
+    card: 'bars',
+    variant: 'single yellow @ -9% (sub-black)',
+    size: HD,
+    config: { cardType: 'bars', bars: { type: 'single', level: '-9', overlay: false, color: 'Yellow' } }
+  },
   {
     id: 'bars-smpte',
     card: 'bars',
