@@ -71,7 +71,8 @@ const CASES = [
     size: HD,
     config: { cardType: 'bars', bars: { type: 'simple', level: '0', overlay: false, color: 'white' } }
   },
-  // The level control offers -9, 0, 75, 100 and 109. The excursion levels are
+  // There are two level controls: Simple offers 75/100/109, Single offers
+  // -9/0/75/100/109. They write the same bars.level key. The excursion levels are
   // where "is the black floor 16 or 0?" actually bites, so they need coverage.
   {
     id: 'bars-simple-109',
@@ -79,6 +80,15 @@ const CASES = [
     variant: 'simple @ 109% (super-white)',
     size: HD,
     config: { cardType: 'bars', bars: { type: 'simple', level: '109', overlay: false, color: 'white' } }
+  },
+  {
+    // Reachable only by setting -9 on Single and switching to Simple, because
+    // bars.level is one shared key. Simple's own UI never offers -9.
+    id: 'bars-simple-minus9',
+    card: 'bars',
+    variant: 'simple @ -9% (sub-black, leaked from Single)',
+    size: HD,
+    config: { cardType: 'bars', bars: { type: 'simple', level: '-9', overlay: false, color: 'white' } }
   },
   {
     id: 'bars-single-yellow-109',

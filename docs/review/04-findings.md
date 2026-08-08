@@ -1624,6 +1624,72 @@ known Alteka URLs, since there are only three call sites — `ipc.js:101`, `menu
 
 ---
 
+### F-036
+**Simple bars at -9 IRE renders the Black bar brighter than the White bar**
+
+- **Severity:** Medium
+- **Confidence:** Observed — measured with the pixel harness, case `bars-simple-minus9`
+- **Category:** Correctness / config validity
+- **Added:** 2026-08-08, during implementation task A4. Found by the maintainer while reviewing
+  F1; not part of the original review.
+- **Evidence:** `src/components/TestCard/Bars.vue:5-12`, `src/components/Control/ControlBars.vue:24-50`
+
+**Description.** `Bars.vue` drives its first seven swatches from `config.bars.level` but hardcodes
+the eighth to `ire="0"`:
+
+```html
+<swatch colour="white"  :ire="config.bars.level" ...>   <!-- bars 1-7 -->
+...
+<swatch colour="black"  ire="0" ...>                    <!-- bar 8, fixed -->
+```
+
+There are **two** level controls in `ControlBars.vue` writing the **same** `bars.level` key:
+
+| `bars.type` | Levels offered |
+|---|---|
+| `simple` | 75, 100, 109 |
+| `single` (and `color != 'Black'`) | **-9**, **0**, 75, 100, 109 |
+
+So `-9` is reachable on Simple by setting it on Single and switching type. Simple's own UI never
+offers it and gives no indication the card is in that state — the radio group simply shows nothing
+selected.
+
+**Measured output at `bars.level = '-9'`** (harness, 1920x1080, bar centres):
+
+| Bar | 1 white | 2 yellow | 3 cyan | 4 green | 5 magenta | 6 red | 7 blue | 8 black |
+|---|---|---|---|---|---|---|---|---|
+| RGB | `0,0,0` | `0,0,0` | `0,0,0` | `0,0,0` | `0,0,0` | `0,0,0` | `0,0,0` | **`16,16,16`** |
+
+`ireToDecimal(-9)` is `-3.71`, which the clamp floors to 0, so all seven driven bars collapse to
+pure black. The fixed eighth bar stays at IRE 0, which is code value 16.
+
+**Impact.** The card is a black screen with one slightly lighter strip, and — the part that makes
+it a defect rather than a quirk — **the bar labelled Black is brighter than the bar labelled
+White.** Anyone hitting this while setting up a chain would reasonably conclude their signal path
+had inverted something. It is recoverable (pick 75 in the Simple UI) but nothing tells the user
+what happened or that a level outside Simple's own options is in force.
+
+Note this is independent of F1. Before F1 the seven bars were also `0,0,0` and bar 8 was also
+`16,16,16`; F1 changed neither. F1 is what caused it to be *looked* at.
+
+**Recommendation.** This is a config-domain problem, not a rendering one — `bars.level` has a
+different valid set depending on `bars.type`, and nothing enforces that. Options, cheapest first:
+
+1. **Coerce on type change** — when `bars.type` becomes `simple`, snap `bars.level` into
+   {75, 100, 109}. Contained, and fixes the reachable state.
+2. **Separate the keys** — `bars.simpleLevel` and `bars.singleLevel`. Cleaner, needs a config
+   migration step, so it belongs with **C1**.
+3. **Model it properly in the F6 config schema (C6)** — per-card-type valid domains, validated on
+   load. This is the general form of the bug and would catch the sibling cases too.
+
+Whichever is chosen, decide separately whether the eighth bar should track `bars.level` rather
+than being pinned at IRE 0. Pinning it is defensible — it is the reference black — but then the
+first seven bars should not be allowed below it.
+
+**Related.** F-001, F-013, C1, C6. Covered by pixel harness case `bars-simple-minus9`.
+
+---
+
 ## Not findings — checked and clear
 
 Recording these so a future pass doesn't re-do the work:
