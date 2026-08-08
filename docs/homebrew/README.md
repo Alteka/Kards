@@ -38,10 +38,35 @@ becomes what users type:
 | `Alteka/homebrew-tap` | `alteka/tap` | `brew install --cask alteka/tap/kards` |
 | `Alteka/homebrew-kards` | `alteka/kards` | `brew install --cask alteka/kards/kards` |
 
-**Recommendation: `homebrew-tap`.** Not because it is required — it is not — but because
-`alteka/kards/kards` is repetitive, and a generic tap has somewhere to put a second thing later
-without stranding anyone who has already tapped it. It is also the commonest choice among vendors
-who publish their own tap.
+### What other people actually use
+
+Checked rather than assumed, because the answer splits cleanly by **who is publishing**.
+
+**Community taps** — someone packaging software they did not write. In a sample of the 222
+most-starred third-party `homebrew-*` repositories, **199 (90%) are named after the software**:
+`d12frosted/homebrew-emacs-plus`, `shivammathur/homebrew-php`, `denji/homebrew-nginx`,
+`neovim/homebrew-neovim`, `Gcenx/homebrew-wine`. Only 23 use a generic word. `homebrew-tap` is
+still the single most common individual name (20 of 222), but it is nowhere near a majority.
+
+**Vendor taps** — an organisation publishing its own product, which is our case. The pattern
+inverts:
+
+| `homebrew-tap` | `homebrew-brew` | named after the product/org |
+|---|---|---|
+| hashicorp, aws, goreleaser, planetscale, supabase, charmbracelet, dagger, railwayapp | heroku, mongodb | ngrok, cloudflare, instrumenta, teamookla (`homebrew-cask`) |
+
+Eight of fourteen vendors checked use `homebrew-tap`; ten of fourteen use a generic word. The
+reasoning is fairly obvious once separated out — a community tap is *about* the software it
+packages, so it names itself after it; a vendor tap is *the vendor's shelf*, and naming it after
+one product is awkward the moment there are two.
+
+**Recommendation: `homebrew-tap`.** Not because anything requires it, but because we are the
+vendor case, it is what most vendors do, `alteka/kards/kards` reads badly, and a generic tap has
+somewhere to put a second thing later without stranding anyone who has already tapped it.
+
+`homebrew-kards` is a perfectly defensible alternative if Kards is expected to stay the only
+Alteka product on Homebrew. It is not worth agonising over: changing later costs one repository
+rename plus a line in the README, and GitHub redirects the old name.
 
 1. Create **`github.com/Alteka/homebrew-tap`**, public.
 2. Add `Casks/kards.rb` — seed it with [`kards.rb`](kards.rb) from this directory.

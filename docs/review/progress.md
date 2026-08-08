@@ -1168,6 +1168,25 @@ our choice and becomes what users type — `Alteka/homebrew-tap` gives
 generic tap leaves room for a second product, **not** because anything mandates it. Table of
 options in `docs/homebrew/README.md`.
 
+**Then asked to check what other people actually use, which I had also asserted without
+evidence.** The answer splits by *who is publishing*, and both halves are now in
+`docs/homebrew/README.md`:
+
+- **Community taps** (packaging someone else's software): of the 222 most-starred third-party
+  `homebrew-*` repos, **199 (90%) are named after the software** — `homebrew-emacs-plus`,
+  `homebrew-php`, `homebrew-nginx`, `homebrew-wine`. `homebrew-tap` is the most common single
+  name at 20 of 222, but far from a majority.
+- **Vendor taps** (an org publishing its own product — our case): the pattern inverts. Eight of
+  fourteen vendors checked use `homebrew-tap` (hashicorp, aws, goreleaser, planetscale, supabase,
+  charmbracelet, dagger, railwayapp); ten of fourteen use a generic word, adding heroku and
+  mongodb on `homebrew-brew`. The rest name it after the product — ngrok, cloudflare,
+  instrumenta, and teamookla on `homebrew-cask`.
+
+So the original instinct was right for the vendor case and would have looked wrong against the
+population as a whole. Recommendation unchanged, now with the evidence attached. **This is low
+stakes** — renaming later costs a repository rename and a README line, and GitHub redirects the
+old name.
+
 **`kards.rb` here is a seed, not a second master copy.** Once the tap exists the tap is canonical
 and this file should be deleted or reduced to a pointer. Maintaining both is the same drift that
 produced `mask.image` vs `mask.imageSource` and the Kards Online divergence in F-027 — the failure
