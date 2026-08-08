@@ -1,0 +1,442 @@
+# Review progress — running state file
+
+**STATUS: review COMPLETE, implementation APPROVED and not yet started.**
+All nine review deliverables written; phases 0–8 done. Revised three times after maintainer input
+— see the revision records at the bottom.
+
+> **New session starting work? Read `09-kickoff.md` first, not this file.**
+> This file is the review's state record. `09-kickoff.md` is the implementation handover.
+
+**Repo:** `C:\Users\matt.james\Documents\Repos\Kards` — `https://github.com/Alteka/Kards`
+**Reviewed:** `feature/modernise` @ `6842bf1` (checked out) and `master` @ `3948005`
+**Date:** reviewed 2026-08-07, revised 2026-08-08
+
+---
+
+## Phase status
+
+| Phase | Status | Deliverable |
+|---|---|---|
+| 0 — Orientation | ✅ | `01-current-state.md` |
+| 1 — Build baseline | ✅ | `02-build-baseline.md` |
+| 2 — Architecture & code quality | ✅ | `04-findings.md` |
+| 3 — Platform/dependency/toolchain | ✅ | `03-dependency-audit.md` |
+| 4 — Output correctness | ✅ | `04-findings.md` (F-001, F-002, F-007–F-009, F-013, F-030) |
+| 5 — Security & privacy | ✅ | `04-findings.md` (F-004, F-010, F-020, F-023, F-024, F-028, F-035) |
+| 6 — Issue triage | ✅ | `05-issue-triage.md` — all 12 open issues + closed-issue themes |
+| 7 — Branch reconciliation | ✅ | `06-branch-reconciliation.md` — all 6 non-default branches |
+| 8 — Synthesis | ✅ | `07-plan.md` (incl. §8a migrate-vs-rebuild), `08-summary.md` |
+| Questions | ✅ | `questions.md` — 10 questions, each with a default |
+
+**No early checkpoint was raised after Phase 1** — the app builds and runs, so nothing was blocked.
+
+---
+
+## Definition of done — verified
+
+- [x] All nine files exist under `docs/review/`, each readable on its own.
+- [x] Every finding has evidence with a file path, line number, command transcript or issue ref.
+- [x] All 12 open GitHub issues appear in the triage with a disposition.
+- [x] All 6 non-default branches appear in the reconciliation with a recommendation.
+- [x] The plan is sequenced with dependencies made explicit (`07-plan.md` "Ordering" diagram).
+- [x] `08-summary.md` is one page, stands alone, leads with the three things that matter.
+- [x] **No application code, config or lockfile modified.** `git status` shows only `docs/` plus
+      `package.json` / `package-lock.json`, which were **already modified before this review
+      started** (see below).
+
+### Working-tree state — pre-existing dirt, not caused by this review
+
+`git status` at session start was already:
+
+```
+ M package-lock.json     <- moves grandiose into optionalDependencies
+ M package.json
+?? docs/
+```
+
+Verified byte-identical at the end of the review (`git diff --stat` → same 63/4 line counts).
+
+**One side effect to be aware of:** `dist/` in the repo root now contains a Vite build produced by
+this review (Phase 1). It is git-ignored and regenerable with `npm run build`. `npm ci`,
+`electron-builder` and the asar inspection were all run against a **scratch copy outside the
+repo**, so no lockfile was touched.
+
+---
+
+## Findings inventory
+
+**35 findings — 4 Critical, 9 High, 15 Medium, 7 Low.** Full text in `04-findings.md`.
+
+| Critical | |
+|---|---|
+| F-001 | Colour bars render inactive channels at 0 instead of black level 16 |
+| F-002 | Display ICC profile silently rewrites output; no `--force-color-profile` anywhere |
+| F-003 | Shipped macOS installers unsigned + un-notarised (**verified against the release**); Windows unsigned by choice |
+| F-004 | Unauthenticated LAN HTTP API + **reproduced** prototype pollution |
+
+Highest High is **F-005** — notify-on-launch is the right model, but the notification fires once
+at T+10 s and fails silently.
+
+Reproduced (not just inferred): F-004 (pollution + `0.0.0.0` bind), F-011 (grandiose install
+failure), F-014 (HTTP 500 on numeric endpoints), F-019 (lint scope), F-021 (98 MB asar),
+plus the unsigned binary and the non-sRGB display profiles behind F-002.
+
+---
+
+## Corrections to the brief — carry these forward
+
+1. **Vue 3, not Vue 2.** Vue 2 EOL is irrelevant.
+2. **Not dormant in commits** — `master` to 2025-07-16, `feature/modernise` to 2026-08-07.
+   Dormant in **releases**: last release v1.3.1, 2024-04-03.
+3. **`feature/modernise` already did the Vite migration**, split `background.js` into 14
+   `src/main/*` modules, added a Clock card and NDI. Unreleased. ~85% done.
+4. **No `electron-updater`, and auto-update is a deliberate omission** (correct for event
+   software). The defect is that the notify-on-launch check is unreliable. Windows also has an
+   undocumented **WinGet** channel (`AltekaSolutions.Kards`).
+5. **Builds and runs on Node 22.22.0.** No pinning needed beyond the existing Volta declaration.
+6. **Kards Online is a separate codebase** — `kards.alteka.solutions`, 6 of 9 card types.
+   Cards are implemented twice.
+7. **~100k figure corroborated** — 100,021 GitHub downloads of v1.3.1 (81% macOS, 19% Windows,
+   no Linux artifact ever). But the platform mix inverted vs v1.3.0 — see Q9.
+
+---
+
+## Key facts
+
+- v1.3.1, GPL-3.0-only, appId `solutions.alteka.kards`. Two contributors ever
+  (Drew Perry primary, canoemoose).
+- 9 card types / 15 renderable variants. Rendering is **DOM + CSS** — no canvas, no WebGL.
+- Levels: `Swatch.vue:20-29` maps IRE 0–100 → 16–235. CSS classes at `Testcard.vue:510-527`.
+- State: one plain `config` object, no store, no schema, 7+ writers, broadcast on the `'config'`
+  IPC channel. Root cause of many findings.
+- **No tests, no CI, no `.github/` directory, no TypeScript.**
+- REST binds `0.0.0.0:8321` unauthenticated; OSC binds `127.0.0.1:25518` but is mDNS-advertised
+  to the LAN.
+- Electron reports this machine's 3 displays as **non-sRGB primaries**, `range:FULL`.
+- Branches: `Electron16ReWrite` and `hotfix/macclosewindowbug` are **already fully merged** —
+  delete. Both dependabot PRs patch a deleted `yarn.lock` — close.
+  `feature/modernise` is **missing `3948005`** (diagonal grid lines) from master.
+
+## Recommendation, one line
+
+**Incremental migration, not rebuild** — with the element-plus step scoped as a bounded rebuild of
+the control window only. Ship signing first (v1.4.0, still on Electron 34), then the
+card fixes, then Electron 43, then the UI. `07-plan.md` §8a states the three facts that would
+flip the recommendation.
+
+## If picking this up fresh
+
+Read `08-summary.md`, then `questions.md`, then `07-plan.md`. Everything else is supporting
+evidence. **Q1 (Apple Developer Program membership status) is pure lead time and blocks the
+critical path — start it before any code work.**
+
+---
+
+## Revision 1 — 2026-08-08, after maintainer input
+
+Three corrections from the maintainers, and what changed as a result.
+
+**1. "We think we signed Mac builds."** Verified directly rather than assumed. Range-fetched and
+parsed the xar TOC of all three v1.3.1 `.pkg` assets plus v1.2.0 as a control
+(`02-build-baseline.md` §4a, scripts in the session scratchpad):
+
+- **No installer signature and no stapled notarisation ticket** in any of them.
+- The payload's Bom **does** contain `Kards.app/Contents/_CodeSignature/CodeResources` — so the
+  app bundle was signed and the `.pkg` wrapper never was.
+- Undetermined: whether that app signature is Developer ID or electron-builder's automatic
+  macOS-arm64 ad-hoc signature. Both produce identical Bom entries. **Q1** settles it.
+
+Effect: F-003 rewritten and re-grounded on artefact evidence; the fix is *smaller* than first
+estimated (a Developer ID **Installer** certificate + `notarytool` + `stapler`, not signing from
+scratch). S2 split into S2a (macOS, 3–5 d) and S2b (Windows, 1–2 d); was 5–10 d.
+
+**2. "We deliberately don't auto-update — this is event software."** Accepted; the argument is
+better than the one the review made. F-005 rewritten: notify-on-launch is retained as the correct
+model, and the finding is narrowed to the notification being unreliable (one attempt at T+10 s, no
+retry, no re-check on network-up, silent failure) — which undermines their model rather than
+arguing against it. **Severity Critical → High.** S4 dropped from a 4–6 d `electron-updater`
+project to a ~1 d reliability fix, plus new S4b (Homebrew cask).
+
+**3. "Never signed Windows, because of cost." / "There's a WinGet package."** Both incorporated.
+Windows signing re-priced around Azure Trusted Signing (~$10/month, no hardware token, works on a
+stock CI runner) — the old OV-plus-HSM cost objection no longer holds. WinGet
+(`AltekaSolutions.Kards 1.3.1`) verified present and documented as an existing hash-verified
+update channel that the repo never mentions; it needs a manifest PR per release.
+
+### Net effect on the plan
+
+| | Before | After |
+|---|---|---|
+| Stabilise | 26–42 d | **21–36 d** |
+| Total | 110–180 d | **105–175 d** |
+| Rebuild comparison | 92–151 d | **87–145 d** |
+| Critical findings | 5 | **4** |
+| Headline #1 | "can't ship a fix, and no updater" | **"macOS installers are unsigned — verified"** |
+
+The recommendation (incremental migration) is unchanged; the margin narrows slightly, since
+shared release plumbing drops from ~30% to ~20% of the total.
+
+### Files touched in this revision
+
+`01-current-state.md` §0 · `02-build-baseline.md` (B-2 + new §4a) · `03-dependency-audit.md`
+§5 macOS/Windows and §6 (rewritten as "Update-channel integrity") · `04-findings.md` F-003, F-005,
+index · `05-issue-triage.md` #110 · `07-plan.md` S2a/S2b/S3/S4/S4b, totals, ordering, §8a ·
+`08-summary.md` · `questions.md` (Q1 split into Q1/Q1b, Q9 narrowed — now ten questions).
+
+### Still open from this round
+
+- **Q1** — Apple Developer Program membership status. Pure lead time; start before code work.
+- **Q1b** — whether to sign Windows at the new price point.
+- **Q9** — the macOS download anomaly. WinGet is ruled out as an explanation (it pulls from the
+  same GitHub URLs and is Windows-only). A third-party Homebrew cask submitted by someone else
+  remains the most likely non-organic explanation and is worth searching for before publishing
+  one of your own (S4b).
+
+---
+
+## Revision 2 — 2026-08-08, download-mirror investigation
+
+Triggered by the maintainer asking whether a mirror could be inflating the download numbers.
+Two substantive results, one of which resolves a blocking question.
+
+### A. The 100k figure is inflated — measured, not inferred
+
+Sampled the GitHub release-asset counters 22.3 h apart (2026-08-07 13:50 UTC → 2026-08-08 12:10 UTC):
+
+```
+mac-apple-silicon.pkg   29567 -> 29663   (+96)     ~103/day
+mac-intel.pkg           24753 -> 24845   (+92)     ~99/day
+mac-universal.pkg       26879 -> 26973   (+94)     ~101/day
+windows-x64.exe         18822 -> 18835   (+13)     ~14/day
+```
+
+A second sample 8 minutes later: **+1 on every mac asset, 0 on Windows.** Three variants moving in
+lockstep inside one short window. Whatever it is, it enumerates the three `.pkg` files and never
+touches the `.exe`.
+
+Cross-sectional corroboration: variant ratios flattened from 1.97 : 1 : 1.57 (v1.3.0) to
+1.19 : 1 : 1.09 (v1.3.1), the opposite of organic drift. Fitting silicon+intel and holding out
+universal: proportional growth errs 45%; growth ×7.65 plus a constant C ≈ **19,859 per mac asset**
+errs **2.7%**. C ÷ ~100/day ≈ 199 days ⇒ activity likely began ~January 2026.
+
+**Corrected estimate: ~40,700 genuine v1.3.1 downloads, ~54% mac / 46% win** (vs 42% and 44% mac
+for v1.3.0 / v1.2.0). Caveat: 3 data points, 2 parameters — the 22 h delta is the strong evidence;
+the model only dates it.
+
+Candidate: `autopkg/dataJAR-recipes` → `Kards/` (added 2025-02-28), an AutoPkg/Munki recipe pair
+using `GitHubReleasesInfoProvider` against `Alteka/Kards` with a per-arch `DOWNLOAD_ARCH`. Fits the
+shape; does not fully explain the volume. Ruled out: official Homebrew cask (does not exist),
+nixpkgs, MacPorts, Installomator, fleetdm, macadmins, all aggregator/mirror sites, the app's own
+update checker, and alteka.solutions itself. Negatives are limited to public repos.
+
+Recommended identification method: attach a throwaway extra `.pkg` to the next release and see
+whether the traffic follows it (anything `asset_regex`-driven will; a hard-coded mirror won't).
+
+### B. Q1 resolved — the app was signed with a *development* certificate
+
+The dataJAR recipe's `CodeSignatureVerifier` records the shipped bundle's actual signature:
+
+```
+certificate leaf[subject.CN] = "Apple Development: Drew Perry (D4H96T8MEW)"
+and certificate 1[field.1.2.840.113635.100.6.2.1]
+```
+
+- `Apple Development:` is a **development** certificate, not `Developer ID Application:`. It
+  cannot satisfy Gatekeeper on third-party machines, by design.
+- OID `1.2.840.113635.100.6.2.1` is the Apple **WWDR** intermediate (Development / App Store);
+  Developer ID chains carry `…6.2.6`. Certificate type confirmed twice, independently.
+
+So v1.3.1 macOS = app signed with the wrong certificate type, installer unsigned, nothing
+notarised. Complete explanation of #110, no gaps. It also proves the **Apple membership was active
+at build time** — the failure was identity selection, most likely `electron-builder` auto-picking
+from the build machine's keychain. Q1 narrows to "is the membership *still* active?", and S2a
+gains a concrete requirement: set `mac.identity` explicitly and assert it starts
+`Developer ID Application:` in CI.
+
+### Internal note
+
+`Event-Engineering/ProjectReady` (private, own org) has
+`electron/mac/applications/sudo/install_kards.sh` curling a hard-coded
+`Kards-1.3.1-mac-apple-silicon.pkg`. One-shot and single-arch, so not the cause — but the pinned
+version will break when v1.4.0 ships.
+
+### Effect on the plan
+
+No sequencing change. **Weighting changes: Windows is ~46% of real users, not 19%** — strengthens
+Q1b (Windows signing) and raises the priority of F-007 (DPI, issues #112/#111), which this review
+had discounted as affecting a smaller group.
+
+### Files touched
+
+`02-build-baseline.md` §4a · `04-findings.md` F-003 · `questions.md` Q1, Q1b, Q9 (Q9 now ANSWERED) ·
+`08-summary.md` · this file.
+
+### Unverified claims carried forward
+
+- That AutoPkg's conditional requests increment GitHub's counter even on a 304 — plausible,
+  reported by the research agent, **not verified**.
+- The ~January 2026 start date is a model output, not an observation.
+
+---
+
+## Revision 3 — 2026-08-08, maintainer decisions on Q1–Q8
+
+All questions now answered. `questions.md` carries a DECISIONS table at the top; `07-plan.md`
+has been restructured to match. Summary of what changed:
+
+| Q | Decision | Plan effect |
+|---|---|---|
+| Q1 Apple membership | **Current** (parent company) | Critical path clear; S2a 3–5 d, no lead time |
+| Q1b Windows signing | **Deferred to end** | S2b struck from Stabilise (−1–2 d) |
+| Q2 v1.4.0 scope | Clock + updates + **bug fixes** | v1.4.0 and v1.4.1 **merge**; combined 39–64 d |
+| Q3 Network control | **Leave unauthenticated** | F-004 splits; F6 descoped (−1–2 d) |
+| Q4 NDI | **Park on a branch** | S6 → ~0.5 d (−5–8 d) |
+| Q5 Colour management | **C** (preference, default on) | M7 fixed as written |
+| Q6 Bars-fix comms | **B** (note + help page) | F1 fixed as written |
+| Q7 Multi-output | **Yes, ~2.0+** | Schema shaped for `outputs[]`; **rebuild decision relocated to 2.0** |
+| Q8 Rollbar | **A** (keep, scrub, disclose) | New **S10**, ~1 d |
+
+### Two maintainer premises checked and found wrong (Q8)
+
+1. **"We don't collect anything identifiable."** `node_modules/rollbar/src/server/rollbar.js:733`
+   — `Rollbar.defaultOptions = { host: os.hostname(), … }`, and `src/main/rollbar.js:12-18` does
+   not override it. The hostname is sent on every report, and `config.js:12-15` makes the hostname
+   the app's display name too. Stack traces can also carry the OS username via `userData` and
+   user-selected file paths (`audio.js:29,48,66`, `services.js:26-28`, `windows.js:447`,
+   `ipc.js:114`).
+2. **"We used to have a note in the readme."** `git log -S` across all branches: one commit,
+   `39203c4` (2026-02-13), on the **unreleased** `feature/modernise`, and it is a *build*
+   instruction, not a user disclosure. `git show master:README.md` has no mention of Rollbar,
+   telemetry or privacy at all. No shipped version ever told users.
+
+### F-004 split (Q3)
+
+The unauthenticated LAN binding is now **accepted risk** — the maintainers' argument (diagnostic
+tool, not show-critical; the API mutates config and nothing else) is sound and the original
+Critical rating over-weighted network exposure. The **prototype-pollution guard still ships**
+(S7); that was always a separate question. Consequence carried forward: F-024 (OSC arbitrary file
+read) must still be fixed **before** anyone changes the OSC bind address, and F-015 is now a
+functionality bug rather than a security one.
+
+### Answered for the record: "what happens when we stop paying?" (Q1b)
+
+Signatures are RFC 3161 timestamped on both platforms, so **already-signed builds keep validating
+indefinitely**; you lose only the ability to sign new ones. Notarisation tickets do not expire and
+a stapled ticket validates offline forever. Caveats: certificate *revocation* (for cause, not
+cancellation) breaks things retroactively, and SmartScreen reputation restarts if you later resume
+under a different identity.
+
+### Files touched
+
+`04-findings.md` (F-004 decision block, F-028 verified facts) · `07-plan.md` (S2a, S2b struck,
+S6, S10 added, F1, F6, M7, totals, ordering diagram redrawn, §8a flip condition 1 rewritten) ·
+`questions.md` (DECISIONS table, Q1b "stop paying" answer, Q8 verification) · `08-summary.md`
+(release table) · this file.
+
+### Open
+
+Nothing blocking. Q9's residual — *identifying* the automated downloader — is still open and
+non-blocking; recommended method is a canary `.pkg` attached to the v1.4.0 release.
+
+---
+
+## Handover to implementation — 2026-08-08
+
+Review phase closed. Implementation approved by the maintainers. Handover written to
+**`09-kickoff.md`**, which supersedes this file as the entry point for new sessions.
+
+**First session's work order** (detail and acceptance criteria in `09-kickoff.md` §4):
+
+| | Task | Effort | Gate |
+|---|---|---|---|
+| A1 | Park NDI on `feature/ndi`; take the uncommitted `package.json`/`package-lock.json` changes with it; make `getNdiStatus` honest; post a status update on #41 | ~0.5 d | — |
+| A2 | Delete the two already-merged branches, close both dependabot PRs, **cherry-pick `3948005`**, add `dependabot.yml` | ~0.5 d | — |
+| A3 | **Pixel harness.** Reuse the `ndi.js:60-146` shape. Launch with `--force-color-profile=srgb`. | 3–5 d | **Validates itself against F-001**: must reproduce `235,235,235` for 100% white *and* detect that 75% yellow is `180,180,0` rather than `180,180,16`. If it cannot, stop. |
+| A4 | Levels fixes F1/F2/F3 | 2–3 d | Only after A3 is green |
+
+**Human actions in parallel, starting now:** request the **Developer ID Application** *and*
+**Developer ID Installer** certificates. v1.3.1 was signed with an `Apple Development`
+certificate, which is the root cause of #110. Membership confirmed current (Q1), so there is no
+renewal lead time.
+
+**The rule that does not bend:** the pixel harness lands before anything that can change output.
+With the signing fix and the levels change shipping in the same release (Q2), it is the only thing
+that separates "we fixed the bars" from "something else moved too".
+
+**Working-tree note carried forward:** `package.json` and `package-lock.json` are still modified
+from before the review began (moving `grandiose` to `optionalDependencies`). They are correct, and
+they belong on `feature/ndi` — task A1.
+
+---
+
+## Revision 4 — 2026-08-08, session close: scope decision + handover
+
+Session ends here. Review complete, implementation approved and specified, nothing started.
+
+### Scope decision — one release, not three
+
+Maintainers: *"we will not be releasing the halfway-house 1.4.0 without everything being dragged
+kicking and screaming up to date as of today"*, and asked me to choose between wrapping the
+modernisation into v1.4.0 or doing a v1.4.1 immediately after.
+
+**Decided: one release, v1.4.0, containing everything — Stabilise + Fix + Modernise, including
+Electron 43 and the element-plus rebuild. No v1.4.1 chaser.** Preceded by a signed
+`v1.4.0-beta.1` **pre-release** to validate the signing chain on real Macs.
+
+Reasoning, in full, in `09-kickoff.md` §2. The load-bearing part: my original argument for staging
+was to preserve a bisection point between "we deliberately changed the colour bars" and "Electron
+43 silently changed the pixels" — but **that bisection point needs to be a commit with a green
+pixel harness, not a release.** Release granularity was the wrong tool; commit granularity is
+finer and cheaper. Once that was clear the case for staging collapsed.
+
+Costs, recorded honestly: Electron 43 raises the macOS floor from 11 to 12, dropping Big Sur and
+any remaining 10.15 users. Those users are already effectively stranded (unsigned installer,
+unreliable notification), so shipping them one more Electron 34 build they also cannot install
+helps nobody — but it is a deliberate choice and belongs in the release notes.
+
+element-plus (M8/D8) is in scope but carries a **cut line**: it touches only the control window,
+nothing depends on it, and it can be dropped late without unpicking anything. If it isn't stable
+when everything else is ready, ship without it.
+
+Useful property verified: the update checker calls `/releases/latest`, which the GitHub API
+**excludes pre-releases from** — so the beta will not notify the existing install base. Opt-in by
+construction.
+
+### Durations re-costed for an AI-assisted workflow
+
+`07-plan.md`'s figures are human-developer-days and are now marked as such. `09-kickoff.md` §5
+re-costs everything in session-days: **~18–31 sessions** across four phases.
+
+What compressed 2–4×: harness, levels fixes, dependency bumps, schema/OSC generation, cleanups.
+
+What did **not** compress: certificate procurement (external), notarisation iteration
+(unpredictable), anything needing visual judgement, and the element-plus rebuild.
+
+**The constraint that reshaped the ordering: this machine is Windows.** I cannot build, sign,
+notarise or test macOS locally. So **release CI (B1) moves early** — a GitHub Actions macOS runner
+is the only route to a macOS artifact — and final acceptance requires a human with a Mac. Recorded
+prominently in `09-kickoff.md` §3 rather than left as an assumption.
+
+### New documents
+
+| File | For |
+|---|---|
+| `docs/signing/apple-certificates.md` | Whoever administers the Apple Developer account (Team ID D4H96T8MEW). Self-contained: the problem, the evidence, exactly which two certificates to create and how, notarisation credential options, how to transfer secrets safely, and the verification commands. |
+| `docs/signing/windows-code-signing.md` | Matt. Plain-English: what signing does, why the cost calculation changed, the four options, the "what happens when we stop paying" answer, what signing does *not* fix. |
+| `docs/SESSION-PROMPTS.md` | Copy-paste session-start prompts — one for the next session, one reusable, plus variants. |
+| `docs/review/09-kickoff.md` | Rewritten: scope decision, Windows-machine constraint, four-phase work order with re-costed estimates, harness spec, definition of done, traps. |
+
+`07-plan.md` and `08-summary.md` carry SUPERSEDED banners pointing at `09-kickoff.md` §2. Their
+items and ordering still stand; only release boundaries moved.
+
+### Committed
+
+`docs/` committed to `feature/modernise`. **`package.json` and `package-lock.json` deliberately
+left uncommitted** — they move `grandiose` to `optionalDependencies` and belong on `feature/ndi`
+as part of task A1.
+
+### Next action
+
+Start a session with §1 of `docs/SESSION-PROMPTS.md`. In parallel, send
+`docs/signing/apple-certificates.md` to the Apple account administrator — the certificates are
+the only hard external dependency and Phase B cannot start without them.
