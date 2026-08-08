@@ -76,7 +76,6 @@
       "output": "dist_electron"
     },
     "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
-    "_comment_asarUnpack": "wallpaper ships Mach-O/PE binaries it execFile()s. Electron can run them from inside an asar (it extracts to temp first), but codesign cannot sign them there, and an unsigned executable in the bundle fails Apple notarisation.",
     "asarUnpack": [
       "node_modules/wallpaper/source/**"
     ],
@@ -84,19 +83,15 @@
     "mac": {
       "icon": "public/icon.png",
       "target": "pkg",
-      "_comment_identity": "NEVER null and never absent. Auto-selection from the keychain is what silently picked an Apple Development certificate from 2022 to 2024. scripts/mac/preflight.js refuses to build unless this starts with 'Developer ID Application:'. Replace the placeholder with the exact string from `security find-identity -v -p codesigning`.",
       "identity": "Developer ID Application: REPLACE ME (D4H96T8MEW)",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.inherit.plist",
-      "_comment_notarize": "false on purpose. Notarisation is done by scripts/mac/after-sign.js so the .app can be STAPLED before it is packaged, which electron-builder's own notarize step does not do. See scripts/mac/notary.js.",
       "notarize": false,
-      "_comment_minimumSystemVersion": "Electron 34's real floor. D6 (Electron 43) raises this to 12.0 and that drops Big Sur users - it belongs in the release notes, not in a diff.",
       "minimumSystemVersion": "11.0"
     },
     "pkg": {
-      "_comment_identity": "A Developer ID *Installer* certificate - a different certificate from the Application one. Kards has never had one, which is why no published .pkg has ever been signed. From `security find-identity -v`.",
       "identity": "Developer ID Installer: REPLACE ME (D4H96T8MEW)"
     },
     "win": {
