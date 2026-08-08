@@ -28,9 +28,35 @@
  * The dialog itself still only ever appears once per run.
  */
 
-// 10s, 1min, 5min, 15min, then hourly. Long enough to outlast a venue network
-// coming up; sparse enough that several machines behind one NAT do not burn
-// through GitHub's 60 requests/hour/IP between them.
+// 10s, 1min, 5min, 15min, then hourly.
+//
+// Worth answering, because it looks redundant: if we re-check when the network
+// appears, why retry on a timer at all? Because the network signal cannot be
+// relied on, and the two mechanisms cover different failures.
+//
+// `navigator.onLine` - which is what raises the renderer's `online` event -
+// reports whether Chromium has *a route*, not whether the internet is
+// reachable. So:
+//
+// - A laptop plugged into a venue switch reports online the moment the link
+//   comes up, before DHCP or DNS. The event fires once, the check fails, and
+//   no second event ever arrives.
+// - A machine already "online" at launch behind a captive portal or a proxy
+//   never transitions, so no event fires at all - there is nothing to
+//   transition from.
+// - Failures with no network transition behind them at all: GitHub 5xx, or a
+//   403 rate limit that clears an hour later.
+//
+// The network signal is what makes recovery *fast* in the clean case. The
+// timer is what makes recovery *happen* in the messy ones, which are the
+// common ones for this software. Dropping either leaves a real gap.
+//
+// The shape is a backoff rather than a flat interval because the first few
+// minutes after launch are when the venue network is most likely to come up,
+// so it pays to be eager early - but a flat 5-minute retry would be 12
+// requests/hour/machine, and five machines behind one venue's NAT would sit
+// exactly on GitHub's unauthenticated limit of 60/hour/IP. Settling to hourly
+// is what keeps it safe on a big show.
 const RETRY_SCHEDULE_MS = [10_000, 60_000, 300_000, 900_000]
 const RETRY_INTERVAL_MS = 3_600_000
 
