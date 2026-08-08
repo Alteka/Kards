@@ -1183,9 +1183,11 @@ evidence.** The answer splits by *who is publishing*, and both halves are now in
   instrumenta, and teamookla on `homebrew-cask`.
 
 So the original instinct was right for the vendor case and would have looked wrong against the
-population as a whole. Recommendation unchanged, now with the evidence attached. **This is low
-stakes** — renaming later costs a repository rename and a README line, and GitHub redirects the
-old name.
+population as a whole.
+
+**DECIDED (2026-08-08, maintainer): `Alteka/homebrew-tap`**, giving
+`brew install --cask alteka/tap/kards`. Settled — do not reopen. If it ever needs to change it is
+a repository rename plus a README line, and GitHub redirects the old name.
 
 **`kards.rb` here is a seed, not a second master copy.** Once the tap exists the tap is canonical
 and this file should be deleted or reduced to a pointer. Maintaining both is the same drift that

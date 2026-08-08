@@ -60,12 +60,12 @@ reasoning is fairly obvious once separated out — a community tap is *about* th
 packages, so it names itself after it; a vendor tap is *the vendor's shelf*, and naming it after
 one product is awkward the moment there are two.
 
-**Recommendation: `homebrew-tap`.** Not because anything requires it, but because we are the
-vendor case, it is what most vendors do, `alteka/kards/kards` reads badly, and a generic tap has
-somewhere to put a second thing later without stranding anyone who has already tapped it.
+**Decided (2026-08-08, maintainer): `Alteka/homebrew-tap`**, giving
+`brew install --cask alteka/tap/kards`. We are the vendor case, it is what most vendors do,
+`alteka/kards/kards` reads badly, and a generic tap has somewhere to put a second thing later
+without stranding anyone who has already tapped it.
 
-`homebrew-kards` is a perfectly defensible alternative if Kards is expected to stay the only
-Alteka product on Homebrew. It is not worth agonising over: changing later costs one repository
+This is settled — do not reopen it. If it ever does need to change, it is cheap: a repository
 rename plus a line in the README, and GitHub redirects the old name.
 
 1. Create **`github.com/Alteka/homebrew-tap`**, public.
