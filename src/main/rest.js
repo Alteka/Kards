@@ -3,7 +3,7 @@ const express = require('express')
 var bodyParser = require('body-parser')
 const log = require('electron-log')
 const EventEmitter = require('events')
-var bonjour = require('bonjour')()
+var bonjour = require('./bonjour')
 const { hostname } = require('os')
 
 class restServer extends EventEmitter {

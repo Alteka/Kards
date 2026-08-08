@@ -2,7 +2,7 @@ const { ipcMain } = require('electron')
 const OSC = require('osc-js')
 const log = require('electron-log')
 const EventEmitter = require('events')
-var bonjour = require('bonjour')()
+var bonjour = require('./bonjour')
 const { hostname } = require('os')
 
 class oscServer extends EventEmitter {
