@@ -25,24 +25,24 @@ The app is based around Electron to create and manage the windows. The content i
 ```bash
 # Clone the repo into a folder
 # cd into the folder and run the below
-# You'll need Node.js (e.g. node 16+)
+# Node.js 22 (the repo pins 22.22.0 via Volta)
 
 # install dependencies
 npm install
-
-# Copy the example env file and edit if needed (required for the app to start)
-cp env.example.json env.json
 
 # serve with hot reload at localhost:5173
 npm run electron:serve
 
 # build electron application for production
 npm run electron:build
+
+# check the rendered output against the committed pixel baseline
+npm run test:pixel
 ```
 
-**Environment:** The app expects an `env.json` in the project root (see `env.example.json`). Copy it to `env.json`; leave `rollbarToken` empty unless you use [Rollbar](https://rollbar.com) for error reporting.
+**Environment:** `env.json` is optional. Without it the app starts normally with error reporting disabled ([`src/background.js`](src/background.js) falls back to an empty token). Copy `env.example.json` to `env.json` only if you want to point [Rollbar](https://rollbar.com) at your own account.
 
-**NDI output:** An NDI sender is started automatically so the current test card is available as an NDI source (e.g. "Kards - &lt;hostname&gt;"). Resolution follows the configured window size. NDI support is optional: the app uses the `grandiose` optional dependency and requires the [NDI SDK](https://ndi.video/) to be installed. If `grandiose` is not available, the app runs normally with NDI disabled.
+**Output correctness:** `test/pixel/` samples known coordinates on every card and compares them against a committed baseline. Run it either side of any change that could affect what the cards draw — see [`test/pixel/README.md`](test/pixel/README.md).
 
 ---
 
