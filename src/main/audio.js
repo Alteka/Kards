@@ -20,8 +20,6 @@ module.exports = function initAudio(ipcMain, state, deps) {
     setTimeout(createTextAudio, 5000)
   }
 
-  let lastCreatedVoice = ''
-
   function createVoice() {
     const config = getConfig()
     if (!config) return
@@ -55,22 +53,6 @@ module.exports = function initAudio(ipcMain, state, deps) {
       if (state.controlWindow) {
         state.controlWindow.webContents.send('config', config)
       }
-    })
-  }
-
-  let textToSpeechCount = 0
-  function textToSpeachData(text) {
-    const config = getConfig()
-    if (!config) return ''
-
-    let dest = app.getPath('userData') + '/tts0' + textToSpeechCount + '.wav'
-    textToSpeechCount++
-    say.export(config.audio.text, null, null, dest, (err) => {
-      if (err) {
-        log.error(err)
-        return ''
-      }
-      return 'data:audio/wav;base64,' + fs.readFileSync(dest, { encoding: 'base64' })
     })
   }
 

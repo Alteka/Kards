@@ -96,11 +96,11 @@ export default {
         network: ['127.0.0.1'],
         networkIndex: 0
       },
-      _timeIntervalId: null,
-      _networkIntervalId: null,
-      _networkIndexIntervalId: null,
-      _resizeHandler: null,
-      _contextmenuHandler: null
+      timeIntervalId: null,
+      networkIntervalId: null,
+      networkIndexIntervalId: null,
+      resizeHandler: null,
+      contextmenuHandler: null
     }
   },
   computed: {
@@ -315,20 +315,20 @@ export default {
     vm.updateCardSize()
     setTimeout(vm.updateCardSize, 1000)
     vm.updateTime()
-    this._timeIntervalId = setInterval(vm.updateTime, 1000)
+    this.timeIntervalId = setInterval(vm.updateTime, 1000)
     vm.updateNetworkInfo()
-    this._networkIntervalId = setInterval(vm.updateNetworkInfo, 10000)
-    this._networkIndexIntervalId = setInterval(() => {
+    this.networkIntervalId = setInterval(vm.updateNetworkInfo, 10000)
+    this.networkIndexIntervalId = setInterval(() => {
       vm.info.networkIndex++
       if (vm.info.networkIndex >= vm.info.network.length) vm.info.networkIndex = 0
     }, 5000)
 
-    this._resizeHandler = () => {
+    this.resizeHandler = () => {
       vm.boundsInfo = Math.round(visualViewport.width) + ' x ' + Math.round(visualViewport.height)
     }
-    window.addEventListener('resize', this._resizeHandler)
-    this._contextmenuHandler = (e) => e.preventDefault()
-    window.addEventListener('contextmenu', this._contextmenuHandler, false)
+    window.addEventListener('resize', this.resizeHandler)
+    this.contextmenuHandler = (e) => e.preventDefault()
+    window.addEventListener('contextmenu', this.contextmenuHandler, false)
 
     this.$message({
       customClass: 'modal',
@@ -338,11 +338,11 @@ export default {
     })
   },
   beforeUnmount() {
-    if (this._timeIntervalId) clearInterval(this._timeIntervalId)
-    if (this._networkIntervalId) clearInterval(this._networkIntervalId)
-    if (this._networkIndexIntervalId) clearInterval(this._networkIndexIntervalId)
-    if (this._resizeHandler) window.removeEventListener('resize', this._resizeHandler)
-    if (this._contextmenuHandler) window.removeEventListener('contextmenu', this._contextmenuHandler, false)
+    if (this.timeIntervalId) clearInterval(this.timeIntervalId)
+    if (this.networkIntervalId) clearInterval(this.networkIntervalId)
+    if (this.networkIndexIntervalId) clearInterval(this.networkIndexIntervalId)
+    if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler)
+    if (this.contextmenuHandler) window.removeEventListener('contextmenu', this.contextmenuHandler, false)
     Mousetrap.unbind(['command+f', 'ctrl+f', 'esc', 'f'], 'keyup')
     Mousetrap.unbind(['command+i', 'ctrl+i', 'i'])
     Mousetrap.unbind(['command+m', 'ctrl+m', 'm', 'command+a', 'ctrl+a', 'a'])
