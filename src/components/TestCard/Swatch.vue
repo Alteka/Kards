@@ -68,7 +68,6 @@ export default {
   },
   data: function () {
     return {
-      vertical: false,
       colours: {
         red: [1, 0, 0],
         magenta: [1, 0, 1],
