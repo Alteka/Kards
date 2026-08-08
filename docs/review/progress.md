@@ -793,8 +793,12 @@ successor, and with the instance in one place that swap is now a one-line change
 
 ### Not done — remaining A5
 
-**Dead files (F-031).** All confirmed present and unreferenced by a `src/` grep, but **the deletion
-was not made** — verification of references outside `src/` was cut short. Verify then delete:
+**Dead files (F-031) — DONE after all, in `f82449e`.** The reference check that had been cut short
+completed in the background; every occurrence of these paths anywhere in the repository turned out
+to be documentation describing them as dead, with no code references. `env.json.example` and
+`env.example.json` confirmed same content, differing only in indentation and a trailing newline;
+README points at `env.example.json`, which stays. `Deghost.vue:10` confirmed importing
+`../../../public/particles.js`, the live unminified copy. All four deleted:
 
 | Path | Why |
 |---|---|
@@ -805,6 +809,10 @@ was not made** — verification of references outside `src/` was cut short. Veri
 
 Warning learned the hard way: a recursive `grep -rn` from the repo root walks `node_modules` and
 hangs. Use the Grep tool or scope the path.
+
+Note `Swatch.vue` is under `src/components/TestCard/`, which ground rule 3 protects. Removing an
+unread data key cannot change output and the harness confirmed it — 560 samples, 0 failed, identical
+either side.
 
 Also still open from F-031 and not started: `browserslist` in package.json (meaningless for an
 Electron target, vue-cli leftover — belongs with D1), the `README.md:43` claim that `env.json` is
