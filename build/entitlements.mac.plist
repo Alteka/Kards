@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!--
+    Hardened runtime entitlements for the main Kards.app bundle.
+
+    Notarisation requires the hardened runtime, and the hardened runtime blocks
+    several things Electron needs by default. Each of these is here because
+    Chromium requires it, not because Kards does:
+
+    - allow-jit                          V8 compiles JavaScript to machine code
+                                         at runtime.
+    - allow-unsigned-executable-memory   V8 also writes to pages it later
+                                         executes; JIT alone is not enough for
+                                         Chromium's allocator.
+    - allow-dyld-environment-variables   Electron sets DYLD_* when launching its
+                                         helper processes.
+    - disable-library-validation         The app loads code not signed by the
+                                         same Team ID - the Electron Framework
+                                         helpers and the `wallpaper` package's
+                                         `macos-wallpaper` binary.
+
+    Deliberately NOT present:
+
+    - Any com.apple.security.device.* entitlement. Kards plays audio, it never
+      records. See docs/RELEASING.md for the consequence on the audio output
+      device list.
+    - com.apple.security.app-sandbox. This is a Developer ID build distributed
+      outside the App Store; the sandbox is not required and would break
+      setting the desktop wallpaper.
+  -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+  <true/>
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+</dict>
+</plist>
