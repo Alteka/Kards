@@ -9,24 +9,14 @@
 </template>
 
 <script>
+import { BLACK_LEVEL, ireToDecimal } from '@/levels'
+
 export default {
   name: 'ColorSwatch',
   props: {
     colour: String,
     ire: String,
     showText: Boolean
-  },
-  methods: {
-    ireToDecimal: function (ire) {
-      // give it an ire percentage and it returns the 0-255 value you need.
-      let r1 = [0, 100] // ire range
-      let r2 = [16, 235] // dec range
-      let result = ((ire - r1[0]) * (r2[1] - r2[0])) / (r1[1] - r1[0]) + r2[0]
-      if (result < 0) {
-        result = 0
-      }
-      return Math.round(result)
-    }
   },
   computed: {
     bgCol: function () {
@@ -35,11 +25,18 @@ export default {
       if (this.colour.includes('rec709') || this.colour.includes('ntsc')) {
         bg = this.colours[this.colour]
       } else {
-        let dec = this.ireToDecimal(this.ire)
-        let r = dec * this.colours[this.colour][0]
-        let g = dec * this.colours[this.colour][1]
-        let b = dec * this.colours[this.colour][2]
-        bg = 'rgb(' + r + ', ' + g + ', ' + b + ')'
+        const dec = ireToDecimal(this.ire)
+        // F-001: a channel that is "off" sits at black level, not at zero. This
+        // used to multiply `dec` by a 0/1 unit vector, which put the inactive
+        // channels of every colour bar 16 code values *below* black — so yellow
+        // at 75% was 180,180,0 where it should be 180,180,16.
+        //
+        // The min() matters only below IRE 0, where `dec` is already under the
+        // black level and an off channel must not end up brighter than an on one.
+        const off = Math.min(BLACK_LEVEL, dec)
+        const channels = this.colours[this.colour]
+        const level = (on) => (on ? dec : off)
+        bg = 'rgb(' + level(channels[0]) + ', ' + level(channels[1]) + ', ' + level(channels[2]) + ')'
       }
 
       let color = 'white'

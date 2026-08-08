@@ -53,19 +53,26 @@ Machine-readable report on stdout, for CI.
 `--validate` is the harness's own acceptance test, and it asserts two things that
 have to be true _simultaneously_:
 
-| Check                         | Assertion                                                                          |
-| ----------------------------- | ---------------------------------------------------------------------------------- |
-| Reproduces a documented value | bars/simple @ 100%, centre of bar 1 = `235,235,235`                                |
-| Detects a known bug           | bars/simple @ 75%, centre of bar 2 = `180,180,0`, **not** the correct `180,180,16` |
+| Check                         | Assertion                                           |
+| ----------------------------- | --------------------------------------------------- |
+| Reproduces a documented value | bars/simple @ 100%, centre of bar 1 = `235,235,235` |
+| Detected a known bug          | bars/simple @ 75%, centre of bar 2 — see below      |
 
 Either one alone is worthless. A harness that only agrees with the app tells you
 nothing; a harness that only disagrees is broken. Both together mean it is
 measuring the real thing.
 
-The second check is finding **F-001**: `Swatch.vue` multiplies the level value by
-a per-channel 0 or 1, so channels that should sit at the 16 floor land on 0
-instead. When F1 fixes that, this check's expectation changes to `180,180,16` —
-and at that point it stops being a bug detector, so keep the first check.
+**The second check has changed sense, and the history is the point.** At commit
+`0dd8690`, before any fix, it asserted the yellow bar was `180,180,0` — the
+_wrong_ value — and passed. That is what demonstrated the harness detects a real
+defect rather than merely agreeing with whatever the app happens to draw. That
+defect is **F-001**: `Swatch.vue` multiplied the level by a per-channel 0 or 1,
+so channels that should sit at the 16 floor landed on 0.
+
+F1 fixed it. The same sample now asserts the correct `180,180,16` **and** that it
+is not `180,180,0`, so it doubles as the regression guard against F1 being
+undone. If you ever need the original demonstration back, check out `0dd8690`
+and run `--validate` there.
 
 ## How a capture is made
 
@@ -142,9 +149,9 @@ text at the lattice points — but it is the weakest coverage in the matrix.
 {
   "name": "bar2-yellow-75",
   "point": [360, 540],
-  "expected": [180, 180, 0],
+  "expected": [180, 180, 16],
   "source": "spec",
-  "note": "F-001: blue channel is 0, should be 16. ..."
+  "note": "F1 (landed): inactive blue channel sits at black level 16, not 0. ..."
 }
 ```
 

@@ -30,10 +30,10 @@
           "expected": [
             235,
             235,
-            0
+            16
           ],
           "source": "spec",
-          "note": "Blue channel is 0; the 16-235 floor makes it 16. Changes to 235,235,16 when F1 lands."
+          "note": "F1 (landed): inactive blue channel sits at black level 16, not 0. Was 235,235,0."
         },
         {
           "name": "bar1-white-100",
@@ -84,7 +84,7 @@
           "expected": [
             235,
             235,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -97,7 +97,7 @@
           "expected": [
             235,
             235,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -108,7 +108,7 @@
             180
           ],
           "expected": [
-            0,
+            16,
             235,
             235
           ],
@@ -121,7 +121,7 @@
             540
           ],
           "expected": [
-            0,
+            16,
             235,
             235
           ],
@@ -134,7 +134,7 @@
             900
           ],
           "expected": [
-            0,
+            16,
             235,
             235
           ],
@@ -147,9 +147,9 @@
             180
           ],
           "expected": [
-            0,
+            16,
             235,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -160,9 +160,9 @@
             540
           ],
           "expected": [
-            0,
+            16,
             235,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -173,9 +173,9 @@
             900
           ],
           "expected": [
-            0,
+            16,
             235,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -187,7 +187,7 @@
           ],
           "expected": [
             235,
-            0,
+            16,
             235
           ],
           "source": "recorded"
@@ -200,7 +200,7 @@
           ],
           "expected": [
             235,
-            0,
+            16,
             235
           ],
           "source": "recorded"
@@ -213,7 +213,7 @@
           ],
           "expected": [
             235,
-            0,
+            16,
             235
           ],
           "source": "recorded"
@@ -226,8 +226,8 @@
           ],
           "expected": [
             235,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -239,8 +239,8 @@
           ],
           "expected": [
             235,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -252,8 +252,8 @@
           ],
           "expected": [
             235,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -264,8 +264,8 @@
             180
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             235
           ],
           "source": "recorded"
@@ -277,8 +277,8 @@
             540
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             235
           ],
           "source": "recorded"
@@ -290,8 +290,8 @@
             900
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             235
           ],
           "source": "recorded"
@@ -355,10 +355,10 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "spec",
-          "note": "F-001: blue channel is 0, should be 16. This is the sample the day-one validation uses to prove the harness detects a known bug. Changes to 180,180,16 when F1 lands."
+          "note": "F1 (landed): inactive blue channel sits at black level 16, not 0. Was 180,180,0 - the value the day-one validation used to prove the harness could detect a real bug."
         },
         {
           "name": "bar1-white-75",
@@ -409,7 +409,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -422,7 +422,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -433,7 +433,7 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -446,7 +446,7 @@
             540
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -459,7 +459,7 @@
             900
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -472,9 +472,9 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -485,9 +485,9 @@
             540
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -498,9 +498,9 @@
             900
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -512,7 +512,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -525,7 +525,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -538,7 +538,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -551,8 +551,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -564,8 +564,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -577,8 +577,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -589,8 +589,8 @@
             180
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -602,8 +602,8 @@
             540
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -615,8 +615,8 @@
             900
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -719,7 +719,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -732,7 +732,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -745,7 +745,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -756,7 +756,7 @@
             120
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -769,7 +769,7 @@
             360
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -782,7 +782,7 @@
             600
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -795,9 +795,9 @@
             120
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -808,9 +808,9 @@
             360
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -821,9 +821,9 @@
             600
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -835,7 +835,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -848,7 +848,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -861,7 +861,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -874,8 +874,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -887,8 +887,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -900,8 +900,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -912,8 +912,8 @@
             120
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -925,8 +925,8 @@
             360
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -938,8 +938,8 @@
             600
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -1042,7 +1042,7 @@
           "expected": [
             16,
             16,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1055,7 +1055,7 @@
           "expected": [
             16,
             16,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1068,7 +1068,7 @@
           "expected": [
             16,
             16,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1079,7 +1079,7 @@
             180
           ],
           "expected": [
-            0,
+            16,
             16,
             16
           ],
@@ -1092,7 +1092,7 @@
             540
           ],
           "expected": [
-            0,
+            16,
             16,
             16
           ],
@@ -1105,7 +1105,7 @@
             900
           ],
           "expected": [
-            0,
+            16,
             16,
             16
           ],
@@ -1118,9 +1118,9 @@
             180
           ],
           "expected": [
-            0,
             16,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1131,9 +1131,9 @@
             540
           ],
           "expected": [
-            0,
             16,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1144,9 +1144,9 @@
             900
           ],
           "expected": [
-            0,
             16,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1158,7 +1158,7 @@
           ],
           "expected": [
             16,
-            0,
+            16,
             16
           ],
           "source": "recorded"
@@ -1171,7 +1171,7 @@
           ],
           "expected": [
             16,
-            0,
+            16,
             16
           ],
           "source": "recorded"
@@ -1184,7 +1184,7 @@
           ],
           "expected": [
             16,
-            0,
+            16,
             16
           ],
           "source": "recorded"
@@ -1197,8 +1197,8 @@
           ],
           "expected": [
             16,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1210,8 +1210,8 @@
           ],
           "expected": [
             16,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1223,8 +1223,8 @@
           ],
           "expected": [
             16,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1235,8 +1235,8 @@
             180
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             16
           ],
           "source": "recorded"
@@ -1248,8 +1248,8 @@
             540
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             16
           ],
           "source": "recorded"
@@ -1261,8 +1261,8 @@
             900
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             16
           ],
           "source": "recorded"
@@ -1365,7 +1365,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1378,7 +1378,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1402,7 +1402,7 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -1415,7 +1415,7 @@
             540
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -1441,9 +1441,9 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1454,9 +1454,9 @@
             540
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1480,9 +1480,9 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1493,9 +1493,9 @@
             540
           ],
           "expected": [
-            0,
+            16,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1520,7 +1520,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -1533,7 +1533,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -1559,8 +1559,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1572,8 +1572,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1597,8 +1597,8 @@
             180
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -1610,8 +1610,8 @@
             540
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -1727,7 +1727,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1740,7 +1740,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -1764,7 +1764,7 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -1777,7 +1777,7 @@
             540
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -1804,7 +1804,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -1817,7 +1817,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -1843,8 +1843,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1856,8 +1856,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -1881,8 +1881,8 @@
             180
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -1894,8 +1894,8 @@
             540
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"
@@ -1998,7 +1998,7 @@
           "expected": [
             180,
             180,
-            0
+            16
           ],
           "source": "recorded"
         },
@@ -2009,7 +2009,7 @@
             180
           ],
           "expected": [
-            0,
+            16,
             180,
             180
           ],
@@ -2023,7 +2023,7 @@
           ],
           "expected": [
             180,
-            0,
+            16,
             180
           ],
           "source": "recorded"
@@ -2036,8 +2036,8 @@
           ],
           "expected": [
             180,
-            0,
-            0
+            16,
+            16
           ],
           "source": "recorded"
         },
@@ -2048,8 +2048,8 @@
             180
           ],
           "expected": [
-            0,
-            0,
+            16,
+            16,
             180
           ],
           "source": "recorded"

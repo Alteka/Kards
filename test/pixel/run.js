@@ -382,10 +382,16 @@ async function runRecord() {
  *
  * The harness is only trustworthy if it can do both of these at once:
  *   1. reproduce a value the app documents and gets right   (100% white = 235)
- *   2. detect a value the app currently gets wrong          (75% yellow blue channel)
+ *   2. detect a value the app gets wrong                    (75% yellow blue channel)
  *
  * Passing 1 alone would mean it agrees with the app; passing 2 alone would mean
  * it disagrees with everything. Both together is the only useful signal.
+ *
+ * Check 2 has since changed sense. At commit 0dd8690, before F1, it asserted the
+ * yellow bar was 180,180,0 — the wrong value — and passed, which is what proved
+ * the harness detects a real defect rather than merely agreeing with the app.
+ * F1 fixed that channel, so the same sample now asserts the correct 180,180,16
+ * and doubles as the regression guard against F1 being undone.
  */
 async function runValidate() {
   const hundred = CASES.find((c) => c.id === 'bars-simple-100')
@@ -409,10 +415,10 @@ async function runValidate() {
       actual: rgb(white)
     },
     {
-      name: 'detects the known bug F-001',
-      detail: 'bars/simple @ 75%, centre of bar 2 (yellow) is 180,180,0 and NOT the correct 180,180,16',
-      ok: eq(yellow, [180, 180, 0]) && !eq(yellow, [180, 180, 16]),
-      expected: '180,180,0 (wrong, as shipped)',
+      name: 'inactive channels sit at black level (F1)',
+      detail: 'bars/simple @ 75%, centre of bar 2 (yellow) is 180,180,16 and NOT the old 180,180,0',
+      ok: eq(yellow, [180, 180, 16]) && !eq(yellow, [180, 180, 0]),
+      expected: '180,180,16',
       actual: rgb(yellow)
     },
     {
@@ -435,8 +441,9 @@ async function runValidate() {
   const allOk = checks.every((c) => c.ok)
   console.log(
     allOk
-      ? 'Harness validated. It reproduces the documented value and detects the known bug.\n'
-      : 'HARNESS NOT VALIDATED. Fix the harness before trusting it. Do not proceed to the levels fixes.\n'
+      ? 'Validation passed. Documented value reproduced, F1 in place, frames deterministic.\n'
+      : 'VALIDATION FAILED. Either the harness is broken or a levels fix has been undone.\n' +
+          'Find out which before trusting any other result from this harness.\n'
   )
   return allOk ? 0 : 1
 }
