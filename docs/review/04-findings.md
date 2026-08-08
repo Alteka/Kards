@@ -124,6 +124,39 @@ multiply-by-zero path is wrong.
 
 **Related.** F-013 (ramp uses a different range again), F-030, F-022.
 
+**Open question added 2026-08-08, during A4 — the black floor above IRE 100. NOT DECIDED.**
+
+F1 landed the 16 floor unconditionally, so an inactive channel is 16 at every level. For 75% and
+100% bars that is unambiguous and matches the reference values. Above 100 it is an open question,
+raised by the maintainer and **deliberately left open** — do not close it by reading this finding
+literally.
+
+The state in question, measured (harness cases `bars-simple-109`, `bars-single-yellow-109`):
+
+| | Before F1 | As shipped by F1 |
+|---|---|---|
+| Simple or Single yellow @ 109 | `255,255,0` | `255,255,16` |
+
+**The framing that matters**, and the reason this is not just "pick one":
+
+> Full range versus reduced range is a property of the **whole scale** — it moves both ends at
+> once, 0-255 against 16-235. But 75 / 100 / 109 % are statements about the **white end only**.
+> They say nothing, explicitly or implicitly, about what is happening at the black end.
+
+So "109% therefore full range therefore black is 0" does not follow — level and range convention
+are **orthogonal axes**, and the app currently has a control for one of them and no control at
+all for the other. That is the actual gap. Choosing 0 or 16 for the 109 case is picking a default
+for an axis the user cannot see or set.
+
+Which points at the same missing abstraction as F-013's "Full range / Legal range" switch, and as
+the colour-management preference in **M7/Q5**. Three separate symptoms, one absent concept.
+Whatever is decided here should be decided together with those, not before them.
+
+Until then the shipped behaviour is 16 at every level, it is covered by the two harness cases
+above, and changing it is contained to re-recording them.
+
+**Related.** F-013, F-030, F-036, M7/Q5.
+
 ---
 
 ### F-002
