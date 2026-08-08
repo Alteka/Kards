@@ -19,6 +19,7 @@
 <script>
 import Swatch from './Swatch.vue'
 import InfoCircle from './InfoCircle.vue'
+import { BLACK_LEVEL, WHITE_LEVEL, ireToDecimal, greyString } from '@/levels'
 export default {
   name: 'RampTestCard',
   components: { Swatch, InfoCircle },
@@ -28,10 +29,18 @@ export default {
   },
   data: function () {
     return {
+      // IRE, not code values. -7.5 and 109 are deliberate sub-black and
+      // super-white markers; the rest is an even 0-100 in tens. These drive both
+      // the stepped gradient and the labels drawn over it, which is what stops
+      // the two from disagreeing (F-013).
       steps: ['-7.5', '0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '109']
     }
   },
   computed: {
+    /** The code value for each step, on the same scale as the swatch labels. */
+    stepLevels: function () {
+      return this.steps.map(ireToDecimal)
+    },
     gradientAngle: function () {
       let angle
       if (this.config.ramp.direction == 'Horizontal') {
@@ -47,34 +56,12 @@ export default {
       return angle
     },
     computedColours: function () {
-      if (this.config.ramp.stepped) {
-        return 'rgb(0,0,0) 10.0%, rgb(26,26,26) 10.0%, rgb(26,26,26) 20.0%, rgb(51,51,51) 20.0%, rgb(51,51,51) 30.0%, rgb(77,77,77) 30.0%, rgb(77,77,77) 40%, rgb(102,102,102) 40%, rgb(102,102,102) 50%, rgb(128,128,128) 50%, rgb(128,128,128) 60%, rgb(153,153,153) 60%, rgb(153,153,153) 70%, rgb(179,179,179) 70%, rgb(179,179,179) 80%, rgb(230,230,230) 80%, rgb(230,230,230) 90%, rgb(255,255,255) 90%'
-      } else {
-        return 'rgb(0,0,0) 0%, rgb(255,255,255) 100%'
-      }
+      return this.rampStops(false)
     },
     computedRamp1: function () {
       let result
       if (this.config.ramp.direction == 'Radial') {
-        if (this.config.ramp.reverse) {
-          if (this.config.ramp.stepped) {
-            result = {
-              background:
-                'radial-gradient(circle, rgb(255,255,255) 10.0%, rgb(230,230,230) 10.0%, rgb(230,230,230) 20.0%, rgb(179,179,179) 20.0%, rgb(179,179,179) 30.0%, rgb(153,153,153) 30.0%, rgb(153,153,153) 40%, rgb(128,128,128) 40%, rgb(128,128,128) 50%, rgb(102,102,102) 50%, rgb(102,102,102) 60%, rgb(77,77,77) 60%, rgb(77,77,77) 70%, rgb(51,51,51) 70%, rgb(51,51,51) 80%, rgb(26,26,26) 80%, rgb(26,26,26) 90%, rgb(0,0,0) 90%)'
-            }
-          } else {
-            result = { background: 'radial-gradient(circle, rgb(255,255,255) 0%, rgb(0,0,0) 100%)' }
-          }
-        } else {
-          if (this.config.ramp.stepped) {
-            result = {
-              background:
-                'radial-gradient(circle, rgb(0,0,0) 10.0%, rgb(26,26,26) 10.0%, rgb(26,26,26) 20.0%, rgb(51,51,51) 20.0%, rgb(51,51,51) 30.0%, rgb(77,77,77) 30.0%, rgb(77,77,77) 40%, rgb(102,102,102) 40%, rgb(102,102,102) 50%, rgb(128,128,128) 50%, rgb(128,128,128) 60%, rgb(153,153,153) 60%, rgb(153,153,153) 70%, rgb(179,179,179) 70%, rgb(179,179,179) 80%, rgb(230,230,230) 80%, rgb(230,230,230) 90%, rgb(255,255,255) 90%)'
-            }
-          } else {
-            result = { background: 'radial-gradient(circle, rgb(0,0,0) 0%, rgb(255,255,255) 100%)' }
-          }
-        }
+        result = { background: 'radial-gradient(circle, ' + this.rampStops(this.config.ramp.reverse) + ')' }
       } else {
         result = { background: 'linear-gradient(' + this.gradientAngle + 'deg, ' + this.computedColours + ')' }
       }
@@ -92,25 +79,9 @@ export default {
     computedRamp2: function () {
       let result
       if (this.config.ramp.direction == 'Radial') {
-        if (!this.config.ramp.reverse) {
-          if (this.config.ramp.stepped) {
-            result = {
-              background:
-                'radial-gradient(circle, rgb(255,255,255) 10.0%, rgb(230,230,230) 10.0%, rgb(230,230,230) 20.0%, rgb(179,179,179) 20.0%, rgb(179,179,179) 30.0%, rgb(153,153,153) 30.0%, rgb(153,153,153) 40%, rgb(128,128,128) 40%, rgb(128,128,128) 50%, rgb(102,102,102) 50%, rgb(102,102,102) 60%, rgb(77,77,77) 60%, rgb(77,77,77) 70%, rgb(51,51,51) 70%, rgb(51,51,51) 80%, rgb(26,26,26) 80%, rgb(26,26,26) 90%, rgb(0,0,0) 90%)'
-            }
-          } else {
-            result = { background: 'radial-gradient(circle, rgb(255,255,255) 0%, rgb(0,0,0) 100%)' }
-          }
-        } else {
-          if (this.config.ramp.stepped) {
-            result = {
-              background:
-                'radial-gradient(circle, rgb(0,0,0) 10.0%, rgb(26,26,26) 10.0%, rgb(26,26,26) 20.0%, rgb(51,51,51) 20.0%, rgb(51,51,51) 30.0%, rgb(77,77,77) 30.0%, rgb(77,77,77) 40%, rgb(102,102,102) 40%, rgb(102,102,102) 50%, rgb(128,128,128) 50%, rgb(128,128,128) 60%, rgb(153,153,153) 60%, rgb(153,153,153) 70%, rgb(179,179,179) 70%, rgb(179,179,179) 80%, rgb(230,230,230) 80%, rgb(230,230,230) 90%, rgb(255,255,255) 90%)'
-            }
-          } else {
-            result = { background: 'radial-gradient(circle, rgb(0,0,0) 0%, rgb(255,255,255) 100%)' }
-          }
-        }
+        // The second ramp mirrors the first, so its radial gradient runs the
+        // opposite way round.
+        result = { background: 'radial-gradient(circle, ' + this.rampStops(!this.config.ramp.reverse) + ')' }
       } else {
         result = { background: 'linear-gradient(' + (this.gradientAngle - 180) + 'deg, ' + this.computedColours + ')' }
       }
@@ -159,6 +130,38 @@ export default {
       } else {
         return false
       }
+    }
+  },
+  methods: {
+    /**
+     * Hard-stop gradient stops: one equal-width band per step, no interpolation.
+     *
+     * Generated rather than hand-written. The old version was the same string
+     * typed out five times, and one copy of it was missing a step (F-008), which
+     * is precisely the failure mode duplication produces.
+     */
+    bandStops: function (levels) {
+      const n = levels.length
+      return levels
+        .map((dec, i) => {
+          const colour = greyString(dec)
+          const from = ((i * 100) / n).toFixed(4)
+          const to = (((i + 1) * 100) / n).toFixed(4)
+          return colour + ' ' + from + '%, ' + colour + ' ' + to + '%'
+        })
+        .join(', ')
+    },
+    /** Smooth black-to-white stops on the studio range (F-013). */
+    smoothStops: function (descending) {
+      const first = descending ? WHITE_LEVEL : BLACK_LEVEL
+      const last = descending ? BLACK_LEVEL : WHITE_LEVEL
+      return greyString(first) + ' 0%, ' + greyString(last) + ' 100%'
+    },
+    /** The gradient body for one ramp, ascending or descending. */
+    rampStops: function (descending) {
+      if (!this.config.ramp.stepped) return this.smoothStops(descending)
+      const levels = descending ? [...this.stepLevels].reverse() : this.stepLevels
+      return this.bandStops(levels)
     }
   }
 }

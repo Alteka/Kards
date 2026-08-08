@@ -91,9 +91,10 @@ and run `--validate` there.
 7. Sample the baseline's coordinates and compare exactly — no tolerance.
 
 Cards that animate by design (`deghost`, `audioSync`) never satisfy step 6. They
-are reported as `frame never settled` and still sampled; their sample points are
-in regions that happen to be static. Treat a failure there as suspect before
-treating it as real.
+are still captured and sampled, but **their mismatches are advisory and cannot
+fail the run** — they are printed as `WARN` and excluded from the exit code. A
+harness that intermittently goes red on two cards it cannot control is a harness
+nobody reads. Look at those warnings by hand; do not gate on them.
 
 ### What the harness changes about the app, and why
 
@@ -164,8 +165,12 @@ text at the lattice points — but it is the weakest coverage in the matrix.
   "this did not change", not "this is correct".
 
 `meta` records the Electron and Chrome versions the baseline was taken on. The
-current baseline is **Electron 34.5.8 / Chrome 132**, recorded on win32 x64
-before any of the levels fixes. That is the reference point D6 steps away from.
+current baseline is **Electron 34.5.8 / Chrome 132** on win32 x64, 440 samples
+across 22 cases, taken **after** the levels fixes F1/F2/F3 and before anything
+else. That is the reference point D6 steps away from.
+
+The pre-fix baseline is not lost — it is commit `0dd8690`, and the commit
+messages for F1 and F2/F3 record exactly which samples moved and by how much.
 
 ## Re-baselining
 
@@ -198,8 +203,14 @@ platform only and treat the other as a comparison run.
   text rendering is deliberately excluded.
 - `ramp` and `ramp-vertical` rely on the stability check alone, with no
   neighbourhood test.
-- `deghost` and `audioSync` never settle; their samples are in regions that are
-  static in practice, which is an observation, not a guarantee.
+- `deghost` and `audioSync` never settle, so they are advisory only and
+  effectively uncovered. If either needs real coverage, give it a deterministic
+  mode rather than loosening the harness.
+- The **horizontal and vertical stepped ramps** draw swatch labels over the
+  entire gradient, so those two cases measure the labels, not the gradient
+  underneath. `ramp-stepped-diagonal` and `ramp-stepped-radial` exist because
+  they are the only variants where the stepped gradient is actually visible —
+  and therefore the only ones where F-008's missing step could be seen.
 - Exact comparison, no tolerance. Correct for the levels work. If a future change
   makes a card legitimately non-deterministic at the last bit, the answer is to
   exclude that sample, not to add a global tolerance.

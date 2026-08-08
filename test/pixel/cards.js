@@ -139,6 +139,24 @@ const CASES = [
     size: HD,
     config: { cardType: 'ramp', ramp: { direction: 'Horizontal', reverse: false, stepped: true, double: false } }
   },
+  // The horizontal and vertical stepped ramps draw swatch labels over the whole
+  // gradient, so the gradient itself is invisible there. Diagonal and Radial set
+  // showSteps false, which is the only place the stepped gradient is actually
+  // seen — and therefore the only place F-008's missing step was visible.
+  {
+    id: 'ramp-stepped-diagonal',
+    card: 'ramp',
+    variant: 'diagonal stepped (bare gradient)',
+    size: HD,
+    config: { cardType: 'ramp', ramp: { direction: 'Diagonal', reverse: false, stepped: true, double: false } }
+  },
+  {
+    id: 'ramp-stepped-radial',
+    card: 'ramp',
+    variant: 'radial stepped (bare gradient)',
+    size: HD,
+    config: { cardType: 'ramp', ramp: { direction: 'Radial', reverse: false, stepped: true, double: false } }
+  },
   {
     id: 'ramp-vertical',
     card: 'ramp',
