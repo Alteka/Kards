@@ -889,7 +889,7 @@ to begin with.** Phase C's config migration ladder has no equivalent safety net 
 
 ## A5 finished, B1 written — 2026-08-08, second session
 
-Six commits, `5e9e1df..fbdf084`, none pushed. Working tree clean. Build clean, `npm run lint` clean (0 errors,
+Eight commits, `5e9e1df..da439e8`, none pushed. Working tree clean. Build clean, `npm run lint` clean (0 errors,
 285 warnings, unchanged), pixel harness **560 samples, 0 failed** at every gate.
 
 ### A5 — now complete
@@ -1019,8 +1019,8 @@ checker is unaffected: `updateChecker.js:17` reads only `tag_name`.
 
 ### Next session, in order
 
-1. **B6 `docs/RELEASING.md`** — the one Phase B item needing neither certificates nor a Mac, and
-   the kickoff says it should be written **as** B1–B4 happen, not after. B1 is fresh now.
+1. ~~**B6 `docs/RELEASING.md`**~~ — **done** (`da439e8`), carrying a banner saying §3-5 are not yet
+   executed end to end. Correct it as v1.4.0-beta.1 is cut, not afterwards.
 2. **B4 Windows release build.** The build is confirmed working here — `--win --x64` produces
    `Kards-1.3.1-win-x64.exe` (NSIS). What remains is the signed-vs-unsigned decision (Q1b) and
    documenting it.
@@ -1036,5 +1036,5 @@ moved this session; see the previous section for detail.
 
 **Correction to the previous handover:** it says `feature/modernise` is "not pushed". It is —
 `origin/feature/modernise` is at `5e9e1df`, so all 21 of those commits reached the remote after
-that block was written. This session's six are **not** pushed; the branch is 6 ahead. Pushing is
+that block was written. This session's eight are **not** pushed; the branch is 8 ahead. Pushing is
 outward-facing and was not asked for.
