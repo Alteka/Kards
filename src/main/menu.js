@@ -485,6 +485,15 @@ class altekaMenu extends EventEmitter {
         label: 'Help',
         submenu: [
           { label: 'Version ' + require('../../package.json').version, enabled: false },
+          {
+            // For event software this is arguably the most important entry
+            // point - the engineer checks the day before a show, not whenever
+            // the app happened to launch. F-005.
+            label: 'Check for Updates…',
+            click: () => {
+              this.emit('checkForUpdates')
+            }
+          },
           { type: 'separator' },
           {
             label: 'Open Help Site',

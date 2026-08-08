@@ -103,6 +103,9 @@
             <el-dropdown-item @click="showShareDialog = true"
               ><i class="fas fa-share green" style="width: 10px; text-align: center"></i> Share Card</el-dropdown-item
             >
+            <el-dropdown-item divided :disabled="updateStatus.result === 'checking'" @click="checkForUpdates"
+              ><i :class="updateIcon" style="width: 10px; text-align: center"></i> {{ updateLabel }}</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -263,6 +266,47 @@ export default {
       set(value) {
         this.$emit('update:modelValue', value) // update the v-model object to parent component
       }
+    },
+    updateIcon: function () {
+      switch (this.updateStatus.result) {
+        case 'checking':
+          return 'fas fa-sync fa-spin green'
+        case 'update-available':
+          return 'fas fa-arrow-circle-down green'
+        case 'error':
+          return 'fas fa-exclamation-triangle green'
+        default:
+          return 'fas fa-sync green'
+      }
+    },
+    /**
+     * The label carries the status, so a failed check is visible without
+     * anyone opening the log file. F-005: silent failure was the problem.
+     */
+    updateLabel: function () {
+      const s = this.updateStatus
+      switch (s.result) {
+        case 'checking':
+          return 'Checking For Updates…'
+        case 'update-available':
+          return `Update Available (${s.latestVersion})`
+        case 'error':
+          return 'Check For Updates (last check failed)'
+        case 'up-to-date':
+        case 'ahead':
+          return `Check For Updates (up to date${this.lastCheckedAgo})`
+        default:
+          return 'Check For Updates (never checked)'
+      }
+    },
+    lastCheckedAgo: function () {
+      if (!this.updateStatus.lastCheckedAt) return ''
+      const minutes = Math.floor((Date.now() - new Date(this.updateStatus.lastCheckedAt).getTime()) / 60000)
+      if (minutes < 1) return ', just now'
+      if (minutes < 60) return `, ${minutes}m ago`
+      const hours = Math.floor(minutes / 60)
+      if (hours < 24) return `, ${hours}h ago`
+      return `, ${Math.floor(hours / 24)}d ago`
     }
   },
   data: function () {
@@ -278,7 +322,8 @@ export default {
       textTimer: null,
       audioDevices: [],
       showShareDialog: false,
-      showAboutDialog: false
+      showAboutDialog: false,
+      updateStatus: { result: 'never', lastCheckedAt: null, latestVersion: null, error: null }
     }
   },
   mounted: function () {
@@ -292,6 +337,18 @@ export default {
     document.getElementById('tone').src = toneWav
     document.getElementById('white').src = whiteWav
     document.getElementById('sweep').src = sweepWav
+
+    // The main process has no `online` event; the renderer does. This is the
+    // signal that the venue network finally came up, which is the case the old
+    // one-shot check at T+10s always missed. F-005.
+    window.addEventListener('online', () => window.ipcRenderer.send('rendererOnline'))
+
+    window.ipcRenderer.receive('updateStatus', (s) => {
+      this.updateStatus = s
+    })
+    window.ipcRenderer.invoke('getUpdateStatus').then((s) => {
+      if (s) this.updateStatus = s
+    })
 
     window.ipcRenderer.receive('exportCardCompleted', function (msg) {
       if (msg) {
@@ -427,6 +484,9 @@ export default {
         background: 'rgba(0, 0, 0, 0.85)'
       })
       this.drawerImage = false
+    },
+    checkForUpdates: function () {
+      window.ipcRenderer.send('checkForUpdates')
     },
     importSettings: function () {
       window.ipcRenderer.send('importSettings')

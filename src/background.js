@@ -1,11 +1,10 @@
 'use strict'
 
-const { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme } = require('electron')
+const { app, protocol, BrowserWindow, ipcMain, dialog, shell, screen, nativeTheme, powerMonitor } = require('electron')
 const { default: installExtension, VUEJS3_DEVTOOLS } = require('electron-devtools-installer')
 const compareVersions = require('compare-versions')
 const log = require('electron-log')
 const { networkInterfaces, hostname } = require('os')
-const axios = require('axios')
 const Store = require('electron-store')
 const path = require('path')
 const bonjour = require('./main/bonjour')
@@ -94,6 +93,9 @@ controlMenu.on('openLogs', () => {
 })
 controlMenu.on('aboutDialog', () => {
   if (state.controlWindow) state.controlWindow.webContents.send('aboutDialog')
+})
+controlMenu.on('checkForUpdates', () => {
+  if (state.checkForUpdates) state.checkForUpdates()
 })
 
 app.on('ready', async () => {
@@ -216,10 +218,11 @@ initIpc(ipcMain, state, {
 // Update checker
 // ---------------------------------------
 startUpdateChecker(state, {
-  axios,
   compareVersions,
   version,
   log,
   dialog,
-  shell
+  shell,
+  ipcMain,
+  powerMonitor
 })
