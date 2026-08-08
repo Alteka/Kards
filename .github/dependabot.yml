@@ -1,0 +1,58 @@
+# Dependabot configuration for Alteka Kards.
+#
+# Before this file, Dependabot ran on GitHub's defaults: one pull request per
+# advisory, ungrouped, unlimited. Over 28 months of silence that produced a
+# queue nobody triaged, which is worse than no signal at all — see
+# docs/review/06-branch-reconciliation.md.
+#
+# NOTE: GitHub reads this file from the DEFAULT branch only. It has no effect
+# until feature/modernise reaches master.
+
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: deps
+      prefix-development: deps-dev
+
+    groups:
+      # One PR a week for the routine stuff, rather than fifteen.
+      production-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development-minor-patch:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+
+    ignore:
+      # The runtime and packaging chain are stepped by hand, one major at a
+      # time, with the pixel harness run at every step (plan tasks D5/D6).
+      # An unattended jump across several majors would defeat the whole point
+      # of that sequence, and is the specific risk finding F-002 describes.
+      - dependency-name: electron
+        update-types: [version-update:semver-major]
+      - dependency-name: electron-builder
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+    commit-message:
+      prefix: ci
